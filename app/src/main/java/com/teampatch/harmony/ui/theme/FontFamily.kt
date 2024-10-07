@@ -17,3 +17,7 @@ val PretendardFontFamily = FontFamily(
     Font(R.font.pretendard_extra_bold_800, FontWeight.ExtraBold, FontStyle.Normal),
     Font(R.font.pretendard_black_900, FontWeight.Black, FontStyle.Normal),
 )
+
+val MeetMeFontFamily = FontFamily(
+    Font(R.font.meet_me, FontWeight.Normal, FontStyle.Normal),
+)
