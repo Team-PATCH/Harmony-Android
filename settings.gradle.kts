@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Harmony-Android"
 include(":app")
+include(":core:designsystem")

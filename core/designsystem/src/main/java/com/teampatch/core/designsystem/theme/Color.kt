@@ -1,4 +1,4 @@
-package com.teampatch.harmony.ui.theme
+package com.teampatch.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

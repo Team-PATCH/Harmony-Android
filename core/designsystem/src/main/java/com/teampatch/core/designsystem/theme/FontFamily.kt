@@ -1,10 +1,10 @@
-package com.teampatch.harmony.ui.theme
+package com.teampatch.core.designsystem.theme
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.teampatch.harmony.R
+import com.teampatch.core.designsystem.R
 
 val PretendardFontFamily = FontFamily(
     Font(R.font.pretendard_thin_100, FontWeight.Thin, FontStyle.Normal),
