@@ -45,6 +45,8 @@ dependencies {
     api(libs.androidx.ui.graphics)
     api(libs.androidx.ui.tooling.preview)
     api(libs.androidx.material3)
+    debugApi(libs.androidx.ui.tooling)
+    debugApi(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
