@@ -54,10 +54,14 @@ android {
 dependencies {
 
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:onboarding:login"))
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(project(":feature:onboarding:login"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
