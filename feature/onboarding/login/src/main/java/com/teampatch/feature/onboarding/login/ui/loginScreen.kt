@@ -1,5 +1,6 @@
 package com.teampatch.feature.onboarding.login.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,45 +37,27 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "가족과 함께 만드는 소중한 추억",
-                fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.W500,
-                fontSize = 16.sp,
-                color = Color.Gray,
-                modifier = modifier.padding(bottom = 16.dp)
-            )
-
-            Text(
-                text = "harmony.",
-                fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.W700,
-                fontSize = 40.sp,
-                color = Color.Black,
-                modifier = modifier.padding(bottom = 32.dp)
-            )
-
-            Spacer(modifier = modifier.height(16.dp))
-
-            Button(
-                onClick = { /* Handle Apple Login */ },
+            Image(
+                painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.text_intro_harmony),
+                contentDescription = "Text Introduce Harmony",
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Text(
-                    text = "Apple로 계속하기",
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.W600,
-                    fontSize = 18.sp,
-                    color = Color.White
-                )
-            }
+                    .height(56.dp)
+            )
 
-            Spacer(modifier = modifier.height(12.dp))
+            Spacer(modifier = modifier.height(29.3.dp))
+
+            Image(
+                painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.logo_harmony),
+                contentDescription = "Logo Harmony",
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+                    .height(56.dp)
+            )
+
+            Spacer(modifier = modifier.height(644.dp))
 
             Button(
                 onClick = { /* Handle Kakao Login */ },
@@ -80,15 +65,15 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)), // 배경색은 이미지를 꽉 채우면 안 보이게 됩니다.
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text(
-                    text = "카카오로 계속하기",
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.W600,
-                    fontSize = 18.sp,
-                    color = Color.Black
+                // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
+                Image(
+                    painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.kakao_login_medium_wide), // 카카오 로그인 이미지
+                    contentDescription = "Kakao Login",
+                    modifier = Modifier.fillMaxSize(), // 버튼 크기를 꽉 채움
+                    contentScale = ContentScale.Crop // 이미지가 버튼에 맞게 잘리거나 확장됨
                 )
             }
         }
