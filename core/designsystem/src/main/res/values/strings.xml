@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="collapse_memoryCard_title1">오늘의 </string>
+    <string name="collapse_memoryCard_title2">추억카드</string>
+    <string name="collapse_memoryCard_title3">가 도착했어요!</string>
+    <string name="collapse_memoryCard_description">어떤 추억인지 확인해 볼까요?</string>
+
+    <string name="empty_memory_card_title1">오늘의 </string>
+    <string name="empty_memory_card_title2">추억카드</string>
+    <string name="empty_memory_card_title3">가 아직 없어요.</string>
+    <string name="empty_memory_card_description">새로운 추억카드를 기다려보아요.</string>
+
+    <string name="expand_memory_card_title1">오늘의 </string>
+    <string name="expand_memory_card_title2">추억카드</string>
+</resources>
