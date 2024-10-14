@@ -9,6 +9,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core:domain"))
+
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.ui)
     api(libs.androidx.ui.graphics)
