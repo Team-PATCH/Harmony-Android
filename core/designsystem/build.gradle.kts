@@ -19,7 +19,8 @@ dependencies {
     debugApi(libs.androidx.ui.tooling)
     debugApi(libs.androidx.ui.test.manifest)
 
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.paging.common)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
