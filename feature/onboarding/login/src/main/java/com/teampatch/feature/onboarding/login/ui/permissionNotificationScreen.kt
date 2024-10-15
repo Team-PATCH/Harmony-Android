@@ -21,9 +21,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teampatch.core.designsystem.R
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun PermissionNotificationScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -37,29 +38,25 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.text_intro_harmony),
-                contentDescription = "Text Introduce Harmony",
+                painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.image_permission_to_notify),
+                contentDescription = "Permission Notification Image",
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .height(56.dp)
             )
 
-            Spacer(modifier = modifier.height(29.3.dp))
+            Spacer(modifier = modifier.height(33.3.dp))
 
             Image(
-                painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.logo_harmony),
-                contentDescription = "Logo Harmony",
+                painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.img_character_fullbody_mony),
+                contentDescription = "Full-Body Mony Character",
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .height(56.dp)
             )
 
-            Spacer(modifier = modifier.height(644.dp))
+            Spacer(modifier = modifier.height(48.dp))
 
             Button(
-                onClick = { /* Handle Kakao Login */ },
+                onClick = { /* Handle Start Process */ },
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
@@ -69,8 +66,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             ) {
                 // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
                 Image(
-                    painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.kakao_login_medium_wide), // 카카오 로그인 이미지
-                    contentDescription = "Kakao Login",
+                    painter = painterResource(id = R.drawable.btn_start_harmony), // 카카오 로그인 이미지
+                    contentDescription = "Harmoy Start Process",
                     modifier = Modifier.fillMaxSize(), // 버튼 크기를 꽉 채움
                     contentScale = ContentScale.Crop // 이미지가 버튼에 맞게 잘리거나 확장됨
                 )
@@ -81,6 +78,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
-    LoginScreen()
+fun PermissionNotificationScreenPreview() {
+    PermissionNotificationScreen()
 }
