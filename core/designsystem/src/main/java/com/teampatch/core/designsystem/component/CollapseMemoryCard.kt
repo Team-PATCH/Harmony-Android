@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -34,26 +35,18 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 
 @Composable
 fun ColumnScope.CollapseMemoryCard(
-    writer: String
+    title: AnnotatedString,
+    text: String,
+    writer: String,
 ) {
     Text(
-        text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = BL)) {
-                append("${stringResource(R.string.collapse_memoryCard_title1)} ")
-            }
-            withStyle(style = SpanStyle(color = MainGreen)) {
-                append(stringResource(R.string.collapse_memoryCard_title2))
-            }
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringResource(R.string.collapse_memoryCard_title3))
-            }
-        },
+        text = title,
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.W700,
         fontSize = 24.sp
     )
     Text(
-        text = stringResource(R.string.collapse_memoryCard_description),
+        text = text,
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.W500,
         fontSize = 18.sp,
@@ -95,6 +88,18 @@ private fun CollapseMemoryCardPreview() {
                 .padding(top = 28.dp, bottom = 24.dp)
         ) {
             CollapseMemoryCard(
+                title = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = BL)) {
+                        append("오늘의 ")
+                    }
+                    withStyle(style = SpanStyle(color = MainGreen)) {
+                        append("추억카드")
+                    }
+                    withStyle(style = SpanStyle(color = BL)) {
+                        append("가 도착했어요")
+                    }
+                },
+                text = "어떤 추억인지 확인해 볼까요?",
                 writer = "손녀 조다은"
             )
         }
