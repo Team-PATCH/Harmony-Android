@@ -1,4 +1,4 @@
-package com.teampatch.feature.home
+package com.teampatch.feature.harmony.home
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,8 +12,8 @@ import com.teampatch.core.domain.model.Todo
 import com.teampatch.core.domain.usecase.home.GetDailyRoutineUseCase
 import com.teampatch.core.domain.usecase.home.GetMemoryCardUseCase
 import com.teampatch.core.domain.usecase.home.ToggleDailyRoutineStatusUseCase
-import com.teampatch.feature.home.model.HomeErrorHandler
-import com.teampatch.feature.home.model.MemoryCardUiState
+import com.teampatch.feature.harmony.home.model.HomeErrorHandler
+import com.teampatch.feature.harmony.home.model.MemoryCardUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,10 +28,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class HarmonyHomeViewModel @Inject constructor(
     private val getDailyRoutineUseCase: GetDailyRoutineUseCase,
     private val getMemoryCardUseCase: GetMemoryCardUseCase,
-    private val toggleDailyRoutineStatusUseCase: ToggleDailyRoutineStatusUseCase
+    private val toggleDailyRoutineStatusUseCase: ToggleDailyRoutineStatusUseCase,
 ) : ViewModel() {
 
     private val _errorHandler: MutableSharedFlow<HomeErrorHandler> = MutableSharedFlow()

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="am">오전</string>
+    <string name="pm">오후</string>
+    <string name="year">년</string>
+    <string name="month">월</string>
+    <string name="day">일</string>
+    <string name="hour">시</string>
+
+    <string name="text_daily_routine_time_stamp">의 일과</string>
+    <string name="text_daily_routine_empty_title">아직 일과가 없어요.\n
+        새로운 일과를 만들어볼까요?</string>
+    <string name="btn_daily_routine_empty">일과 만들러 가기 -></string>
+</resources>

@@ -1,4 +1,4 @@
-package com.teampatch.feature.home
+package com.teampatch.feature.harmony.home
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -60,32 +60,32 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.model.Todo
-import com.teampatch.feature.home.model.HomeErrorHandler
-import com.teampatch.feature.home.model.MemoryCardUiState
+import com.teampatch.feature.harmony.home.model.HomeErrorHandler
+import com.teampatch.feature.harmony.home.model.MemoryCardUiState
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
 @Composable
-fun HomeRoute(
+fun HarmonyHomeRoute(
     onUserPageRequest: () -> Unit,
     onDailyRoutineRegisterPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id
     onMemoryCardClick: (String) -> Unit, // id
-    homeViewModel: HomeViewModel = hiltViewModel()
+    harmonyHomeViewModel: HarmonyHomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val dailyRoutine = homeViewModel.dailyRoutine.collectAsLazyPagingItems()
-    val memoryCardUiState by homeViewModel.memoryCardUiState.collectAsStateWithLifecycle()
-    val errorHandler by homeViewModel.errorHandler.collectAsStateWithLifecycle(null)
+    val dailyRoutine = harmonyHomeViewModel.dailyRoutine.collectAsLazyPagingItems()
+    val memoryCardUiState by harmonyHomeViewModel.memoryCardUiState.collectAsStateWithLifecycle()
+    val errorHandler by harmonyHomeViewModel.errorHandler.collectAsStateWithLifecycle(null)
 
-    HomeScreen(
+    HarmonyHomeScreen(
         onUserPageRequest = onUserPageRequest,
         onDailyRoutineRegisterPageRequest = onDailyRoutineRegisterPageRequest,
         onDailyRoutineClick = onDailyRoutineClick,
         onMemoryCardClick = onMemoryCardClick,
-        onDailyRoutineCheckChanged = homeViewModel::changeDailyRoutine,
+        onDailyRoutineCheckChanged = harmonyHomeViewModel::changeDailyRoutine,
         memoryCardUiState = memoryCardUiState,
-        dailyRoutine = dailyRoutine
+        dailyRoutine = dailyRoutine,
     )
 
     LaunchedEffect(errorHandler) {
@@ -99,7 +99,7 @@ fun HomeRoute(
 }
 
 @Composable
-fun HomeScreen(
+fun HarmonyHomeScreen(
     onUserPageRequest: () -> Unit,
     onDailyRoutineRegisterPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id
@@ -165,6 +165,18 @@ fun HomeScreen(
                                 }
 
                                 CollapseMemoryCard(
+                                    title = buildAnnotatedString {
+                                        withStyle(style = SpanStyle(color = BL)) {
+                                            append("오늘의 ")
+                                        }
+                                        withStyle(style = SpanStyle(color = MainGreen)) {
+                                            append("추억카드")
+                                        }
+                                        withStyle(style = SpanStyle(color = BL)) {
+                                            append("가 도착했어요")
+                                        }
+                                    },
+                                    text = "어떤 추억인지 확인해 볼까요?",
                                     writer = memoryCardUiState.data.let { "${it.writerTitle} ${it.writerName}" }
                                 )
                             }
@@ -276,12 +288,12 @@ private fun LocalDateTime.stringHour(): String = when (hour) {
 
 @Preview
 @Composable
-private fun HomeScreenPreview(
+private fun HarmonyHomeScreenPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
     todos: List<Todo>
 ) {
     HarmonyTheme {
-        HomeScreen(
+        HarmonyHomeScreen(
             onUserPageRequest = {},
             onDailyRoutineRegisterPageRequest = {},
             onDailyRoutineClick = {},
@@ -310,12 +322,12 @@ private fun HomeScreenPreview(
 
 @Preview
 @Composable
-private fun HomeScreenEmptyPreview(
+private fun HarmonyHomeScreenEmptyPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
     todos: List<Todo>
 ) {
     HarmonyTheme {
-        HomeScreen(
+        HarmonyHomeScreen(
             onUserPageRequest = {},
             onDailyRoutineRegisterPageRequest = {},
             onDailyRoutineClick = {},

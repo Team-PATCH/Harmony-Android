@@ -1,4 +1,4 @@
-package com.teampatch.feature.home.model
+package com.teampatch.feature.harmony.home.model
 
 import com.teampatch.core.domain.model.MemoryCard
 
