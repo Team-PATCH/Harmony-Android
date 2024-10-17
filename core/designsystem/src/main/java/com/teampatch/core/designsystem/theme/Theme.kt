@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 private val LightColorScheme = lightColorScheme(
     primary = MainGreen,
     secondary = Green2,
-    background = WH
+    background = WH,
+    surfaceContainer = WH,
+    surfaceContainerHigh = WH
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
