@@ -1,7 +1,6 @@
-package com.teampatch.feature.member.home
+package com.teampatch.feature.home
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,14 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -35,8 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -59,45 +54,9 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.model.Todo
-import com.teampatch.feature.member.home.model.HomeErrorHandler
-import com.teampatch.feature.member.home.model.MemoryCardUiState
+import com.teampatch.feature.home.model.MemoryCardUiState
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
-
-@Composable
-fun MemberHomeRoute(
-    onUserPageRequest: () -> Unit,
-    onDailyRoutineClick: (String) -> Unit, // id
-    onMemoryCardClick: (String) -> Unit, // id
-    memberHomeViewModel: MemberHomeViewModel = hiltViewModel()
-) {
-    val context = LocalContext.current
-    val dailyRoutine = memberHomeViewModel.dailyRoutine.collectAsLazyPagingItems()
-    val memoryCardUiState by memberHomeViewModel.memoryCardUiState.collectAsStateWithLifecycle()
-    val errorHandler by memberHomeViewModel.errorHandler.collectAsStateWithLifecycle(null)
-
-    MemberHomeScreen(
-        onUserPageRequest = onUserPageRequest,
-        onDailyRoutineClick = onDailyRoutineClick,
-        onMemoryCardClick = onMemoryCardClick,
-        onDailyRoutineCheckChanged = memberHomeViewModel::changeDailyRoutine,
-        uploadMemoryCardRequest = memberHomeViewModel::addMemoryCard,
-        memoryCardUiState = memoryCardUiState,
-        dailyRoutine = dailyRoutine,
-    )
-
-    LaunchedEffect(errorHandler) {
-        when (errorHandler) {
-            null -> {}
-            is HomeErrorHandler.ChangeDailyRoutineError -> {
-                Toast.makeText(context, "일과 변경중에 에러가 발생되었습니다.", Toast.LENGTH_SHORT).show()
-            }
-            is HomeErrorHandler.MemoryCardAdditionError -> {
-                Toast.makeText(context, "추억카드 등록중에 에러가 발생되었습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-}
 
 @Composable
 fun MemberHomeScreen(
@@ -281,13 +240,6 @@ fun MemberHomeScreen(
             }
         }
     }
-}
-
-@Composable
-private fun LocalDateTime.stringHour(): String = when (hour) {
-    0 -> "${stringResource(R.string.am)} 12시"
-    !in 0..12 -> "${stringResource(R.string.pm)} ${hour - 12}${stringResource(R.string.hour)}"
-    else -> "${stringResource(R.string.am)} ${hour}${stringResource(R.string.hour)}"
 }
 
 @Preview

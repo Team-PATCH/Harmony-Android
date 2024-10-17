@@ -1,6 +1,5 @@
-package com.teampatch.feature.harmony.home
+package com.teampatch.feature.home
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,14 +16,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -36,8 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -60,46 +55,12 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.model.Todo
-import com.teampatch.feature.harmony.home.model.HomeErrorHandler
-import com.teampatch.feature.harmony.home.model.MemoryCardUiState
+import com.teampatch.feature.home.model.MemoryCardUiState
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
 @Composable
-fun HarmonyHomeRoute(
-    onUserPageRequest: () -> Unit,
-    onDailyRoutineRegisterPageRequest: () -> Unit,
-    onDailyRoutineClick: (String) -> Unit, // id
-    onMemoryCardClick: (String) -> Unit, // id
-    harmonyHomeViewModel: HarmonyHomeViewModel = hiltViewModel()
-) {
-    val context = LocalContext.current
-    val dailyRoutine = harmonyHomeViewModel.dailyRoutine.collectAsLazyPagingItems()
-    val memoryCardUiState by harmonyHomeViewModel.memoryCardUiState.collectAsStateWithLifecycle()
-    val errorHandler by harmonyHomeViewModel.errorHandler.collectAsStateWithLifecycle(null)
-
-    HarmonyHomeScreen(
-        onUserPageRequest = onUserPageRequest,
-        onDailyRoutineRegisterPageRequest = onDailyRoutineRegisterPageRequest,
-        onDailyRoutineClick = onDailyRoutineClick,
-        onMemoryCardClick = onMemoryCardClick,
-        onDailyRoutineCheckChanged = harmonyHomeViewModel::changeDailyRoutine,
-        memoryCardUiState = memoryCardUiState,
-        dailyRoutine = dailyRoutine,
-    )
-
-    LaunchedEffect(errorHandler) {
-        when (errorHandler) {
-            null -> {}
-            is HomeErrorHandler.ChangeDailyRoutineError -> {
-                Toast.makeText(context, "Daily Routine Error", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-}
-
-@Composable
-fun HarmonyHomeScreen(
+fun VipHomeScreen(
     onUserPageRequest: () -> Unit,
     onDailyRoutineRegisterPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id
@@ -279,21 +240,14 @@ fun HarmonyHomeScreen(
     }
 }
 
-@Composable
-private fun LocalDateTime.stringHour(): String = when (hour) {
-    0 -> "${stringResource(R.string.am)} 12시"
-    !in 0..12 -> "${stringResource(R.string.pm)} ${hour - 12}${stringResource(R.string.hour)}"
-    else -> "${stringResource(R.string.am)} ${hour}${stringResource(R.string.hour)}"
-}
-
 @Preview
 @Composable
-private fun HarmonyHomeScreenPreview(
+private fun VipHomeScreenPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
     todos: List<Todo>
 ) {
     HarmonyTheme {
-        HarmonyHomeScreen(
+        VipHomeScreen(
             onUserPageRequest = {},
             onDailyRoutineRegisterPageRequest = {},
             onDailyRoutineClick = {},
@@ -322,12 +276,12 @@ private fun HarmonyHomeScreenPreview(
 
 @Preview
 @Composable
-private fun HarmonyHomeScreenEmptyPreview(
+private fun VipHomeScreenEmptyPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
     todos: List<Todo>
 ) {
     HarmonyTheme {
-        HarmonyHomeScreen(
+        VipHomeScreen(
             onUserPageRequest = {},
             onDailyRoutineRegisterPageRequest = {},
             onDailyRoutineClick = {},

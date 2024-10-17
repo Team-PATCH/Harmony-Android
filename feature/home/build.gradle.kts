@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.member.home"
+    namespace = "com.teampatch.feature.home"
 }
 
 dependencies {
@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     implementation(libs.hilt.navigation.compose)
+
     implementation(libs.coil.compose)
 
     testImplementation(libs.junit)

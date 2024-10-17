@@ -1,4 +1,4 @@
-package com.teampatch.feature.member.home.model
+package com.teampatch.feature.home.model
 
 sealed interface HomeErrorHandler {
 
