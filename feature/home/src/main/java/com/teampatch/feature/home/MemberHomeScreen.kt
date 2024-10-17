@@ -149,16 +149,16 @@ fun MemberHomeScreen(
                             CollapseMemoryCard(
                                 title = buildAnnotatedString {
                                     withStyle(style = SpanStyle(color = BL)) {
-                                        append("오늘의 ")
+                                        append("${stringResource(R.string.text_member_home_collapse_memory_card_title1)} ")
                                     }
                                     withStyle(style = SpanStyle(color = MainGreen)) {
-                                        append("추억카드")
+                                        append(stringResource(R.string.text_member_home_collapse_memory_card_title2))
                                     }
                                     withStyle(style = SpanStyle(color = BL)) {
-                                        append("가 공유됐어요!")
+                                        append(stringResource(R.string.text_member_home_collapse_memory_card_title3))
                                     }
                                 },
-                                text = "할머니가 확인 후 추억카드가 완성돼요",
+                                text = stringResource(R.string.text_member_home_collapse_memory_card_content),
                                 writer = memoryCardUiState.data.let { "${it.writerTitle} ${it.writerName}" }
                             )
                         }
@@ -170,16 +170,16 @@ fun MemberHomeScreen(
                                 },
                                 title = buildAnnotatedString {
                                     withStyle(style = SpanStyle(color = BL)) {
-                                        append("할머니의 ")
+                                        append("${stringResource(R.string.text_member_home_addition_memory_card_title1)} ")
                                     }
                                     withStyle(style = SpanStyle(color = MainGreen)) {
-                                        append("추억")
+                                        append(stringResource(R.string.text_member_home_addition_memory_card_title2))
                                     }
                                     withStyle(style = SpanStyle(color = BL)) {
-                                        append("을 들어볼까요?")
+                                        append(stringResource(R.string.text_member_home_addition_memory_card_title3))
                                     }
                                 },
-                                text = "아래를 클릭해 카드를 보내드려요.",
+                                text = stringResource(R.string.text_member_home_addition_memory_card_content),
                             )
                         }
                     }

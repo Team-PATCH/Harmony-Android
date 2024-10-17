@@ -128,16 +128,16 @@ fun VipHomeScreen(
                                 CollapseMemoryCard(
                                     title = buildAnnotatedString {
                                         withStyle(style = SpanStyle(color = BL)) {
-                                            append("오늘의 ")
+                                            append("${stringResource(R.string.text_vip_home_collapse_memory_card_title1)} ")
                                         }
                                         withStyle(style = SpanStyle(color = MainGreen)) {
-                                            append("추억카드")
+                                            append(stringResource(R.string.text_vip_home_collapse_memory_card_title2))
                                         }
                                         withStyle(style = SpanStyle(color = BL)) {
-                                            append("가 도착했어요")
+                                            append(stringResource(R.string.text_vip_home_collapse_memory_card_title3))
                                         }
                                     },
-                                    text = "어떤 추억인지 확인해 볼까요?",
+                                    text = stringResource(R.string.text_vip_home_collapse_memory_card_content),
                                     writer = memoryCardUiState.data.let { "${it.writerTitle} ${it.writerName}" }
                                 )
                             }
