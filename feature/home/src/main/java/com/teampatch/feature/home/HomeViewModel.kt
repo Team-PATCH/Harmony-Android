@@ -46,7 +46,10 @@ class HomeViewModel @Inject constructor(
     val errorHandler: SharedFlow<HomeErrorHandler> = _errorHandler.asSharedFlow()
 
     val user: StateFlow<User?> = kotlin.runCatching { getUserInfoUseCase() }
-        .getOrElse { flowOf(null) }
+        .getOrElse {
+            _errorHandler.tryEmit(HomeErrorHandler.UserInfoLoadError(it))
+            flowOf(null)
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,

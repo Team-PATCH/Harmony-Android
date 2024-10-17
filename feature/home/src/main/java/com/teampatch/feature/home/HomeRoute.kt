@@ -75,6 +75,10 @@ fun HomeRoute(
             is HomeErrorHandler.MemoryCardAdditionError -> {
                 Toast.makeText(context, "추억카드 등록중에 에러가 발생되었습니다.", Toast.LENGTH_SHORT).show()
             }
+
+            is HomeErrorHandler.UserInfoLoadError -> {
+                Toast.makeText(context, "유저 정보를 불러오는 도중에 에러가 발생되었습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
