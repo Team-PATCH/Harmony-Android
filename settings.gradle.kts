@@ -19,8 +19,12 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+gradle.startParameter.excludedTaskNames.apply {
+    add(":build-logic:convention:testClasses")
+}
 
 rootProject.name = "Harmony-Android"
 include(":app")
 include(":core:designsystem")
 include(":core:domain")
+include(":feature:home")
