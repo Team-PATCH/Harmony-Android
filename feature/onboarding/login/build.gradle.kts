@@ -17,9 +17,9 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.androidx.runtime.livedata)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    debugImplementation(libs.ui.tooling)
 }
