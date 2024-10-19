@@ -23,7 +23,7 @@ fun NavGraphBuilder.addOnBoardingScreen(
     onNextClick: (() -> Unit)? = null
 ) {
     composable(ONBOARDING_ROUTE) {
-        OnBoardingCommonScreen(
+        OnBoardingScreen(
             title = title,
             content = content,
             onBackClick = onBackClick,
