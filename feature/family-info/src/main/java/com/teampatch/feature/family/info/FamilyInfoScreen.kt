@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.rememberAsyncImagePainter
 import com.teampatch.core.designsystem.R.drawable.ic_export_family_info
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.ic_settings_appbar
@@ -161,7 +162,9 @@ fun FamilyInfoScreen(
                                 .padding(horizontal = 20.dp, vertical = 16.dp)
                         ) {
                             Image(
-                                painter = painterResource(ic_my_appbar),
+                                painter = rememberAsyncImagePainter(
+                                    model = familyInfoUiState.user.profileImageUrl ?: ic_my_appbar
+                                ),
                                 contentDescription = "profile",
                                 modifier = Modifier
                                     .size(72.dp)
@@ -213,7 +216,9 @@ fun FamilyInfoScreen(
 
                 items(familyInfoUiState.familyInfo) { family ->
                     FamilyProfile(
-                        profileImage = painterResource(ic_my_appbar),
+                        profileImage = rememberAsyncImagePainter(
+                            model = family.profileImageUrl ?: ic_my_appbar,
+                        ),
                         title = family.title,
                         name = family.name,
                         role = getFamilyRole(family),
