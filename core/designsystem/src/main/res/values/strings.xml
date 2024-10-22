@@ -16,4 +16,6 @@
 
     <string name="date_picker_ok">확인</string>
     <string name="date_picker_cancel">취소</string>
+
+    <string name="family_profile_manager">매니저</string>
 </resources>
