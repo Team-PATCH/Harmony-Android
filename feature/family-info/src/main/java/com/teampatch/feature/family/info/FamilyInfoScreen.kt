@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,15 +73,7 @@ fun FamilyInfoRoute(
             Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
         }
 
-        is FamilyInfoUiState.Init -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                CircularProgressIndicator()
-            }
-        }
+        is FamilyInfoUiState.Init -> {}
 
         is FamilyInfoUiState.Success -> {
             FamilyInfoScreen(
