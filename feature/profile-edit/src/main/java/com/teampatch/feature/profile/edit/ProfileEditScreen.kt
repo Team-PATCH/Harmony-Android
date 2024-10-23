@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.teampatch.core.designsystem.R.drawable.ic_camera_profile
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
+import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
 import com.teampatch.core.designsystem.component.nonReplyClickable
@@ -76,6 +77,7 @@ fun ProfileEditRoute(
 
         is ProfileEditUiState.Success -> {
             ProfileEditScreen(
+                onBackRequest = onCompleteRequest,
                 onEditClick = { profileEditViewModel.editProfile(); onCompleteRequest() },
                 onRelationChange = profileEditViewModel::updateRelation,
                 onNameChange = profileEditViewModel::updateName,
@@ -102,6 +104,7 @@ fun ProfileEditRoute(
 
 @Composable
 fun ProfileEditScreen(
+    onBackRequest: () -> Unit,
     onEditClick: () -> Unit,
     onRelationChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
@@ -109,6 +112,14 @@ fun ProfileEditScreen(
     profileEditUiState: ProfileEditUiState.Success
 ) {
     Scaffold(
+        topBar = {
+            BackButtonAppBar(
+                onBackRequest = onBackRequest,
+                title = {
+                    Text("프로필 수정")
+                }
+            )
+        },
         bottomBar = {
             DefaultButton(
                 onClick = onEditClick,
@@ -142,7 +153,7 @@ fun ProfileEditScreen(
                         placeholder = previewPlaceholder(ic_my_appbar),
                     ),
                     contentDescription = "profile",
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(144.dp)
                         .clip(CircleShape)
@@ -212,6 +223,7 @@ fun ProfileEditScreen(
 private fun ProfileEditScreenPreview() {
     HarmonyTheme {
         ProfileEditScreen(
+            onBackRequest = {},
             onEditClick = { },
             onRelationChange = { },
             onNameChange = { },
