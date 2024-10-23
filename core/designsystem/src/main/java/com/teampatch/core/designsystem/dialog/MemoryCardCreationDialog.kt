@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,18 +38,17 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.teampatch.core.designsystem.R
+import com.teampatch.core.designsystem.component.DefaultTextField
 import com.teampatch.core.designsystem.component.nonReplyClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G2
-import com.teampatch.core.designsystem.theme.G3
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
@@ -171,39 +169,12 @@ fun MemoryCardCreationDialog(
                 modifier = Modifier
                     .padding(top = 24.dp)
             )
-            BasicTextField(
+            DefaultTextField(
                 value = memoryTextValue,
                 onValueChange = { memoryTextValue = it },
-                maxLines = 1,
-                textStyle = TextStyle(
-                    color = BL,
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 20.sp
-                ),
+                hint = { Text(text = stringResource(R.string.memory_card_creation_dialog_question_memory_hint)) },
                 modifier = Modifier.padding(top = 8.dp)
-            ) {
-                Box(
-                    contentAlignment = Alignment.CenterStart,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 52.dp)
-                        .background(color = G1, shape = RoundedCornerShape(10.dp))
-                        .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
-                        .padding(horizontal = 20.dp)
-                ) {
-                    if (memoryTextValue.isEmpty()) {
-                        Text(
-                            text = stringResource(R.string.memory_card_creation_dialog_question_memory_hint),
-                            color = G3,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 20.sp
-                        )
-                    }
-                    it()
-                }
-            }
+            )
             Text(
                 text = stringResource(R.string.memory_card_creation_dialog_question_date),
                 fontFamily = PretendardFontFamily,
