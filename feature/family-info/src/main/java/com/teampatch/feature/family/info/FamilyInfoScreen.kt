@@ -46,6 +46,7 @@ import com.teampatch.core.designsystem.component.RoundButton
 import com.teampatch.core.designsystem.component.nonReplyClickable
 import com.teampatch.core.designsystem.preview.FamilyInfoPreviewParameterProvider
 import com.teampatch.core.designsystem.preview.UserPreviewParameterProvider
+import com.teampatch.core.designsystem.previewPlaceholder
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G2
@@ -209,6 +210,7 @@ fun FamilyInfoScreen(
                     FamilyProfile(
                         profileImage = rememberAsyncImagePainter(
                             model = family.profileImageUrl ?: ic_my_appbar,
+                            placeholder = previewPlaceholder(ic_my_appbar)
                         ),
                         title = family.title,
                         name = family.name,
