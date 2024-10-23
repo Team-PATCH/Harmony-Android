@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,8 +41,8 @@ fun FamilyProfile(
     profileImage: Painter,
     title: String,
     name: String,
-    role: FamilyRole? = null,
     modifier: Modifier = Modifier,
+    role: FamilyRole? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -55,6 +57,7 @@ fun FamilyProfile(
             contentDescription = "profile image",
             modifier = Modifier
                 .size(54.dp)
+                .clip(CircleShape)
         )
         Text(
             text = title,
@@ -82,6 +85,7 @@ fun FamilyProfile(
                     contentDescription = "admin"
                 )
             }
+
             FamilyRole.MANAGER -> {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -102,6 +106,7 @@ fun FamilyProfile(
                     )
                 }
             }
+
             null -> {}
         }
     }
