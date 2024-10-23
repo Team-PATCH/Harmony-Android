@@ -62,6 +62,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun FamilyInfoRoute(
+    onBackRequest: () -> Unit,
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
     familyInfoViewModel: FamilyInfoViewModel = hiltViewModel()
@@ -78,6 +79,7 @@ fun FamilyInfoRoute(
 
         is FamilyInfoUiState.Success -> {
             FamilyInfoScreen(
+                onBackRequest = onBackRequest,
                 onInviteClick = familyInfoViewModel::inviteFamily,
                 onSettingsClick = onSettingsClick,
                 onProfileEditClick = onProfileEditClick,
@@ -99,6 +101,7 @@ fun FamilyInfoRoute(
 
 @Composable
 fun FamilyInfoScreen(
+    onBackRequest: () -> Unit,
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
     onInviteClick: () -> Unit,
@@ -107,6 +110,7 @@ fun FamilyInfoScreen(
     Scaffold(
         topBar = {
             BackButtonAppBar(
+                onBackRequest = onBackRequest,
                 title = {
                     Text(
                         text = stringResource(R.string.text_title_appbar),
@@ -261,6 +265,7 @@ private fun getFamilyRole(
 private fun FamilyInfoScreenPreview() {
     HarmonyTheme {
         FamilyInfoScreen(
+            onBackRequest = {},
             onInviteClick = {},
             onSettingsClick = {},
             onProfileEditClick = {},

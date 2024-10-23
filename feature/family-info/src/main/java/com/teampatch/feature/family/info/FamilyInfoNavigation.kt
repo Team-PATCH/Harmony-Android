@@ -20,11 +20,13 @@ fun NavController.navigateToFamilyInfoScreen(
 }
 
 fun NavGraphBuilder.addFamilyInfoScreen(
+    onBackRequest: () -> Unit,
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
 ) {
     composable(FAMILY_INFO_ROUTE) {
         FamilyInfoRoute(
+            onBackRequest = onBackRequest,
             onSettingsClick = onSettingsClick,
             onProfileEditClick = onProfileEditClick
         )
