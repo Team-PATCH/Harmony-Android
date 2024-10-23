@@ -1,6 +1,7 @@
 package com.teampatch.core.designsystem.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,20 +14,28 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
-    navigation: @Composable RowScope.() -> Unit = {},
-    title: @Composable RowScope.() -> Unit = {},
+    navigation: @Composable () -> Unit = {},
+    title: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    Box(
+        contentAlignment = Alignment.CenterStart,
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
             .then(modifier)
     ) {
         navigation()
-        title()
-        actions()
+
+        Box(modifier = Modifier.align(Alignment.Center)) {
+            title()
+        }
+
+        Row(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+            content = actions
+        )
     }
 }
