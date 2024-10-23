@@ -155,7 +155,8 @@ fun FamilyInfoScreen(
                         ) {
                             Image(
                                 painter = rememberAsyncImagePainter(
-                                    model = familyInfoUiState.user.profileImageUrl ?: ic_my_appbar
+                                    model = familyInfoUiState.user.profileImageUrl ?: ic_my_appbar,
+                                    placeholder = previewPlaceholder(ic_my_appbar)
                                 ),
                                 contentDescription = "profile",
                                 modifier = Modifier
