@@ -39,9 +39,9 @@ import com.teampatch.core.designsystem.R.drawable.ic_export_family_info
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.ic_settings_appbar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
+import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.FamilyProfile
 import com.teampatch.core.designsystem.component.FamilyRole
-import com.teampatch.core.designsystem.component.MainGreenButton
 import com.teampatch.core.designsystem.component.RoundButton
 import com.teampatch.core.designsystem.component.nonReplyClickable
 import com.teampatch.core.designsystem.preview.FamilyInfoPreviewParameterProvider
@@ -225,7 +225,7 @@ fun FamilyInfoScreen(
                 }
             }
 
-            MainGreenButton(
+            DefaultButton(
                 onClick = { onInviteClick() },
                 modifier = Modifier
                     .fillMaxWidth()
