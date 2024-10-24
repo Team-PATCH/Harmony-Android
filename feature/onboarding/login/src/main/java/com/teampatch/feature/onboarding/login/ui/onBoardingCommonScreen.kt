@@ -2,6 +2,7 @@
 
 package com.teampatch.feature.onboarding.login.ui
 
+import android.widget.EditText
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,14 +14,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,15 +34,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding
+import com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding
+import com.teampatch.core.designsystem.R.drawable.btn_share_code_invitation
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
+import com.teampatch.core.designsystem.R.drawable.img_guide_start
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
@@ -96,6 +108,24 @@ fun OnBoardingLayout(
 }
 
 @Composable
+fun ChooseSpace() {
+    OnBoardingLayout(
+        title = "먼저 가족공간을 만들 주세요",
+        subtext = "가족 공간을 만든 사람이 우리 가족의 매니저가 돼요.",
+        onBackClick = { /*TODO*/ }
+    ) {
+        Column {
+            Image(painter = painterResource(btn_make_space_onboarding), null)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Image(painter = painterResource(btn_enter_space_onboarding), null)
+        }
+    }
+}
+
+
+@Composable
 fun InputVipName() {
     var expanded by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("할머니") }
@@ -149,6 +179,71 @@ fun InputVipName() {
 }
 
 @Composable
+fun InputMemberName() {
+    // 상태 변수로 관계와 이름을 저장
+    var relation by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+
+    // '다음' 버튼 활성화 상태
+    val isNextEnabled = relation.isNotEmpty() && name.isNotEmpty()
+
+    OnBoardingLayout(
+        title = "할머니와\n" +
+                "어떤 관계인가요?",
+        subtext = "할머니에 보여질\n" +
+                "닉네임을 입력 해주세요.",
+        onBackClick = { }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            // 관계 입력 필드
+            OutlinedTextField(
+                value = relation,
+                onValueChange = { relation = it },
+                label = { Text("관계 (예: 손녀)") },
+                placeholder = { Text("예) 손녀") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 이름 입력 필드
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("이름") },
+                placeholder = { Text("이름을 입력해 주세요.") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // '다음' 버튼
+            Button(
+                onClick = { /* 다음 단계로 이동 처리 */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),  // 버튼의 높이 설정
+                enabled = isNextEnabled,  // 활성화 여부
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isNextEnabled) Color(0xFF4CAF50) else Color(0xFFD3D3D3), // 초록색 또는 회색
+                    contentColor = Color.White
+                )
+            ) {
+                Text(text = "다음")
+            }
+        }
+    }
+}
+
+
+
+@Composable
 fun InputProfileSettings(modifier: Modifier = Modifier) {
     OnBoardingLayout(
         title = "마지막으로\n" +
@@ -157,43 +252,113 @@ fun InputProfileSettings(modifier: Modifier = Modifier) {
                 "프로필 사진을 설정해 주세요.",
         onBackClick = {  }
     ) {
-
         Image(painter = painterResource(ic_my_appbar), null)
     }
 }
 
-@Preview
 @Composable
-private fun InputProfileSettingsPreview() {
-    HarmonyTheme {
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = BL)) {
-                    append("할머니와\n")
-                }
-
-                withStyle(style = SpanStyle(color = MainGreen)) {
-                    append("어떤 관계")
-                }
-                withStyle(SpanStyle(color = BL)) {
-                    append("인가요?")
-                }
-            },
-            fontFamily = PretendardFontFamily,
-            fontWeight = FontWeight.W700,
-            fontSize = 28.sp,
-        )
+fun InviteVip() {
+    OnBoardingLayout(
+        title = "윤여정 할머니를\n" +
+        "초대 해주세요.",
+        subtext = "할머니를 초대해야\n" +
+        "하모니를 시작할 수 있어요",
+        onBackClick = { /*TODO*/ }
+    ) {
+        Image(painter = painterResource(btn_share_code_invitation), null)
     }
 }
 
-//@Preview(showBackground = true) //
-@Preview(showSystemUi = true) // 원래 배경색이 없는데
 @Composable
-private fun InputVipNamePreview() {
-    HarmonyTheme {
-        InputVipName()
+fun InsertInvitaionCode() {
+    // 상태 변수로 초대 코드의 각 자리를 저장
+    var code by remember { mutableStateOf("") }
+
+    // 버튼 활성화 여부 (5자리 모두 입력되면 활성화)
+    val isNextEnabled = code.length == 5
+
+    OnBoardingLayout(
+        title = "초대코드를\n" +
+        "입력 해주세요.",
+        subtext = "가족 매니저가 전송\n" +
+        "5자리 코드를 입력 해주세요.",
+        onBackClick = { /*TODO*/ }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            // 초대 코드 입력 필드
+            OutlinedTextField(
+                value = code,
+                onValueChange = {
+                    if (it.length <= 5) {
+                        code = it
+                    }
+                },
+                label = { Text("초대코드") },
+                placeholder = { Text("12345") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = PasswordVisualTransformation()  // 코드 숨김 처리
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 다음 버튼
+            Button(
+                onClick = { /* 초대 코드 확인 처리 */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),  // 버튼의 높이 설정
+                enabled = isNextEnabled,  // 활성화 여부: 5자리가 아니면 비활성화
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isNextEnabled) Color(0xFF4CAF50) else Color(0xFFD3D3D3),  // 활성화시 초록색, 비활성화시 회색
+                    contentColor = Color.White
+                )
+            ) {
+                Text(text = "다음")
+            }
+        }
     }
 }
+
+@Composable
+fun EnterSpaceInSingularState() {
+    OnBoardingLayout(
+        title = "손녀 조다은님이\n" +
+        "만든 가족 공간이에요.",
+        subtext = "",
+        onBackClick = { /*TODO*/ }
+    ) {
+        Image(painter = painterResource(ic_my_appbar), null)
+
+        Spacer(modifier = Modifier.height(221.dp))
+
+        Image(painter = painterResource(img_guide_start), null)
+
+        Spacer(modifier = Modifier.height(34.dp))
+
+        // 다음 버튼
+        Button(
+            onClick = { /* 초대 코드 확인 처리 */ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),  // 버튼의 높이 설정
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF4CAF50),  // 활성화시 초록색, 비활성화시 회색
+                contentColor = Color.White
+            )
+        ) {
+            Text(text = "다음")
+        }
+    }
+}
+
+
+
 //@Composable
 //fun Screen4_1(
 //    selectedMember: String,
@@ -292,15 +457,88 @@ private fun InputVipNamePreview() {
 //}
 
 
-// OnBoardingCommonScreen Preview
+//@Preview(showBackground = true)
+//@Composable
+//fun OnBoardingScreenPreview() {
+//    OnBoardingLayout(
+//        title = "할배요",
+//        subtext = "할매요",
+//        onBackClick = {},
+//        content = {}
+//    )
+//}
+
 @Preview(showBackground = true)
 @Composable
-fun OnBoardingScreenPreview() {
-    OnBoardingLayout(
-        title = "할배요",
-        subtext = "할매요",
-        onBackClick = {},
-        content = {}
-    )
+private fun ChooseSpacePreview() {
+    HarmonyTheme {
+        ChooseSpace()
+    }
 }
 
+@Preview(showBackground = true) //
+//@Preview(showSystemUi = true) // 원래 배경색이 없는데
+@Composable
+private fun InputVipNamePreview() {
+    HarmonyTheme {
+        InputVipName()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InputMemberNamePreview() {
+    HarmonyTheme {
+        InputMemberName()
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun InputProfileSettingsPreview() {
+    HarmonyTheme {
+        InputProfileSettings()
+//        Text(
+//            text = buildAnnotatedString {
+//                withStyle(style = SpanStyle(color = BL)) {
+//                    append("할머니와\n")
+//                }
+//
+//                withStyle(style = SpanStyle(color = MainGreen)) {
+//                    append("어떤 관계")
+//                }
+//                withStyle(SpanStyle(color = BL)) {
+//                    append("인가요?")
+//                }
+//            },
+//            fontFamily = PretendardFontFamily,
+//            fontWeight = FontWeight.W700,
+//            fontSize = 28.sp,
+//        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InviteVipPreview() {
+    HarmonyTheme {
+        InviteVip()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InsertInvitaionCodePreview() {
+    HarmonyTheme {
+        InsertInvitaionCode()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EnterSpaceInSingularStatePreview() {
+    HarmonyTheme {
+        EnterSpaceInSingularState()
+    }
+}
