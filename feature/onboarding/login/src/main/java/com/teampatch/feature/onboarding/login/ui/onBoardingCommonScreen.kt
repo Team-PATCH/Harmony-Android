@@ -2,16 +2,20 @@
 
 package com.teampatch.feature.onboarding.login.ui
 
-import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +23,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -55,7 +63,7 @@ fun OnBoardingLayout(
             onClick = onBackClick
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back"
             )
         }
@@ -89,31 +97,52 @@ fun OnBoardingLayout(
 
 @Composable
 fun InputVipName() {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf("할머니") }
+
     OnBoardingLayout(
         title = "누구를 위해\n" +
                 "만드시나요?",
         subtext = "할머니나 할아버지의 성함을\n" +
                 "입력해 주세요.",
         onBackClick = {
-
+            // Handle back click here
         }
     ) {
-
         Column {
-            DropdownMenu(
-                expanded = true,
-                onDismissRequest = {  }
-            ) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { expanded = !expanded },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = selectedItem, modifier = Modifier.weight(1f))
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,  // 항상 ArrowDropDown 아이콘만 표시
+                        contentDescription = "Toggle Dropdown"
+                    )
+                }
 
-                DropdownMenuItem(
-                    text = { Text("할머니") },
-                    onClick = { Log.d("OnBoarding", "onClick") }
-                )
-
-                DropdownMenuItem(
-                    text = { Text("할아버지") },
-                    onClick = { Log.d("OnBoarding", "onClick") }
-                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("할머니") },
+                        onClick = {
+                            selectedItem = "할머니"
+                            expanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("할아버지") },
+                        onClick = {
+                            selectedItem = "할아버지"
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }
