@@ -56,9 +56,8 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.domain.model.FamilyInfo
 import com.teampatch.core.domain.model.Role
-import com.teampatch.feature.family.info.model.FamilyInfoErrorHandler
+import com.teampatch.feature.family.info.model.FamilyInfoSideEffect
 import com.teampatch.feature.family.info.model.FamilyInfoUiState
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun FamilyInfoRoute(
@@ -69,32 +68,34 @@ fun FamilyInfoRoute(
 ) {
     val context = LocalContext.current
     val familyInfoUiState by familyInfoViewModel.familyInfoUiState.collectAsStateWithLifecycle()
+    val sideEffect by familyInfoViewModel.sidEffect.collectAsStateWithLifecycle(
+        initialValue = FamilyInfoSideEffect.Init
+    )
 
-    when (val uiState = familyInfoUiState) {
-        is FamilyInfoUiState.Error -> {
-            Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
-        }
-
-        is FamilyInfoUiState.Init -> {}
-
-        is FamilyInfoUiState.Success -> {
-            FamilyInfoScreen(
-                onBackRequest = onBackRequest,
-                onInviteClick = familyInfoViewModel::inviteFamily,
-                onSettingsClick = onSettingsClick,
-                onProfileEditClick = onProfileEditClick,
-                familyInfoUiState = uiState
-            )
-        }
+    if (sideEffect is FamilyInfoSideEffect.Init) {
+        return
     }
 
-    LaunchedEffect(Unit) {
-        familyInfoViewModel.familyInfoErrorHandler.distinctUntilChanged().collect {
-            when (it) {
-                is FamilyInfoErrorHandler.InviteError -> {
-                    Toast.makeText(context, "초대 도중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
-                }
+    FamilyInfoScreen(
+        onBackRequest = onBackRequest,
+        onInviteClick = familyInfoViewModel::inviteFamily,
+        onSettingsClick = onSettingsClick,
+        onProfileEditClick = onProfileEditClick,
+        familyInfoUiState = familyInfoUiState
+    )
+
+    LaunchedEffect(sideEffect) {
+        when (sideEffect) {
+            is FamilyInfoSideEffect.InviteError -> {
+                Toast.makeText(context, "초대 도중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
             }
+
+            is FamilyInfoSideEffect.LoadError -> {
+                Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            FamilyInfoSideEffect.Load -> {}
+            FamilyInfoSideEffect.Init -> {}
         }
     }
 }
@@ -105,7 +106,7 @@ fun FamilyInfoScreen(
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
     onInviteClick: () -> Unit,
-    familyInfoUiState: FamilyInfoUiState.Success
+    familyInfoUiState: FamilyInfoUiState
 ) {
     Scaffold(
         topBar = {
@@ -269,7 +270,7 @@ private fun FamilyInfoScreenPreview() {
             onInviteClick = {},
             onSettingsClick = {},
             onProfileEditClick = {},
-            familyInfoUiState = FamilyInfoUiState.Success(
+            familyInfoUiState = FamilyInfoUiState(
                 user = UserPreviewParameterProvider().values.first(),
                 familyInfo = FamilyInfoPreviewParameterProvider().values.first()
             )
