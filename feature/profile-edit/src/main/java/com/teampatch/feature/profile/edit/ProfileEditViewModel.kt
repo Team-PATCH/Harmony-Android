@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val editProfileUseCase: EditProfileUseCase,
-    val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase
 ) : ViewModel() {
 
     private val _errorHandler: MutableSharedFlow<ProfileEditErrorHandler> = MutableSharedFlow()
