@@ -1,5 +1,10 @@
 package com.teampatch.core.designsystem
 
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import androidx.annotation.RequiresApi
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
@@ -13,4 +18,11 @@ fun <T: Any> Throwable.toPagingData(): Flow<PagingData<T>> {
         append = LoadState.Error(this)
     )
     return flowOf(PagingData.empty(errorLoadStates))
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Context.startNotificationSettingsActivity(packageName: String) {
+    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+    startActivity(intent)
 }
