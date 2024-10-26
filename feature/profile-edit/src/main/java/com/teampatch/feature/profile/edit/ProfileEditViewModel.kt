@@ -6,14 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.usecase.profile.EditProfileUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
-import com.teampatch.feature.profile.edit.model.ProfileEditErrorHandler
+import com.teampatch.feature.profile.edit.model.ProfileEditSideEffect
 import com.teampatch.feature.profile.edit.model.ProfileEditUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,47 +25,49 @@ class ProfileEditViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase
 ) : ViewModel() {
 
-    private val _errorHandler: MutableSharedFlow<ProfileEditErrorHandler> = MutableSharedFlow()
-    val errorHandler = _errorHandler.asSharedFlow()
+    init {
+        loadData()
+    }
 
-    private val _profileEditUiState: MutableStateFlow<ProfileEditUiState> =
-        MutableStateFlow(ProfileEditUiState.Init)
+    private val _sideEffect: Channel<ProfileEditSideEffect> = Channel()
+    val sideEffect: Flow<ProfileEditSideEffect> = _sideEffect.receiveAsFlow()
+
+    private val _profileEditUiState = MutableStateFlow(ProfileEditUiState())
     val profileEditUiState = _profileEditUiState.asStateFlow()
 
-    fun loadData() = viewModelScope.launch {
+    private fun loadData() = viewModelScope.launch {
         try {
             val user = getUserInfoUseCase().first()
-            _profileEditUiState.value = ProfileEditUiState.Success(
+            _profileEditUiState.value = ProfileEditUiState(
                 relation = user.relation,
                 name = user.name,
                 profileImage = user.profileImageUrl?.let { Image.Url(it) }
             )
+            _sideEffect.send(ProfileEditSideEffect.Load)
         } catch (e: Exception) {
-            _profileEditUiState.value = ProfileEditUiState.Error(e)
+            _sideEffect.send(ProfileEditSideEffect.LoadError(e))
         }
     }
 
     fun updateRelation(relation: String) {
-        val uiState = profileEditUiState.value as? ProfileEditUiState.Success ?: return
-        _profileEditUiState.value = uiState.copy(relation = relation)
+        _profileEditUiState.update { it.copy(relation = relation) }
     }
 
     fun updateName(name: String) {
-        val uiState = profileEditUiState.value as? ProfileEditUiState.Success ?: return
-        _profileEditUiState.value = uiState.copy(name = name)
+        _profileEditUiState.update { it.copy(name = name) }
     }
 
     fun updateProfileImage(uri: Uri) {
-        val uiState = profileEditUiState.value as? ProfileEditUiState.Success ?: return
-        _profileEditUiState.value = uiState.copy(profileImage = Image.Uri(uri.toString()))
+        _profileEditUiState.update { it.copy(profileImage = Image.Uri(uri.toString())) }
     }
 
     fun editProfile() = viewModelScope.launch {
         try {
-            val uiState = profileEditUiState.value as? ProfileEditUiState.Success ?: return@launch
+            val uiState = profileEditUiState.value
             editProfileUseCase(uiState.relation, uiState.name, uiState.profileImage)
+            _sideEffect.send(ProfileEditSideEffect.ProfileEditSuccess)
         } catch (e: Exception) {
-            _errorHandler.emit(ProfileEditErrorHandler.ProfileEditError(e))
+            _sideEffect.send(ProfileEditSideEffect.ProfileEditError(e))
         }
     }
 }
