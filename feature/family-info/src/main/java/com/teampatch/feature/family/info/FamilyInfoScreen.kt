@@ -68,34 +68,28 @@ fun FamilyInfoRoute(
 ) {
     val context = LocalContext.current
     val familyInfoUiState by familyInfoViewModel.familyInfoUiState.collectAsStateWithLifecycle()
-    val sideEffect by familyInfoViewModel.sidEffect.collectAsStateWithLifecycle(
-        initialValue = FamilyInfoSideEffect.Init
-    )
 
-    if (sideEffect is FamilyInfoSideEffect.Init) {
-        return
+    if (!familyInfoUiState.isLoading) {
+        FamilyInfoScreen(
+            onBackRequest = onBackRequest,
+            onInviteClick = familyInfoViewModel::inviteFamily,
+            onSettingsClick = onSettingsClick,
+            onProfileEditClick = onProfileEditClick,
+            familyInfoUiState = familyInfoUiState
+        )
     }
 
-    FamilyInfoScreen(
-        onBackRequest = onBackRequest,
-        onInviteClick = familyInfoViewModel::inviteFamily,
-        onSettingsClick = onSettingsClick,
-        onProfileEditClick = onProfileEditClick,
-        familyInfoUiState = familyInfoUiState
-    )
+    LaunchedEffect(Unit) {
+        familyInfoViewModel.sidEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is FamilyInfoSideEffect.InviteError -> {
+                    Toast.makeText(context, "초대 도중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
 
-    LaunchedEffect(sideEffect) {
-        when (sideEffect) {
-            is FamilyInfoSideEffect.InviteError -> {
-                Toast.makeText(context, "초대 도중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                is FamilyInfoSideEffect.LoadError -> {
+                    Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            is FamilyInfoSideEffect.LoadError -> {
-                Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
-            }
-
-            FamilyInfoSideEffect.Load -> {}
-            FamilyInfoSideEffect.Init -> {}
         }
     }
 }

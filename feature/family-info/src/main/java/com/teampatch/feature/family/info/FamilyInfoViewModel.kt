@@ -38,8 +38,11 @@ class FamilyInfoViewModel @Inject constructor(
         try {
             val user = getUserInfoUseCase().first()
             val familyInfo = getFamilyInfoUseCase().first()
-            _familyInfoUiState.value = FamilyInfoUiState(user, familyInfo)
-            _sideEffect.send(FamilyInfoSideEffect.Load)
+            _familyInfoUiState.value = FamilyInfoUiState(
+                user = user,
+                familyInfo = familyInfo,
+                isLoading = false
+            )
         } catch (e: Exception) {
             _sideEffect.send(FamilyInfoSideEffect.LoadError(e))
         }
