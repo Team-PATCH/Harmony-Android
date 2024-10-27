@@ -70,4 +70,9 @@ class ProfileEditViewModel @Inject constructor(
             _sideEffect.send(ProfileEditSideEffect.ProfileEditError(e))
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        _sideEffect.close()
+    }
 }
