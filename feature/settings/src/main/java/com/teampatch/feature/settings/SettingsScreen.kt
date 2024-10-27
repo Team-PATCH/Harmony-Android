@@ -193,7 +193,7 @@ fun SettingsScreen(
                 )
             }
 
-            if (settingsUiState.installedVersion.isNotEmpty()) {
+            if (!settingsUiState.isLoading) {
                 Text(
                     text = settingsUiState.getVersionString(context),
                     color = G4,
@@ -257,7 +257,7 @@ private fun SettingsScreenPreview() {
             onLogoutRequest = {},
             onWithdrawFamilyGroupRequest = {},
             onWithdrawRequest = {},
-            settingsUiState = SettingsUiState(installedVersion = "1.0.0")
+            settingsUiState = SettingsUiState(installedVersion = "1.0.0", isLoading = false)
         )
     }
 }
