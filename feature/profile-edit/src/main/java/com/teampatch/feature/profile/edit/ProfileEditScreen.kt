@@ -19,9 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,9 +57,8 @@ fun ProfileEditRoute(
 ) {
     val context = LocalContext.current
     val profileEditUiState by profileEditViewModel.profileEditUiState.collectAsStateWithLifecycle()
-    var isLoading by rememberSaveable { mutableStateOf(true) }
 
-    if (!isLoading) {
+    if (!profileEditUiState.isLoading) {
         ProfileEditScreen(
             onBackRequest = onCompleteRequest,
             onEditClick = { profileEditViewModel.editProfile() },
@@ -76,11 +72,6 @@ fun ProfileEditRoute(
     LaunchedEffect(Unit) {
         profileEditViewModel.sideEffect.collect {
             when (it) {
-                is ProfileEditSideEffect.Init -> {}
-                is ProfileEditSideEffect.Load -> {
-                    isLoading = false
-                }
-
                 is ProfileEditSideEffect.LoadError -> {
                     Toast.makeText(context, "유저 정보를 불러오는 도중 에러가 발생하였습니다.", Toast.LENGTH_SHORT)
                         .show()

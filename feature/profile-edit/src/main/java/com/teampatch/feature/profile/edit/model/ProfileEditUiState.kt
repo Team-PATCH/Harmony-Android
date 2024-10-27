@@ -5,5 +5,6 @@ import com.teampatch.core.domain.model.Image
 data class ProfileEditUiState(
     val relation: String = "",
     val name: String = "",
-    val profileImage: Image? = null
+    val profileImage: Image? = null,
+    val isLoading: Boolean = true
 )

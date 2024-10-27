@@ -41,9 +41,9 @@ class ProfileEditViewModel @Inject constructor(
             _profileEditUiState.value = ProfileEditUiState(
                 relation = user.relation,
                 name = user.name,
-                profileImage = user.profileImageUrl?.let { Image.Url(it) }
+                profileImage = user.profileImageUrl?.let { Image.Url(it) },
+                isLoading = false
             )
-            _sideEffect.send(ProfileEditSideEffect.Load)
         } catch (e: Exception) {
             _sideEffect.send(ProfileEditSideEffect.LoadError(e))
         }
