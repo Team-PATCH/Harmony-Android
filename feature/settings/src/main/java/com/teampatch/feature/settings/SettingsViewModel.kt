@@ -77,4 +77,9 @@ class SettingsViewModel @Inject constructor(
             _sideEffect.send(SettingsSideEffect.WithdrawAppError(e))
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        _sideEffect.close()
+    }
 }
