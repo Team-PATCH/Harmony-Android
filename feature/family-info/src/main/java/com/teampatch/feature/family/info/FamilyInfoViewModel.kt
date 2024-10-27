@@ -48,7 +48,6 @@ class FamilyInfoViewModel @Inject constructor(
         }
     }
 
-
     fun inviteFamily() = viewModelScope.launch {
         try {
             inviteFamilyUseCase()
@@ -58,4 +57,8 @@ class FamilyInfoViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        _sideEffect.close()
+    }
 }
