@@ -35,7 +35,11 @@ class SettingsViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val settingsUiState: StateFlow<SettingsUiState> = kotlin.runCatching {
         getAppLatestVersionUseCase().mapLatest {
-            SettingsUiState(it.isLatest, it.installedVersionName)
+            SettingsUiState(
+                isLatestVersion = it.isLatest,
+                installedVersion = it.installedVersionName,
+                isLoading = false
+            )
         }
     }
         .getOrElse {
