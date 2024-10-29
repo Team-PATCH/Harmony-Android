@@ -18,7 +18,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +49,7 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.domain.model.Image
+import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.profile.edit.model.ProfileEditSideEffect
 import com.teampatch.feature.profile.edit.model.ProfileEditUiState
 
@@ -118,12 +121,27 @@ fun ProfileEditScreen(
             )
         },
         bottomBar = {
+            val buttonEnable: Boolean by remember(profileEditUiState) {
+                derivedStateOf {
+                    when (profileEditUiState.role) {
+                        Role.VIP -> {
+                            profileEditUiState.name.isNotBlank()
+                        }
+                        Role.MEMBER -> {
+                            with(profileEditUiState) {
+                                relation.isNotBlank() && name.isNotBlank()
+                            }
+                        }
+                    }
+                }
+            }
+
             DefaultButton(
                 onClick = onEditClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp),
-                enable = with(profileEditUiState) { relation.isNotBlank() && name.isNotBlank() }
+                enable = buttonEnable
             ) {
                 Text(text = stringResource(R.string.btn_edit_bottom))
             }
@@ -171,27 +189,30 @@ fun ProfileEditScreen(
                     )
                 }
             }
-            Text(
-                text = stringResource(R.string.text_relation_title),
-                color = BL,
-                fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
-                modifier = Modifier
-                    .padding(start = 28.dp, top = 32.dp)
-            )
-            DefaultTextField(
-                value = profileEditUiState.relation,
-                onValueChange = onRelationChange,
-                textStyle = TextStyle(
+            if (profileEditUiState.role == Role.MEMBER) {
+                Text(
+                    text = stringResource(R.string.text_relation_title),
                     color = BL,
                     fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                ),
-                hint = { Text(text = stringResource(R.string.tf_relation_hint)) },
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp)
-            )
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .padding(start = 28.dp, top = 32.dp)
+                )
+                DefaultTextField(
+                    value = profileEditUiState.relation,
+                    onValueChange = onRelationChange,
+                    textStyle = TextStyle(
+                        color = BL,
+                        fontFamily = PretendardFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    ),
+                    hint = { Text(text = stringResource(R.string.tf_relation_hint)) },
+                    modifier = Modifier
+                        .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                )
+            }
             Text(
                 text = stringResource(R.string.text_name_title),
                 color = BL,
@@ -211,7 +232,8 @@ fun ProfileEditScreen(
                     fontSize = 20.sp
                 ),
                 hint = { Text(text = stringResource(R.string.tf_name_hint)) },
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 8.dp)
             )
         }
     }
@@ -219,7 +241,7 @@ fun ProfileEditScreen(
 
 @Preview
 @Composable
-private fun ProfileEditScreenPreview() {
+private fun ProfileEditScreenMemberPreview() {
     HarmonyTheme {
         ProfileEditScreen(
             onBackRequest = {},
@@ -231,6 +253,26 @@ private fun ProfileEditScreenPreview() {
                 relation = "",
                 name = "",
                 profileImage = Image.Url("https://picsum.photos/200/300")
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileEditScreenVipPreview() {
+    HarmonyTheme {
+        ProfileEditScreen(
+            onBackRequest = {},
+            onEditClick = { },
+            onRelationChange = { },
+            onNameChange = { },
+            onProfileImageChange = { },
+            profileEditUiState = ProfileEditUiState(
+                relation = "",
+                name = "",
+                profileImage = Image.Url("https://picsum.photos/200/300"),
+                role = Role.VIP
             )
         )
     }

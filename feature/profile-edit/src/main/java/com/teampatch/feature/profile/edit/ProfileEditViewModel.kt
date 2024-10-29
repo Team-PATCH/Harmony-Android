@@ -42,6 +42,7 @@ class ProfileEditViewModel @Inject constructor(
                 relation = user.relation,
                 name = user.name,
                 profileImage = user.profileImageUrl?.let { Image.Url(it) },
+                role = user.role,
                 isLoading = false
             )
         } catch (e: Exception) {
