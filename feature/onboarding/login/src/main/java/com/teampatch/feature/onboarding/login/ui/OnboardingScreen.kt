@@ -2,20 +2,24 @@
 
 package com.teampatch.feature.onboarding.login.ui
 
-import android.widget.EditText
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -30,6 +34,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +46,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,138 +59,251 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.R
+import com.teampatch.core.designsystem.R.drawable.btn_add_profile
+import com.teampatch.core.designsystem.R.drawable.btn_back
 import com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding
 import com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding
 import com.teampatch.core.designsystem.R.drawable.btn_share_code_invitation
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.img_guide_start
+import com.teampatch.core.designsystem.R.drawable.img_logo_in_login
+import com.teampatch.core.designsystem.component.AdditionMemoryCard
+import com.teampatch.core.designsystem.component.CollapseMemoryCard
+import com.teampatch.core.designsystem.component.ExpandMemoryCard
+import com.teampatch.core.designsystem.component.HomeAppBar
+import com.teampatch.core.designsystem.component.OnboardingAppBar
+import com.teampatch.core.designsystem.component.nonReplyClickable
 import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen() {
     Scaffold(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)),
     ) { paddingValues ->
-        Column(
-            modifier = modifier
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(paddingValues) // Scaffold의 기본 패딩
+                .padding(top = 135.dp, bottom = 8.dp) // Column 시작 위치에 추가 패딩
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.text_intro_harmony),
-                contentDescription = "Text Introduce Harmony",
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .height(56.dp)
-            )
-
-            Spacer(modifier = modifier.height(29.3.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.logo_harmony),
-                contentDescription = "Logo Harmony",
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .height(56.dp)
-            )
-
-            Spacer(modifier = modifier.height(644.dp))
-
-            Button(
-                onClick = { /* Handle Kakao Login */ },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)), // 배경색은 이미지를 꽉 채우면 안 보이게 됩니다.
-                shape = RoundedCornerShape(10.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+//                verticalArrangement = Arrangement.Center,
+//                verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
                 Image(
-                    painter = painterResource(id = R.drawable.kakao_login_medium_wide), // 카카오 로그인 이미지
-                    contentDescription = "Kakao Login",
-                    modifier = Modifier.fillMaxSize(), // 버튼 크기를 꽉 채움
-                    contentScale = ContentScale.Crop // 이미지가 버튼에 맞게 잘리거나 확장됨
+                    painter = painterResource(id = img_logo_in_login),
+                    contentDescription = "Logo Harmony",
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
+
+                Spacer(modifier = Modifier.height(465.dp))
+
+                Button(
+                    onClick = { /* Handle Kakao Login */ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(68.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)), // 배경색은 이미지를 꽉 채우면 안 보이게 됩니다.
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
+                    Image(
+                        painter = painterResource(id = R.drawable.kakao_login_medium_wide), // 카카오 로그인 이미지
+                        contentDescription = "Kakao Login",
+                        modifier = Modifier.fillMaxSize(), // 버튼 크기를 꽉 채움
+//                    contentScale = ContentScale.Crop // 이미지가 버튼에 맞게 잘리거나 확장됨
+//                    modifier = Modifier.fillMaxHeight(), // 버튼 높이에 맞게 이미지 채우기
+                        contentScale = ContentScale.Fit // 이미지가 잘리지 않고 버튼 안에 맞춰짐
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun OnBoardingLayout(
-    title: String,
-    subtext: String,
-    onBackClick: () -> Unit,
-    content: @Composable () -> Unit  // content 인자를 받음
-) {
-    Column(
+fun PermissionNotificationScreen() {
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
-    ) {
-        // 뒤로 가기 버튼
-        IconButton(
-            onClick = onBackClick
+            .background(Color(0xFFF5F5F5)),
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(top = 92.dp, bottom = 8.dp) // Column 시작 위치에 추가 패딩
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.image_permission_to_notify),
+                    contentDescription = "Permission Notification Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Image(
+                    painter = painterResource(id = com.teampatch.core.designsystem.R.drawable.img_character_fullbody_mony),
+                    contentDescription = "Full-Body Mony Character",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(36.dp))
+
+                Button(
+                    onClick = { /* Handle Start Process */ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(68.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), // 투명한 배경
+                    contentPadding = PaddingValues(0.dp), // 버튼의 기본 내부 패딩 제거
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
+                    Image(
+                        painter = painterResource(id = R.drawable.btn_start_harmony), // 카카오 로그인 이미지
+                        contentDescription = "Harmoy Start Process",
+                        modifier = Modifier.fillMaxSize(), // 이미지가 버튼의 크기를 꽉 채움
+                        contentScale = ContentScale.Crop // 이미지가 버튼 크기에 맞춰 잘림
+                    )
+                }
+            }
         }
-
-        Spacer(
-            modifier = Modifier.height(24.dp)
-        )
-
-        Text(
-            text = title,
-            fontFamily = PretendardFontFamily,
-            fontWeight = FontWeight.W700,
-            fontSize = 28.sp,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = subtext,
-            color = G5,
-            fontFamily = PretendardFontFamily,
-            fontWeight = FontWeight.W500,
-            fontSize = 18.sp,
-        )
-
-        Spacer(modifier = Modifier.height(45.3.dp))
-
-        content()
     }
 }
+
+
+@Composable
+fun OnBoardingLayout(
+    onBackRequest: () -> Unit,
+    title: AnnotatedString,
+    subtext: String,
+    content: @Composable () -> Unit // content 인자를 받음
+) {
+    Scaffold(
+        topBar = {
+            OnboardingAppBar {
+                IconButton(onClick = onBackRequest) {
+                }
+            }
+        }
+    ) { scaffoldPaddingValues ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(scaffoldPaddingValues)
+                .padding(horizontal = 16.dp)
+        ) {
+            // Title, Subtitle, and Spacer sections
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                ) {
+                    Text(
+                        text = title,
+                        fontFamily = PretendardFontFamily,
+                        fontWeight = FontWeight.W700,
+                        fontSize = 28.sp,
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = subtext,
+                        color = G5,
+                        fontFamily = PretendardFontFamily,
+                        fontWeight = FontWeight.W500,
+                        fontSize = 18.sp,
+                    )
+                }
+            }
+
+            // Content Section
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp)
+                        .background(G1)
+                ) {
+                    content() // Passing the composable content
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun ChooseSpace() {
     OnBoardingLayout(
-        title = "먼저 가족공간을 만들 주세요",
-        subtext = "가족 공간을 만든 사람이 우리 가족의 매니저가 돼요.",
-        onBackClick = { /*TODO*/ }
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = BL)) {
+                append("먼저 ")
+            }
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("가족공간")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("을\n만들어 주세요.")
+            }
+        },
+        subtext = "가족 공간을 만든 사람이\n우리 가족의 매니저가 돼요.",
+        onBackRequest = { /*TODO*/ }
     ) {
-        Column {
-            Image(painter = painterResource(btn_make_space_onboarding), null)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White) // 배경색 설정
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(btn_make_space_onboarding),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            // Spacer 대신 Box로 배경색을 설정한 여백 추가
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp)
+                    .background(Color.White) // 여백의 배경색을 설정
+            )
 
-            Image(painter = painterResource(btn_enter_space_onboarding), null)
+            Image(
+                painter = painterResource(btn_enter_space_onboarding),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -193,11 +315,20 @@ fun InputVipName() {
     var selectedItem by remember { mutableStateOf("할머니") }
 
     OnBoardingLayout(
-        title = "누구를 위해\n" +
-                "만드시나요?",
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("누구")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("를 위해\n")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("만드시나요")
+            }
+        },
         subtext = "할머니나 할아버지의 성함을\n" +
                 "입력해 주세요.",
-        onBackClick = {
+        onBackRequest = {
             // Handle back click here
         }
     ) {
@@ -250,11 +381,19 @@ fun InputMemberName() {
     val isNextEnabled = relation.isNotEmpty() && name.isNotEmpty()
 
     OnBoardingLayout(
-        title = "할머니와\n" +
-                "어떤 관계인가요?",
-        subtext = "할머니에 보여질\n" +
-                "닉네임을 입력 해주세요.",
-        onBackClick = { }
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = BL)) {
+                append("할머니와\n")
+            }
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("어떤 관계")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("인가요?")
+            }
+        },
+        subtext = "할머니에게 보여질\n닉네임을 입력해 주세요.",
+        onBackRequest = { }
     ) {
         Column(
             modifier = Modifier
@@ -306,26 +445,49 @@ fun InputMemberName() {
 
 
 @Composable
-fun InputProfileSettings(modifier: Modifier = Modifier) {
+fun InputProfileSettings() {
     OnBoardingLayout(
-        title = "마지막으로\n" +
-                "프로필 사진을 설정해요.",
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = BL)) {
+                append("마지막으로\n")
+            }
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("프로필 사진")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("을 설정해요.")
+            }
+        },
         subtext = "할머니에게 보여질\n" +
                 "프로필 사진을 설정해 주세요.",
-        onBackClick = {  }
+        onBackRequest = {  }
     ) {
-        Image(painter = painterResource(ic_my_appbar), null)
+        Image(
+            painter = painterResource(btn_add_profile), null,
+            contentScale = ContentScale.Crop, // 이미지가 잘리지 않고 버튼 안에 맞춰짐
+            modifier = Modifier
+                .fillMaxWidth()
+        )
     }
 }
 
 @Composable
 fun InviteVip() {
     OnBoardingLayout(
-        title = "윤여정 할머니를\n" +
-        "초대 해주세요.",
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("윤여정 할머니")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("를\n")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("초대 해주세요.")
+            }
+        },
         subtext = "할머니를 초대해야\n" +
-        "하모니를 시작할 수 있어요",
-        onBackClick = { /*TODO*/ }
+                "하모니를 시작할 수 있어요",
+        onBackRequest = { /*TODO*/ }
     ) {
         Image(painter = painterResource(btn_share_code_invitation), null)
     }
@@ -340,11 +502,20 @@ fun InsertInvitaionCode() {
     val isNextEnabled = code.length == 5
 
     OnBoardingLayout(
-        title = "초대코드를\n" +
-        "입력 해주세요.",
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("초대코드")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("를\n")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("만들어 주세요.")
+            }
+        },
         subtext = "가족 매니저가 전송\n" +
-        "5자리 코드를 입력 해주세요.",
-        onBackClick = { /*TODO*/ }
+                "5자리 코드를 입력 해주세요.",
+        onBackRequest = { /*TODO*/ }
     ) {
         Column(
             modifier = Modifier
@@ -390,10 +561,19 @@ fun InsertInvitaionCode() {
 @Composable
 fun EnterSpaceInSingularState() {
     OnBoardingLayout(
-        title = "손녀 조다은님이\n" +
-        "만든 가족 공간이에요.",
+        title = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = MainGreen)) {
+                append("손녀 조다은님")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("이\n")
+            }
+            withStyle(style = SpanStyle(color = BL)) {
+                append("만든 가족 공간이에요.")
+            }
+        },
         subtext = "",
-        onBackClick = { /*TODO*/ }
+        onBackRequest = { /*TODO*/ }
     ) {
         Image(painter = painterResource(ic_my_appbar), null)
 
@@ -418,7 +598,6 @@ fun EnterSpaceInSingularState() {
         }
     }
 }
-
 
 
 //@Composable
@@ -534,6 +713,12 @@ fun EnterSpaceInSingularState() {
 @Composable
 fun LoginScreenPreview() {
     LoginScreen()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PermissionNotificationScreenPreview() {
+    PermissionNotificationScreen()
 }
 
 @Preview(showBackground = true)
