@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -190,7 +191,9 @@ fun ProfileEditScreen(
                     fontSize = 20.sp
                 ),
                 hint = { Text(text = stringResource(R.string.tf_relation_hint)) },
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                    .testTag("relation_text_field")
             )
             Text(
                 text = stringResource(R.string.text_name_title),
@@ -211,7 +214,9 @@ fun ProfileEditScreen(
                     fontSize = 20.sp
                 ),
                 hint = { Text(text = stringResource(R.string.tf_name_hint)) },
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                    .testTag("name_text_field")
             )
         }
     }
