@@ -7,7 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
 
-const val ONBOARDING_ROUTE = "OnBoarding"
+const val ONBOARDING_ROUTE = "Onboarding"
 
 fun NavController.navigateToOnBoardingScreen(
     navOptions: NavOptions? = null,
@@ -16,14 +16,14 @@ fun NavController.navigateToOnBoardingScreen(
     navigate(route = ONBOARDING_ROUTE, navOptions = navOptions, navigatorExtras = navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnBoardingScreen(
+fun NavGraphBuilder.addOnboardingScreen(
     title: String,
     content: @Composable () -> Unit,  // content 인자를 받음
     onBackClick: () -> Unit,
     onNextClick: (() -> Unit)? = null
 ) {
     composable(ONBOARDING_ROUTE) {
-//        OnBoardingScreen(
+//        OnboardingScreen(
 //            title = title,
 //            onBackClick = onBackClick,
 //            onNextClick = onNextClick,

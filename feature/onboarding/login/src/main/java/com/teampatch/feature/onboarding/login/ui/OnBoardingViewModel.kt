@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class OnBoardingViewModel @Inject constructor(
+class OnboardingViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registerFamilyUseCase: RegisterFamilyUseCase
 ) : ViewModel() {
