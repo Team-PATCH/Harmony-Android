@@ -30,6 +30,7 @@ fun Context.startNotificationSettingsActivity(packageName: String) {
     val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
         .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
     startActivity(intent)
+}
 
 @Composable
 fun previewPlaceholder(@DrawableRes resourceId: Int): Painter? {

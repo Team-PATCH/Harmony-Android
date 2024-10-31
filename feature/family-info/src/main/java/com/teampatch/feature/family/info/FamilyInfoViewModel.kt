@@ -24,15 +24,15 @@ class FamilyInfoViewModel @Inject constructor(
     private val inviteFamilyUseCase: InviteFamilyUseCase
 ) : ViewModel() {
 
-    init {
-        load()
-    }
-
     private val _sideEffect: Channel<FamilyInfoSideEffect> = Channel()
     val sidEffect: Flow<FamilyInfoSideEffect> = _sideEffect.receiveAsFlow()
 
     private val _familyInfoUiState = MutableStateFlow(FamilyInfoUiState())
     val familyInfoUiState = _familyInfoUiState.asStateFlow()
+
+    init {
+        load()
+    }
 
     private fun load() = viewModelScope.launch {
         try {
