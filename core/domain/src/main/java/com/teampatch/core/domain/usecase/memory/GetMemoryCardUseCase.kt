@@ -1,4 +1,4 @@
-package com.teampatch.core.domain.usecase.home
+package com.teampatch.core.domain.usecase.memory
 
 import com.teampatch.core.domain.model.MemoryCard
 import kotlinx.coroutines.flow.Flow

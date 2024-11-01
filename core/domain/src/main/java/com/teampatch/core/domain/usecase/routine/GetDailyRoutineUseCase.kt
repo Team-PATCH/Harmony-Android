@@ -1,4 +1,4 @@
-package com.teampatch.core.domain.usecase.home
+package com.teampatch.core.domain.usecase.routine
 
 import androidx.paging.PagingData
 import com.teampatch.core.domain.model.Todo
