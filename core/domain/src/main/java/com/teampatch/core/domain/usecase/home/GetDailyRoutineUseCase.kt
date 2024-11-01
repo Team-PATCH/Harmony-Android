@@ -3,8 +3,12 @@ package com.teampatch.core.domain.usecase.home
 import androidx.paging.PagingData
 import com.teampatch.core.domain.model.Todo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import javax.inject.Inject
 
-interface GetDailyRoutineUseCase {
+class GetDailyRoutineUseCase @Inject constructor() {
 
-    operator fun invoke(): Flow<PagingData<Todo>>
+    operator fun invoke(): Flow<PagingData<Todo>> {
+        return emptyFlow()
+    }
 }

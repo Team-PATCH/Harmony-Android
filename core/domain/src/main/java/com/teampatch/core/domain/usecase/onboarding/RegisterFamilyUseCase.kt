@@ -3,8 +3,9 @@ package com.teampatch.core.domain.usecase.onboarding
 import com.teampatch.core.domain.model.InvitationMessage
 import com.teampatch.core.domain.model.Host
 import com.teampatch.core.domain.model.Image
+import javax.inject.Inject
 
-interface RegisterFamilyUseCase {
+class RegisterFamilyUseCase @Inject constructor() {
 
     /**
      * @param host 할머니 혹은 할아버지
@@ -18,6 +19,8 @@ interface RegisterFamilyUseCase {
         relation: String,
         name: String,
         profileImage: Image,
-    ): InvitationMessage
+    ): InvitationMessage {
+        return InvitationMessage("test", "test")
+    }
 }
 
