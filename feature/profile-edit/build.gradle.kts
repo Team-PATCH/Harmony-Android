@@ -2,6 +2,7 @@ plugins {
     id("teampatch.android.library")
     id("teampatch.android.library.compose")
     id("teampatch.android.hilt")
+    id("teampatch.android.feature")
 }
 
 android {
@@ -12,8 +13,6 @@ dependencies {
 
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
-
-    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.coil.compose)
 
