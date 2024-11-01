@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("teampatch.android.hilt")
+    id("teampatch.android.feature")
 }
 
 android {
@@ -55,6 +57,9 @@ dependencies {
 
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:settings"))
+    implementation(project(":feature:family-info"))
+    implementation(project(":feature:profile-edit"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
