@@ -8,15 +8,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -52,14 +49,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.R.drawable.btn_add_profile
 import com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding
 import com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding
 import com.teampatch.core.designsystem.R.drawable.btn_share_code_invitation
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.img_guide_start
-import com.teampatch.core.designsystem.R.drawable.img_logo_in_login
 import com.teampatch.core.designsystem.component.OnboardingAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
@@ -80,8 +75,6 @@ import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_
 import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_invite_grandparents
 import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_make_space
 import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_setting_prfile_image
-
-
 
 
 @Composable
