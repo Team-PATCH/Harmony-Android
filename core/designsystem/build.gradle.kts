@@ -20,6 +20,7 @@ dependencies {
     debugApi(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
