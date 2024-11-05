@@ -1,2 +1,10 @@
 <resources>
+    <string name="subtext_onboarding_make_space">"가족 공간을 만든 사람이\n우리 가족의 매니저가 돼요."</string>
+    <string name="subtext_onboarding_enter_grandparents_name">"할머니나 할아버지의 성함을\n" +"입력해 주세요."</string>
+    <string name="subtext_onboarding_enter_my_name">"할머니에게 보여질\n닉네임을 입력해 주세요."</string>
+    <string name="subtext_onboarding_setting_prfile_image">"할머니에게 보여질\n" + "프로필 사진을 설정해 주세요."</string>
+    <string name="subtext_onboarding_invite_grandparents">"할머니를 초대해야\n" + "하모니를 시작할 수 있어요"</string>
+    <string name="subtext_onboarding_enter_code">"가족 매니저가 전송\n" + "5자리 코드를 입력 해주세요."</string>
+
 </resources>
+

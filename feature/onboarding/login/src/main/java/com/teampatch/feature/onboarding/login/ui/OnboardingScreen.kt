@@ -79,6 +79,12 @@ import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_code
+import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_grandparents_name
+import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_my_name
+import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_invite_grandparents
+import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_make_space
+import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_setting_prfile_image
 
 @Composable
 fun LoginScreen() {
@@ -275,7 +281,7 @@ fun ChooseSpace() {
                 append("을\n만들어 주세요.")
             }
         },
-        subtext = "가족 공간을 만든 사람이\n우리 가족의 매니저가 돼요.",
+        subtext = stringResource(subtext_onboarding_make_space),
         onBackRequest = { /*TODO*/ }
     ) {
         Column(
@@ -326,8 +332,7 @@ fun InputVipName() {
                 append("만드시나요")
             }
         },
-        subtext = "할머니나 할아버지의 성함을\n" +
-                "입력해 주세요.",
+        subtext = stringResource(subtext_onboarding_enter_grandparents_name),
         onBackRequest = {
             // Handle back click here
         }
@@ -392,7 +397,7 @@ fun InputMemberName() {
                 append("인가요?")
             }
         },
-        subtext = "할머니에게 보여질\n닉네임을 입력해 주세요.",
+        subtext = stringResource(subtext_onboarding_enter_my_name),
         onBackRequest = { }
     ) {
         Column(
@@ -458,8 +463,7 @@ fun InputProfileSettings() {
                 append("을 설정해요.")
             }
         },
-        subtext = "할머니에게 보여질\n" +
-                "프로필 사진을 설정해 주세요.",
+        subtext = stringResource(subtext_onboarding_setting_prfile_image),
         onBackRequest = {  }
     ) {
         Image(
@@ -485,8 +489,7 @@ fun InviteVip() {
                 append("초대 해주세요.")
             }
         },
-        subtext = "할머니를 초대해야\n" +
-                "하모니를 시작할 수 있어요",
+        subtext = stringResource(subtext_onboarding_invite_grandparents),
         onBackRequest = { /*TODO*/ }
     ) {
         Image(painter = painterResource(btn_share_code_invitation), null)
@@ -513,8 +516,7 @@ fun InsertInvitaionCode() {
                 append("만들어 주세요.")
             }
         },
-        subtext = "가족 매니저가 전송\n" +
-                "5자리 코드를 입력 해주세요.",
+        subtext = stringResource(subtext_onboarding_enter_code),
         onBackRequest = { /*TODO*/ }
     ) {
         Column(
