@@ -12,10 +12,10 @@ import com.teampatch.core.designsystem.toPagingData
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.core.domain.model.User
-import com.teampatch.core.domain.usecase.home.AddMemoryCardUseCase
-import com.teampatch.core.domain.usecase.home.GetDailyRoutineUseCase
-import com.teampatch.core.domain.usecase.home.GetMemoryCardUseCase
-import com.teampatch.core.domain.usecase.home.ToggleDailyRoutineStatusUseCase
+import com.teampatch.core.domain.usecase.memory.AddMemoryCardUseCase
+import com.teampatch.core.domain.usecase.routine.GetDailyRoutineUseCase
+import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
+import com.teampatch.core.domain.usecase.routine.ToggleDailyRoutineStatusUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.home.model.HomeErrorHandler
 import com.teampatch.feature.home.model.MemoryCardUiState

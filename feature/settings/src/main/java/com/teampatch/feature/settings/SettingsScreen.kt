@@ -41,13 +41,21 @@ import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.feature.settings.model.SettingsSideEffect
 import com.teampatch.feature.settings.model.SettingsUiState
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SettingsRoute
+
+/**
+ * @param onTosClick Terms of service
+ */
 
 @Composable
 fun SettingsRoute(
     onBackRequest: () -> Unit,
     onExitAppRequest: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
-    onTosClick: () -> Unit, // Terms of service
+    onTosClick: () -> Unit,
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current

@@ -15,6 +15,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.home.model.HomeErrorHandler
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object HomeRoute
 
 @Composable
 fun HomeRoute(

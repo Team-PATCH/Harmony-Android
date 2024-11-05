@@ -37,5 +37,9 @@ gradlePlugin {
             id = "teampatch.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidFeature") {
+            id = "teampatch.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
     }
 }

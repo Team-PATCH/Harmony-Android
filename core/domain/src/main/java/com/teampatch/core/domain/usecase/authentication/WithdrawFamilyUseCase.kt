@@ -1,6 +1,10 @@
 package com.teampatch.core.domain.usecase.authentication
 
-interface WithdrawFamilyUseCase {
+import javax.inject.Inject
 
-    suspend operator fun invoke()
+class WithdrawFamilyUseCase @Inject constructor() {
+
+    suspend operator fun invoke() {
+
+    }
 }

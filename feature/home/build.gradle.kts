@@ -2,6 +2,7 @@ plugins {
     id("teampatch.android.library")
     id("teampatch.android.library.compose")
     id("teampatch.android.hilt")
+    id("teampatch.android.feature")
 }
 
 android {
@@ -15,8 +16,6 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-
-    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.coil.compose)
 

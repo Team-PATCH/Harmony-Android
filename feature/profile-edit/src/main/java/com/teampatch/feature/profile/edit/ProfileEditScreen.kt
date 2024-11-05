@@ -52,6 +52,10 @@ import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.profile.edit.model.ProfileEditSideEffect
 import com.teampatch.feature.profile.edit.model.ProfileEditUiState
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ProfileEditRoute
 
 @Composable
 fun ProfileEditRoute(
