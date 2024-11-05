@@ -15,6 +15,7 @@ hiltNavigation = "1.2.0"
 desurgar = "2.1.2"
 androidTools = "31.7.0"
 coil = "2.7.0"
+runtimeLivedata = "1.7.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,6 +48,7 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 
 android-tools-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref ="desurgar" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
