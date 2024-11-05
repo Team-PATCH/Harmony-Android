@@ -11,18 +11,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,8 +30,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,10 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,25 +54,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.R.drawable.btn_add_profile
-import com.teampatch.core.designsystem.R.drawable.btn_back
 import com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding
 import com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding
 import com.teampatch.core.designsystem.R.drawable.btn_share_code_invitation
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.img_guide_start
 import com.teampatch.core.designsystem.R.drawable.img_logo_in_login
-import com.teampatch.core.designsystem.component.AdditionMemoryCard
-import com.teampatch.core.designsystem.component.CollapseMemoryCard
-import com.teampatch.core.designsystem.component.ExpandMemoryCard
-import com.teampatch.core.designsystem.component.HomeAppBar
 import com.teampatch.core.designsystem.component.OnboardingAppBar
-import com.teampatch.core.designsystem.component.nonReplyClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_code
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_grandparents_name
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_my_name
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_space
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_invite_grandparents
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_make_space
+import com.teampatch.feature.onboarding.login.R.array.title_onboarding_setting_prfile_image
 import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_code
 import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_grandparents_name
 import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_my_name
@@ -272,13 +267,13 @@ fun ChooseSpace() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = BL)) {
-                append("먼저 ")
+                append(stringArrayResource(title_onboarding_make_space)[0])
             }
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("가족공간")
+                append(stringArrayResource(title_onboarding_make_space)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("을\n만들어 주세요.")
+                append(stringArrayResource(title_onboarding_make_space)[2])
             }
         },
         subtext = stringResource(subtext_onboarding_make_space),
@@ -323,13 +318,13 @@ fun InputVipName() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("누구")
+                append(stringArrayResource(title_onboarding_enter_grandparents_name)[0])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("를 위해\n")
+                append(stringArrayResource(title_onboarding_enter_grandparents_name)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("만드시나요")
+                append(stringArrayResource(title_onboarding_enter_grandparents_name)[2])
             }
         },
         subtext = stringResource(subtext_onboarding_enter_grandparents_name),
@@ -388,13 +383,13 @@ fun InputMemberName() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = BL)) {
-                append("할머니와\n")
+                append(stringArrayResource(title_onboarding_enter_my_name)[0])
             }
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("어떤 관계")
+                append(stringArrayResource(title_onboarding_enter_my_name)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("인가요?")
+                append(stringArrayResource(title_onboarding_enter_my_name)[2])
             }
         },
         subtext = stringResource(subtext_onboarding_enter_my_name),
@@ -454,13 +449,13 @@ fun InputProfileSettings() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = BL)) {
-                append("마지막으로\n")
+                append(stringArrayResource(title_onboarding_setting_prfile_image)[0])
             }
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("프로필 사진")
+                append(stringArrayResource(title_onboarding_setting_prfile_image)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("을 설정해요.")
+                append(stringArrayResource(title_onboarding_setting_prfile_image)[2])
             }
         },
         subtext = stringResource(subtext_onboarding_setting_prfile_image),
@@ -480,13 +475,13 @@ fun InviteVip() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("윤여정 할머니")
+                append(stringArrayResource(title_onboarding_invite_grandparents)[0])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("를\n")
+                append(stringArrayResource(title_onboarding_invite_grandparents)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("초대 해주세요.")
+                append(stringArrayResource(title_onboarding_invite_grandparents)[2])
             }
         },
         subtext = stringResource(subtext_onboarding_invite_grandparents),
@@ -507,13 +502,13 @@ fun InsertInvitaionCode() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("초대코드")
+                append(stringArrayResource(title_onboarding_enter_code)[0])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("를\n")
+                append(stringArrayResource(title_onboarding_enter_code)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("만들어 주세요.")
+                append(stringArrayResource(title_onboarding_enter_code)[2])
             }
         },
         subtext = stringResource(subtext_onboarding_enter_code),
@@ -565,13 +560,13 @@ fun EnterSpaceInSingularState() {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append("손녀 조다은님")
+                append(stringArrayResource(title_onboarding_enter_space)[0])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("이\n")
+                append(stringArrayResource(title_onboarding_enter_space)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append("만든 가족 공간이에요.")
+                append(stringArrayResource(title_onboarding_enter_space)[2])
             }
         },
         subtext = "",
