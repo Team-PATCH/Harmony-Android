@@ -20,11 +20,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HarmonyTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    LoginScreen(modifier = Modifier.padding(innerPadding)) // LoginScreen 적용
-                }
+
             }
         }
     }
