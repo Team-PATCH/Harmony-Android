@@ -55,7 +55,7 @@ dependencies {
 
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home"))
-    implementation(project(":feature:onboarding:login"))
+    implementation(project(":feature:onboarding"))
 
 
 

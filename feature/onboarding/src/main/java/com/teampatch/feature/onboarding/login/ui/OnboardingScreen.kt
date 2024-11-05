@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.teampatch.feature.onboarding.login.ui
+package com.teampatch.feature.onboarding.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,19 +62,19 @@ import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_code
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_grandparents_name
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_my_name
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_enter_space
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_invite_grandparents
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_make_space
-import com.teampatch.feature.onboarding.login.R.array.title_onboarding_setting_prfile_image
-import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_code
-import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_grandparents_name
-import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_enter_my_name
-import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_invite_grandparents
-import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_make_space
-import com.teampatch.feature.onboarding.login.R.string.subtext_onboarding_setting_prfile_image
+import com.teampatch.feature.onboarding.R.array.title_onboarding_enter_code
+import com.teampatch.feature.onboarding.R.array.title_onboarding_enter_grandparents_name
+import com.teampatch.feature.onboarding.R.array.title_onboarding_enter_my_name
+import com.teampatch.feature.onboarding.R.array.title_onboarding_enter_space
+import com.teampatch.feature.onboarding.R.array.title_onboarding_invite_grandparents
+import com.teampatch.feature.onboarding.R.array.title_onboarding_make_space
+import com.teampatch.feature.onboarding.R.array.title_onboarding_setting_prfile_image
+import com.teampatch.feature.onboarding.R.string.subtext_onboarding_enter_code
+import com.teampatch.feature.onboarding.R.string.subtext_onboarding_enter_grandparents_name
+import com.teampatch.feature.onboarding.R.string.subtext_onboarding_enter_my_name
+import com.teampatch.feature.onboarding.R.string.subtext_onboarding_invite_grandparents
+import com.teampatch.feature.onboarding.R.string.subtext_onboarding_make_space
+import com.teampatch.feature.onboarding.R.string.subtext_onboarding_setting_prfile_image
 
 
 @Composable

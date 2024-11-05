@@ -27,5 +27,5 @@ rootProject.name = "Harmony-Android"
 include(":app")
 include(":core:designsystem")
 include(":core:domain")
-include(":feature:onboarding:login")
+include(":feature:onboarding")
 include(":feature:home")
