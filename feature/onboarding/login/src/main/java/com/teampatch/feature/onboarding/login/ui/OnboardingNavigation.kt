@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 
 const val ONBOARDING_ROUTE = "Onboarding"
 
-fun NavController.navigateToOnBoardingScreen(
+fun NavController.navigateToOnboardingScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null
 ) {
