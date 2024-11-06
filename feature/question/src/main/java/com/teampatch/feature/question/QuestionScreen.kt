@@ -52,8 +52,9 @@ import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.question.model.QuestionSideEffect
 import com.teampatch.feature.question.model.QuestionUiState
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.Serializable
 
-// TODO: @Serialized
+@Serializable
 data object QuestionRoute
 
 @Composable

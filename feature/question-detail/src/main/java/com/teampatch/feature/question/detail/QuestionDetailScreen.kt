@@ -73,8 +73,9 @@ import com.teampatch.feature.question.detail.model.CommentEvent
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.Serializable
 
-// TODO: @Serialized
+@Serializable
 data class QuestionDetailRoute(val questionId: String)
 
 @Composable

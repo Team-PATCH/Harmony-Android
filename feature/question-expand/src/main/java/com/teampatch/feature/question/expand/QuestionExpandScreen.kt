@@ -43,8 +43,9 @@ import com.teampatch.core.domain.fake.FakeQuestions
 import com.teampatch.feature.question.expand.model.QuestionExpandSideEffect
 import com.teampatch.feature.question.expand.model.QuestionExpandUiState
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.Serializable
 
-// TODO: @Serialized
+@Serializable
 data object QuestionExpandRoute
 
 @Composable
