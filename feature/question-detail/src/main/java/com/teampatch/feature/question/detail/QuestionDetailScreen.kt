@@ -284,6 +284,7 @@ internal fun QuestionDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(WH)
+                        .padding(top = 40.dp)
                 ) {
                     Text(
                         text = "${uiState.detail.number}${stringResource(R.string.text_number_question)}",
