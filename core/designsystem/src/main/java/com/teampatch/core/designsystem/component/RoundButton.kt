@@ -33,11 +33,10 @@ fun RoundButton(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(MainGreen, RoundedCornerShape(999.dp))
-            .nonReplyClickable {
-                if (enable) {
-                    onClick()
-                }
-            },
+            .noRippleClickable(
+                enabled = enable,
+                onClick = onClick
+            ),
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.merge(

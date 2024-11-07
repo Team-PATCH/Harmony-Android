@@ -43,7 +43,7 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.FamilyProfile
 import com.teampatch.core.designsystem.component.FamilyRole
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.preview.FamilyInfoPreviewParameterProvider
 import com.teampatch.core.designsystem.preview.UserPreviewParameterProvider
 import com.teampatch.core.designsystem.previewPlaceholder
@@ -58,6 +58,10 @@ import com.teampatch.core.domain.model.FamilyInfo
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.family.info.model.FamilyInfoSideEffect
 import com.teampatch.feature.family.info.model.FamilyInfoUiState
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object FamilyInfoRoute
 
 @Composable
 fun FamilyInfoRoute(
@@ -121,9 +125,7 @@ fun FamilyInfoScreen(
                         contentDescription = "settings",
                         modifier = Modifier
                             .padding(end = 20.dp)
-                            .nonReplyClickable {
-                                onSettingsClick()
-                            }
+                            .noRippleClickable(onClick = onSettingsClick)
                     )
                 }
             )

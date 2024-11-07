@@ -15,7 +15,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -76,13 +75,12 @@ fun DefaultTextField(
         cursorBrush = cursorBrush
     ) {
         Box(
-            contentAlignment = Alignment.CenterStart,
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 52.dp)
                 .background(color = G1, shape = RoundedCornerShape(10.dp))
                 .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp, vertical = 14.dp)
         ) {
             if (hint != null && value.isEmpty()) {
                 CompositionLocalProvider(

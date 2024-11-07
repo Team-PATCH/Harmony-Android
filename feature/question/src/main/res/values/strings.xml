@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="text_title_appbar">
+        <item>오늘의&#160;</item>
+        <item>질문</item>
+    </string-array>
+
+    <string name="text_title_question">주고받은 질문들</string>
+    <string name="text_detail_question">전체 보기</string>
+    <string name="btn_answer_member">답변보러 가기 -></string>
+    <string name="btn_answer_vip">답변하러 가기 -></string>
+</resources>

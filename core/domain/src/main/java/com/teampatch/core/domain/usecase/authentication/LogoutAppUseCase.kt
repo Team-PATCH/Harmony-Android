@@ -1,6 +1,10 @@
 package com.teampatch.core.domain.usecase.authentication
 
-interface LogoutAppUseCase {
+import javax.inject.Inject
 
-    suspend operator fun invoke()
+class LogoutAppUseCase @Inject constructor() {
+
+    suspend operator fun invoke() {
+
+    }
 }
