@@ -50,7 +50,7 @@ import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultTextField
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.dialog.InputLargeTextBottomSheetContent
 import com.teampatch.core.designsystem.getOrNull
 import com.teampatch.core.designsystem.theme.BL
@@ -215,7 +215,7 @@ internal fun QuestionDetailScreen(
                             modifier = Modifier
                                 .padding(end = 20.dp)
                                 .size(36.dp)
-                                .nonReplyClickable {
+                                .noRippleClickable {
                                     answerEventMenuExpanded = true
                                 }
                         ) {
@@ -378,7 +378,7 @@ internal fun QuestionDetailScreen(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .align(Alignment.CenterEnd)
-                                    .nonReplyClickable {
+                                    .noRippleClickable {
                                         commentEventMenuExpanded = true
                                     }
                             ) {

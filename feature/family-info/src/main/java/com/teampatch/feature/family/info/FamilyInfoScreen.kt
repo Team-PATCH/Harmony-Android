@@ -43,7 +43,7 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.FamilyProfile
 import com.teampatch.core.designsystem.component.FamilyRole
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.preview.FamilyInfoPreviewParameterProvider
 import com.teampatch.core.designsystem.preview.UserPreviewParameterProvider
 import com.teampatch.core.designsystem.previewPlaceholder
@@ -125,9 +125,7 @@ fun FamilyInfoScreen(
                         contentDescription = "settings",
                         modifier = Modifier
                             .padding(end = 20.dp)
-                            .nonReplyClickable {
-                                onSettingsClick()
-                            }
+                            .noRippleClickable(onClick = onSettingsClick)
                     )
                 }
             )

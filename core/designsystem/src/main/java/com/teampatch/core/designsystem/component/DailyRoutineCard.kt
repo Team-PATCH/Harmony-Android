@@ -51,7 +51,7 @@ fun DailyRoutineCard(
                 .border(1.dp, if (checked) MainGreen else G2, RoundedCornerShape(10.dp))
                 .background(if (checked) Green2 else G1, RoundedCornerShape(10.dp))
                 .size(64.dp)
-                .nonReplyClickable { onCheckedChange(!checked) },
+                .noRippleClickable { onCheckedChange(!checked) },
         ) {
             if (checked) {
                 Icon(

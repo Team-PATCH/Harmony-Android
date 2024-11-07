@@ -41,7 +41,7 @@ import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.previewPlaceholder
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
@@ -158,7 +158,7 @@ fun ProfileEditScreen(
                 modifier = Modifier
                     .padding(top = 44.dp)
                     .align(Alignment.CenterHorizontally)
-                    .nonReplyClickable {
+                    .noRippleClickable {
                         val pickerRequest =
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         photoPicker.launch(pickerRequest)

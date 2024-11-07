@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G2
@@ -83,9 +83,9 @@ fun MemoryCardCreationDialog(
                     text = stringResource(R.string.date_picker_ok),
                     modifier = Modifier
                         .padding(start = 16.dp, bottom = 12.dp, end = 12.dp)
-                        .nonReplyClickable {
+                        .noRippleClickable {
                             val dateMillis =
-                                datePickerState.selectedDateMillis ?: return@nonReplyClickable
+                                datePickerState.selectedDateMillis ?: return@noRippleClickable
                             val instant = Instant.ofEpochMilli(dateMillis)
                             dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
 
@@ -97,7 +97,7 @@ fun MemoryCardCreationDialog(
                 Text(
                     text = stringResource(R.string.date_picker_cancel),
                     modifier = Modifier
-                        .nonReplyClickable {
+                        .noRippleClickable {
                             isDatePickerDialogShow = false
                         }
                 )
@@ -131,7 +131,7 @@ fun MemoryCardCreationDialog(
                     .height(194.dp)
                     .padding(top = 24.dp)
                     .background(G1, RoundedCornerShape(10.dp))
-                    .nonReplyClickable { imageRequest() }
+                    .noRippleClickable(onClick = imageRequest)
             ) {
                 if (painter == null) {
                     Image(
@@ -192,7 +192,7 @@ fun MemoryCardCreationDialog(
                     .background(color = WH, shape = RoundedCornerShape(10.dp))
                     .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
                     .padding(horizontal = 20.dp)
-                    .nonReplyClickable { isDatePickerDialogShow = true }
+                    .noRippleClickable { isDatePickerDialogShow = true }
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_date_memory_card),
@@ -217,7 +217,7 @@ fun MemoryCardCreationDialog(
                         color = if (buttonEnable) MainGreen else G2,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .nonReplyClickable {
+                    .noRippleClickable {
                         if (buttonEnable) {
                             onCompleteRequest(memoryTextValue, dateTime!!)
                         }
@@ -241,9 +241,7 @@ fun MemoryCardCreationDialog(
             Image(
                 painter = painterResource(R.drawable.ic_close_memory_card),
                 contentDescription = "date",
-                modifier = Modifier.nonReplyClickable {
-                    onDismissRequest()
-                }
+                modifier = Modifier.noRippleClickable(onClick = onDismissRequest)
             )
         }
     }

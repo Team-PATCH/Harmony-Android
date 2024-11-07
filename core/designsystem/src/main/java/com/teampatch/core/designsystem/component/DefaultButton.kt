@@ -38,7 +38,7 @@ fun DefaultButton(
             .widthIn(min = 80.dp)
             .heightIn(min = 68.dp)
             .background(if (enable) MainGreen else G2, RoundedCornerShape(10.dp))
-            .nonReplyClickable(enabled = enable, onClick = onClick)
+            .noRippleClickable(enabled = enable, onClick = onClick)
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.merge(

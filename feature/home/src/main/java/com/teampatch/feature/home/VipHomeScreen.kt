@@ -43,7 +43,7 @@ import com.teampatch.core.designsystem.component.DailyRoutineCard
 import com.teampatch.core.designsystem.component.EmptyLetterBox
 import com.teampatch.core.designsystem.component.ExpandMemoryCard
 import com.teampatch.core.designsystem.component.HomeAppBar
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider
 import com.teampatch.core.designsystem.theme.BL
@@ -79,7 +79,9 @@ fun VipHomeScreen(
                     contentDescription = "my",
                     modifier = Modifier
                         .padding(end = 20.dp)
-                        .nonReplyClickable { onUserPageRequest() }
+                        .noRippleClickable(
+                            onClick = onUserPageRequest
+                        )
                 )
             }
         }
@@ -100,12 +102,12 @@ fun VipHomeScreen(
                             .fillMaxWidth()
                             .background(G1)
                             .padding(top = 28.dp, bottom = 24.dp)
-                            .nonReplyClickable {
+                            .noRippleClickable {
                                 if (memoryCardExpanded &&
                                     memoryCardUiState is MemoryCardUiState.Success
                                 ) {
                                     onMemoryCardClick(memoryCardUiState.data.id)
-                                    return@nonReplyClickable
+                                    return@noRippleClickable
                                 }
                                 memoryCardExpanded = true
                             }
@@ -189,8 +191,8 @@ fun VipHomeScreen(
                         text = title ?: "",
                         modifier = Modifier
                             .padding(horizontal = 24.dp)
-                            .nonReplyClickable {
-                                val data = dailyRoutine[index]?.data ?: return@nonReplyClickable
+                            .noRippleClickable {
+                                val data = dailyRoutine[index]?.data ?: return@noRippleClickable
                                 onDailyRoutineClick(data.id)
                             }
                     )
@@ -224,7 +226,9 @@ fun VipHomeScreen(
                             .widthIn(min = 320.dp)
                             .heightIn(48.dp)
                             .background(MainGreen, RoundedCornerShape(999.dp))
-                            .nonReplyClickable { onDailyRoutineRegisterPageRequest() }
+                            .noRippleClickable(
+                                onClick = onDailyRoutineRegisterPageRequest
+                            )
                     ) {
                         Text(
                             text = stringResource(R.string.btn_daily_routine_empty),

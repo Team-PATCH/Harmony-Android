@@ -32,7 +32,7 @@ import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G3
 import com.teampatch.core.designsystem.theme.G4
@@ -100,7 +100,7 @@ internal fun AnswerScreen(
                         modifier = Modifier
                             .size(36.dp)
                             .padding(end = 20.dp)
-                            .nonReplyClickable {
+                            .noRippleClickable {
 
                             }
                     ) {

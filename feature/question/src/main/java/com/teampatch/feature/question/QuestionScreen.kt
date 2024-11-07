@@ -37,7 +37,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.designsystem.R.drawable.ic_chevron_question
 import com.teampatch.core.designsystem.component.AppBar
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.getOrNull
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
@@ -201,7 +201,7 @@ internal fun QuestionScreen(
                         fontSize = 18.sp,
                         color = MainGreen,
                         modifier = Modifier
-                            .nonReplyClickable(onClick = questionExpandPageRequest)
+                            .noRippleClickable(onClick = questionExpandPageRequest)
                     )
                 }
             }
@@ -215,8 +215,8 @@ internal fun QuestionScreen(
                         .padding(horizontal = 20.dp)
                         .background(G1, RoundedCornerShape(10.dp))
                         .padding(vertical = 16.dp, horizontal = 24.dp)
-                        .nonReplyClickable {
-                            val id = questions.getOrNull(index)?.id ?: return@nonReplyClickable
+                        .noRippleClickable {
+                            val id = questions.getOrNull(index)?.id ?: return@noRippleClickable
                             questionDetailPageRequest(id)
                         }
                 ) {
