@@ -1,6 +1,10 @@
 package com.teampatch.core.domain.usecase.family
 
-interface InviteFamilyUseCase {
+import javax.inject.Inject
 
-    suspend operator fun invoke()
+class InviteFamilyUseCase @Inject constructor() {
+
+    suspend operator fun invoke() {
+
+    }
 }

@@ -43,7 +43,7 @@ import com.teampatch.core.designsystem.component.CollapseMemoryCard
 import com.teampatch.core.designsystem.component.DailyRoutineCard
 import com.teampatch.core.designsystem.component.ExpandMemoryCard
 import com.teampatch.core.designsystem.component.HomeAppBar
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.dialog.MemoryCardCreationDialog
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider
@@ -103,7 +103,7 @@ fun MemberHomeScreen(
                     contentDescription = "my",
                     modifier = Modifier
                         .padding(end = 20.dp)
-                        .nonReplyClickable { onUserPageRequest() }
+                        .noRippleClickable(onClick = onUserPageRequest)
                 )
             }
         }
@@ -121,12 +121,12 @@ fun MemberHomeScreen(
                         .fillMaxWidth()
                         .background(G1)
                         .padding(top = 28.dp, bottom = 24.dp)
-                        .nonReplyClickable {
+                        .noRippleClickable {
                             if (memoryCardExpanded &&
                                 memoryCardUiState is MemoryCardUiState.Success
                             ) {
                                 onMemoryCardClick(memoryCardUiState.data.id)
-                                return@nonReplyClickable
+                                return@noRippleClickable
                             }
                             memoryCardExpanded = true
                         }
@@ -226,8 +226,8 @@ fun MemberHomeScreen(
                     text = title ?: "",
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
-                        .nonReplyClickable {
-                            val data = dailyRoutine[index]?.data ?: return@nonReplyClickable
+                        .noRippleClickable {
+                            val data = dailyRoutine[index]?.data ?: return@noRippleClickable
                             onDailyRoutineClick(data.id)
                         }
                 )

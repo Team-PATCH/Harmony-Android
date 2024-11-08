@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teampatch.core.designsystem.component.BackButtonAppBar
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.startNotificationSettingsActivity
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
@@ -41,13 +41,21 @@ import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.feature.settings.model.SettingsSideEffect
 import com.teampatch.feature.settings.model.SettingsUiState
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SettingsRoute
+
+/**
+ * @param onTosClick Terms of service
+ */
 
 @Composable
 fun SettingsRoute(
     onBackRequest: () -> Unit,
     onExitAppRequest: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
-    onTosClick: () -> Unit, // Terms of service
+    onTosClick: () -> Unit,
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -232,7 +240,7 @@ private fun SettingsItem(
             .heightIn(min = 48.dp)
             .padding(horizontal = 20.dp)
             .then(modifier)
-            .nonReplyClickable { onClick() }
+            .noRippleClickable { onClick() }
     ) {
         Text(
             text = text,

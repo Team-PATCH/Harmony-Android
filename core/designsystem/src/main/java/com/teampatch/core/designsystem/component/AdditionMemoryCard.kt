@@ -66,7 +66,7 @@ fun ColumnScope.AdditionMemoryCard(
             .width(304.dp)
             .height(184.dp)
             .background(G2, RoundedCornerShape(10.dp))
-            .nonReplyClickable { onClick() }
+            .noRippleClickable(onClick = onClick)
     ) {
         Image(
             painter = painterResource(R.drawable.ic_add_memory_card),

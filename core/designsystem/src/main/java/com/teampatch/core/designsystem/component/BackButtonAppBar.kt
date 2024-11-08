@@ -33,7 +33,7 @@ fun BackButtonAppBar(
                 contentDescription = "back",
                 modifier = Modifier
                     .padding(start = 24.dp)
-                    .nonReplyClickable { onBackRequest() }
+                    .noRippleClickable(onClick = onBackRequest)
             )
         },
         title = {
