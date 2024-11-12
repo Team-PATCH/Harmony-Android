@@ -1,23 +1,51 @@
 package com.teampatch.harmony
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.designsystem.R.drawable.ic_edit
+import com.teampatch.core.designsystem.component.AppBar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
-import com.teampatch.core.designsystem.component.nonReplyClickable
+import com.teampatch.core.designsystem.component.DailyRoutineCard
+import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.model.CheckableData
+import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider
 import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
+import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.domain.model.Todo
+import com.teampatch.feature.daily.R
+import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDateTime
 
 @Composable
 fun DailyManageRoute(
@@ -32,19 +60,28 @@ fun DailyManageScreen(
     // TODO: Route
     onBackRequest: () -> Unit,
     onEditClick: () -> Unit,
+    progress: Float, // 진행률 (0f부터 1f까지의 값)
+    onDailyRoutineClick: (String) -> Unit, // id
+    onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
+    dailyRoutine: LazyPagingItems<CheckableData<Todo>>
 ) {
     // TODO:  ??
     Scaffold(
         topBar = {
-            BackButtonAppBar(
-                onBackRequest = onBackRequest,
-                title = {
+            AppBar(
+                navigation = {
                     Text(
-                        text = "2024년 6월 13일 일과",
-                        fontSize = 22.sp,
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = BL)) {
+                                append("2024년 6월 13일")
+                            }
+                            withStyle(style = SpanStyle(color = MainGreen)) {
+                                append("일과")
+                            }
+                        },
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.Bold,
-                        color = BL
+                        fontSize = 22.sp,
                     )
                 },
                 actions = {
@@ -53,15 +90,85 @@ fun DailyManageScreen(
                         contentDescription = "edit",
                         modifier = Modifier
                             .padding(end = 21.dp)
-                            .nonReplyClickable {
-                                onEditClick()
-                            }
+                            .noRippleClickable(onClick = onEditClick)
+                    )
+                },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            )
+        }
+    ) { scaffoldPaddingValues ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(1.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(scaffoldPaddingValues)
+        ) {
+            item {
+                Text(
+                    text = "완료된 일과에 응원의 한 마디를 남겨요!",
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp,
+                    color = G5,
+                    modifier = Modifier
+                        .padding(top = 17.dp, start = 20.dp, end = 97.dp)
+                )
+                Text(
+                    text = "33% 완료",
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = MainGreen,
+                    modifier = Modifier
+                        .padding(top = 0.dp, start = 20.dp, end = 272.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Color.LightGray) // 배경 색상
+                ) {
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+                        color = Color(0xFF4CAF50), // 프로그레스 바 색상
                     )
                 }
-            )
-        },
-    ) { scaffoldPaddingValues ->
-
+            }
+            items(dailyRoutine.itemCount) { index ->
+                val lastDateTime =
+                    if (index > 0) dailyRoutine.peek(index - 1)?.data?.dateTime else null
+                val dateTime = dailyRoutine.peek(index)?.data?.dateTime
+                val title = dailyRoutine[index]?.data?.title
+                DailyRoutineCard(
+                    onCheckedChange = {
+                        val data = dailyRoutine[index]?.data ?: return@DailyRoutineCard
+                        dailyRoutine.itemSnapshotList.items[index].checked.value = it
+                        onDailyRoutineCheckChanged(data.id, it)
+                    },
+                    checked = dailyRoutine[index]?.checked?.value ?: false,
+                    dateTime = dateTime?.stringHour() ?: "",
+                    text = title ?: "",
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .noRippleClickable {
+                            val data = dailyRoutine[index]?.data ?: return@noRippleClickable
+                            onDailyRoutineClick(data.id)
+                        }
+                )
+            }
+            if (dailyRoutine.itemCount != 0) {
+                item {
+                    Box(modifier = Modifier.height(20.dp))
+                }
+            }
+        }
     }
 }
 
@@ -69,6 +176,25 @@ fun DailyManageScreen(
 @Composable
 private fun DailyManageScreenPreview() {
     HarmonyTheme {
-        DailyManageScreen()
+        DailyManageScreen(
+            onBackRequest = { /* TODO: Handle back request */ },
+            onEditClick = { /* TODO: Handle edit click */ },
+            progress = 0.33f, // 33% 완료
+            onDailyRoutineClick = {},
+            onDailyRoutineCheckChanged = { _, _ -> },
+            dailyRoutine = flowOf(
+                PagingData.from(
+                    data = TodoPreviewParameterProvider().values.first()
+                        .map { CheckableData(it, mutableStateOf(it.isFinished)) },
+                ),
+            )
+                .collectAsLazyPagingItems()       )
     }
+}
+
+@Composable
+internal fun LocalDateTime.stringHour(): String = when (hour) {
+    0 -> "오전 12시"
+    !in 0..12 -> "오후 ${hour - 12}시"
+    else -> "오전 ${hour}시"
 }
