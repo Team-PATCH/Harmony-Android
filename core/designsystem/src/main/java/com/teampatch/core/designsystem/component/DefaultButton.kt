@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ fun DefaultButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    color: DefaultButtonColor = DefaultButtonColor(),
     content: @Composable RowScope.() -> Unit
 ) {
     Row(
@@ -37,7 +39,10 @@ fun DefaultButton(
         modifier = modifier
             .widthIn(min = 80.dp)
             .heightIn(min = 68.dp)
-            .background(if (enable) MainGreen else G2, RoundedCornerShape(10.dp))
+            .background(
+                color = if (enable) color.containerColor else color.disabledContainerColor,
+                shape = RoundedCornerShape(10.dp)
+            )
             .noRippleClickable(enabled = enable, onClick = onClick)
     ) {
         CompositionLocalProvider(
@@ -52,6 +57,11 @@ fun DefaultButton(
         }
     }
 }
+
+data class DefaultButtonColor(
+    val containerColor: Color = MainGreen,
+    val disabledContainerColor: Color = G2,
+)
 
 @Preview
 @Composable
