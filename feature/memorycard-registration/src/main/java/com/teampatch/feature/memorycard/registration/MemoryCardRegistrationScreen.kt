@@ -40,7 +40,7 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultButtonColor
 import com.teampatch.core.designsystem.component.SpeechBubble
 import com.teampatch.core.designsystem.component.TypewriterText
-import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily

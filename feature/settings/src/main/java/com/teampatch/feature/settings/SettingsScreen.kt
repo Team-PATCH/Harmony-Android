@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teampatch.core.common.startNotificationSettingsActivity
 import com.teampatch.core.designsystem.component.BackButtonAppBar
-import com.teampatch.core.designsystem.component.noRippleClickable
-import com.teampatch.core.designsystem.startNotificationSettingsActivity
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G4
