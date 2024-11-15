@@ -61,6 +61,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:family-info"))
     implementation(project(":feature:profile-edit"))
+    implementation(project(":feature:memorycard-registration"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_communication_start">대화 시작</string>
+    <string name="btn_communication_end">대화 종료</string>
+    <string name="btn_communication_complete">추억 보러가기</string>
+    <string name="text_speechbuble_init">안녕하세요! 추억을 기록하러 오셨군요. 아래 버튼을 누르면 기록을 시작합니다.</string>
+    <string name="text_speechbuble_complete">좋아요! 그럼 지금까지 나눈 추억 대화를 저장하겠습니다.</string>
+</resources>
