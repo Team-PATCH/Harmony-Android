@@ -29,7 +29,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.rememberAsyncImagePainter
-import com.teampatch.core.common.checkRadioAudioPermission
 import com.teampatch.core.common.findActivity
 import com.teampatch.core.common.requestRadioAudioPermission
 import com.teampatch.core.designsystem.R.drawable.ic_camera_memory
@@ -57,6 +56,7 @@ internal fun MemoryCardRegistrationRoute(
     viewModel: MemoryCardRegistrationViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val activity = context.findActivity()
     val lifecycle = LocalLifecycleOwner.current
     val uiState = viewModel.uiState
 
@@ -91,8 +91,10 @@ internal fun MemoryCardRegistrationRoute(
                 MemoryCardRegistrationSideEffect.RecordingError ->
                     Toast.makeText(context, "음성 녹음 실패하였습니다.", Toast.LENGTH_SHORT).show()
 
-                MemoryCardRegistrationSideEffect.RecordingPermissionDeniedError ->
+                MemoryCardRegistrationSideEffect.RecordingPermissionDeniedError -> {
                     Toast.makeText(context, "오디오 녹음 권한이 필요합니다.", Toast.LENGTH_LONG).show()
+                    activity?.requestRadioAudioPermission()
+                }
             }
         }
     }
@@ -107,7 +109,7 @@ internal fun MemoryCardRegistrationScreen(
     uiState: MemoryCardRegistrationUiState
 ) {
     val context = LocalContext.current
-    val activity = context.findActivity()
+
     Scaffold(
         topBar = {
             AppBar(
@@ -135,10 +137,6 @@ internal fun MemoryCardRegistrationScreen(
                 onClick = {
                     when (uiState.recordState) {
                         RecordState.INIT -> {
-                            if (!context.checkRadioAudioPermission()) {
-                                activity?.requestRadioAudioPermission()
-                                return@DefaultButton
-                            }
                             onRecordRequest()
                         }
 
