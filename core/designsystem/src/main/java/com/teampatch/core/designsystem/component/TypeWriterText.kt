@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.TextUnit
 import kotlinx.coroutines.delay
 
 @Composable
-fun TypewriterText(
+fun TypeWriterText(
     text: String,
     modifier: Modifier = Modifier,
     typingDelay: Long = 120,

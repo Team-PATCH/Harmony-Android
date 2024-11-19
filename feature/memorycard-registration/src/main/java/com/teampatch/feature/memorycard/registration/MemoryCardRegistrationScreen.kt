@@ -40,7 +40,7 @@ import com.teampatch.core.designsystem.component.AppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultButtonColor
 import com.teampatch.core.designsystem.component.SpeechBubble
-import com.teampatch.core.designsystem.component.TypewriterText
+import com.teampatch.core.designsystem.component.TypeWriterText
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
@@ -201,7 +201,7 @@ internal fun MemoryCardRegistrationScreen(
                 }
             }
             SpeechBubble {
-                TypewriterText(text = context.getSpeechBubbleText(uiState))
+                TypeWriterText(text = context.getSpeechBubbleText(uiState))
             }
             Image(
                 painter = painterResource(ic_harmony_talk),
