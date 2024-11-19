@@ -7,10 +7,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.teampatch.core.common.exception.PermissionDeniedException
-import com.teampatch.core.domain.usecase.memory.AddMemoryCardRecordingUseCase
+import com.teampatch.core.domain.usecase.memory.AddMemoryCardRecordUseCase
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardQuestionUseCase
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
+import com.teampatch.core.domain.usecase.memory.StartMemoryCardRecordingUseCase
+import com.teampatch.core.domain.usecase.memory.StopMemoryCardRecordingUseCase
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationSideEffect
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationUiState
 import com.teampatch.feature.memorycard.registration.model.RecordState
@@ -24,7 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 internal class MemoryCardRegistrationViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val addMemoryCardRecordingUseCase: AddMemoryCardRecordingUseCase,
+    private val startMemoryCardRecordingUseCase: StartMemoryCardRecordingUseCase,
+    private val stopMemoryCardRecordingUseCase: StopMemoryCardRecordingUseCase,
+    private val addMemoryCardRecordUseCase: AddMemoryCardRecordUseCase,
     private val getMemoryCardQuestionUseCase: GetMemoryCardQuestionUseCase,
     private val getMemoryCardUseCase: GetMemoryCardUseCase
 ) : ViewModel() {
@@ -36,8 +39,8 @@ internal class MemoryCardRegistrationViewModel @Inject constructor(
         savedStateHandle.toRoute<MemoryCardRegistrationRoute>()
     }
         .onFailure {
-            _sideEffect.trySend(MemoryCardRegistrationSideEffect.LoadError)
             it.printStackTrace()
+            _sideEffect.trySend(MemoryCardRegistrationSideEffect.LoadError)
         }
         .getOrNull()
 
@@ -57,8 +60,8 @@ internal class MemoryCardRegistrationViewModel @Inject constructor(
                 isLoading = false
             )
         } catch (e: Exception) {
-            _sideEffect.send(MemoryCardRegistrationSideEffect.LoadError)
             e.printStackTrace()
+            _sideEffect.send(MemoryCardRegistrationSideEffect.LoadError)
         }
     }
 
@@ -69,24 +72,23 @@ internal class MemoryCardRegistrationViewModel @Inject constructor(
             val question = getMemoryCardQuestionUseCase(route!!.memoryCardId)
             uiState = uiState.copy(questions = listOf(question.question))
 
-            addMemoryCardRecordingUseCase(
-                memoryCardId = route.memoryCardId,
-                question = question.question,
-                isRecordFinished = { uiState.recordState == RecordState.COMPLETE }
-            )
+            startMemoryCardRecordingUseCase()
         } catch (e: Exception) {
-            if (e is PermissionDeniedException) {
-                _sideEffect.send(MemoryCardRegistrationSideEffect.RecordingPermissionDeniedError)
-            } else {
-                _sideEffect.send(MemoryCardRegistrationSideEffect.RecordingError)
-            }
-
-            uiState = uiState.copy(recordState = RecordState.INIT)
             e.printStackTrace()
+            _sideEffect.send(MemoryCardRegistrationSideEffect.RecordingError)
+            uiState = uiState.copy(recordState = RecordState.INIT)
         }
     }
 
-    fun stopRecord() {
-        uiState = uiState.copy(recordState = RecordState.COMPLETE)
+    fun stopRecord() = viewModelScope.launch {
+        try {
+            stopMemoryCardRecordingUseCase()
+            addMemoryCardRecordUseCase(route!!.memoryCardId, uiState.questions.first())
+            uiState = uiState.copy(recordState = RecordState.COMPLETE)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            uiState = uiState.copy(recordState = RecordState.INIT)
+            _sideEffect.send(MemoryCardRegistrationSideEffect.RecordingError)
+        }
     }
 }
