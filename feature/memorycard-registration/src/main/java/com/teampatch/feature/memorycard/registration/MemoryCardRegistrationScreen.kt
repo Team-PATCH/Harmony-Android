@@ -29,6 +29,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.rememberAsyncImagePainter
+import com.teampatch.core.common.checkRadioAudioPermission
 import com.teampatch.core.common.findActivity
 import com.teampatch.core.common.requestRadioAudioPermission
 import com.teampatch.core.designsystem.R.drawable.ic_camera_memory
@@ -40,11 +41,11 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultButtonColor
 import com.teampatch.core.designsystem.component.SpeechBubble
 import com.teampatch.core.designsystem.component.TypewriterText
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationSideEffect
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationUiState
 import com.teampatch.feature.memorycard.registration.model.RecordState
@@ -134,7 +135,10 @@ internal fun MemoryCardRegistrationScreen(
                 onClick = {
                     when (uiState.recordState) {
                         RecordState.INIT -> {
-                            activity?.requestRadioAudioPermission()
+                            if (!context.checkRadioAudioPermission()) {
+                                activity?.requestRadioAudioPermission()
+                                return@DefaultButton
+                            }
                             onRecordRequest()
                         }
 
