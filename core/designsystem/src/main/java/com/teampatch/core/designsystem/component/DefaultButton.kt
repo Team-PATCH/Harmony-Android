@@ -30,7 +30,7 @@ import com.teampatch.core.designsystem.utils.noRippleClickable
 fun DefaultButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enable: Boolean = true,
+    enabled: Boolean = true,
     color: DefaultButtonColor = DefaultButtonColor(),
     content: @Composable RowScope.() -> Unit
 ) {
@@ -41,10 +41,10 @@ fun DefaultButton(
             .widthIn(min = 80.dp)
             .heightIn(min = 68.dp)
             .background(
-                color = if (enable) color.containerColor else color.disabledContainerColor,
+                color = if (enabled) color.containerColor else color.disabledContainerColor,
                 shape = RoundedCornerShape(10.dp)
             )
-            .noRippleClickable(enabled = enable, onClick = onClick)
+            .noRippleClickable(enabled = enabled, onClick = onClick)
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.merge(

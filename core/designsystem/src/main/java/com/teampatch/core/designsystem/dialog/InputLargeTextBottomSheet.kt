@@ -66,7 +66,7 @@ fun ColumnScope.InputLargeTextBottomSheetContent(
 
     DefaultButton(
         onClick = onCompleteRequest,
-        enable = buttonEnable,
+        enabled = buttonEnable,
         modifier = Modifier
             .fillMaxWidth()
             .height(54.dp)

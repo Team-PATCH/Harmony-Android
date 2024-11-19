@@ -115,7 +115,7 @@ internal fun AnswerScreen(
         bottomBar = {
             DefaultButton(
                 onClick = { onCompleteRequest(answer) },
-                enable = answer.isNotBlank(),
+                enabled = answer.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)

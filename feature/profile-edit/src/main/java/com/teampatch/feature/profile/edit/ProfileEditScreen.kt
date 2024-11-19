@@ -146,7 +146,7 @@ fun ProfileEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp),
-                enable = buttonEnable
+                enabled = buttonEnable
             ) {
                 Text(text = stringResource(R.string.btn_edit_bottom))
             }
