@@ -16,7 +16,8 @@ import java.time.LocalDateTime
 internal data class DailyManageUiState(
 //    val daily: Flow<PagingData<Daily>> = emptyFlow(),
     val user: User = emptyUser,
-    val daily: DailyManage = DailyManage("", 0, "", "", LocalDateTime.now(), 0),
+//    val daily: DailyManage = DailyManage("", 0, "", "", LocalDateTime.now(), 0),
+    val daily: Flow<PagingData<Daily>> = emptyFlow(),
     val comment: Flow<PagingData<DailyComment>> = emptyFlow(),
     val isLoading: Boolean = true
 )

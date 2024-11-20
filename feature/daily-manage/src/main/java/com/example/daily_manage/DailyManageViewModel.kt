@@ -11,7 +11,6 @@ import com.teampatch.core.domain.usecase.daily.DeleteDailyCommentUseCase
 import com.teampatch.core.domain.usecase.daily.EditDailyCommentUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyCommentsUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
-import com.teampatch.core.domain.usecase.daily.GetDailyUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -33,14 +32,11 @@ internal class DailyManageViewModel @Inject constructor(
     private val deleteCommentUseCase: DeleteDailyCommentUseCase,
 ) : ViewModel() {
 
-    var dailyManageUiState = mutableStateOf(DailyManageUiState())
+    var uiState = mutableStateOf(DailyManageUiState())
         private set
 
     private val dailyId: StateFlow<String> =
         savedStateHandle.getStateFlow("daily_id", "")
-
-    var uiState = mutableStateOf(DailyManageUiState())
-        private set
 
     private val _sideEffect: Channel<DailyManageSideEffect> = Channel()
     val sideEffect: Flow<DailyManageSideEffect> = _sideEffect.receiveAsFlow()

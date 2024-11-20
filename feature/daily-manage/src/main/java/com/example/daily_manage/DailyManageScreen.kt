@@ -53,9 +53,6 @@ import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.domain.emptyUser
 import com.teampatch.core.domain.fake.FakeDaily
 import com.teampatch.core.domain.fake.FakeDailyComments
-import com.teampatch.core.domain.fake.FakeDailyManage
-import com.teampatch.core.domain.fake.FakeQuestionComments
-import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.core.domain.model.Role
 import com.teampatch.daily_manage.R
 import kotlinx.coroutines.flow.flowOf
@@ -70,8 +67,8 @@ fun DailyManageRoute(
     editDailyPageRequest: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    val dailyManageViewModel: DailyManageViewModel = hiltViewModel()
-    val uiState: DailyManageUiState by dailyManageViewModel.dailyManageUiState
+    val viewModel: DailyManageViewModel = hiltViewModel()
+    val uiState: DailyManageUiState by viewModel.uiState
 
     if (!uiState.isLoading) {
         DailyManageScreen(
@@ -88,11 +85,11 @@ fun DailyManageRoute(
                 }
             },
             uiState = uiState
-            )
+        )
     }
 
     LaunchedEffect(Unit) {
-        dailyManageViewModel.sideEffect.collect { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is DailyManageSideEffect.AddCommentError ->
                     Toast.makeText(context, "일과 추가 실패", Toast.LENGTH_SHORT).show()
@@ -118,7 +115,7 @@ internal fun DailyManageScreen(
     commentEventListener: (CommentEvent) -> Unit,
     uiState: DailyManageUiState
 ) {
-//    val daily = uiState.daily.collectAsLazyPagingItems()
+    val daily = uiState.daily.collectAsLazyPagingItems()
 
     var isCommentDialogShow by rememberSaveable { mutableStateOf(false) }
     var isCommentEditDialogShow by rememberSaveable { mutableStateOf<CommentEdit?>(null) }
@@ -262,8 +259,9 @@ private fun DailyManageScreenPreview() {
             onBackRequest = {},
             editDailyPageRequest = {},
             commentEventListener = {},
+            answerEventListener = {},
             uiState = DailyManageUiState(
-                daily = FakeDailyManage().get(),
+                daily = flowOf(PagingData.from(FakeDaily().get())),
                 comment = flowOf(PagingData.from(FakeDailyComments().get())),
                 user = emptyUser.copy(uid = "uid001", role = Role.VIP),
                 isLoading = false
