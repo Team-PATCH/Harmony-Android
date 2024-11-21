@@ -72,10 +72,18 @@ internal fun MemoryCardRegistrationRoute(
 
     DisposableEffect(lifecycle.lifecycle.currentState) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP &&
-                viewModel.uiState.recordState == RecordState.RECORDING
-            ) {
-                viewModel.stopRecord()
+            when (event) {
+                Lifecycle.Event.ON_START -> {
+                    if (viewModel.uiState.recordState == RecordState.RECORDING) {
+                        viewModel.resumeRecording()
+                    }
+                }
+                Lifecycle.Event.ON_STOP -> {
+                    if (viewModel.uiState.recordState == RecordState.RECORDING) {
+                        viewModel.pauseRecording()
+                    }
+                }
+                else -> {}
             }
         }
         lifecycle.lifecycle.addObserver(observer)

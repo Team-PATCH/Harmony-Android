@@ -12,6 +12,8 @@ import com.teampatch.core.common.checkRadioAudioPermission
 import com.teampatch.core.domain.usecase.memory.AddMemoryCardRecordUseCase
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardQuestionUseCase
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
+import com.teampatch.core.domain.usecase.memory.PauseMemoryCardRecordingUseCase
+import com.teampatch.core.domain.usecase.memory.ResumeMemoryCardRecordingUseCase
 import com.teampatch.core.domain.usecase.memory.StartMemoryCardRecordingUseCase
 import com.teampatch.core.domain.usecase.memory.StopMemoryCardRecordingUseCase
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationSideEffect
@@ -31,6 +33,8 @@ internal class MemoryCardRegistrationViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val startMemoryCardRecordingUseCase: StartMemoryCardRecordingUseCase,
     private val stopMemoryCardRecordingUseCase: StopMemoryCardRecordingUseCase,
+    private val resumeMemoryCardRecordingUseCase: ResumeMemoryCardRecordingUseCase,
+    private val pauseMemoryCardRecordingUseCase: PauseMemoryCardRecordingUseCase,
     private val addMemoryCardRecordUseCase: AddMemoryCardRecordUseCase,
     private val getMemoryCardQuestionUseCase: GetMemoryCardQuestionUseCase,
     private val getMemoryCardUseCase: GetMemoryCardUseCase
@@ -95,9 +99,34 @@ internal class MemoryCardRegistrationViewModel @Inject constructor(
             addMemoryCardRecordUseCase(route!!.memoryCardId, uiState.questions.first())
             uiState = uiState.copy(recordState = RecordState.COMPLETE)
         } catch (e: Exception) {
-            e.printStackTrace()
-            uiState = uiState.copy(recordState = RecordState.INIT)
-            _sideEffect.send(MemoryCardRegistrationSideEffect.RecordingError)
+            handleRecordingError(e)
         }
+    }
+
+    fun resumeRecording() = viewModelScope.launch {
+        try {
+            resumeMemoryCardRecordingUseCase()
+        } catch (e: Exception) {
+            handleRecordingError(e)
+        }
+    }
+
+    fun pauseRecording() = viewModelScope.launch {
+        try {
+            pauseMemoryCardRecordingUseCase()
+        } catch (e: Exception) {
+            handleRecordingError(e)
+        }
+    }
+
+    private suspend fun handleRecordingError(e: Exception) {
+        e.printStackTrace()
+        uiState = uiState.copy(recordState = RecordState.INIT)
+        _sideEffect.send(MemoryCardRegistrationSideEffect.RecordingError)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopMemoryCardRecordingUseCase()
     }
 }
