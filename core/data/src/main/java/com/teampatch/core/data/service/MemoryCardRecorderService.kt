@@ -14,11 +14,22 @@ internal class MemoryCardRecorderService @Inject constructor(
     lateinit var filePath: String
         private set
 
-    fun startRecording(outputFilePath: String) = with(mediaRecorder) {
+    fun prepare(outputFilePath: String) = with(mediaRecorder) {
         filePath = outputFilePath
         setOutputFile(outputFilePath)
         prepare()
+    }
+
+    fun startRecording() = with(mediaRecorder) {
         start()
+    }
+
+    fun resumeRecording() {
+        mediaRecorder.resume()
+    }
+
+    fun pauseRecording() {
+        mediaRecorder.pause()
     }
 
     fun stopRecording() = with(mediaRecorder) {

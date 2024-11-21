@@ -20,11 +20,20 @@ internal class MemoryCardRepositoryImpl @Inject constructor(
 
     override fun startRecord() {
         val fileName = "${appContext.cacheDir.absolutePath}/${UUID.randomUUID()}.m4a"
-        memoryCardRecorderService.startRecording(fileName)
+        memoryCardRecorderService.prepare(fileName)
+        memoryCardRecorderService.startRecording()
     }
 
     override fun stopRecording() {
         memoryCardRecorderService.stopRecording()
+    }
+
+    override fun resumeRecording() {
+        memoryCardRecorderService.resumeRecording()
+    }
+
+    override fun pauseRecording() {
+        memoryCardRecorderService.pauseRecording()
     }
 
     override fun getRecordingResult(): InputStream {

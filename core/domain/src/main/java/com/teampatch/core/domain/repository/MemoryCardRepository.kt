@@ -9,6 +9,10 @@ interface MemoryCardRepository {
 
     fun stopRecording()
 
+    fun resumeRecording()
+
+    fun pauseRecording()
+
     fun getRecordingResult(): InputStream
 
     /**
