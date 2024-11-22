@@ -45,14 +45,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.teampatch.core.common.getOrNull
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultTextField
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.dialog.InputLargeTextBottomSheetContent
-import com.teampatch.core.designsystem.getOrNull
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G3
@@ -63,6 +62,7 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.emptyUser
 import com.teampatch.core.domain.fake.FakeQuestionComments
 import com.teampatch.core.domain.fake.FakeQuestionDetail

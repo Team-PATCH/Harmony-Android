@@ -28,6 +28,7 @@ import com.teampatch.core.designsystem.theme.Green2
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 
 @Composable
 fun DailyRoutineCard(

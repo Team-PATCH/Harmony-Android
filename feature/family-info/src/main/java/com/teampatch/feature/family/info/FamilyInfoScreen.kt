@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.core.designsystem.R.drawable.ic_export_family_info
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.ic_settings_appbar
@@ -43,10 +44,9 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.FamilyProfile
 import com.teampatch.core.designsystem.component.FamilyRole
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.preview.FamilyInfoPreviewParameterProvider
 import com.teampatch.core.designsystem.preview.UserPreviewParameterProvider
-import com.teampatch.core.designsystem.previewPlaceholder
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G2

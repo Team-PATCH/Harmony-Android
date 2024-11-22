@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G2

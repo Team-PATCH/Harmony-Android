@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,12 +24,14 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
 
 @Composable
 fun DefaultButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enable: Boolean = true,
+    enabled: Boolean = true,
+    color: DefaultButtonColor = DefaultButtonColor(),
     content: @Composable RowScope.() -> Unit
 ) {
     Row(
@@ -37,8 +40,11 @@ fun DefaultButton(
         modifier = modifier
             .widthIn(min = 80.dp)
             .heightIn(min = 68.dp)
-            .background(if (enable) MainGreen else G2, RoundedCornerShape(10.dp))
-            .noRippleClickable(enabled = enable, onClick = onClick)
+            .background(
+                color = if (enabled) color.containerColor else color.disabledContainerColor,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .noRippleClickable(enabled = enabled, onClick = onClick)
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.merge(
@@ -52,6 +58,11 @@ fun DefaultButton(
         }
     }
 }
+
+data class DefaultButtonColor(
+    val containerColor: Color = MainGreen,
+    val disabledContainerColor: Color = G2,
+)
 
 @Preview
 @Composable
