@@ -17,6 +17,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/") }
     }
 }
 gradle.startParameter.excludedTaskNames.apply {
@@ -39,3 +40,4 @@ include(":feature:answer")
 include(":feature:memorycard-registration")
 include(":core:data")
 include(":core:common")
+include(":core:authentication")
