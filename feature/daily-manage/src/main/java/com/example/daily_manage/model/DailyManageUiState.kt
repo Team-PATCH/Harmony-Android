@@ -1,4 +1,4 @@
-package com.example.daily_manage.model
+package com.teampatch.daily_manage.model
 
 import androidx.paging.PagingData
 import com.teampatch.core.domain.emptyUser

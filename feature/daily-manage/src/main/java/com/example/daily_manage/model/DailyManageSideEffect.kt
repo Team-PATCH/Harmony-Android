@@ -1,4 +1,4 @@
-package com.example.daily_manage.model
+package com.teampatch.daily_manage.model
 
 internal sealed interface DailyManageSideEffect {
 

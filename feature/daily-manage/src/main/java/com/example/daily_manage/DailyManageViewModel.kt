@@ -1,17 +1,17 @@
-package com.example.daily_manage
+package com.teampatch.daily_manage
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.daily_manage.model.DailyManageSideEffect
-import com.example.daily_manage.model.DailyManageUiState
 import com.teampatch.core.domain.usecase.daily.AddDailyCommentUseCase
 import com.teampatch.core.domain.usecase.daily.DeleteDailyCommentUseCase
 import com.teampatch.core.domain.usecase.daily.EditDailyCommentUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyCommentsUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
+import com.teampatch.daily_manage.model.DailyManageSideEffect
+import com.teampatch.daily_manage.model.DailyManageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

@@ -1,4 +1,4 @@
-package com.example.daily_manage
+package com.teampatch.daily_manage
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -35,11 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.daily_manage.model.AnswerEvent
-import com.example.daily_manage.model.CommentEdit
-import com.example.daily_manage.model.CommentEvent
-import com.example.daily_manage.model.DailyManageSideEffect
-import com.example.daily_manage.model.DailyManageUiState
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.getOrNull
@@ -54,7 +49,11 @@ import com.teampatch.core.domain.emptyUser
 import com.teampatch.core.domain.fake.FakeDaily
 import com.teampatch.core.domain.fake.FakeDailyComments
 import com.teampatch.core.domain.model.Role
-import com.teampatch.daily_manage.R
+import com.teampatch.daily_manage.model.AnswerEvent
+import com.teampatch.daily_manage.model.CommentEdit
+import com.teampatch.daily_manage.model.CommentEvent
+import com.teampatch.daily_manage.model.DailyManageSideEffect
+import com.teampatch.daily_manage.model.DailyManageUiState
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.Serializable
 
