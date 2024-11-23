@@ -59,12 +59,7 @@ fun rememberLauncherForKakaoLoginResult(
                 clazz = Token::class.java
             )!!
         }
-            .onSuccess {
-                callback(Result.success(it))
-            }
-            .onFailure {
-                callback(Result.failure(it))
-            }
+            .let(callback)
     }
 }
 
