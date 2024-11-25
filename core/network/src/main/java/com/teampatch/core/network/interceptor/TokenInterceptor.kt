@@ -1,8 +1,11 @@
 package com.teampatch.core.network.interceptor
 
+import com.teampatch.core.network.annotation.AuthorizedRequest
 import com.teampatch.core.tokenstore.TokenLocalDataSource
 import okhttp3.Interceptor
+import okhttp3.Request
 import okhttp3.Response
+import retrofit2.Invocation
 import javax.inject.Inject
 
 internal class TokenInterceptor @Inject constructor(
@@ -10,17 +13,21 @@ internal class TokenInterceptor @Inject constructor(
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
-        val request = request()
-        val accessToken = tokenLocalDataSource.getAccessToken()
+        var request: Request = request()
 
-        if (accessToken.isEmpty()) {
-            return@with proceed(request)
+        request.tag(Invocation::class.java)?.let { invocation ->
+            invocation.method().annotations.forEach { annotation ->
+                when (annotation) {
+                    is AuthorizedRequest -> {
+                        val accessToken = tokenLocalDataSource.getAccessToken()
+                        request = request.newBuilder()
+                            .addHeader("Authorization", "Bearer $accessToken")
+                            .build()
+                    }
+                }
+            }
         }
 
-        val newRequest = request.newBuilder()
-            .addHeader("Authorization", "Bearer $accessToken")
-            .build()
-
-        proceed(newRequest)
+        proceed(request)
     }
 }

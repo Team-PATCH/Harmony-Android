@@ -1,5 +1,6 @@
 package com.teampatch.core.network
 
+import com.teampatch.core.network.annotation.AuthorizedRequest
 import com.teampatch.core.network.model.user.ProfileResponse
 import com.teampatch.core.network.model.user.SignupOrLoginRequestBody
 import com.teampatch.core.network.model.user.SignupOrLoginResponse
@@ -14,6 +15,7 @@ interface UserRemoteDataSource {
         @Body body: SignupOrLoginRequestBody
     ): SignupOrLoginResponse
 
+    @AuthorizedRequest
     @GET
     suspend fun getMyProfile(): ProfileResponse
 }
