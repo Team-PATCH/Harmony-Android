@@ -10,12 +10,12 @@ import retrofit2.http.POST
 
 interface UserRemoteDataSource {
 
-    @POST
+    @POST("/user/signup")
     suspend fun signupOrLogin(
         @Body body: SignupOrLoginRequestBody
     ): SignupOrLoginResponse
 
     @AuthorizedRequest
-    @GET
+    @GET("/user/profile")
     suspend fun getMyProfile(): ProfileResponse
 }
