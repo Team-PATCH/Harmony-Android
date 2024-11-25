@@ -1,5 +1,7 @@
 package com.teampatch.core.network.di
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teampatch.core.network.BASE_URL
 import com.teampatch.core.network.UserRemoteDataSource
 import com.teampatch.core.network.interceptor.TokenInterceptor
@@ -27,14 +29,24 @@ internal object NetworkSingletonModule {
             .build()
     }
 
+    @Provides
+    fun provideMoshi(): MoshiConverterFactory {
+        return MoshiConverterFactory.create(
+            Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+        )
+    }
+
     @Singleton
     @Provides
     fun provideRetrofit(
-        okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient,
+        converterFactory: MoshiConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(converterFactory)
             .callFactory(okHttpClient)
             .build()
     }
