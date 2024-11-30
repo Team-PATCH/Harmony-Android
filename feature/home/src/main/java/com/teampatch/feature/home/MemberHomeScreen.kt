@@ -43,7 +43,7 @@ import com.teampatch.core.designsystem.component.CollapseMemoryCard
 import com.teampatch.core.designsystem.component.DailyRoutineCard
 import com.teampatch.core.designsystem.component.ExpandMemoryCard
 import com.teampatch.core.designsystem.component.HomeAppBar
-import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.dialog.MemoryCardCreationDialog
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider

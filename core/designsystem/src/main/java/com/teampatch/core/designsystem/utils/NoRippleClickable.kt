@@ -1,4 +1,4 @@
-package com.teampatch.core.designsystem.component
+package com.teampatch.core.designsystem.utils
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

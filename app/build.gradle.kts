@@ -55,6 +55,7 @@ android {
 
 dependencies {
 
+    implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home"))
     implementation(project(":feature:onboarding"))
@@ -62,6 +63,7 @@ dependencies {
     implementation(project(":feature:family-info"))
     implementation(project(":feature:profile-edit"))
     implementation(project(":feature:daily"))
+    implementation(project(":feature:memorycard-registration"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

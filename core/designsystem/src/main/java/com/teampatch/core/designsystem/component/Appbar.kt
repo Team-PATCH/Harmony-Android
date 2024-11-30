@@ -6,10 +6,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.PretendardFontFamily
 
 @Composable
 fun AppBar(
@@ -28,7 +34,15 @@ fun AppBar(
         navigation()
 
         Box(modifier = Modifier.align(Alignment.Center)) {
-            title()
+            CompositionLocalProvider(
+                LocalTextStyle provides LocalTextStyle.current.merge(
+                    color = BL,
+                    fontSize = 20.sp,
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Bold
+                ),
+                content = title
+            )
         }
 
         Row(

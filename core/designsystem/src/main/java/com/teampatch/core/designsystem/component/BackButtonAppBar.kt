@@ -18,6 +18,7 @@ import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 
 @Composable
 fun BackButtonAppBar(

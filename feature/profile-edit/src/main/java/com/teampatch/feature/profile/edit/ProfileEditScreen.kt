@@ -36,13 +36,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.core.designsystem.R.drawable.ic_camera_profile
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.noRippleClickable
-import com.teampatch.core.designsystem.previewPlaceholder
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
@@ -131,6 +131,7 @@ fun ProfileEditScreen(
                         Role.VIP -> {
                             profileEditUiState.name.isNotBlank()
                         }
+
                         Role.MEMBER -> {
                             with(profileEditUiState) {
                                 relation.isNotBlank() && name.isNotBlank()
@@ -145,7 +146,7 @@ fun ProfileEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp),
-                enable = buttonEnable
+                enabled = buttonEnable
             ) {
                 Text(text = stringResource(R.string.btn_edit_bottom))
             }

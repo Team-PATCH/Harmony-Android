@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.teampatch.core.common.toPagingData
 import com.teampatch.core.designsystem.model.CheckableData
-import com.teampatch.core.designsystem.toPagingData
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.core.domain.model.User
 import com.teampatch.core.domain.usecase.memory.AddMemoryCardUseCase
+import com.teampatch.core.domain.usecase.memory.GetLatestMemoryCardUseCase
 import com.teampatch.core.domain.usecase.routine.GetDailyRoutineUseCase
-import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
 import com.teampatch.core.domain.usecase.routine.ToggleDailyRoutineStatusUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.home.model.HomeErrorHandler
@@ -36,7 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getDailyRoutineUseCase: GetDailyRoutineUseCase,
-    private val getMemoryCardUseCase: GetMemoryCardUseCase,
+    private val getLatestMemoryCardUseCase: GetLatestMemoryCardUseCase,
     private val toggleDailyRoutineStatusUseCase: ToggleDailyRoutineStatusUseCase,
     private val addMemoryCardUseCase: AddMemoryCardUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase
@@ -67,7 +67,7 @@ class HomeViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
     val memoryCardUiState: StateFlow<MemoryCardUiState> =
-        kotlin.runCatching { getMemoryCardUseCase() }
+        kotlin.runCatching { getLatestMemoryCardUseCase() }
             .map { result ->
                 result.map {
                     MemoryCardUiState.Success(it)

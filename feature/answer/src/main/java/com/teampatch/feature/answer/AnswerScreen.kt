@@ -32,7 +32,7 @@ import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.component.noRippleClickable
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G3
 import com.teampatch.core.designsystem.theme.G4
@@ -115,7 +115,7 @@ internal fun AnswerScreen(
         bottomBar = {
             DefaultButton(
                 onClick = { onCompleteRequest(answer) },
-                enable = answer.isNotBlank(),
+                enabled = answer.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
