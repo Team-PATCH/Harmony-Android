@@ -1,7 +1,7 @@
-package com.teampatch.core.tokenstore.preferences
+package com.teampatch.core.preferences.preferences
 
 import android.content.SharedPreferences
-import com.teampatch.core.tokenstore.TokenLocalDataSource
+import com.teampatch.core.preferences.TokenLocalDataSource
 import javax.inject.Inject
 
 internal class EncryptedSharedPreferences @Inject constructor(

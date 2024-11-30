@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.core.tokenstore"
+    namespace = "com.teampatch.core.preferences"
 }
 
 dependencies {

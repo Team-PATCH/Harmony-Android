@@ -1,7 +1,7 @@
-package com.teampatch.core.tokenstore.di
+package com.teampatch.core.preferences.di
 
-import com.teampatch.core.tokenstore.TokenLocalDataSource
-import com.teampatch.core.tokenstore.preferences.EncryptedSharedPreferences
+import com.teampatch.core.preferences.TokenLocalDataSource
+import com.teampatch.core.preferences.preferences.EncryptedSharedPreferences
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

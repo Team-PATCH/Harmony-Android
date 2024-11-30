@@ -1,4 +1,4 @@
-package com.teampatch.core.tokenstore
+package com.teampatch.core.preferences
 
 interface TokenLocalDataSource {
 

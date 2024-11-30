@@ -1,7 +1,7 @@
 package com.teampatch.core.data.repository
 
 import com.teampatch.core.domain.repository.TokenRepository
-import com.teampatch.core.tokenstore.TokenLocalDataSource
+import com.teampatch.core.preferences.TokenLocalDataSource
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
