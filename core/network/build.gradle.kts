@@ -9,8 +9,6 @@ android {
 
 dependencies {
 
-    implementation(project(":core:tokenstore"))
-
     implementation(libs.squareup.retrofit2)
     implementation(libs.squareup.retrofit2.converter.moshi)
     implementation(libs.squareup.moshi.kotlin)
