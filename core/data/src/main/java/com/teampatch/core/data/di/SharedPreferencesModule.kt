@@ -1,16 +1,17 @@
-package com.teampatch.core.preferences.di
+package com.teampatch.core.data.di
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.teampatch.core.preferences.FILE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
+private const val FILE_NAME = "data-store.encrypted"
 
 @Module
 @InstallIn(SingletonComponent::class)

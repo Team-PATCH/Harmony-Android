@@ -1,7 +1,7 @@
 package com.teampatch.core.network.interceptor
 
+import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.network.annotation.AuthorizedRequest
-import com.teampatch.core.network.utils.TokenManager
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

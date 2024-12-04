@@ -9,6 +9,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core:domain"))
+
     implementation(libs.squareup.retrofit2)
     implementation(libs.squareup.retrofit2.converter.moshi)
     implementation(libs.squareup.moshi.kotlin)

@@ -1,6 +1,8 @@
 package com.teampatch.core.data.di
 
+import com.teampatch.core.data.entity.TokenManagerImpl
 import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
+import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.domain.repository.MemoryCardRepository
 import dagger.Binds
 import dagger.Module
@@ -9,10 +11,15 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @Module
 @InstallIn(ViewModelComponent::class)
-internal interface DataViewModelModule {
+internal abstract class DataViewModelModule {
 
     @Binds
-    fun bindMemoryCardRepository(
-        impl: MemoryCardRepositoryImpl
+    abstract fun bindsMemoryCardRepository(
+        memoryCardRepositoryImpl: MemoryCardRepositoryImpl
     ): MemoryCardRepository
+
+    @Binds
+    abstract fun bindsTokenManager(
+        tokenManagerImpl: TokenManagerImpl
+    ): TokenManager
 }
