@@ -1,0 +1,65 @@
+package com.teampatch.core.network
+
+import com.teampatch.core.domain.entity.TokenManager
+import com.teampatch.core.network.di.NetworkSingletonModule
+import com.teampatch.core.network.interceptor.TokenInterceptor
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import retrofit2.Retrofit
+import java.util.regex.Pattern
+
+internal object TestRetrofit {
+
+    private const val BASE_URL = "https://harmony-api2.azurewebsites.net"
+
+    private val tokenManager = object : TokenManager() {
+        private var token: String = ""
+        private val jsonContentType = MediaType.parse("application/json; charset=utf-8")
+
+        override fun getAccessToken(): String {
+            if (token.isEmpty()) {
+                val request = Request.Builder()
+                    .url("$BASE_URL/user/signup")
+                    .post(RequestBody.create(jsonContentType, createSignUpRequestBody()))
+                    .build()
+
+                val client = OkHttpClient.Builder().build()
+
+                client.newCall(request).execute().use { response ->
+                    token = extractToken(response.body()!!.string())!!
+                }
+            }
+            return token
+        }
+
+        override fun setAccessToken(token: String) {}
+    }
+
+    private fun createSignUpRequestBody(): String {
+        return """ { "userId": "yeojeong@naver.com", "nick": "윤여정", "authProvider": "kakao", "socialToken": "string", "refreshToken": "string", "socialTokenExpiredAt": "2024-12-07T13:11:11.152Z" } """.trimIndent()
+    }
+
+    private fun extractToken(jsonString: String): String? {
+        val pattern = Pattern.compile("\"token\":\"([^\"]+)\"")
+        val matcher = pattern.matcher(jsonString)
+        return if (matcher.find()) matcher.group(1) else null
+    }
+
+    private val tokenInterceptor = TokenInterceptor(tokenManager)
+
+    private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(tokenInterceptor)
+        .build()
+
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(NetworkSingletonModule.provideMoshi())
+        .callFactory(okHttpClient)
+        .build()
+
+    fun getRetrofit(): Retrofit {
+        return retrofit
+    }
+}
