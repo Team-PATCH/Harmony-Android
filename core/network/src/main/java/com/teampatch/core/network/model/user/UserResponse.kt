@@ -7,10 +7,7 @@ import com.squareup.moshi.JsonClass
 data class UserResponse(
     @Json(name = "userId") val userId: String,
     @Json(name = "nick") val nick: String,
-    @Json(name = "profile") val profile: String,
     @Json(name = "authProvider") val authProvider: String,
-    @Json(name = "socialToken") val socialToken: String,
-    @Json(name = "refreshToken") val refreshToken: String,
-    @Json(name = "socialTokenExpiredAt") val socialTokenExpiredAt: String,
-    @Json(name = "lastLoginAt") val lastLoginAt: String
+    @Json(name = "groupId") val groupId: Int,
+    @Json(name = "permissionId") val permissionId: String,
 )
