@@ -1,3 +1,7 @@
+import com.android.build.api.dsl.DefaultConfig
+import com.android.tools.build.jetifier.core.utils.Log
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +24,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        initVariable()
     }
 
     buildTypes {
@@ -41,6 +46,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -53,8 +59,52 @@ android {
     }
 }
 
+fun DefaultConfig.initVariable() {
+    val file = File(rootDir.absolutePath + "/.env/key.properties")
+    if (file.exists()) {
+        file.inputStream().use { inputStream ->
+            val properties = Properties()
+            properties.load(inputStream)
+            setBuildConfigOrManifest(
+                type = "String",
+                name = "KAKAO_NATIVE_KEY",
+                value = properties.getProperty("KAKAO_NATIVE_KEY")
+            )
+        }
+        return
+    }
+
+    setBuildConfigOrManifest("String", "KAKAO_NATIVE_KEY", "null")
+    Log.e(
+        tag = "build.gradle.kts(:app)",
+        message = "주의!!!! ${file.absolutePath} 파일이 존재하지 않습니다."
+    )
+}
+
+fun DefaultConfig.setBuildConfigOrManifest(
+    type: String,
+    name: String,
+    value: String
+) {
+    if (type == "String") {
+        buildConfigField(
+            type = type,
+            name = name,
+            value = "\"$value\""
+        )
+    } else {
+        buildConfigField(
+            type = type,
+            name = name,
+            value = value
+        )
+    }
+    manifestPlaceholders[name] = value
+}
+
 dependencies {
 
+    implementation(project(":core:authentication"))
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":feature:home"))
@@ -62,6 +112,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:family-info"))
     implementation(project(":feature:profile-edit"))
+    implementation(project(":feature:daily"))
     implementation(project(":feature:memorycard-registration"))
 
     implementation(libs.androidx.core.ktx)
@@ -75,4 +126,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     coreLibraryDesugaring(libs.android.tools.desugar)
+
+    implementation(libs.kakao.sdk.v2.user)
 }
