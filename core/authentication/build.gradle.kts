@@ -2,21 +2,29 @@ plugins {
     id("teampatch.android.library")
     id("teampatch.android.library.compose")
     id("teampatch.android.hilt")
-    id("teampatch.android.feature")
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "com.teampatch.daily.manage"
+    namespace = "com.agvber.core.authentication"
+
+    buildTypes {
+        release {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
 }
 
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
 
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
+    implementation(libs.kakao.sdk.v2.user)
+    implementation(libs.androidx.activity.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

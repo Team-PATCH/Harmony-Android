@@ -1,4 +1,4 @@
-package com.teampatch.daily_manage.model
+package com.teampatch.daily.manage.model
 
 internal sealed interface CommentEvent {
     data class Add(val commentText: String) : CommentEvent
