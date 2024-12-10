@@ -14,7 +14,7 @@ internal object TestRetrofit {
 
     private const val BASE_URL = "https://harmony-api2.azurewebsites.net"
 
-    private val tokenManager = object : TokenManager() {
+    val tokenManager = object : TokenManager() {
         private var token: String = ""
         private val jsonContentType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
@@ -38,7 +38,15 @@ internal object TestRetrofit {
     }
 
     private fun createSignUpRequestBody(): String {
-        return """ { "userId": "yeojeong@naver.com", "nick": "윤여정", "authProvider": "kakao", "socialToken": "string", "refreshToken": "string", "socialTokenExpiredAt": "2024-12-07T13:11:11.152Z" } """.trimIndent()
+        return """ { 
+            "userId": "yeojeong@naver.com", 
+            "nick": "윤여정", 
+            "authProvider": "kakao", 
+            "socialToken": "string", 
+            "refreshToken": "string", 
+            "socialTokenExpiredAt": 
+            "2024-12-07T13:11:11.152Z" 
+            } """.trimIndent()
     }
 
     private fun extractToken(jsonString: String): String? {
