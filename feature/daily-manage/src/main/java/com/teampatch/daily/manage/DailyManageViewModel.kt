@@ -1,4 +1,4 @@
-package com.teampatch.daily_manage
+package com.teampatch.daily.manage
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -10,8 +10,8 @@ import com.teampatch.core.domain.usecase.daily.EditDailyCommentUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyCommentsUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
-import com.teampatch.daily_manage.model.DailyManageSideEffect
-import com.teampatch.daily_manage.model.DailyManageUiState
+import com.teampatch.daily.manage.model.DailyManageSideEffect
+import com.teampatch.daily.manage.model.DailyManageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -54,7 +54,7 @@ internal class DailyManageViewModel @Inject constructor(
             val daily = getDailyManageUseCase(dailyId.value)
             val comment = getCommentsUseCase(dailyId.value)
 
-            uiState.value = DailyManageUiState(user, daily, comment, false)
+//            uiState.value = DailyManageUiState(user, daily, comment, false)
         } catch (e: Exception) {
             _sideEffect.send(DailyManageSideEffect.LoadError(e))
             e.printStackTrace()
