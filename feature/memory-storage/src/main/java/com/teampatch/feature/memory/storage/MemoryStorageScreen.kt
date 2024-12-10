@@ -40,6 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teampatch.core.common.getOrNull
 import com.teampatch.core.designsystem.R.drawable
 import com.teampatch.core.designsystem.R.drawable.btn_search
 import com.teampatch.core.designsystem.component.AppBar
@@ -48,13 +49,18 @@ import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import androidx.compose.material3.LargeFloatingActionButton as LargeFloatingActionButton
 
 @Composable
 fun MemoryStorageScreen(
+    onClick: () -> Unit,
+    uiState: MemoryStorageDetailUiState
 
-    onClick: () -> Unit
 ) {
+
+    val memories = uiState.memoryStorage.collectAsLazyPagingItems()
+
     // 상태 관리
     var isSearchMode by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
@@ -192,6 +198,10 @@ fun MemoryStorageScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(scaffoldPaddingValues)
+                .noRippleClickable {
+                    val id = memories.getOrNull(index)?.id ?: return@noRippleClickable
+                    memoryStorageDetailPageRequest(id)
+                }
         ) {
             items(
                 count = 9,
