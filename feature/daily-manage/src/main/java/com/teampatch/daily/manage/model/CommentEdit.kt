@@ -1,4 +1,4 @@
-package com.teampatch.daily_manage.model
+package com.teampatch.daily.manage.model
 
 internal data class CommentEdit(
     val commentId: String,
