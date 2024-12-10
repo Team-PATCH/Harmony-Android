@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.memorystorage"
+    namespace = "com.example.memorystorage.detail"
 }
 
 dependencies {
