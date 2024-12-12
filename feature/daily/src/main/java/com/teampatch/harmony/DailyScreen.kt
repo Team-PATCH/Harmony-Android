@@ -21,10 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.PlatformTextInputMethodRequest
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +37,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.designsystem.R.drawable.ic_edit
 import com.teampatch.core.designsystem.component.AppBar
 import com.teampatch.core.designsystem.component.DailyRoutineCard
-import com.teampatch.core.designsystem.component.noRippleClickable
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider
 import com.teampatch.core.designsystem.theme.BL
@@ -47,12 +44,11 @@ import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
-import com.teampatch.core.domain.fake.FakeDaily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.daily.R
 import com.teampatch.harmony.model.DailySideEffect
 import com.teampatch.harmony.model.DailyUiState
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
@@ -72,7 +68,7 @@ internal fun DailyRoute(
             onBackRequest = { },
             progress = 0f,
             onDailyRoutineClick = {},
-            onDailyRoutineCheckChanged = {_, _ ->},
+            onDailyRoutineCheckChanged = { _, _ -> },
             dailyRoutine = flowOf(PagingData.empty<CheckableData<Todo>>()).collectAsLazyPagingItems(),
             dailyManagePageRequest = dailyManagePageRequest,
             editDailyPageRequest = editDailyPageRequest,
@@ -237,7 +233,7 @@ private fun DailyManageScreenPreview() {
             onBackRequest = { },
             progress = 0f,
             onDailyRoutineClick = {},
-            onDailyRoutineCheckChanged = {_, _ ->},
+            onDailyRoutineCheckChanged = { _, _ -> },
             dailyRoutine = flowOf(
                 PagingData.from(
                     data = TodoPreviewParameterProvider().values.first()
