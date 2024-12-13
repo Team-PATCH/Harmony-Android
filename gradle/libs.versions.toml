@@ -16,15 +16,19 @@ hiltNavigation = "1.2.0"
 desurgar = "2.1.2"
 androidTools = "31.7.0"
 coil = "2.7.0"
+retrofit = "2.11.0"
 runtimeLivedata = "1.7.4"
 appcompat = "1.7.0"
 material = "1.12.0"
 navigationCompose = "2.8.3"
+moshi = "1.15.1"
+securityCrypto = "1.0.0"
 kakaoSdk2 = "2.20.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -61,6 +65,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 # Kakao
 kakao-sdk-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoSdk2" }
+
+# Squareup
+squareup-retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+squareup-retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+squareup-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
