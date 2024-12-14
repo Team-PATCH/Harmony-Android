@@ -7,6 +7,15 @@ plugins {
 
 android {
     namespace = "com.agvber.core.authentication"
+
+    buildTypes {
+        release {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
 }
 
 dependencies {
