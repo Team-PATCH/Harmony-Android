@@ -45,6 +45,7 @@ import com.teampatch.core.common.getCustomParcelableExtra
  * @param callback 사용자의 카카오 토큰 값이 전달됩니다.
  */
 
+@Deprecated("해당 코드는 deprecated 되었습니다. 되도록 LoginKakaoUseCase를 사용해주세요!!")
 @Composable
 fun rememberLauncherForKakaoLoginResult(
     callback: (Result<Token>) -> Unit
@@ -66,7 +67,7 @@ fun rememberLauncherForKakaoLoginResult(
 /**
  * 카카오 로그인 페이지를 실행하는 함수 입니다.
  */
-
+@Deprecated("해당 코드는 deprecated 되었습니다. 되도록 LoginKakaoUseCase를 사용해주세요!!")
 fun ManagedActivityResultLauncher<Intent, ActivityResult>.loginKakao(
     context: Context
 ) {
