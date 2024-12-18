@@ -3,10 +3,10 @@ package com.teampatch.core.network
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.network.di.NetworkSingletonModule
 import com.teampatch.core.network.interceptor.TokenInterceptor
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Retrofit
 import java.util.regex.Pattern
 
@@ -14,21 +14,21 @@ internal object TestRetrofit {
 
     private const val BASE_URL = "https://harmony-api2.azurewebsites.net"
 
-    private val tokenManager = object : TokenManager() {
+    val tokenManager = object : TokenManager() {
         private var token: String = ""
-        private val jsonContentType = MediaType.parse("application/json; charset=utf-8")
+        private val jsonContentType = "application/json; charset=utf-8".toMediaTypeOrNull()
 
         override fun getAccessToken(): String {
             if (token.isEmpty()) {
                 val request = Request.Builder()
                     .url("$BASE_URL/user/signup")
-                    .post(RequestBody.create(jsonContentType, createSignUpRequestBody()))
+                    .post(createSignUpRequestBody().toRequestBody(jsonContentType))
                     .build()
 
                 val client = OkHttpClient.Builder().build()
 
                 client.newCall(request).execute().use { response ->
-                    token = extractToken(response.body()!!.string())!!
+                    token = extractToken(response.body!!.string())!!
                 }
             }
             return token
@@ -38,7 +38,15 @@ internal object TestRetrofit {
     }
 
     private fun createSignUpRequestBody(): String {
-        return """ { "userId": "yeojeong@naver.com", "nick": "윤여정", "authProvider": "kakao", "socialToken": "string", "refreshToken": "string", "socialTokenExpiredAt": "2024-12-07T13:11:11.152Z" } """.trimIndent()
+        return """ { 
+            "userId": "yeojeong@naver.com", 
+            "nick": "윤여정", 
+            "authProvider": "kakao", 
+            "socialToken": "string", 
+            "refreshToken": "string", 
+            "socialTokenExpiredAt": 
+            "2024-12-07T13:11:11.152Z" 
+            } """.trimIndent()
     }
 
     private fun extractToken(jsonString: String): String? {

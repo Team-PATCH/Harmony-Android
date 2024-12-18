@@ -3,6 +3,8 @@ package com.teampatch.core.network.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teampatch.core.network.BASE_URL
+import com.teampatch.core.network.QuestionRemoteDataSource
+import com.teampatch.core.network.GroupRemoteDataSource
 import com.teampatch.core.network.UserRemoteDataSource
 import com.teampatch.core.network.interceptor.TokenInterceptor
 import dagger.Module
@@ -54,6 +56,18 @@ internal object NetworkSingletonModule {
     @Provides
     fun provideUserRemoteDataSource(retrofit: Retrofit): UserRemoteDataSource {
         return retrofit.create<UserRemoteDataSource>()
+    }
+
+    @Provides
+    fun providesQuestionRemoteDataSource(
+        retrofit: Retrofit
+    ): QuestionRemoteDataSource {
+        return retrofit.create()
+    }
+
+    @Provides
+    fun providesGroupRemoteDataSource(retrofit: Retrofit): GroupRemoteDataSource {
+        return retrofit.create()
     }
 
 }

@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.squareup.retrofit2)
     implementation(libs.squareup.retrofit2.converter.moshi)
     implementation(libs.squareup.moshi.kotlin)
+    implementation(libs.logging.interceptor)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
