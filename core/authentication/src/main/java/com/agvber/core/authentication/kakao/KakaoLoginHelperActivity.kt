@@ -134,11 +134,13 @@ internal class KakaoLoginHelperActivity : Activity() {
             intent: Intent,
             resultListener: (resultCode: Int, data: Intent?) -> Unit
         ) {
-            val mIntent = intent.apply {
+            intent.apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             }
-            context.startActivity(mIntent)
+                .also {
+                    context.startActivity(it)
+                }
             activityResultListener = resultListener
         }
     }
