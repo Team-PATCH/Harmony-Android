@@ -6,4 +6,16 @@ data class User(
     val relation: String,
     val profileImageUrl: String?,
     val role: Role
-)
+) {
+    companion object {
+
+        fun init(): User = User(
+            uid = "",
+            groupId = 0,
+            name = "",
+            relation = "",
+            profileImageUrl = null,
+            role = Role.MEMBER
+        )
+    }
+}
