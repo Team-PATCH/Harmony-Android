@@ -2,6 +2,7 @@ package com.teampatch.core.domain.model
 
 data class User(
     val uid: String,
+    val groupId: Int,
     val name: String,
     val relation: String,
     val profileImageUrl: String?,

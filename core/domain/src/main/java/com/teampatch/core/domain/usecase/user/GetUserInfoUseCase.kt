@@ -3,7 +3,6 @@ package com.teampatch.core.domain.usecase.user
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.model.User
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
@@ -13,6 +12,7 @@ class GetUserInfoUseCase @Inject constructor() {
         flowOf(
             User(
                 uid = "uid001",
+                groupId = 0,
                 name = "Alice Johnson",
                 relation = "Mother",
                 profileImageUrl = null,
