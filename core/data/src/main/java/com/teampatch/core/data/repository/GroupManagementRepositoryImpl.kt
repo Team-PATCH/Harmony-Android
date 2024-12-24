@@ -4,7 +4,7 @@ import com.teampatch.core.data.mapper.toDomain
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.domain.model.InvitedGroup
 import com.teampatch.core.domain.repository.GroupManagementRepository
-import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
+import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.GroupRemoteDataSource
 import com.teampatch.core.network.model.group.request.GroupCreationRequestBody
 import com.teampatch.core.network.model.group.request.GroupJoinRequestBody
@@ -14,11 +14,11 @@ import javax.inject.Inject
 class GroupManagementRepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager,
     private val groupRemoteDataSource: GroupRemoteDataSource,
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val userRepository: UserRepository
 ) : GroupManagementRepository {
 
     override suspend fun createFamilyGroup(): String {
-        val user = getUserInfoUseCase().first()
+        val user = userRepository.getUserInfo().first()
         val body = GroupCreationRequestBody(
             userId = user.uid,
             name = user.name,
@@ -29,13 +29,13 @@ class GroupManagementRepositoryImpl @Inject constructor(
     }
 
     override suspend fun generateInviteCode(): String {
-        val user = getUserInfoUseCase().first()
+        val user = userRepository.getUserInfo().first()
         val response = groupRemoteDataSource.regenerateGroupInviteCode(user.groupId)
         return response.newInviteCode
     }
 
     override suspend fun joinFamilyGroup(inviteCode: String): InvitedGroup {
-        val user = getUserInfoUseCase().first()
+        val user = userRepository.getUserInfo().first()
         val body = GroupJoinRequestBody(
             userId = user.uid,
             inviteCode = inviteCode,
