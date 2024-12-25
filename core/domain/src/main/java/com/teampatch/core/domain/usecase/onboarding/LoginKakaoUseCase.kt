@@ -8,7 +8,10 @@ class LoginKakaoUseCase @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) {
 
-    @Throws(FamilyRegistrationRequiredException::class)
+    /**
+     * @throws FamilyRegistrationRequiredException 그룹이 존재 하지 않는 유저인 경우
+     */
+
     suspend operator fun invoke() {
         val loginResult = authenticationRepository.loginKakao()
 
