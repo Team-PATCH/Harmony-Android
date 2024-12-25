@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -57,23 +56,31 @@ class HomeViewModel @Inject constructor(
         )
 
     val dailyRoutine: Flow<PagingData<CheckableData<Todo>>> =
-        kotlin.runCatching { getDailyRoutineUseCase() }
-            .getOrElse { it.toPagingData() }
-            .map { pagingData ->
-                pagingData.map {
-                    CheckableData(it, mutableStateOf(it.isFinished))
-                }
+        flowErrorCatch(
+            block = {
+                getDailyRoutineUseCase()
+                    .map { pagingData ->
+                        pagingData.map {
+                            CheckableData(it, mutableStateOf(it.isFinished))
+                        }
+                    }
+                    .cachedIn(viewModelScope)
             }
-            .cachedIn(viewModelScope)
+        ) {
+            it.printStackTrace()
+            emit(it.toPagingData())
+        }
 
     val memoryCardUiState: StateFlow<MemoryCardUiState> =
-        kotlin.runCatching { getLatestMemoryCardUseCase() }
-            .map { result ->
-                result.map {
-                    MemoryCardUiState.Success(it)
-                }
+        flowErrorCatch<MemoryCardUiState>(
+            block = {
+                getLatestMemoryCardUseCase()
+                    .map { MemoryCardUiState.Success(it) }
             }
-            .getOrElse { flowOf(MemoryCardUiState.Error(it)) }
+        ) {
+            it.printStackTrace()
+            emit(MemoryCardUiState.Error(it))
+        }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
