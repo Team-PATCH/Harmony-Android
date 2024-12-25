@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.teampatch.core.common.flowErrorCatch
 import com.teampatch.core.common.toPagingData
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.domain.model.Image
@@ -45,11 +46,10 @@ class HomeViewModel @Inject constructor(
     private val _errorHandler: MutableSharedFlow<HomeErrorHandler> = MutableSharedFlow()
     val errorHandler: SharedFlow<HomeErrorHandler> = _errorHandler.asSharedFlow()
 
-    val user: StateFlow<User?> = kotlin.runCatching { getUserInfoUseCase() }
-        .getOrElse {
-            _errorHandler.tryEmit(HomeErrorHandler.UserInfoLoadError(it))
-            flowOf(null)
-        }
+    val user: StateFlow<User?> = flowErrorCatch({ getUserInfoUseCase() }) {
+        it.printStackTrace()
+        _errorHandler.emit(HomeErrorHandler.UserInfoLoadError(it))
+    }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
