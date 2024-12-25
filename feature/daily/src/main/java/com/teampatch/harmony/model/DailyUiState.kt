@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 internal data class DailyUiState(
-    val user: User = User.init(),
+    val user: User = User.createEmptyUser(),
     val daily: Flow<PagingData<Daily>> = emptyFlow(),
     val isLoading: Boolean = true
 )

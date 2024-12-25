@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import java.time.LocalDateTime
 
 internal data class QuestionDetailUiState(
-    val user: User = User.init(),
+    val user: User = User.createEmptyUser(),
     val detail: QuestionDetail = QuestionDetail("", 0, "", "", LocalDateTime.now(), 0),
     val comment: Flow<PagingData<QuestionComment>> = emptyFlow(),
     val isLoading: Boolean = true

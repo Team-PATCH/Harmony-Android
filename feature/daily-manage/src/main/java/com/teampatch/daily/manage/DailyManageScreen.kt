@@ -265,7 +265,7 @@ private fun DailyManageScreenPreview() {
             uiState = DailyManageUiState(
                 daily = flowOf(PagingData.from(FakeDaily().get())),
                 comment = flowOf(PagingData.from(FakeDailyComments().get())),
-                user = User.init().copy(uid = "uid001", role = Role.VIP),
+                user = User.createEmptyUser().copy(uid = "uid001", role = Role.VIP),
                 isLoading = false
             )
         )
