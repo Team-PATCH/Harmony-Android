@@ -10,17 +10,17 @@ import com.teampatch.core.domain.usecase.question.GetQuestionDetailUseCase
 import com.teampatch.feature.answer.model.AnswerSideEffect
 import com.teampatch.feature.answer.model.AnswerUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class AnswerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getQuestionDetailUseCase: GetQuestionDetailUseCase,
-    private val addAnswerUseCase: AddAnswerUseCase
+    private val addAnswerUseCase: AddAnswerUseCase,
 ) : ViewModel() {
 
     private val answerRoute = savedStateHandle.toRoute<AnswerRoute>()
@@ -58,5 +58,4 @@ internal class AnswerViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
-
 }

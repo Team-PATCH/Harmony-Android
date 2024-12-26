@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class GroupInviteResponse(
     @Json(name = "message") val message: String,
-    @Json(name = "newInviteCode") val newInviteCode: String
+    @Json(name = "newInviteCode") val newInviteCode: String,
 )

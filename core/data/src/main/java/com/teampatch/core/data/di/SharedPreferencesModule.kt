@@ -20,7 +20,7 @@ internal object SharedPreferencesModule {
     @Singleton
     @Provides
     fun provideEncryptedStore(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): SharedPreferences {
         val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
         val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)

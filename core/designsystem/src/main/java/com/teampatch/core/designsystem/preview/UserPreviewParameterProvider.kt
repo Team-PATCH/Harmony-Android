@@ -17,5 +17,4 @@ class UserPreviewParameterProvider : PreviewParameterProvider<User> {
         User("uid009", "Ivy Wilson", "Grandmother", null, Role.MEMBER),
         User("uid010", "Jack King", "Grandfather", null, Role.MEMBER)
     )
-
 }

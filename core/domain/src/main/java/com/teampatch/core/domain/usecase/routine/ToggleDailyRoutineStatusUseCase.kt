@@ -8,6 +8,5 @@ class ToggleDailyRoutineStatusUseCase @Inject constructor() {
         id: String,
         isFinished: Boolean,
     ) {
-
     }
 }

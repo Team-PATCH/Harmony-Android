@@ -8,16 +8,16 @@ import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.question.model.QuestionSideEffect
 import com.teampatch.feature.question.model.QuestionUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class QuestionViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val getQuestionsUseCase: GetQuestionsUseCase
+    private val getQuestionsUseCase: GetQuestionsUseCase,
 ) : ViewModel() {
 
     var questionUiState = mutableStateOf(QuestionUiState())

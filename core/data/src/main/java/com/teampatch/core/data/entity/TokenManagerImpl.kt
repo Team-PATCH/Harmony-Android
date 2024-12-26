@@ -6,12 +6,10 @@ import com.teampatch.core.domain.entity.TokenManager
 import javax.inject.Inject
 
 class TokenManagerImpl @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) : TokenManager() {
 
-    override fun getAccessToken(): String {
-        return sharedPreferences.getString(ACCESS_TOKEN_KEY, null) ?: ""
-    }
+    override fun getAccessToken(): String = sharedPreferences.getString(ACCESS_TOKEN_KEY, null) ?: ""
 
     override fun setAccessToken(token: String) {
         sharedPreferences.edit {

@@ -6,16 +6,16 @@ import com.teampatch.core.domain.fake.FakeMemoryCardQuestion
 import com.teampatch.core.domain.model.MemoryCardQuestion
 import com.teampatch.core.domain.repository.MemoryCardRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 import java.io.InputStream
 import java.util.UUID
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 internal class MemoryCardRepositoryImpl @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    private val memoryCardRecorderService: MemoryCardRecorderService
+    private val memoryCardRecorderService: MemoryCardRecorderService,
 ) : MemoryCardRepository {
 
     override fun startRecord() {
@@ -36,21 +36,17 @@ internal class MemoryCardRepositoryImpl @Inject constructor(
         memoryCardRecorderService.pauseRecording()
     }
 
-    override fun getRecordingResult(): InputStream {
-        return FileInputStream(memoryCardRecorderService.filePath)
-    }
+    override fun getRecordingResult(): InputStream = FileInputStream(memoryCardRecorderService.filePath)
 
     override suspend fun addCommunication(
         memoryCardId: String,
         question: String,
-        audioFile: InputStream
+        audioFile: InputStream,
     ) {
         withContext(Dispatchers.IO) {
             audioFile.close()
         }
     }
 
-    override suspend fun getQuestionMessage(memoryCardId: String): MemoryCardQuestion {
-        return FakeMemoryCardQuestion().get()
-    }
+    override suspend fun getQuestionMessage(memoryCardId: String): MemoryCardQuestion = FakeMemoryCardQuestion().get()
 }

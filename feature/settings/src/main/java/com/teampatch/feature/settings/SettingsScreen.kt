@@ -30,7 +30,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teampatch.core.common.startNotificationSettingsActivity
 import com.teampatch.core.designsystem.component.BackButtonAppBar
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G4
@@ -39,6 +38,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.feature.settings.model.SettingsSideEffect
 import com.teampatch.feature.settings.model.SettingsUiState
 import kotlinx.serialization.Serializable
@@ -56,7 +56,7 @@ fun SettingsRoute(
     onExitAppRequest: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTosClick: () -> Unit,
-    settingsViewModel: SettingsViewModel = hiltViewModel()
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by settingsViewModel.settingsUiState.collectAsStateWithLifecycle()
@@ -114,7 +114,7 @@ fun SettingsScreen(
     onLogoutRequest: () -> Unit,
     onWithdrawFamilyGroupRequest: () -> Unit,
     onWithdrawRequest: () -> Unit,
-    settingsUiState: SettingsUiState
+    settingsUiState: SettingsUiState,
 ) {
     val context = LocalContext.current
 
@@ -171,7 +171,7 @@ fun SettingsScreen(
                     color = G1,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 12.dp),
+                        .padding(vertical = 12.dp)
                 )
 
                 Text(
@@ -218,21 +218,20 @@ fun SettingsScreen(
     }
 }
 
-fun SettingsUiState.getVersionString(context: Context): String =
-    if (isLatestVersion) {
-        "$installedVersion " +
-                context.getString(R.string.text_version_latest)
-    } else {
-        "$installedVersion " +
-                context.getString(R.string.text_version_oldest)
-    }
+fun SettingsUiState.getVersionString(context: Context): String = if (isLatestVersion) {
+    "$installedVersion " +
+        context.getString(R.string.text_version_latest)
+} else {
+    "$installedVersion " +
+        context.getString(R.string.text_version_oldest)
+}
 
 @Composable
 private fun SettingsItem(
     onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = BL
+    color: Color = BL,
 ) {
     Box(
         modifier = Modifier

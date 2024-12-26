@@ -5,5 +5,5 @@ data class FamilyInfo(
     val name: String,
     val isManager: Boolean,
     val role: Role,
-    val profileImageUrl: String?
+    val profileImageUrl: String?,
 )

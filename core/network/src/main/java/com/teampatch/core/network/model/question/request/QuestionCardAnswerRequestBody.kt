@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class QuestionCardAnswerRequestBody(
-    @Json(name = "answer") val answer: String
+    @Json(name = "answer") val answer: String,
 )

@@ -25,13 +25,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teampatch.core.designsystem.R
 
-
 @Composable
 fun OnboardingPermissionNotificationScreen() {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)),
+            .background(Color(0xFFF5F5F5))
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -86,6 +85,7 @@ fun OnboardingPermissionNotificationScreen() {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun OnboardingPermissionNotificationScreenPreview() {

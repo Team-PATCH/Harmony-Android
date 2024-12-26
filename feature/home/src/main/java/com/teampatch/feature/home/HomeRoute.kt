@@ -26,7 +26,7 @@ fun HomeRoute(
     onDailyRoutineRegisterPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id
     onMemoryCardClick: (String) -> Unit, // id
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val dailyRoutine = homeViewModel.dailyRoutine.collectAsLazyPagingItems()
@@ -52,7 +52,7 @@ fun HomeRoute(
                 onMemoryCardClick = onMemoryCardClick,
                 onDailyRoutineCheckChanged = homeViewModel::changeDailyRoutine,
                 memoryCardUiState = memoryCardUiState,
-                dailyRoutine = dailyRoutine,
+                dailyRoutine = dailyRoutine
             )
         }
 
@@ -64,7 +64,7 @@ fun HomeRoute(
                 onDailyRoutineCheckChanged = homeViewModel::changeDailyRoutine,
                 uploadMemoryCardRequest = homeViewModel::addMemoryCard,
                 memoryCardUiState = memoryCardUiState,
-                dailyRoutine = dailyRoutine,
+                dailyRoutine = dailyRoutine
             )
         }
     }

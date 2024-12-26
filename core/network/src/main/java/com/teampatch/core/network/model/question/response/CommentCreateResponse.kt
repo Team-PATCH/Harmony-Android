@@ -8,5 +8,5 @@ data class CommentCreateResponse(
     @Json(name = "commentId") val commentId: Int,
     @Json(name = "questionId") val questionId: Int,
     @Json(name = "authorId") val authorId: Int,
-    @Json(name = "content") val content: String
+    @Json(name = "content") val content: String,
 )

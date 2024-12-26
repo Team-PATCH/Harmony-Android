@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MemoryCardRegistrationRoute(
-    val memoryCardId: String
+    val memoryCardId: String,
 )
 
 fun NavGraphBuilder.addMemoryCardRegistrationScreen(
