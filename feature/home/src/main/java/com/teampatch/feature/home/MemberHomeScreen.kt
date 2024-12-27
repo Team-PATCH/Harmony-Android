@@ -59,7 +59,7 @@ import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
 @Composable
-fun MemberHomeScreen(
+internal fun MemberHomeScreen(
     onUserPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id
     onMemoryCardClick: (String) -> Unit, // id

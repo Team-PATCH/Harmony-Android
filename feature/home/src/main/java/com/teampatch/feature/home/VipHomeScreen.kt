@@ -60,7 +60,7 @@ import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
 @Composable
-fun VipHomeScreen(
+internal fun VipHomeScreen(
     onUserPageRequest: () -> Unit,
     onDailyRoutineRegisterPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id

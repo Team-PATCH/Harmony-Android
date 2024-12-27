@@ -15,17 +15,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.home.model.HomeErrorHandler
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object HomeRoute
 
 @Composable
-fun HomeRoute(
+internal fun HomeRoute(
     onUserPageRequest: () -> Unit,
     onDailyRoutineRegisterPageRequest: () -> Unit,
-    onDailyRoutineClick: (String) -> Unit, // id
-    onMemoryCardClick: (String) -> Unit, // id
+    onDailyRoutineClick: (dailyRoutineId: String) -> Unit,
+    onMemoryCardClick: (memoryCardId: String) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.teampatch.feature.family.info.FamilyInfoRoute
 import com.teampatch.feature.home.HomeRoute
+import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.profile.edit.ProfileEditRoute
 import com.teampatch.feature.settings.SettingsRoute
@@ -19,14 +20,12 @@ fun MainNavHost(
         navController = navController,
         startDestination = HomeRoute
     ) {
-        composable<HomeRoute> {
-            HomeRoute(
-                onUserPageRequest = { },
-                onDailyRoutineClick = { },
-                onDailyRoutineRegisterPageRequest = { },
-                onMemoryCardClick = { }
-            )
-        }
+        addHomeScreen(
+            onUserPageRequest = { },
+            onDailyRoutineClick = { },
+            onDailyRoutineRegisterPageRequest = { },
+            onMemoryCardClick = { }
+        )
 
         composable<SettingsRoute> {
             SettingsRoute(
@@ -51,7 +50,7 @@ fun MainNavHost(
 
         addMemoryCardRegistrationScreen(
             onDismissRequest = navController::popBackStack,
-            onMemoryStorePageRequest = {  } // TODO: 메모리 저장소 페이지 가기
+            onMemoryStorePageRequest = { } // TODO: 메모리 저장소 페이지 가기
         )
     }
 }
