@@ -45,10 +45,10 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.utils.noRippleClickable
-import com.teampatch.core.domain.emptyUser
 import com.teampatch.core.domain.fake.FakeDaily
 import com.teampatch.core.domain.fake.FakeDailyComments
 import com.teampatch.core.domain.model.Role
+import com.teampatch.core.domain.model.User
 import com.teampatch.daily.manage.model.AnswerEvent
 import com.teampatch.daily.manage.model.CommentEdit
 import com.teampatch.daily.manage.model.CommentEvent
@@ -265,7 +265,7 @@ private fun DailyManageScreenPreview() {
             uiState = DailyManageUiState(
                 daily = flowOf(PagingData.from(FakeDaily().get())),
                 comment = flowOf(PagingData.from(FakeDailyComments().get())),
-                user = emptyUser.copy(uid = "uid001", role = Role.VIP),
+                user = User.createEmptyUser().copy(uid = "uid001", role = Role.VIP),
                 isLoading = false
             )
         )

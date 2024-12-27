@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.teampatch.core.common.flowErrorCatch
 import com.teampatch.core.common.toPagingData
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.domain.model.Image
@@ -26,7 +27,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -45,11 +45,10 @@ internal class HomeViewModel @Inject constructor(
     private val _errorHandler: MutableSharedFlow<HomeErrorHandler> = MutableSharedFlow()
     val errorHandler: SharedFlow<HomeErrorHandler> = _errorHandler.asSharedFlow()
 
-    val user: StateFlow<User?> = kotlin.runCatching { getUserInfoUseCase() }
-        .getOrElse {
-            _errorHandler.tryEmit(HomeErrorHandler.UserInfoLoadError(it))
-            flowOf(null)
-        }
+    val user: StateFlow<User?> = flowErrorCatch({ getUserInfoUseCase() }) {
+        it.printStackTrace()
+        _errorHandler.emit(HomeErrorHandler.UserInfoLoadError(it))
+    }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -57,23 +56,31 @@ internal class HomeViewModel @Inject constructor(
         )
 
     val dailyRoutine: Flow<PagingData<CheckableData<Todo>>> =
-        kotlin.runCatching { getDailyRoutineUseCase() }
-            .getOrElse { it.toPagingData() }
-            .map { pagingData ->
-                pagingData.map {
-                    CheckableData(it, mutableStateOf(it.isFinished))
-                }
+        flowErrorCatch(
+            block = {
+                getDailyRoutineUseCase()
+                    .map { pagingData ->
+                        pagingData.map {
+                            CheckableData(it, mutableStateOf(it.isFinished))
+                        }
+                    }
+                    .cachedIn(viewModelScope)
             }
-            .cachedIn(viewModelScope)
+        ) {
+            it.printStackTrace()
+            emit(it.toPagingData())
+        }
 
     val memoryCardUiState: StateFlow<MemoryCardUiState> =
-        kotlin.runCatching { getLatestMemoryCardUseCase() }
-            .map { result ->
-                result.map {
-                    MemoryCardUiState.Success(it)
-                }
+        flowErrorCatch<MemoryCardUiState>(
+            block = {
+                getLatestMemoryCardUseCase()
+                    .map { MemoryCardUiState.Success(it) }
             }
-            .getOrElse { flowOf(MemoryCardUiState.Error(it)) }
+        ) {
+            it.printStackTrace()
+            emit(MemoryCardUiState.Error(it))
+        }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
