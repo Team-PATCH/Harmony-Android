@@ -63,10 +63,10 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
-import com.teampatch.core.domain.emptyUser
 import com.teampatch.core.domain.fake.FakeQuestionComments
 import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.core.domain.model.Role
+import com.teampatch.core.domain.model.User
 import com.teampatch.feature.question.detail.model.AnswerEvent
 import com.teampatch.feature.question.detail.model.CommentEdit
 import com.teampatch.feature.question.detail.model.CommentEvent
@@ -507,7 +507,7 @@ private fun QuestionDetailScreenPreview() {
             uiState = QuestionDetailUiState(
                 detail = FakeQuestionDetail().get(),
                 comment = flowOf(PagingData.from(FakeQuestionComments().get())),
-                user = emptyUser.copy(uid = "uid001", role = Role.VIP),
+                user = User.init().copy(uid = "uid001", role = Role.VIP),
                 isLoading = false
             )
         )
