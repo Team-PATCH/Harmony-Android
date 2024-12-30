@@ -15,11 +15,11 @@ internal abstract class DataViewModelModule {
 
     @Binds
     abstract fun bindsMemoryCardRepository(
-        memoryCardRepositoryImpl: MemoryCardRepositoryImpl
+        memoryCardRepositoryImpl: MemoryCardRepositoryImpl,
     ): MemoryCardRepository
 
     @Binds
     abstract fun bindsAuthenticationRepository(
-        authenticationRepositoryImpl: AuthenticationRepositoryImpl
+        authenticationRepositoryImpl: AuthenticationRepositoryImpl,
     ): AuthenticationRepository
 }

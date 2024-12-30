@@ -12,7 +12,7 @@ import javax.inject.Inject
 class AuthenticationRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val kakaoLoginService: KakaoLoginService,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
 ) : AuthenticationRepository {
 
     override suspend fun loginKakao(): LoginResult {

@@ -13,6 +13,6 @@ internal abstract class DataSingletonModule {
 
     @Binds
     abstract fun bindsTokenManager(
-        tokenManagerImpl: TokenManagerImpl
+        tokenManagerImpl: TokenManagerImpl,
     ): TokenManager
 }

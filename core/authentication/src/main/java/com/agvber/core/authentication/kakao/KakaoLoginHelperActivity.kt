@@ -132,7 +132,7 @@ internal class KakaoLoginHelperActivity : Activity() {
         fun startActivityForResult(
             context: Context,
             intent: Intent,
-            resultListener: (resultCode: Int, data: Intent?) -> Unit
+            resultListener: (resultCode: Int, data: Intent?) -> Unit,
         ) {
             intent.apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
