@@ -6,7 +6,7 @@ data class User(
     val name: String,
     val relation: String,
     val profileImageUrl: String?,
-    val role: Role
+    val role: Role,
 ) {
     companion object {
 

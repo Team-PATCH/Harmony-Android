@@ -5,7 +5,7 @@ import com.teampatch.core.domain.repository.GroupManagementRepository
 import javax.inject.Inject
 
 class CreateFamilyGroupUseCase @Inject constructor(
-    private val groupManagementRepository: GroupManagementRepository
+    private val groupManagementRepository: GroupManagementRepository,
 ) {
 
     suspend operator fun invoke(): InvitationMessage {

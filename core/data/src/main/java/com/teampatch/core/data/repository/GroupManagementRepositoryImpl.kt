@@ -8,13 +8,13 @@ import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.GroupRemoteDataSource
 import com.teampatch.core.network.model.group.request.GroupCreationRequestBody
 import com.teampatch.core.network.model.group.request.GroupJoinRequestBody
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 
 class GroupManagementRepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager,
     private val groupRemoteDataSource: GroupRemoteDataSource,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : GroupManagementRepository {
 
     override suspend fun createFamilyGroup(): String {
@@ -45,4 +45,3 @@ class GroupManagementRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 }
-
