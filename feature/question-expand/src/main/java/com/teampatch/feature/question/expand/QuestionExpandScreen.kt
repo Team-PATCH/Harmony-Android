@@ -79,7 +79,7 @@ fun QuestionExpandRoute(
 internal fun QuestionExpandScreen(
     onBackRequest: () -> Unit,
     questionDetailPageRequest: (String) -> Unit,
-    uiState: QuestionExpandUiState
+    uiState: QuestionExpandUiState,
 ) {
     val questions = uiState.question.collectAsLazyPagingItems()
     Scaffold(
@@ -123,7 +123,7 @@ internal fun QuestionExpandScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+                            .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
                     ) {
                         Text(
                             text = questions.getOrNull(index)?.title ?: "",
@@ -136,7 +136,7 @@ internal fun QuestionExpandScreen(
                         Icon(
                             painter = painterResource(ic_chevron_question),
                             contentDescription = "chevron",
-                            tint = G3,
+                            tint = G3
                         )
                     }
                 }

@@ -19,7 +19,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 @Composable
 fun OnboardingAppBar(
     modifier: Modifier = Modifier,
-    actions: @Composable RowScope.() -> Unit
+    actions: @Composable RowScope.() -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -43,7 +43,6 @@ fun OnboardingAppBar(
 private fun OnboardingAppBaPreview() {
     HarmonyTheme {
         OnboardingAppBar {
-
         }
     }
 }

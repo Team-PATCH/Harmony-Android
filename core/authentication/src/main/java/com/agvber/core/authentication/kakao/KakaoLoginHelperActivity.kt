@@ -53,7 +53,7 @@ internal class KakaoLoginHelperActivity : Activity() {
 
     private fun loginKakaoWeb(
         onSuccess: (Token) -> Unit,
-        onFailure: (Throwable?) -> Unit
+        onFailure: (Throwable?) -> Unit,
     ) {
         try {
             UserApiClient.instance.loginWithKakaoAccount(
@@ -80,7 +80,7 @@ internal class KakaoLoginHelperActivity : Activity() {
 
     private fun loginKakaoTalk(
         onSuccess: (Token) -> Unit,
-        onFailure: (Throwable?) -> Unit
+        onFailure: (Throwable?) -> Unit,
     ) {
         try {
             UserApiClient.instance.loginWithKakaoTalk(
@@ -132,7 +132,7 @@ internal class KakaoLoginHelperActivity : Activity() {
         fun startActivityForResult(
             context: Context,
             intent: Intent,
-            resultListener: (resultCode: Int, data: Intent?) -> Unit
+            resultListener: (resultCode: Int, data: Intent?) -> Unit,
         ) {
             intent.apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

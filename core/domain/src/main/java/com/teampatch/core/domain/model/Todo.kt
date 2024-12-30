@@ -6,5 +6,5 @@ data class Todo(
     val id: String,
     val dateTime: LocalDateTime,
     val title: String,
-    val isFinished: Boolean
+    val isFinished: Boolean,
 )

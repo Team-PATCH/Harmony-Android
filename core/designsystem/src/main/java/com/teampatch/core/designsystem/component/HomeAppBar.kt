@@ -14,7 +14,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 @Composable
 fun HomeAppBar(
     modifier: Modifier = Modifier,
-    actions: @Composable RowScope.() -> Unit
+    actions: @Composable RowScope.() -> Unit,
 ) {
     AppBar(
         navigation = {

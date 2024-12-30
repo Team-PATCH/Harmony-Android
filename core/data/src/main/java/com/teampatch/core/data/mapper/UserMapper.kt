@@ -17,6 +17,6 @@ internal fun ProfileResponse.toDomain(): User {
         name = user.nick,
         relation = "",
         profileImageUrl = null,
-        role = role,
+        role = role
     )
 }

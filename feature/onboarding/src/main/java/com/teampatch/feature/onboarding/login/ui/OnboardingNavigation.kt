@@ -11,16 +11,16 @@ const val ONBOARDING_ROUTE = "Onboarding"
 
 fun NavController.navigateToOnboardingScreen(
     navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null
+    navigatorExtras: Navigator.Extras? = null,
 ) {
     navigate(route = ONBOARDING_ROUTE, navOptions = navOptions, navigatorExtras = navigatorExtras)
 }
 
 fun NavGraphBuilder.addOnboardingScreen(
     title: String,
-    content: @Composable () -> Unit,  // content 인자를 받음
+    content: @Composable () -> Unit, // content 인자를 받음
     onBackClick: () -> Unit,
-    onNextClick: (() -> Unit)? = null
+    onNextClick: (() -> Unit)? = null,
 ) {
     composable(ONBOARDING_ROUTE) {
 //        OnboardingScreen(

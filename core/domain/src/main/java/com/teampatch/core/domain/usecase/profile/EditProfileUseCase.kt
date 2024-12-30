@@ -8,8 +8,7 @@ class EditProfileUseCase @Inject constructor() {
     suspend operator fun invoke(
         relation: String,
         name: String,
-        profileImage: Image?
+        profileImage: Image?,
     ) {
-
     }
 }

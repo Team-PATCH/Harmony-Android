@@ -14,7 +14,7 @@ import com.teampatch.feature.settings.SettingsRoute
 
 @Composable
 fun MainNavHost(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         navController = navController,

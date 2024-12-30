@@ -6,13 +6,13 @@ import com.agvber.core.authentication.SocialLoginService
 import com.agvber.core.authentication.model.Token
 import com.teampatch.core.common.getCustomParcelableExtra
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class KakaoLoginService @Inject constructor(
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val appContext: Context,
 ) : SocialLoginService() {
 
     override suspend fun login(): Token = suspendCancellableCoroutine { continuation ->

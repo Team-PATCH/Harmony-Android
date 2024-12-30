@@ -33,7 +33,7 @@ fun SpeechBubble(
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     propagateMinConstraints: Boolean = false,
-    content: @Composable (BoxScope.() -> Unit)
+    content: @Composable (BoxScope.() -> Unit),
 ) {
     Box(
         contentAlignment = contentAlignment,
@@ -60,7 +60,7 @@ fun SpeechBubble(
                         lineTo((size.width / 2) - 24.dp.toPx(), size.height - 20.dp.toPx())
                         close()
                     },
-                    color = G1,
+                    color = G1
                 )
                 drawLine(
                     color = G3,
@@ -84,7 +84,7 @@ fun SpeechBubble(
                 color = BL,
                 fontSize = 25.sp,
                 fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
         ) {
             content()

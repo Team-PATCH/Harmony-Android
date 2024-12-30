@@ -15,7 +15,6 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-
 dependencies {
 
     implementation(libs.androidx.paging.common)

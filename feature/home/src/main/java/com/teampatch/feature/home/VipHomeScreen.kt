@@ -43,7 +43,6 @@ import com.teampatch.core.designsystem.component.DailyRoutineCard
 import com.teampatch.core.designsystem.component.EmptyLetterBox
 import com.teampatch.core.designsystem.component.ExpandMemoryCard
 import com.teampatch.core.designsystem.component.HomeAppBar
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider
 import com.teampatch.core.designsystem.theme.BL
@@ -53,11 +52,12 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.home.model.MemoryCardUiState
-import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun VipHomeScreen(
@@ -67,7 +67,7 @@ internal fun VipHomeScreen(
     onMemoryCardClick: (String) -> Unit, // id
     onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
     memoryCardUiState: MemoryCardUiState,
-    dailyRoutine: LazyPagingItems<CheckableData<Todo>>
+    dailyRoutine: LazyPagingItems<CheckableData<Todo>>,
 ) {
     var memoryCardExpanded by rememberSaveable { mutableStateOf(false) }
 
@@ -119,8 +119,8 @@ internal fun VipHomeScreen(
                                         memoryCardUiState.data.text,
                                         memoryCardUiState.data.dateTime.let {
                                             "${it.year}${stringResource(R.string.year)} " +
-                                                    "${it.monthValue}${stringResource(R.string.month)} " +
-                                                    "${it.dayOfMonth}${stringResource(R.string.day)}"
+                                                "${it.monthValue}${stringResource(R.string.month)} " +
+                                                "${it.dayOfMonth}${stringResource(R.string.day)}"
                                         },
                                         painter = painterResource(img_test_memory_card)
                                     )
@@ -165,7 +165,7 @@ internal fun VipHomeScreen(
                                         withStyle(style = SpanStyle(color = MainGreen)) {
                                             append(
                                                 "${it.monthValue}${stringResource(R.string.month)} " +
-                                                        "${it.dayOfMonth}${stringResource(R.string.day)}"
+                                                    "${it.dayOfMonth}${stringResource(R.string.day)}"
                                             )
                                         }
                                     }
@@ -248,7 +248,7 @@ internal fun VipHomeScreen(
 @Composable
 private fun VipHomeScreenPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
-    todos: List<Todo>
+    todos: List<Todo>,
 ) {
     HarmonyTheme {
         VipHomeScreen(
@@ -270,8 +270,8 @@ private fun VipHomeScreenPreview(
             dailyRoutine = flowOf(
                 PagingData.from(
                     data = TodoPreviewParameterProvider().values.first()
-                        .map { CheckableData(it, mutableStateOf(it.isFinished)) },
-                ),
+                        .map { CheckableData(it, mutableStateOf(it.isFinished)) }
+                )
             )
                 .collectAsLazyPagingItems()
         )
@@ -282,7 +282,7 @@ private fun VipHomeScreenPreview(
 @Composable
 private fun VipHomeScreenEmptyPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
-    todos: List<Todo>
+    todos: List<Todo>,
 ) {
     HarmonyTheme {
         VipHomeScreen(

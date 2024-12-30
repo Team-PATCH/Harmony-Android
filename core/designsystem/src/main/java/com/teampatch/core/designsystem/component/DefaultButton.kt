@@ -32,7 +32,7 @@ fun DefaultButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: DefaultButtonColor = DefaultButtonColor(),
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -52,7 +52,7 @@ fun DefaultButton(
                 fontSize = 24.sp,
                 fontFamily = PretendardFontFamily,
                 fontWeight = FontWeight.SemiBold
-            ),
+            )
         ) {
             content()
         }
@@ -70,7 +70,6 @@ private fun DefaultButtonPreview() {
     HarmonyTheme {
         DefaultButton(
             onClick = {
-
             },
             modifier = Modifier.fillMaxWidth()
         ) {

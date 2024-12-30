@@ -5,7 +5,7 @@ import com.teampatch.core.domain.repository.AuthenticationRepository
 import javax.inject.Inject
 
 class LoginKakaoUseCase @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val authenticationRepository: AuthenticationRepository,
 ) {
 
     /**

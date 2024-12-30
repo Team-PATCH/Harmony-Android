@@ -8,5 +8,5 @@ data class TodayQuestionResponse(
     @Json(name = "questionId") val questionId: Int,
     @Json(name = "groupId") val groupId: Int,
     @Json(name = "question") val question: String,
-    @Json(name = "answer") val answer: String?
+    @Json(name = "answer") val answer: String?,
 )

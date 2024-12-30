@@ -23,6 +23,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Check code quality
-      run: ./gradlew lint
+      run: ./gradlew ktlintCheck
     - name: Build with Gradle
       run: ./gradlew assembleDebug 

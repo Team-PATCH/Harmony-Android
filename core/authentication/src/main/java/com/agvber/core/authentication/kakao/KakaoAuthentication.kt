@@ -48,20 +48,18 @@ import com.teampatch.core.common.getCustomParcelableExtra
 @Deprecated("해당 코드는 deprecated 되었습니다. 되도록 LoginKakaoUseCase를 사용해주세요!!")
 @Composable
 fun rememberLauncherForKakaoLoginResult(
-    callback: (Result<Token>) -> Unit
-): ManagedActivityResultLauncher<Intent, ActivityResult> {
-    return rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        runCatching {
-            val intent = result.data!!
-            intent.getCustomParcelableExtra(
-                name = KakaoLoginHelperActivity.TOKEN_PARAM,
-                clazz = Token::class.java
-            )!!
-        }
-            .let(callback)
+    callback: (Result<Token>) -> Unit,
+): ManagedActivityResultLauncher<Intent, ActivityResult> = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.StartActivityForResult()
+) { result ->
+    runCatching {
+        val intent = result.data!!
+        intent.getCustomParcelableExtra(
+            name = KakaoLoginHelperActivity.TOKEN_PARAM,
+            clazz = Token::class.java
+        )!!
     }
+        .let(callback)
 }
 
 /**
@@ -69,7 +67,7 @@ fun rememberLauncherForKakaoLoginResult(
  */
 @Deprecated("해당 코드는 deprecated 되었습니다. 되도록 LoginKakaoUseCase를 사용해주세요!!")
 fun ManagedActivityResultLauncher<Intent, ActivityResult>.loginKakao(
-    context: Context
+    context: Context,
 ) {
     val intent = Intent(context, KakaoLoginHelperActivity::class.java)
     launch(intent)

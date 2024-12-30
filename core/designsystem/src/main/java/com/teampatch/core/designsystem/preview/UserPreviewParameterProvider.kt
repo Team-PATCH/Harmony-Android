@@ -87,5 +87,4 @@ class UserPreviewParameterProvider : PreviewParameterProvider<User> {
             role = Role.MEMBER
         )
     )
-
 }

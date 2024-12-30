@@ -21,6 +21,8 @@ import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.home.model.HomeErrorHandler
 import com.teampatch.feature.home.model.MemoryCardUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -30,8 +32,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
@@ -39,7 +39,7 @@ internal class HomeViewModel @Inject constructor(
     private val getLatestMemoryCardUseCase: GetLatestMemoryCardUseCase,
     private val toggleDailyRoutineStatusUseCase: ToggleDailyRoutineStatusUseCase,
     private val addMemoryCardUseCase: AddMemoryCardUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
 
     private val _errorHandler: MutableSharedFlow<HomeErrorHandler> = MutableSharedFlow()
@@ -103,7 +103,9 @@ internal class HomeViewModel @Inject constructor(
     ) = viewModelScope.launch {
         try {
             addMemoryCardUseCase(
-                memories = memories, dateTime = dateTime, image = Image.Uri(image.toString())
+                memories = memories,
+                dateTime = dateTime,
+                image = Image.Uri(image.toString())
             )
         } catch (e: Exception) {
             e.printStackTrace()

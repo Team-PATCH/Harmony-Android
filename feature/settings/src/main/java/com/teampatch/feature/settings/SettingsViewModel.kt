@@ -9,6 +9,7 @@ import com.teampatch.core.domain.usecase.version.GetAppLatestVersionUseCase
 import com.teampatch.feature.settings.model.SettingsSideEffect
 import com.teampatch.feature.settings.model.SettingsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -19,14 +20,13 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val getAppLatestVersionUseCase: GetAppLatestVersionUseCase,
     private val logoutAppUseCase: LogoutAppUseCase,
     private val withdrawAppUseCase: WithdrawAppUseCase,
-    private val withdrawFamilyUseCase: WithdrawFamilyUseCase
+    private val withdrawFamilyUseCase: WithdrawFamilyUseCase,
 ) : ViewModel() {
 
     private val _sideEffect = Channel<SettingsSideEffect>()

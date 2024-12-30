@@ -7,10 +7,8 @@ import java.util.Date
 
 internal val serverDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 
-internal fun Date.toServerDateFormat(): String {
-    return LocalDateTime.ofInstant(
-        toInstant(),
-        ZoneId.systemDefault()
-    )
-        .format(serverDateTimeFormatter)
-}
+internal fun Date.toServerDateFormat(): String = LocalDateTime.ofInstant(
+    toInstant(),
+    ZoneId.systemDefault()
+)
+    .format(serverDateTimeFormatter)

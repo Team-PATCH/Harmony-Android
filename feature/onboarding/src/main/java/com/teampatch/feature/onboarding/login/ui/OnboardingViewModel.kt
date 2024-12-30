@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val registerFamilyUseCase: RegisterFamilyUseCase
+    private val registerFamilyUseCase: RegisterFamilyUseCase,
 ) : ViewModel() {
 
     // 로그인 시도를 수행하는 함수
@@ -28,15 +28,17 @@ class OnboardingViewModel @Inject constructor(
         host: Host,
         relation: String,
         name: String,
-        profileImage: Image
+        profileImage: Image,
     ): LiveData<Result<InvitationMessage>> = liveData {
-        emit(Result.runCatching {
-            registerFamilyUseCase(
-                host = host,
-                relation = relation,
-                name = name,
-                profileImage = profileImage
-            )
-        })
+        emit(
+            Result.runCatching {
+                registerFamilyUseCase(
+                    host = host,
+                    relation = relation,
+                    name = name,
+                    profileImage = profileImage
+                )
+            }
+        )
     }
 }

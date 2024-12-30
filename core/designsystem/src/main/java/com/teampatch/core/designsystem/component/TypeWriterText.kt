@@ -41,7 +41,7 @@ fun TypeWriterText(
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
-    style: TextStyle = LocalTextStyle.current
+    style: TextStyle = LocalTextStyle.current,
 ) {
     val inspectionMode = LocalInspectionMode.current
     var textToDisplay by remember { mutableStateOf("") }

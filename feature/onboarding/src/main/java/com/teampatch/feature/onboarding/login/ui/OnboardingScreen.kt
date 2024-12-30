@@ -76,13 +76,12 @@ import com.teampatch.feature.onboarding.R.string.subtext_onboarding_invite_grand
 import com.teampatch.feature.onboarding.R.string.subtext_onboarding_make_space
 import com.teampatch.feature.onboarding.R.string.subtext_onboarding_setting_prfile_image
 
-
 @Composable
 fun OnBoardingLayout(
     onBackRequest: () -> Unit,
     title: AnnotatedString,
     subtext: String,
-    content: @Composable () -> Unit // content 인자를 받음
+    content: @Composable () -> Unit, // content 인자를 받음
 ) {
     Scaffold(
         topBar = {
@@ -111,7 +110,7 @@ fun OnBoardingLayout(
                         text = title,
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.W700,
-                        fontSize = 28.sp,
+                        fontSize = 28.sp
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -121,7 +120,7 @@ fun OnBoardingLayout(
                         color = G5,
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.W500,
-                        fontSize = 18.sp,
+                        fontSize = 18.sp
                     )
                 }
             }
@@ -140,7 +139,6 @@ fun OnBoardingLayout(
         }
     }
 }
-
 
 @Composable
 fun ChooseSpace() {
@@ -189,7 +187,6 @@ fun ChooseSpace() {
     }
 }
 
-
 @Composable
 fun InputVipName() {
     var expanded by remember { mutableStateOf(false) }
@@ -222,7 +219,7 @@ fun InputVipName() {
                 ) {
                     Text(text = selectedItem, modifier = Modifier.weight(1f))
                     Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,  // 항상 ArrowDropDown 아이콘만 표시
+                        imageVector = Icons.Filled.ArrowDropDown, // 항상 ArrowDropDown 아이콘만 표시
                         contentDescription = "Toggle Dropdown"
                     )
                 }
@@ -309,8 +306,8 @@ fun InputMemberName() {
                 onClick = { /* 다음 단계로 이동 처리 */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),  // 버튼의 높이 설정
-                enabled = isNextEnabled,  // 활성화 여부
+                    .height(56.dp), // 버튼의 높이 설정
+                enabled = isNextEnabled, // 활성화 여부
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (isNextEnabled) Color(0xFF4CAF50) else Color(0xFFD3D3D3), // 초록색 또는 회색
                     contentColor = Color.White
@@ -321,8 +318,6 @@ fun InputMemberName() {
         }
     }
 }
-
-
 
 @Composable
 fun InputProfileSettings() {
@@ -339,10 +334,11 @@ fun InputProfileSettings() {
             }
         },
         subtext = stringResource(subtext_onboarding_setting_prfile_image),
-        onBackRequest = {  }
+        onBackRequest = { }
     ) {
         Image(
-            painter = painterResource(btn_add_profile), null,
+            painter = painterResource(btn_add_profile),
+            null,
             contentScale = ContentScale.Crop, // 이미지가 잘리지 않고 버튼 안에 맞춰짐
             modifier = Modifier
                 .fillMaxWidth()
@@ -412,7 +408,7 @@ fun InsertInvitaionCode() {
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                visualTransformation = PasswordVisualTransformation()  // 코드 숨김 처리
+                visualTransformation = PasswordVisualTransformation() // 코드 숨김 처리
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -422,10 +418,10 @@ fun InsertInvitaionCode() {
                 onClick = { /* 초대 코드 확인 처리 */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),  // 버튼의 높이 설정
-                enabled = isNextEnabled,  // 활성화 여부: 5자리가 아니면 비활성화
+                    .height(56.dp), // 버튼의 높이 설정
+                enabled = isNextEnabled, // 활성화 여부: 5자리가 아니면 비활성화
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isNextEnabled) Color(0xFF4CAF50) else Color(0xFFD3D3D3),  // 활성화시 초록색, 비활성화시 회색
+                    containerColor = if (isNextEnabled) Color(0xFF4CAF50) else Color(0xFFD3D3D3), // 활성화시 초록색, 비활성화시 회색
                     contentColor = Color.White
                 )
             ) {
@@ -465,9 +461,9 @@ fun EnterSpaceInSingularState() {
             onClick = { /* 초대 코드 확인 처리 */ },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),  // 버튼의 높이 설정
+                .height(56.dp), // 버튼의 높이 설정
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF4CAF50),  // 활성화시 초록색, 비활성화시 회색
+                containerColor = Color(0xFF4CAF50), // 활성화시 초록색, 비활성화시 회색
                 contentColor = Color.White
             )
         ) {
@@ -476,15 +472,14 @@ fun EnterSpaceInSingularState() {
     }
 }
 
-
-//@Composable
-//fun Screen4_1(
+// @Composable
+// fun Screen4_1(
 //    selectedMember: String,
 //    onMemberSelected: (String) -> Unit,
 //    lastName: String,
 //    onLastNameChanged: (String) -> Unit,
 //    onNextClick: () -> Unit
-//) {
+// ) {
 //    var expanded by remember { mutableStateOf(false) }
 //    val memberOptions = listOf("할머니", "할아버지")
 //    val isFormValid = selectedMember.isNotEmpty() && lastName.isNotEmpty()
@@ -572,23 +567,18 @@ fun EnterSpaceInSingularState() {
 //            }
 //        }
 //    }
-//}
+// }
 
-
-//@Preview(showBackground = true)
-//@Composable
-//fun OnBoardingScreenPreview() {
+// @Preview(showBackground = true)
+// @Composable
+// fun OnBoardingScreenPreview() {
 //    OnBoardingLayout(
 //        title = "할배요",
 //        subtext = "할매요",
 //        onBackClick = {},
 //        content = {}
 //    )
-//}
-
-
-
-
+// }
 
 @Preview(showBackground = true)
 @Composable
@@ -599,7 +589,7 @@ private fun ChooseSpacePreview() {
 }
 
 @Preview(showBackground = true) //
-//@Preview(showSystemUi = true) // 원래 배경색이 없는데
+// @Preview(showSystemUi = true) // 원래 배경색이 없는데
 @Composable
 private fun InputVipNamePreview() {
     HarmonyTheme {
@@ -614,7 +604,6 @@ private fun InputMemberNamePreview() {
         InputMemberName()
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
