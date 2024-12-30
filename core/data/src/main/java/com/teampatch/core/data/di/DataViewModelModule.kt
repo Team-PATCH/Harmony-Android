@@ -1,8 +1,8 @@
 package com.teampatch.core.data.di
 
-import com.teampatch.core.data.entity.TokenManagerImpl
+import com.teampatch.core.data.repository.AuthenticationRepositoryImpl
 import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
-import com.teampatch.core.domain.entity.TokenManager
+import com.teampatch.core.domain.repository.AuthenticationRepository
 import com.teampatch.core.domain.repository.MemoryCardRepository
 import dagger.Binds
 import dagger.Module
@@ -19,7 +19,7 @@ internal abstract class DataViewModelModule {
     ): MemoryCardRepository
 
     @Binds
-    abstract fun bindsTokenManager(
-        tokenManagerImpl: TokenManagerImpl,
-    ): TokenManager
+    abstract fun bindsAuthenticationRepository(
+        authenticationRepositoryImpl: AuthenticationRepositoryImpl,
+    ): AuthenticationRepository
 }
