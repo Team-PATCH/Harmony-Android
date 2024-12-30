@@ -6,8 +6,7 @@ class EditAnswerUseCase @Inject constructor() {
 
     suspend operator fun invoke(
         questionId: String,
-        answer: String
+        answer: String,
     ) {
-
     }
 }

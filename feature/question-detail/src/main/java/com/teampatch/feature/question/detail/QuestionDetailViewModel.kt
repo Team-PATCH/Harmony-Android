@@ -13,13 +13,13 @@ import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class QuestionDetailViewModel @Inject constructor(

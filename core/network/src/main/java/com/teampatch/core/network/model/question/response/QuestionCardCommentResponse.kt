@@ -9,5 +9,5 @@ data class QuestionCardCommentResponse(
     @Json(name = "questionId") val questionId: Int,
 //    @Json(name = "authorId") val authorId: Int,
     @Json(name = "content") val content: String,
-    @Json(name = "createdAt") val createdAt: String
+    @Json(name = "createdAt") val createdAt: String,
 )

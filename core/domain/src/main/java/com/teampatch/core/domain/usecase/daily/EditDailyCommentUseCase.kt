@@ -6,8 +6,7 @@ class EditDailyCommentUseCase @Inject constructor() {
 
     suspend operator fun invoke(
         commentId: String,
-        comment: String
+        comment: String,
     ) {
-
     }
 }

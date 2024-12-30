@@ -21,11 +21,11 @@ import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistratio
 import com.teampatch.feature.memorycard.registration.model.RecordState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class MemoryCardRegistrationViewModel @Inject constructor(
@@ -37,7 +37,7 @@ internal class MemoryCardRegistrationViewModel @Inject constructor(
     private val pauseMemoryCardRecordingUseCase: PauseMemoryCardRecordingUseCase,
     private val addMemoryCardRecordUseCase: AddMemoryCardRecordUseCase,
     private val getMemoryCardQuestionUseCase: GetMemoryCardQuestionUseCase,
-    private val getMemoryCardUseCase: GetMemoryCardUseCase
+    private val getMemoryCardUseCase: GetMemoryCardUseCase,
 ) : ViewModel() {
 
     private val _sideEffect: Channel<MemoryCardRegistrationSideEffect> = Channel()

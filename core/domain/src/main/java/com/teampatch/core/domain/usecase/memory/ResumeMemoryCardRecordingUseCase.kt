@@ -4,7 +4,7 @@ import com.teampatch.core.domain.repository.MemoryCardRepository
 import javax.inject.Inject
 
 class ResumeMemoryCardRecordingUseCase @Inject constructor(
-    private val memoryCardRepository: MemoryCardRepository
+    private val memoryCardRepository: MemoryCardRepository,
 ) {
 
     operator fun invoke() {

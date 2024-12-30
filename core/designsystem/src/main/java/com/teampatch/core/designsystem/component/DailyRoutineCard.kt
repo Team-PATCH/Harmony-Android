@@ -36,7 +36,7 @@ fun DailyRoutineCard(
     checked: Boolean,
     dateTime: String,
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -52,7 +52,7 @@ fun DailyRoutineCard(
                 .border(1.dp, if (checked) MainGreen else G2, RoundedCornerShape(10.dp))
                 .background(if (checked) Green2 else G1, RoundedCornerShape(10.dp))
                 .size(64.dp)
-                .noRippleClickable { onCheckedChange(!checked) },
+                .noRippleClickable { onCheckedChange(!checked) }
         ) {
             if (checked) {
                 Icon(
@@ -79,7 +79,7 @@ fun DailyRoutineCard(
                 fontWeight = FontWeight.W600,
                 fontSize = 24.sp,
                 color = BL,
-                softWrap = true,
+                softWrap = true
             )
         }
     }
@@ -93,7 +93,7 @@ private fun DailyRoutineCardPreview() {
             onCheckedChange = {},
             checked = true,
             dateTime = "오전 11시",
-            text = "공원 산책 가서 비둘기 사진 찍기",
+            text = "공원 산책 가서 비둘기 사진 찍기"
         )
     }
 }

@@ -3,12 +3,12 @@ package com.teampatch.core.network
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.network.di.NetworkSingletonModule
 import com.teampatch.core.network.interceptor.TokenInterceptor
+import java.util.regex.Pattern
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Retrofit
-import java.util.regex.Pattern
 
 internal object TestRetrofit {
 
@@ -37,8 +37,7 @@ internal object TestRetrofit {
         override fun setAccessToken(token: String) {}
     }
 
-    private fun createSignUpRequestBody(): String {
-        return """ { 
+    private fun createSignUpRequestBody(): String = """ { 
             "userId": "yeojeong@naver.com", 
             "nick": "윤여정", 
             "authProvider": "kakao", 
@@ -46,8 +45,8 @@ internal object TestRetrofit {
             "refreshToken": "string", 
             "socialTokenExpiredAt": 
             "2024-12-07T13:11:11.152Z" 
-            } """.trimIndent()
-    }
+            } 
+    """.trimIndent()
 
     private fun extractToken(jsonString: String): String? {
         val pattern = Pattern.compile("\"token\":\"([^\"]+)\"")
@@ -67,7 +66,5 @@ internal object TestRetrofit {
         .callFactory(okHttpClient)
         .build()
 
-    fun getRetrofit(): Retrofit {
-        return retrofit
-    }
+    fun getRetrofit(): Retrofit = retrofit
 }

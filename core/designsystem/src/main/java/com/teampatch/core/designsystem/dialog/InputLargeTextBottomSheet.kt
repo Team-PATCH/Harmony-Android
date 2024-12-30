@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 
 @Composable
 fun ColumnScope.InputLargeTextBottomSheetContent(
@@ -41,14 +41,14 @@ fun ColumnScope.InputLargeTextBottomSheetContent(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 18.dp),
+            .padding(top = 18.dp)
     ) {
         CompositionLocalProvider(
             value = LocalTextStyle provides LocalTextStyle.current.merge(
                 fontFamily = PretendardFontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
-                color = BL,
+                color = BL
             ),
             content = title
         )
@@ -74,8 +74,8 @@ fun ColumnScope.InputLargeTextBottomSheetContent(
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.merge(
-                fontSize = 20.sp,
-            ),
+                fontSize = 20.sp
+            )
         ) {
             buttonText()
         }
@@ -96,7 +96,7 @@ private fun InputLargeTextBottomSheetPreview() {
                 onDismissRequest = {},
                 onCompleteRequest = {},
                 title = { Text(text = "댓글 남기기") },
-                buttonText = { Text(text = "작성 완료") },
+                buttonText = { Text(text = "작성 완료") }
             ) {
                 DefaultTextField(
                     value = "",

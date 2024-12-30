@@ -6,7 +6,5 @@ import javax.inject.Inject
 
 class GetMemoryCardUseCase @Inject constructor() {
 
-    suspend operator fun invoke(memoryCardId: String): MemoryCard {
-        return FakeMemoryCard().get().first()
-    }
+    suspend operator fun invoke(memoryCardId: String): MemoryCard = FakeMemoryCard().get().first()
 }

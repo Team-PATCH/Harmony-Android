@@ -4,88 +4,86 @@ import com.teampatch.core.domain.model.MemoryCard
 import java.time.LocalDateTime
 
 class FakeMemoryCard : FakeModel<List<MemoryCard>>() {
-    override fun build(): List<MemoryCard> {
-        return listOf(
-            MemoryCard(
-                id = "1",
-                writerTitle = "Happy Moment",
-                writerName = "Alice",
-                text = "This was one of the best days of my life!",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now()
-            ),
-            MemoryCard(
-                id = "2",
-                writerTitle = "Vacation Fun",
-                writerName = "Bob",
-                text = "Enjoying the sun at the beach.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(1)
-            ),
-            MemoryCard(
-                id = "3",
-                writerTitle = "Family Time",
-                writerName = "Charlie",
-                text = "Great dinner with family.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(2)
-            ),
-            MemoryCard(
-                id = "4",
-                writerTitle = "Adventure",
-                writerName = "Dave",
-                text = "Hiking in the mountains.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(3)
-            ),
-            MemoryCard(
-                id = "5",
-                writerTitle = "Birthday Bash",
-                writerName = "Eve",
-                text = "Celebrating my birthday with friends.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(4)
-            ),
-            MemoryCard(
-                id = "6",
-                writerTitle = "New Job",
-                writerName = "Frank",
-                text = "Started my new job today!",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(5)
-            ),
-            MemoryCard(
-                id = "7",
-                writerTitle = "Concert",
-                writerName = "Grace",
-                text = "Amazing night at the concert.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(6)
-            ),
-            MemoryCard(
-                id = "8",
-                writerTitle = "Pet Love",
-                writerName = "Hank",
-                text = "Cuddling with my dog.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(7)
-            ),
-            MemoryCard(
-                id = "9",
-                writerTitle = "Travel Diaries",
-                writerName = "Ivy",
-                text = "Exploring a new city.",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(8)
-            ),
-            MemoryCard(
-                id = "10",
-                writerTitle = "Graduation",
-                writerName = "Jack",
-                text = "Finally graduated!",
-                imageUrl = FAKE_IMAGE_URL,
-                dateTime = LocalDateTime.now().minusDays(9)
-            )
+    override fun build(): List<MemoryCard> = listOf(
+        MemoryCard(
+            id = "1",
+            writerTitle = "Happy Moment",
+            writerName = "Alice",
+            text = "This was one of the best days of my life!",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now()
+        ),
+        MemoryCard(
+            id = "2",
+            writerTitle = "Vacation Fun",
+            writerName = "Bob",
+            text = "Enjoying the sun at the beach.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(1)
+        ),
+        MemoryCard(
+            id = "3",
+            writerTitle = "Family Time",
+            writerName = "Charlie",
+            text = "Great dinner with family.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(2)
+        ),
+        MemoryCard(
+            id = "4",
+            writerTitle = "Adventure",
+            writerName = "Dave",
+            text = "Hiking in the mountains.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(3)
+        ),
+        MemoryCard(
+            id = "5",
+            writerTitle = "Birthday Bash",
+            writerName = "Eve",
+            text = "Celebrating my birthday with friends.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(4)
+        ),
+        MemoryCard(
+            id = "6",
+            writerTitle = "New Job",
+            writerName = "Frank",
+            text = "Started my new job today!",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(5)
+        ),
+        MemoryCard(
+            id = "7",
+            writerTitle = "Concert",
+            writerName = "Grace",
+            text = "Amazing night at the concert.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(6)
+        ),
+        MemoryCard(
+            id = "8",
+            writerTitle = "Pet Love",
+            writerName = "Hank",
+            text = "Cuddling with my dog.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(7)
+        ),
+        MemoryCard(
+            id = "9",
+            writerTitle = "Travel Diaries",
+            writerName = "Ivy",
+            text = "Exploring a new city.",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(8)
+        ),
+        MemoryCard(
+            id = "10",
+            writerTitle = "Graduation",
+            writerName = "Jack",
+            text = "Finally graduated!",
+            imageUrl = FAKE_IMAGE_URL,
+            dateTime = LocalDateTime.now().minusDays(9)
         )
-    }
+    )
 }

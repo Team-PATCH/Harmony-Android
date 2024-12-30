@@ -7,14 +7,14 @@ import com.teampatch.core.domain.usecase.question.GetQuestionsUseCase
 import com.teampatch.feature.question.expand.model.QuestionExpandSideEffect
 import com.teampatch.feature.question.expand.model.QuestionExpandUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class QuestionExpandViewModel @Inject constructor(
-    private val getQuestionsUseCase: GetQuestionsUseCase
+    private val getQuestionsUseCase: GetQuestionsUseCase,
 ) : ViewModel() {
 
     var questionExpandUiState = mutableStateOf(QuestionExpandUiState())

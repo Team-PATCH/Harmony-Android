@@ -8,6 +8,7 @@ import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.family.info.model.FamilyInfoSideEffect
 import com.teampatch.feature.family.info.model.FamilyInfoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,13 +16,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class FamilyInfoViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getFamilyInfoUseCase: GetFamilyInfoUseCase,
-    private val inviteFamilyUseCase: InviteFamilyUseCase
+    private val inviteFamilyUseCase: InviteFamilyUseCase,
 ) : ViewModel() {
 
     private val _sideEffect: Channel<FamilyInfoSideEffect> = Channel()

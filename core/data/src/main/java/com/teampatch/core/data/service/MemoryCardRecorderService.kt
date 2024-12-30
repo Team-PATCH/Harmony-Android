@@ -8,7 +8,7 @@ import javax.inject.Inject
 @ViewModelScoped
 internal class MemoryCardRecorderService @Inject constructor(
     @MemoryCardRecorder
-    private val mediaRecorder: MediaRecorder
+    private val mediaRecorder: MediaRecorder,
 ) {
 
     lateinit var filePath: String
@@ -36,5 +36,4 @@ internal class MemoryCardRecorderService @Inject constructor(
         stop()
         release()
     }
-
 }

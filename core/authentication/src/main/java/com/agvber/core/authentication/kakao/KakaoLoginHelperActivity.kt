@@ -1,6 +1,7 @@
 package com.agvber.core.authentication.kakao
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,35 +17,43 @@ internal class KakaoLoginHelperActivity : Activity() {
 
         if (!UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
             loginKakaoWeb(
-                onSuccess = { finishActivityWithResult(it) },
-                onFailure = { finish() }
+                onSuccess = { finishActivityWithSuccessResult(it) },
+                onFailure = { finishActivityWithFailureResult() }
             )
-            finish()
             return
         }
 
         loginKakaoTalk(
-            onSuccess = { finishActivityWithResult(it) },
+            onSuccess = { finishActivityWithSuccessResult(it) },
             onFailure = {
                 loginKakaoWeb(
-                    onSuccess = { finishActivityWithResult(it) },
-                    onFailure = { finish() }
+                    onSuccess = { finishActivityWithSuccessResult(it) },
+                    onFailure = { finishActivityWithFailureResult() }
                 )
             }
         )
     }
 
-    private fun finishActivityWithResult(token: Token) {
+    private fun finishActivityWithSuccessResult(token: Token) {
         val intent = Intent().apply {
             putExtra(TOKEN_PARAM, token)
         }
         setResult(RESULT_OK, intent)
+        activityResultListener?.invoke(RESULT_OK, intent)
+        activityResultListener = null
+        finish()
+    }
+
+    private fun finishActivityWithFailureResult() {
+        setResult(RESULT_CANCELED)
+        activityResultListener?.invoke(RESULT_CANCELED, null)
+        activityResultListener = null
         finish()
     }
 
     private fun loginKakaoWeb(
         onSuccess: (Token) -> Unit,
-        onFailure: (Throwable?) -> Unit
+        onFailure: (Throwable?) -> Unit,
     ) {
         try {
             UserApiClient.instance.loginWithKakaoAccount(
@@ -71,7 +80,7 @@ internal class KakaoLoginHelperActivity : Activity() {
 
     private fun loginKakaoTalk(
         onSuccess: (Token) -> Unit,
-        onFailure: (Throwable?) -> Unit
+        onFailure: (Throwable?) -> Unit,
     ) {
         try {
             UserApiClient.instance.loginWithKakaoTalk(
@@ -117,5 +126,22 @@ internal class KakaoLoginHelperActivity : Activity() {
         private const val TAG = "KakaoLoginHelperActivity"
         private const val PROVIDER = "kakao"
         internal const val TOKEN_PARAM = "token"
+
+        private var activityResultListener: ((resultCode: Int, data: Intent?) -> Unit)? = null
+
+        fun startActivityForResult(
+            context: Context,
+            intent: Intent,
+            resultListener: (resultCode: Int, data: Intent?) -> Unit,
+        ) {
+            intent.apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            }
+                .also {
+                    context.startActivity(it)
+                }
+            activityResultListener = resultListener
+        }
     }
 }

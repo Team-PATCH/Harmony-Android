@@ -36,18 +36,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.core.designsystem.R.drawable.ic_camera_profile
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
+import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.profile.edit.model.ProfileEditSideEffect
@@ -60,7 +60,7 @@ data object ProfileEditRoute
 @Composable
 fun ProfileEditRoute(
     onCompleteRequest: () -> Unit,
-    profileEditViewModel: ProfileEditViewModel = hiltViewModel()
+    profileEditViewModel: ProfileEditViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val profileEditUiState by profileEditViewModel.profileEditUiState.collectAsStateWithLifecycle()
@@ -103,7 +103,7 @@ fun ProfileEditScreen(
     onRelationChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
     onProfileImageChange: (Uri) -> Unit,
-    profileEditUiState: ProfileEditUiState
+    profileEditUiState: ProfileEditUiState,
 ) {
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -172,7 +172,7 @@ fun ProfileEditScreen(
                             is Image.Url -> profileImage.url
                             null -> ic_my_appbar
                         },
-                        placeholder = previewPlaceholder(ic_my_appbar),
+                        placeholder = previewPlaceholder(ic_my_appbar)
                     ),
                     contentDescription = "profile",
                     contentScale = ContentScale.Crop,
@@ -190,7 +190,7 @@ fun ProfileEditScreen(
                     Icon(
                         painter = painterResource(ic_camera_profile),
                         contentDescription = "camera",
-                        tint = WH,
+                        tint = WH
                     )
                 }
             }

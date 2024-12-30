@@ -130,7 +130,7 @@ internal fun QuestionDetailScreen(
     onBackRequest: () -> Unit,
     answerEventListener: (AnswerEvent) -> Unit,
     commentEventListener: (CommentEvent) -> Unit,
-    uiState: QuestionDetailUiState
+    uiState: QuestionDetailUiState,
 ) {
     var isCommentDialogShow by rememberSaveable { mutableStateOf(false) }
     var isCommentEditDialogShow by rememberSaveable { mutableStateOf<CommentEdit?>(null) }
@@ -149,7 +149,7 @@ internal fun QuestionDetailScreen(
             onDismissRequest = { },
             sheetState = sheetState,
             containerColor = WH,
-            dragHandle = null,
+            dragHandle = null
 //            sheetGesturesEnabled = false TODO: androidx.compose.material3:material3:1.4.0-alpha02
         ) {
             InputLargeTextBottomSheetContent(
@@ -163,7 +163,7 @@ internal fun QuestionDetailScreen(
                 buttonEnable = text.isNotBlank()
             ) {
                 CommentEditorContent(
-                    text = text,
+                    text = text
                 ) {
                     if (it.length <= 100) {
                         text = it
@@ -180,7 +180,7 @@ internal fun QuestionDetailScreen(
             onDismissRequest = { },
             sheetState = sheetState,
             containerColor = WH,
-            dragHandle = null,
+            dragHandle = null
 //            sheetGesturesEnabled = false TODO: androidx.compose.material3:material3:1.4.0-alpha02
         ) {
             InputLargeTextBottomSheetContent(
@@ -194,7 +194,7 @@ internal fun QuestionDetailScreen(
                 buttonEnable = text.isNotBlank()
             ) {
                 CommentEditorContent(
-                    text = text,
+                    text = text
                 ) {
                     if (it.length <= 100) {
                         text = it
@@ -221,7 +221,7 @@ internal fun QuestionDetailScreen(
                         ) {
                             Image(
                                 painter = painterResource(ic_more_question),
-                                contentDescription = "more",
+                                contentDescription = "more"
                             )
                         }
                         DropdownMenu(
@@ -306,8 +306,8 @@ internal fun QuestionDetailScreen(
                     Text(
                         text = with(uiState.detail.dateTime) {
                             "${year}${stringResource(R.string.text_year_datetime)} " +
-                                    "${monthValue}${stringResource(R.string.text_month_datetime)} " +
-                                    "${dayOfMonth}${stringResource(R.string.text_day_datetime)}"
+                                "${monthValue}${stringResource(R.string.text_month_datetime)} " +
+                                "${dayOfMonth}${stringResource(R.string.text_day_datetime)}"
                         },
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.Medium,
@@ -433,7 +433,7 @@ internal fun QuestionDetailScreen(
                                                     fontFamily = PretendardFontFamily,
                                                     fontWeight = FontWeight.Medium,
                                                     fontSize = 20.sp,
-                                                    color = SubRed,
+                                                    color = SubRed
                                                 )
                                             }
                                         },
@@ -467,7 +467,7 @@ internal fun QuestionDetailScreen(
 @Composable
 fun ColumnScope.CommentEditorContent(
     text: String,
-    onTextChange: (String) -> Unit
+    onTextChange: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -481,7 +481,7 @@ fun ColumnScope.CommentEditorContent(
             maxLines = 6,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
         )
         Text(
             text = "${text.length}/100${stringResource(R.string.text_per_comment)}",

@@ -53,7 +53,7 @@ import com.teampatch.feature.memorycard.registration.model.RecordState
 internal fun MemoryCardRegistrationRoute(
     onDismissRequest: () -> Unit,
     onMemoryStorePageRequest: () -> Unit,
-    viewModel: MemoryCardRegistrationViewModel = hiltViewModel()
+    viewModel: MemoryCardRegistrationViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val activity = context.findActivity()
@@ -116,7 +116,7 @@ internal fun MemoryCardRegistrationScreen(
     onRecordRequest: () -> Unit,
     onRecordStopRequest: () -> Unit,
     onMemoryStorePageRequest: () -> Unit,
-    uiState: MemoryCardRegistrationUiState
+    uiState: MemoryCardRegistrationUiState,
 ) {
     val context = LocalContext.current
 
@@ -194,12 +194,12 @@ internal fun MemoryCardRegistrationScreen(
                 if (uiState.imageUrl == null) {
                     Image(
                         painter = painterResource(ic_camera_memory),
-                        contentDescription = "camera",
+                        contentDescription = "camera"
                     )
                 } else {
                     Image(
                         painter = rememberAsyncImagePainter(
-                            model = uiState.imageUrl,
+                            model = uiState.imageUrl
                         ),
                         contentDescription = "image",
                         contentScale = ContentScale.FillWidth,
@@ -231,19 +231,17 @@ internal fun MemoryCardRegistrationScreen(
     }
 }
 
-private fun Context.getSpeechBubbleText(uiState: MemoryCardRegistrationUiState): String {
-    return when (uiState.recordState) {
-        RecordState.INIT -> {
-            getString(R.string.text_speechbuble_init)
-        }
+private fun Context.getSpeechBubbleText(uiState: MemoryCardRegistrationUiState): String = when (uiState.recordState) {
+    RecordState.INIT -> {
+        getString(R.string.text_speechbuble_init)
+    }
 
-        RecordState.RECORDING -> {
-            uiState.questions.getOrNull(uiState.questionProgressIndex) ?: ""
-        }
+    RecordState.RECORDING -> {
+        uiState.questions.getOrNull(uiState.questionProgressIndex) ?: ""
+    }
 
-        RecordState.COMPLETE -> {
-            getString(R.string.text_speechbuble_complete)
-        }
+    RecordState.COMPLETE -> {
+        getString(R.string.text_speechbuble_complete)
     }
 }
 

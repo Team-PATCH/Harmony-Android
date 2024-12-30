@@ -7,5 +7,5 @@ import com.squareup.moshi.JsonClass
 data class QuestionCommonResponse<T>(
     @Json(name = "status") val status: String,
     @Json(name = "message") val message: String,
-    @Json(name = "data") val data: T
+    @Json(name = "data") val data: T,
 )

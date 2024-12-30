@@ -4,5 +4,5 @@ import androidx.compose.runtime.MutableState
 
 data class CheckableData<T>(
     val data: T,
-    var checked: MutableState<Boolean>
+    var checked: MutableState<Boolean>,
 )

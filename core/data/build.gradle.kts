@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
+    implementation(project(":core:authentication"))
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)

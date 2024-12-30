@@ -28,7 +28,7 @@ fun RoundButton(
         .fillMaxWidth()
         .heightIn(min = 48.dp),
     enable: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -37,7 +37,7 @@ fun RoundButton(
             .noRippleClickable(
                 enabled = enable,
                 onClick = onClick
-            ),
+            )
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides LocalTextStyle.current.merge(
@@ -45,7 +45,7 @@ fun RoundButton(
                 fontSize = 24.sp,
                 fontFamily = PretendardFontFamily,
                 fontWeight = FontWeight.SemiBold
-            ),
+            )
         ) {
             content()
         }
@@ -57,7 +57,7 @@ fun RoundButton(
 private fun RoundButtonPreview() {
     HarmonyTheme {
         RoundButton(
-            onClick = {},
+            onClick = {}
         ) {
             Text("Click me!")
         }

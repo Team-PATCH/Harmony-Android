@@ -5,12 +5,10 @@ import javax.inject.Inject
 
 class LoginUseCase @Inject constructor() {
 
-    suspend operator fun invoke(invitationCode: String): FamilyGroup {
-        return FamilyGroup(
-            memberCount = 0,
-            profileImageUrl = emptyList(),
-            madeByName = "test",
-            madeByTitle = "test"
-        )
-    }
+    suspend operator fun invoke(invitationCode: String): FamilyGroup = FamilyGroup(
+        memberCount = 0,
+        profileImageUrl = emptyList(),
+        madeByName = "test",
+        madeByTitle = "test"
+    )
 }

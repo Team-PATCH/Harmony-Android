@@ -22,7 +22,7 @@ fun AppBar(
     modifier: Modifier = Modifier,
     navigation: @Composable () -> Unit = {},
     title: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     Box(
         contentAlignment = Alignment.CenterStart,

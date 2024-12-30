@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G2
@@ -53,6 +52,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -63,7 +63,7 @@ fun MemoryCardCreationDialog(
     onDismissRequest: () -> Unit,
     onCompleteRequest: (String, LocalDateTime) -> Unit,
     imageRequest: () -> Unit,
-    painter: Painter?
+    painter: Painter?,
 ) {
     val datePickerState = rememberDatePickerState()
     var memoryTextValue by rememberSaveable { mutableStateOf("") }
@@ -101,7 +101,7 @@ fun MemoryCardCreationDialog(
                             isDatePickerDialogShow = false
                         }
                 )
-            },
+            }
         ) {
             DatePicker(state = datePickerState)
         }
@@ -228,7 +228,7 @@ fun MemoryCardCreationDialog(
                     fontFamily = PretendardFontFamily,
                     color = WH,
                     fontSize = 24.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }
