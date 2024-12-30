@@ -10,5 +10,5 @@ import kotlinx.coroutines.flow.emptyFlow
 internal data class QuestionUiState(
     val user: User = emptyUser,
     val question: Flow<PagingData<Question>> = emptyFlow(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
 )

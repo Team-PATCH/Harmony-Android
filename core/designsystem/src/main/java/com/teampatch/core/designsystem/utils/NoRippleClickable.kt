@@ -11,7 +11,7 @@ fun Modifier.noRippleClickable(
     enabled: Boolean = true,
     onClickLabel: String? = null,
     role: Role? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) = composed {
     clickable(
         interactionSource = remember { MutableInteractionSource() },

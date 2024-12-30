@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.os.Build
 import android.provider.Settings
-import androidx.annotation.RequiresApi
 
 fun Context.findActivity(): Activity? {
     var context = this

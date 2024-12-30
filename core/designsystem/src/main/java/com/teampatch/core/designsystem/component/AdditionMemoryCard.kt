@@ -109,7 +109,7 @@ private fun AdditionMemoryCardPreview() {
                         append("가 도착했어요")
                     }
                 },
-                text = "어떤 추억인지 확인해 볼까요?",
+                text = "어떤 추억인지 확인해 볼까요?"
             )
         }
     }

@@ -2,14 +2,14 @@ package com.teampatch.core.network.interceptor
 
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.network.annotation.AuthorizedRequest
+import javax.inject.Inject
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import retrofit2.Invocation
-import javax.inject.Inject
 
 internal class TokenInterceptor @Inject constructor(
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response = with(chain) {

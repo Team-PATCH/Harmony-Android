@@ -8,5 +8,5 @@ data class ProfileEditUiState(
     val name: String = "",
     val profileImage: Image? = null,
     val role: Role = Role.MEMBER,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
 )

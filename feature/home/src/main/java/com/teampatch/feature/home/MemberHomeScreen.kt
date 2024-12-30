@@ -43,7 +43,6 @@ import com.teampatch.core.designsystem.component.CollapseMemoryCard
 import com.teampatch.core.designsystem.component.DailyRoutineCard
 import com.teampatch.core.designsystem.component.ExpandMemoryCard
 import com.teampatch.core.designsystem.component.HomeAppBar
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.dialog.MemoryCardCreationDialog
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.designsystem.preview.TodoPreviewParameterProvider
@@ -52,11 +51,12 @@ import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.home.model.MemoryCardUiState
-import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun MemberHomeScreen(
@@ -66,7 +66,7 @@ fun MemberHomeScreen(
     onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
     uploadMemoryCardRequest: (String, LocalDateTime, Uri) -> Unit,
     memoryCardUiState: MemoryCardUiState,
-    dailyRoutine: LazyPagingItems<CheckableData<Todo>>
+    dailyRoutine: LazyPagingItems<CheckableData<Todo>>,
 ) {
     var photoPickerUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
     val photoPicker = rememberLauncherForActivityResult(
@@ -138,8 +138,8 @@ fun MemberHomeScreen(
                                     memoryCardUiState.data.text,
                                     memoryCardUiState.data.dateTime.let {
                                         "${it.year}${stringResource(R.string.year)} " +
-                                                "${it.monthValue}${stringResource(R.string.month)} " +
-                                                "${it.dayOfMonth}${stringResource(R.string.day)}"
+                                            "${it.monthValue}${stringResource(R.string.month)} " +
+                                            "${it.dayOfMonth}${stringResource(R.string.day)}"
                                     },
                                     painter = painterResource(img_test_memory_card)
                                 )
@@ -179,7 +179,7 @@ fun MemberHomeScreen(
                                         append(stringResource(R.string.text_member_home_addition_memory_card_title3))
                                     }
                                 },
-                                text = stringResource(R.string.text_member_home_addition_memory_card_content),
+                                text = stringResource(R.string.text_member_home_addition_memory_card_content)
                             )
                         }
                     }
@@ -200,7 +200,7 @@ fun MemberHomeScreen(
                                     withStyle(style = SpanStyle(color = MainGreen)) {
                                         append(
                                             "${it.monthValue}${stringResource(R.string.month)} " +
-                                                    "${it.dayOfMonth}${stringResource(R.string.day)}"
+                                                "${it.dayOfMonth}${stringResource(R.string.day)}"
                                         )
                                     }
                                 }
@@ -246,7 +246,7 @@ fun MemberHomeScreen(
 @Composable
 private fun MemberHomeScreenPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
-    todos: List<Todo>
+    todos: List<Todo>,
 ) {
     HarmonyTheme {
         MemberHomeScreen(
@@ -268,8 +268,8 @@ private fun MemberHomeScreenPreview(
             dailyRoutine = flowOf(
                 PagingData.from(
                     data = TodoPreviewParameterProvider().values.first()
-                        .map { CheckableData(it, mutableStateOf(it.isFinished)) },
-                ),
+                        .map { CheckableData(it, mutableStateOf(it.isFinished)) }
+                )
             )
                 .collectAsLazyPagingItems()
         )
@@ -280,7 +280,7 @@ private fun MemberHomeScreenPreview(
 @Composable
 private fun MemberHomeScreenEmptyPreview(
     @PreviewParameter(provider = TodoPreviewParameterProvider::class, limit = 1)
-    todos: List<Todo>
+    todos: List<Todo>,
 ) {
     HarmonyTheme {
         MemberHomeScreen(

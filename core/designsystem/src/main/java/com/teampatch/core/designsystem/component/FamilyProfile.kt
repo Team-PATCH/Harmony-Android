@@ -33,7 +33,8 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 
 enum class FamilyRole {
-    ADMIN, MANAGER
+    ADMIN,
+    MANAGER,
 }
 
 @Composable

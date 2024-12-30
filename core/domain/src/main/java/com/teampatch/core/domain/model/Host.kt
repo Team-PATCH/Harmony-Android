@@ -5,6 +5,7 @@ data class Host(
     val name: String,
 ) {
     enum class Title {
-        GRANDFATHER, GRANDMOTHER
+        GRANDFATHER,
+        GRANDMOTHER,
     }
 }

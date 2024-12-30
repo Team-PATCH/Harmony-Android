@@ -12,5 +12,5 @@ internal data class AnswerUiState(
         dateTime = LocalDateTime.now(),
         commentCount = 0
     ),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
 )

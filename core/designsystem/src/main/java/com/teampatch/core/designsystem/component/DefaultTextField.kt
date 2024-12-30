@@ -55,7 +55,7 @@ fun DefaultTextField(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     interactionSource: MutableInteractionSource? = null,
     cursorBrush: Brush = SolidColor(Color.Black),
-    hint: (@Composable () -> Unit)? = null
+    hint: (@Composable () -> Unit)? = null,
 ) {
     BasicTextField(
         value = value,
@@ -106,7 +106,7 @@ private fun DefaultTextFieldPreview() {
         DefaultTextField(
             value = "",
             onValueChange = { },
-            hint = { Text(text = "예) 손녀가 태어난 날") },
+            hint = { Text(text = "예) 손녀가 태어난 날") }
         )
     }
 }

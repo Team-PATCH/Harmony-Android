@@ -5,6 +5,5 @@ import javax.inject.Inject
 class AddDailyCommentUseCase @Inject constructor() {
 
     operator fun invoke(dailyId: String, comment: String) {
-
     }
 }

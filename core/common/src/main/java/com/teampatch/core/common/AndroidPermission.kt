@@ -17,8 +17,7 @@ fun Activity.requestRadioAudioPermission() {
  * @return 권한 존재 여부
  */
 
-fun Context.checkRadioAudioPermission(): Boolean =
-    ActivityCompat.checkSelfPermission(
-        this,
-        Manifest.permission.RECORD_AUDIO
-    ) == PackageManager.PERMISSION_GRANTED
+fun Context.checkRadioAudioPermission(): Boolean = ActivityCompat.checkSelfPermission(
+    this,
+    Manifest.permission.RECORD_AUDIO
+) == PackageManager.PERMISSION_GRANTED

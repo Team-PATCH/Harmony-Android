@@ -5,6 +5,5 @@ import javax.inject.Inject
 class WithdrawFamilyUseCase @Inject constructor() {
 
     suspend operator fun invoke() {
-
     }
 }

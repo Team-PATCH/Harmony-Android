@@ -19,13 +19,13 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
-    */
+     */
 )
 
 @Composable
 fun HarmonyTheme(
     // Dynamic color is available on Android 12+
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     MaterialTheme(
         colorScheme = LightColorScheme,

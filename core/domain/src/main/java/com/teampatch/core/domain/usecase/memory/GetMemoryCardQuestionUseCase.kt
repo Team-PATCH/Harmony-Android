@@ -5,12 +5,10 @@ import com.teampatch.core.domain.repository.MemoryCardRepository
 import javax.inject.Inject
 
 class GetMemoryCardQuestionUseCase @Inject constructor(
-    private val memoryCardRepository: MemoryCardRepository
+    private val memoryCardRepository: MemoryCardRepository,
 ) {
 
     suspend operator fun invoke(
-        memoryCardId: String
-    ): MemoryCardQuestion {
-        return memoryCardRepository.getQuestionMessage(memoryCardId)
-    }
+        memoryCardId: String,
+    ): MemoryCardQuestion = memoryCardRepository.getQuestionMessage(memoryCardId)
 }

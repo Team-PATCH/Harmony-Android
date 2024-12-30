@@ -25,7 +25,7 @@ fun BackButtonAppBar(
     onBackRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     AppBar(
         navigation = {
