@@ -11,5 +11,5 @@ data class SignupOrLoginRequestBody(
     @Json(name = "authProvider") val authProvider: String,
     @Json(name = "socialToken") val socialToken: String,
     @Json(name = "refreshToken") val refreshToken: String,
-    @Json(name = "socialTokenExpiredAt") val socialTokenExpiredAt: String
+    @Json(name = "socialTokenExpiredAt") val socialTokenExpiredAt: String,
 )

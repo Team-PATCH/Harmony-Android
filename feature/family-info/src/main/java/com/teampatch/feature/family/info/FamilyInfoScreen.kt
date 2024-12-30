@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.core.designsystem.R.drawable.ic_export_family_info
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.ic_settings_appbar
@@ -44,7 +43,6 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.FamilyProfile
 import com.teampatch.core.designsystem.component.FamilyRole
 import com.teampatch.core.designsystem.component.RoundButton
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.preview.FamilyInfoPreviewParameterProvider
 import com.teampatch.core.designsystem.preview.UserPreviewParameterProvider
 import com.teampatch.core.designsystem.theme.BL
@@ -54,6 +52,8 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.core.designsystem.utils.noRippleClickable
+import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.core.domain.model.FamilyInfo
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.family.info.model.FamilyInfoSideEffect
@@ -68,7 +68,7 @@ fun FamilyInfoRoute(
     onBackRequest: () -> Unit,
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
-    familyInfoViewModel: FamilyInfoViewModel = hiltViewModel()
+    familyInfoViewModel: FamilyInfoViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val familyInfoUiState by familyInfoViewModel.familyInfoUiState.collectAsStateWithLifecycle()
@@ -104,7 +104,7 @@ fun FamilyInfoScreen(
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
     onInviteClick: () -> Unit,
-    familyInfoUiState: FamilyInfoUiState
+    familyInfoUiState: FamilyInfoUiState,
 ) {
     Scaffold(
         topBar = {
@@ -129,7 +129,7 @@ fun FamilyInfoScreen(
                     )
                 }
             )
-        },
+        }
     ) { scaffoldPaddingValues ->
         Box(
             modifier = Modifier
@@ -248,7 +248,7 @@ fun FamilyInfoScreen(
 }
 
 private fun getFamilyRole(
-    family: FamilyInfo
+    family: FamilyInfo,
 ): FamilyRole? = if (family.isManager) {
     FamilyRole.MANAGER
 } else if (family.role == Role.VIP) {

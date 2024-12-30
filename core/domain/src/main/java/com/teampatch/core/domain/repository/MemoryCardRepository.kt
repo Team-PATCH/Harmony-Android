@@ -24,7 +24,7 @@ interface MemoryCardRepository {
     suspend fun addCommunication(
         memoryCardId: String,
         question: String,
-        audioFile: InputStream
+        audioFile: InputStream,
     )
 
     /**

@@ -113,7 +113,7 @@ internal fun DailyManageScreen(
     editDailyPageRequest: (String) -> Unit,
     answerEventListener: (AnswerEvent) -> Unit,
     commentEventListener: (CommentEvent) -> Unit,
-    uiState: DailyManageUiState
+    uiState: DailyManageUiState,
 ) {
     val daily = uiState.daily.collectAsLazyPagingItems()
 
@@ -163,7 +163,7 @@ internal fun DailyManageScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+                                .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
                         ) {
                             Text(
                                 text = "#${daily.getOrNull(index)?.number}",
@@ -177,7 +177,7 @@ internal fun DailyManageScreen(
                             Icon(
                                 painter = painterResource(com.teampatch.core.designsystem.R.drawable.ic_chevron_question),
                                 contentDescription = "chevron",
-                                tint = G3,
+                                tint = G3
                             )
                             DropdownMenu(
                                 expanded = commentEventMenuExpanded,
@@ -222,7 +222,7 @@ internal fun DailyManageScreen(
                                                 fontFamily = PretendardFontFamily,
                                                 fontWeight = FontWeight.Medium,
                                                 fontSize = 20.sp,
-                                                color = SubRed,
+                                                color = SubRed
                                             )
                                         }
                                     },
@@ -248,7 +248,6 @@ internal fun DailyManageScreen(
                     }
                 }
             }
-
         }
     }
 }

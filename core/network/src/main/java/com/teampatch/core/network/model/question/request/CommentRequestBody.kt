@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CommentRequestBody(
-    @Json(name = "content") val content: String
+    @Json(name = "content") val content: String,
 )

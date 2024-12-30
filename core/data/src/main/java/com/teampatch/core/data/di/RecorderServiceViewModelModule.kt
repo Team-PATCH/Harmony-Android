@@ -17,7 +17,7 @@ internal object RecorderServiceViewModelModule {
     @MemoryCardRecorder
     @Provides
     fun provideMemoryCardRecorder(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): MediaRecorder = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
         MediaRecorder()
     } else {
@@ -28,5 +28,4 @@ internal object RecorderServiceViewModelModule {
             setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
         }
-
 }

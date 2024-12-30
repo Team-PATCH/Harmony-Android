@@ -49,8 +49,8 @@ import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.daily.R
 import com.teampatch.harmony.model.DailySideEffect
 import com.teampatch.harmony.model.DailyUiState
-import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun DailyRoute(
@@ -100,7 +100,7 @@ internal fun DailyScreen(
     editDailyPageRequest: (String) -> Unit,
     dailyAlarmPageRequest: (String) -> Unit,
     certificateDailyPageRequest: (String) -> Unit,
-    uiState: DailyUiState
+    uiState: DailyUiState,
 ) {
     val daily = uiState.daily.collectAsLazyPagingItems()
 
@@ -120,7 +120,7 @@ internal fun DailyScreen(
                         },
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
+                        fontSize = 22.sp
                     )
                 },
                 actions = {
@@ -176,7 +176,7 @@ internal fun DailyScreen(
                             .fillMaxWidth()
                             .height(8.dp)
                             .clip(RoundedCornerShape(4.dp)),
-                        color = Color(0xFF4CAF50), // 프로그레스 바 색상
+                        color = Color(0xFF4CAF50) // 프로그레스 바 색상
                     )
                 }
             }
@@ -237,8 +237,8 @@ private fun DailyManageScreenPreview() {
             dailyRoutine = flowOf(
                 PagingData.from(
                     data = TodoPreviewParameterProvider().values.first()
-                        .map { CheckableData(it, mutableStateOf(it.isFinished)) },
-                ),
+                        .map { CheckableData(it, mutableStateOf(it.isFinished)) }
+                )
             )
                 .collectAsLazyPagingItems(),
             dailyManagePageRequest = { },

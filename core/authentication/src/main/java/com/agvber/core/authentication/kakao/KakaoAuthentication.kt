@@ -47,20 +47,18 @@ import com.teampatch.core.common.getCustomParcelableExtra
 
 @Composable
 fun rememberLauncherForKakaoLoginResult(
-    callback: (Result<Token>) -> Unit
-): ManagedActivityResultLauncher<Intent, ActivityResult> {
-    return rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        runCatching {
-            val intent = result.data!!
-            intent.getCustomParcelableExtra(
-                name = KakaoLoginHelperActivity.TOKEN_PARAM,
-                clazz = Token::class.java
-            )!!
-        }
-            .let(callback)
+    callback: (Result<Token>) -> Unit,
+): ManagedActivityResultLauncher<Intent, ActivityResult> = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.StartActivityForResult()
+) { result ->
+    runCatching {
+        val intent = result.data!!
+        intent.getCustomParcelableExtra(
+            name = KakaoLoginHelperActivity.TOKEN_PARAM,
+            clazz = Token::class.java
+        )!!
     }
+        .let(callback)
 }
 
 /**
@@ -68,7 +66,7 @@ fun rememberLauncherForKakaoLoginResult(
  */
 
 fun ManagedActivityResultLauncher<Intent, ActivityResult>.loginKakao(
-    context: Context
+    context: Context,
 ) {
     val intent = Intent(context, KakaoLoginHelperActivity::class.java)
     launch(intent)

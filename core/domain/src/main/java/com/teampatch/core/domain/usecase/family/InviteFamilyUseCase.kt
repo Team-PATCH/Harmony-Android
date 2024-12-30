@@ -5,6 +5,5 @@ import javax.inject.Inject
 class InviteFamilyUseCase @Inject constructor() {
 
     suspend operator fun invoke() {
-
     }
 }

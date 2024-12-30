@@ -8,5 +8,5 @@ data class QuestionDetail(
     val title: String,
     val content: String,
     val dateTime: LocalDateTime,
-    val commentCount: Int
+    val commentCount: Int,
 )

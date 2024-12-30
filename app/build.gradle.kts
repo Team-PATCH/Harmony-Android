@@ -84,7 +84,7 @@ fun DefaultConfig.initVariable() {
 fun DefaultConfig.setBuildConfigOrManifest(
     type: String,
     name: String,
-    value: String
+    value: String,
 ) {
     if (type == "String") {
         buildConfigField(

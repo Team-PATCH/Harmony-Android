@@ -44,7 +44,7 @@ internal class KakaoLoginHelperActivity : Activity() {
 
     private fun loginKakaoWeb(
         onSuccess: (Token) -> Unit,
-        onFailure: (Throwable?) -> Unit
+        onFailure: (Throwable?) -> Unit,
     ) {
         try {
             UserApiClient.instance.loginWithKakaoAccount(
@@ -71,7 +71,7 @@ internal class KakaoLoginHelperActivity : Activity() {
 
     private fun loginKakaoTalk(
         onSuccess: (Token) -> Unit,
-        onFailure: (Throwable?) -> Unit
+        onFailure: (Throwable?) -> Unit,
     ) {
         try {
             UserApiClient.instance.loginWithKakaoTalk(

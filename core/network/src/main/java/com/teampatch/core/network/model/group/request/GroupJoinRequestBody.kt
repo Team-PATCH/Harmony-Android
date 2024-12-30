@@ -7,5 +7,5 @@ import com.squareup.moshi.JsonClass
 data class GroupJoinRequestBody(
     @Json(name = "userId") val userId: String,
     @Json(name = "inviteCode") val inviteCode: String,
-    @Json(name = "deviceToken") val deviceToken: String
+    @Json(name = "deviceToken") val deviceToken: String,
 )

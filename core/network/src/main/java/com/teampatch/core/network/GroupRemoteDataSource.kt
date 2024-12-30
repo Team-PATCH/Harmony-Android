@@ -13,16 +13,16 @@ interface GroupRemoteDataSource {
 
     @POST("/group")
     suspend fun createGroup(
-        @Body groupCreationRequestBody: GroupCreationRequestBody
+        @Body groupCreationRequestBody: GroupCreationRequestBody,
     ): GroupCreationResponse
 
     @POST("/group/join")
     suspend fun joinGroup(
-        @Body groupJoinRequestBody: GroupJoinRequestBody
+        @Body groupJoinRequestBody: GroupJoinRequestBody,
     ): GroupJoinResponse
 
     @POST("/group/{groupId}/regenerate-invite")
     suspend fun regenerateGroupInviteCode(
-        @Path("groupId") groupId: Int
+        @Path("groupId") groupId: Int,
     ): GroupInviteResponse
 }

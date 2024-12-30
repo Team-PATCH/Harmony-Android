@@ -32,13 +32,13 @@ import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G3
 import com.teampatch.core.designsystem.theme.G4
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.feature.answer.model.AnswerSideEffect
 import com.teampatch.feature.answer.model.AnswerUiState
@@ -86,7 +86,7 @@ fun AnswerRoute(
 internal fun AnswerScreen(
     onBackRequest: () -> Unit,
     onCompleteRequest: (String) -> Unit,
-    uiState: AnswerUiState
+    uiState: AnswerUiState,
 ) {
     var answer by rememberSaveable { mutableStateOf("") }
 
@@ -101,7 +101,6 @@ internal fun AnswerScreen(
                             .size(36.dp)
                             .padding(end = 20.dp)
                             .noRippleClickable {
-
                             }
                     ) {
                         Image(
@@ -171,7 +170,7 @@ internal fun AnswerScreen(
                     singleLine = false,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
                 )
                 Text(
                     text = stringResource(R.string.text_count_answer, answer.length),
@@ -196,7 +195,7 @@ private fun AnswerScreenPreview() {
             onBackRequest = {},
             onCompleteRequest = {},
             uiState = AnswerUiState(
-                questionDetail = FakeQuestionDetail().get(),
+                questionDetail = FakeQuestionDetail().get()
             )
         )
     }

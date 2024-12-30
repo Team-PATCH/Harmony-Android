@@ -11,6 +11,5 @@ class AddMemoryCardUseCase @Inject constructor() {
         dateTime: LocalDateTime,
         image: Image,
     ) {
-
     }
 }

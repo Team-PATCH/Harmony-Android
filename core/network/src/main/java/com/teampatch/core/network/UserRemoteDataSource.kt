@@ -12,7 +12,7 @@ interface UserRemoteDataSource {
 
     @POST("/user/signup")
     suspend fun signupOrLogin(
-        @Body body: SignupOrLoginRequestBody
+        @Body body: SignupOrLoginRequestBody,
     ): SignupOrLoginResponse
 
     @AuthorizedRequest

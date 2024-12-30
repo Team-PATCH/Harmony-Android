@@ -7,7 +7,7 @@ import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-fun <T: Any> Throwable.toPagingData(): Flow<PagingData<T>> {
+fun <T : Any> Throwable.toPagingData(): Flow<PagingData<T>> {
     val errorLoadStates = LoadStates(
         refresh = LoadState.Error(this),
         prepend = LoadState.Error(this),
@@ -16,5 +16,4 @@ fun <T: Any> Throwable.toPagingData(): Flow<PagingData<T>> {
     return flowOf(PagingData.empty(errorLoadStates))
 }
 
-fun<T: Any> LazyPagingItems<T>.getOrNull(index: Int): T? =
-    kotlin.runCatching { get(index) }.getOrNull()
+fun <T : Any> LazyPagingItems<T>.getOrNull(index: Int): T? = kotlin.runCatching { get(index) }.getOrNull()

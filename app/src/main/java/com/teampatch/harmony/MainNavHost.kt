@@ -13,7 +13,7 @@ import com.teampatch.feature.settings.SettingsRoute
 
 @Composable
 fun MainNavHost(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         navController = navController,
@@ -51,7 +51,7 @@ fun MainNavHost(
 
         addMemoryCardRegistrationScreen(
             onDismissRequest = navController::popBackStack,
-            onMemoryStorePageRequest = {  } // TODO: 메모리 저장소 페이지 가기
+            onMemoryStorePageRequest = { } // TODO: 메모리 저장소 페이지 가기
         )
     }
 }
