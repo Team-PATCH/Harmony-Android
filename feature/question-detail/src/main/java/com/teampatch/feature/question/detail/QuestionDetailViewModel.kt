@@ -1,13 +1,14 @@
 package com.teampatch.feature.question.detail
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.teampatch.core.domain.usecase.question.AddQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.DeleteQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.EditQuestionCommentUseCase
-import com.teampatch.core.domain.usecase.question.GetQuestionCommentsUseCase
 import com.teampatch.core.domain.usecase.question.GetQuestionDetailUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
@@ -16,7 +17,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -26,14 +26,13 @@ internal class QuestionDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getQuestionDetailUseCase: GetQuestionDetailUseCase,
-    private val getCommentsUseCase: GetQuestionCommentsUseCase,
     private val addCommentUseCase: AddQuestionCommentUseCase,
     private val editCommentUseCase: EditQuestionCommentUseCase,
     private val deleteCommentUseCase: DeleteQuestionCommentUseCase,
 ) : ViewModel() {
 
-    private val questionId: StateFlow<String> =
-        savedStateHandle.getStateFlow("question_id", "")
+    private val questionDetailRoute: QuestionDetailRoute = savedStateHandle.toRoute()
+    private val questionId: String = questionDetailRoute.questionId
 
     var uiState = mutableStateOf(QuestionDetailUiState())
         private set
@@ -47,15 +46,14 @@ internal class QuestionDetailViewModel @Inject constructor(
 
     private fun load() = viewModelScope.launch {
         try {
-            if (questionId.value.isEmpty()) {
+            if (questionId.isEmpty()) {
+                Log.d(TAG, "question_id is null")
                 return@launch
             }
 
             val user = getUserInfoUseCase().first()
-            val detail = getQuestionDetailUseCase(questionId.value)
-            val comment = getCommentsUseCase(questionId.value)
-
-            uiState.value = QuestionDetailUiState(user, detail, comment, false)
+            val detail = getQuestionDetailUseCase(questionId)
+            uiState.value = QuestionDetailUiState(user, detail, detail.comment, false)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.LoadError(e))
             e.printStackTrace()
@@ -64,7 +62,7 @@ internal class QuestionDetailViewModel @Inject constructor(
 
     fun addComment(text: String) = viewModelScope.launch {
         try {
-            addCommentUseCase(questionId.value, text)
+            addCommentUseCase(questionId, text)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.AddCommentError(e))
             e.printStackTrace()
@@ -87,5 +85,9 @@ internal class QuestionDetailViewModel @Inject constructor(
             _sideEffect.send(QuestionDetailSideEffect.DeleteCommentError(e))
             e.printStackTrace()
         }
+    }
+
+    companion object {
+        private const val TAG = "QuestionDetailViewModel"
     }
 }
