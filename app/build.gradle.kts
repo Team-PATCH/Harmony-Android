@@ -120,6 +120,7 @@ dependencies {
     implementation(project(":feature:daily"))
     implementation(project(":feature:memorycard-registration"))
     implementation(project(":feature:question"))
+    implementation(project(":feature:question-expand"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
