@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 data class QuestionCardCommentResponse(
     @Json(name = "commentId") val commentId: Int,
     @Json(name = "questionId") val questionId: Int,
-//    @Json(name = "authorId") val authorId: Int,
+    @Json(name = "authorId") val authorId: String,
     @Json(name = "content") val content: String,
     @Json(name = "createdAt") val createdAt: String,
 )
