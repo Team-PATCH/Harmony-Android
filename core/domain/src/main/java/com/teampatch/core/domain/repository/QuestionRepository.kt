@@ -1,0 +1,10 @@
+package com.teampatch.core.domain.repository
+
+import androidx.paging.PagingData
+import com.teampatch.core.domain.model.Question
+import kotlinx.coroutines.flow.Flow
+
+interface QuestionRepository {
+
+    fun getQuestions(limit: Int = 3): Flow<PagingData<Question>>
+}
