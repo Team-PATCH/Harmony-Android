@@ -11,6 +11,7 @@ import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
+import com.teampatch.feature.question.addQuestionScreen
 import com.teampatch.feature.settings.SettingsRoute
 
 @Composable
@@ -28,6 +29,12 @@ fun MainNavHost(
             onDailyRoutineClick = { },
             onDailyRoutineRegisterPageRequest = { },
             onMemoryCardClick = { }
+        )
+
+        addQuestionScreen(
+            questionDetailPageRequest = {},
+            answerPageRequest = {},
+            questionExpandPageRequest = {}
         )
 
         composable<SettingsRoute> {
