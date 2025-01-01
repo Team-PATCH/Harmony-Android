@@ -1,6 +1,6 @@
+import com.android.build.gradle.LibraryExtension
 import com.teampatch.convention.configureKotlin
 import com.teampatch.convention.libs
-import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -21,6 +21,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 buildTypes {
                     release {
                         isMinifyEnabled = true
+                    }
+                    create("loggedInDebug") {
+                        initWith(getByName("debug"))
                     }
                 }
 
