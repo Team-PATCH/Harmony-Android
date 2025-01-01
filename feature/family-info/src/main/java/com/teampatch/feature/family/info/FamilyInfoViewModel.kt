@@ -44,6 +44,7 @@ internal class FamilyInfoViewModel @Inject constructor(
                 isLoading = false
             )
         } catch (e: Exception) {
+            e.printStackTrace()
             _sideEffect.send(FamilyInfoSideEffect.LoadError(e))
         }
     }
