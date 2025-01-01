@@ -12,7 +12,7 @@ data object HomeRoute
 
 fun NavController.navigateToHomeScreen(
     navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null
+    navigatorExtras: Navigator.Extras? = null,
 ) {
     navigate(HomeRoute, navOptions, navigatorExtras)
 }

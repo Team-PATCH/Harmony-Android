@@ -15,11 +15,11 @@ abstract class DataSingletonModule {
 
     @Binds
     abstract fun bindsTokenManager(
-        tokenManagerImpl: TokenManagerImpl
+        tokenManagerImpl: TokenManagerImpl,
     ): TokenManager
 
     @Binds
     abstract fun bindsUserRepository(
-        userRepositoryImpl: UserRepositoryImpl
+        userRepositoryImpl: UserRepositoryImpl,
     ): UserRepository
 }
