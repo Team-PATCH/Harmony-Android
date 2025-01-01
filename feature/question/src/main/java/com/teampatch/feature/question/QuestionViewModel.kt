@@ -10,6 +10,7 @@ import com.teampatch.feature.question.model.QuestionUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -33,7 +34,10 @@ internal class QuestionViewModel @Inject constructor(
     private fun load() = viewModelScope.launch {
         try {
             val user = getUserInfoUseCase().first()
-            val questions = getQuestionsUseCase()
+            val questions = getQuestionsUseCase().catch {
+                it.printStackTrace()
+                _sideEffect.send(QuestionSideEffect.LoadError(it))
+            }
             questionUiState.value = QuestionUiState(user = user, question = questions, isLoading = false)
         } catch (e: Exception) {
             _sideEffect.send(QuestionSideEffect.LoadError(e))
