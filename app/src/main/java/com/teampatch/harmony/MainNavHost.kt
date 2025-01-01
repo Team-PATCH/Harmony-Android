@@ -5,11 +5,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.teampatch.feature.family.info.FamilyInfoRoute
+import com.teampatch.feature.family.info.addFamilyInfoScreen
+import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
-import com.teampatch.feature.profile.edit.ProfileEditRoute
 import com.teampatch.feature.settings.SettingsRoute
 
 @Composable
@@ -36,17 +36,11 @@ fun MainNavHost(
             )
         }
 
-        composable<ProfileEditRoute> {
-            ProfileEditRoute(
-                onCompleteRequest = { }
-            )
-        }
-
-        composable<FamilyInfoRoute> {
-            ProfileEditRoute(
-                onCompleteRequest = { }
-            )
-        }
+        addFamilyInfoScreen(
+            onBackRequest = navController::popBackStack,
+            onSettingsClick = {},
+            onProfileEditClick = {}
+        )
 
         addMemoryCardRegistrationScreen(
             onDismissRequest = navController::popBackStack,

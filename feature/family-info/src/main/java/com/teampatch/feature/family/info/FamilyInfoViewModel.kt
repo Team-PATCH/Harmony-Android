@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class FamilyInfoViewModel @Inject constructor(
+internal class FamilyInfoViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getFamilyInfoUseCase: GetFamilyInfoUseCase,
     private val inviteFamilyUseCase: InviteFamilyUseCase,
