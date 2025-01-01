@@ -3,6 +3,7 @@ package com.teampatch.core.data.repository
 import androidx.paging.PagingData
 import com.teampatch.core.data.mapper.toDomain
 import com.teampatch.core.domain.model.Question
+import com.teampatch.core.domain.model.QuestionDetail
 import com.teampatch.core.domain.repository.QuestionRepository
 import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.QuestionRemoteDataSource
@@ -10,6 +11,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 class QuestionRepositoryImpl @Inject constructor(
     private val questionRemoteDataSource: QuestionRemoteDataSource,
@@ -29,5 +31,15 @@ class QuestionRepositoryImpl @Inject constructor(
                 question.toDomain(index)
             }
         emit(PagingData.from(questions))
+    }
+
+    override suspend fun getQuestionDetail(questionId: String): QuestionDetail {
+        val questionResponse = questionRemoteDataSource.getQuestionDetail(questionId = questionId.toInt()).data
+        val commentResponse = questionRemoteDataSource.getQuestionCardComments(questionId.toInt()).data
+        val comment = commentResponse.map { it.toDomain() }
+
+        return questionResponse
+            .toDomain()
+            .copy(commentCount = commentResponse.size, comment = flowOf(PagingData.from(comment)))
     }
 }
