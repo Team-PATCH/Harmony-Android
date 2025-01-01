@@ -25,15 +25,15 @@ class ProfileEditViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
 
-    init {
-        loadData()
-    }
-
     private val _sideEffect: Channel<ProfileEditSideEffect> = Channel()
     val sideEffect: Flow<ProfileEditSideEffect> = _sideEffect.receiveAsFlow()
 
     private val _profileEditUiState = MutableStateFlow(ProfileEditUiState())
     val profileEditUiState = _profileEditUiState.asStateFlow()
+
+    init {
+        loadData()
+    }
 
     private fun loadData() = viewModelScope.launch {
         try {
