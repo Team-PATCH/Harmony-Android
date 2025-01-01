@@ -18,7 +18,7 @@ class QuestionRepositoryImpl @Inject constructor(
 
     override fun getQuestions(limit: Int): Flow<PagingData<Question>> = flow {
         val user = userRepository.getUserInfo().first()
-        val questions = if (limit <= 3) {
+        val questions = if ((1..3).contains(limit)) {
             questionRemoteDataSource.getRecentThreeQuestions(user.groupId)
         } else {
             questionRemoteDataSource.getQuestionAll(user.groupId)
