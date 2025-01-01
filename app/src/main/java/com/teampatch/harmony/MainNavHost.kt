@@ -21,7 +21,7 @@ fun MainNavHost(
         startDestination = HomeRoute
     ) {
         addHomeScreen(
-            onUserPageRequest = { },
+            onUserPageRequest = navController::navigateToFamilyInfoScreen,
             onDailyRoutineClick = { },
             onDailyRoutineRegisterPageRequest = { },
             onMemoryCardClick = { }
