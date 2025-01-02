@@ -1,9 +1,13 @@
 package com.teampatch.core.domain.usecase.question
 
+import com.teampatch.core.domain.repository.QuestionRepository
 import javax.inject.Inject
 
-class AddQuestionCommentUseCase @Inject constructor() {
+class AddQuestionCommentUseCase @Inject constructor(
+    private val questionRepository: QuestionRepository,
+) {
 
-    operator fun invoke(questionId: String, comment: String) {
+    suspend operator fun invoke(questionId: String, comment: String) {
+        questionRepository.addComment(questionId, comment)
     }
 }

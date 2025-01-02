@@ -7,6 +7,7 @@ import com.teampatch.core.domain.model.QuestionDetail
 import com.teampatch.core.domain.repository.QuestionRepository
 import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.QuestionRemoteDataSource
+import com.teampatch.core.network.model.question.request.QuestionCardCommentRequestBody
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -41,5 +42,12 @@ class QuestionRepositoryImpl @Inject constructor(
         return questionResponse
             .toDomain()
             .copy(commentCount = commentResponse.size, comment = flowOf(PagingData.from(comment)))
+    }
+
+    override suspend fun addComment(questionId: String, comment: String) {
+        val user = userRepository.getUserInfo().first()
+        val questionCardCommentRequestBody =
+            QuestionCardCommentRequestBody(questionId.toInt(), user.groupId, user.name, comment)
+        questionRemoteDataSource.postQuestionCardComment(questionCardCommentRequestBody)
     }
 }

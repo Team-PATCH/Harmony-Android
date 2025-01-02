@@ -10,4 +10,6 @@ interface QuestionRepository {
     fun getQuestions(limit: Int = 3): Flow<PagingData<Question>>
 
     suspend fun getQuestionDetail(questionId: String): QuestionDetail
+
+    suspend fun addComment(questionId: String, comment: String)
 }
