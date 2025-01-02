@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.teampatch.feature.answer.addAnswerScreen
+import com.teampatch.feature.answer.navigateToAnswerScreen
 import com.teampatch.feature.family.info.addFamilyInfoScreen
 import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
@@ -37,7 +39,7 @@ fun MainNavHost(
 
         addQuestionScreen(
             questionDetailPageRequest = navController::navigateToQuestionDetailScreen,
-            answerPageRequest = {},
+            answerPageRequest = navController::navigateToAnswerScreen,
             questionExpandPageRequest = navController::navigateToQuestionExpandScreen
         )
 
@@ -48,7 +50,12 @@ fun MainNavHost(
 
         addQuestionDetailScreen(
             onBackRequest = navController::popBackStack,
-            answerEditPageRequest = {}
+            answerEditPageRequest = navController::navigateToAnswerScreen
+        )
+
+        addAnswerScreen(
+            onBackRequest = navController::popBackStack,
+            onCompleteRequest = {}
         )
 
         composable<SettingsRoute> {

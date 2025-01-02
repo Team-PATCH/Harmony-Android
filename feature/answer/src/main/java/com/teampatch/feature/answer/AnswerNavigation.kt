@@ -1,4 +1,4 @@
-package com.teampatch.feature.question.detail
+package com.teampatch.feature.answer
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -8,28 +8,25 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class QuestionDetailRoute(val questionId: String)
+data class AnswerRoute(val questionId: String)
 
-fun NavController.navigateToQuestionDetailScreen(
+fun NavController.navigateToAnswerScreen(
     questionId: String,
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
     navigate(
-        route = QuestionDetailRoute(questionId),
+        route = AnswerRoute(questionId),
         navOptions = navOptions,
         navigatorExtras = navigatorExtras
     )
 }
 
-fun NavGraphBuilder.addQuestionDetailScreen(
+fun NavGraphBuilder.addAnswerScreen(
     onBackRequest: () -> Unit,
-    answerEditPageRequest: (questionId: String) -> Unit,
+    onCompleteRequest: () -> Unit,
 ) {
-    composable<QuestionDetailRoute> {
-        QuestionDetailRoute(
-            onBackRequest = onBackRequest,
-            answerEditPageRequest = answerEditPageRequest
-        )
+    composable<AnswerRoute> {
+        AnswerRoute(onBackRequest = onBackRequest, onCompleteRequest = onCompleteRequest)
     }
 }

@@ -39,7 +39,7 @@ internal class QuestionDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val questionDetailRoute: QuestionDetailRoute = savedStateHandle.toRoute()
-    private val questionId: String = questionDetailRoute.questionId
+    val questionId: String = questionDetailRoute.questionId
 
     var uiState = mutableStateOf(QuestionDetailUiState())
         private set

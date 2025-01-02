@@ -122,6 +122,7 @@ dependencies {
     implementation(project(":feature:question"))
     implementation(project(":feature:question-expand"))
     implementation(project(":feature:question-detail"))
+    implementation(project(":feature:answer"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

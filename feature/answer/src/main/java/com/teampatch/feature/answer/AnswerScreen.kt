@@ -42,18 +42,14 @@ import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.feature.answer.model.AnswerSideEffect
 import com.teampatch.feature.answer.model.AnswerUiState
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class AnswerRoute(val questionId: String)
 
 @Composable
-fun AnswerRoute(
+internal fun AnswerRoute(
     onBackRequest: () -> Unit,
     onCompleteRequest: () -> Unit,
+    viewModel: AnswerViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewModel: AnswerViewModel = hiltViewModel()
     val uiState by viewModel.answerUiState
 
     if (!uiState.isLoading) {

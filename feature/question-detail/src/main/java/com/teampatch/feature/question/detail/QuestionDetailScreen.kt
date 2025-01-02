@@ -78,7 +78,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun QuestionDetailRoute(
     onBackRequest: () -> Unit,
-    answerEditPageRequest: () -> Unit,
+    answerEditPageRequest: (questionId: String) -> Unit,
     viewModel: QuestionDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -87,7 +87,7 @@ internal fun QuestionDetailRoute(
     if (!uiState.isLoading) {
         QuestionDetailScreen(
             onBackRequest = onBackRequest,
-            answerEventListener = { answerEditPageRequest() },
+            answerEventListener = { answerEditPageRequest(viewModel.questionId) },
             commentEventListener = { event ->
                 when (event) {
                     is CommentEvent.Add -> viewModel.addComment(event.commentText)
