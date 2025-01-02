@@ -14,4 +14,6 @@ interface QuestionRepository {
     suspend fun addComment(questionId: String, comment: String)
 
     suspend fun editComment(commentId: String, comment: String)
+
+    suspend fun deleteComment(commentId: String)
 }

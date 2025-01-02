@@ -56,4 +56,8 @@ class QuestionRepositoryImpl @Inject constructor(
         val commentRequestBody = CommentRequestBody(comment)
         questionRemoteDataSource.putComment(commentId.toInt(), commentRequestBody)
     }
+
+    override suspend fun deleteComment(commentId: String) {
+        questionRemoteDataSource.deleteComment(commentId.toInt())
+    }
 }
