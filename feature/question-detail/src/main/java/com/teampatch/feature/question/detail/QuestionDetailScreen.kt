@@ -73,18 +73,14 @@ import com.teampatch.feature.question.detail.model.CommentEvent
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class QuestionDetailRoute(val questionId: String)
 
 @Composable
-fun QuestionDetailRoute(
+internal fun QuestionDetailRoute(
     onBackRequest: () -> Unit,
     answerEditPageRequest: () -> Unit,
+    viewModel: QuestionDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewModel: QuestionDetailViewModel = hiltViewModel()
     val uiState by viewModel.uiState
 
     if (!uiState.isLoading) {

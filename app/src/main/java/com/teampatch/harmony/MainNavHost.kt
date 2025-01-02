@@ -12,6 +12,8 @@ import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.question.addQuestionScreen
+import com.teampatch.feature.question.detail.addQuestionDetailScreen
+import com.teampatch.feature.question.detail.navigateToQuestionDetailScreen
 import com.teampatch.feature.question.expand.addQuestionExpandScreen
 import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.SettingsRoute
@@ -34,14 +36,19 @@ fun MainNavHost(
         )
 
         addQuestionScreen(
-            questionDetailPageRequest = {},
+            questionDetailPageRequest = navController::navigateToQuestionDetailScreen,
             answerPageRequest = {},
             questionExpandPageRequest = navController::navigateToQuestionExpandScreen
         )
 
         addQuestionExpandScreen(
             onBackRequest = navController::popBackStack,
-            questionDetailPageRequest = { }
+            questionDetailPageRequest = navController::navigateToQuestionDetailScreen
+        )
+
+        addQuestionDetailScreen(
+            onBackRequest = navController::popBackStack,
+            answerEditPageRequest = {}
         )
 
         composable<SettingsRoute> {

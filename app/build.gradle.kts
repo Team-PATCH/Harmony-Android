@@ -121,6 +121,7 @@ dependencies {
     implementation(project(":feature:memorycard-registration"))
     implementation(project(":feature:question"))
     implementation(project(":feature:question-expand"))
+    implementation(project(":feature:question-detail"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
