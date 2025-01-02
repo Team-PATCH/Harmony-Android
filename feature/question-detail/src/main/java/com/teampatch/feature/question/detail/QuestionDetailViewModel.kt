@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import androidx.paging.insertHeaderItem
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.question.AddQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.DeleteQuestionCommentUseCase
@@ -21,6 +22,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -68,7 +70,23 @@ internal class QuestionDetailViewModel @Inject constructor(
 
     fun addComment(text: String) = viewModelScope.launch {
         try {
-            addCommentUseCase(questionId, text)
+            val questionComment = addCommentUseCase(questionId, text)
+            uiState.value = uiState.value.copy(
+                comments = uiState.value.comments.map { pagingData ->
+                    pagingData.insertHeaderItem(
+                        item = QuestionDetailUiState.Comment(
+                            id = questionComment.commentId,
+                            content = text,
+                            writer = QuestionDetailUiState.Comment.Writer(
+                                uid = questionComment.writerUid,
+                                name = questionComment.writerName
+                            ),
+                            hasWritePermission = true,
+                            isCommentEdited = mutableStateOf(false)
+                        )
+                    )
+                }
+            )
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.AddCommentError(e))
             e.printStackTrace()
