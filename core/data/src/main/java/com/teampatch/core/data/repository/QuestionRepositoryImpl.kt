@@ -7,6 +7,7 @@ import com.teampatch.core.domain.model.QuestionDetail
 import com.teampatch.core.domain.repository.QuestionRepository
 import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.QuestionRemoteDataSource
+import com.teampatch.core.network.model.question.request.CommentRequestBody
 import com.teampatch.core.network.model.question.request.QuestionCardCommentRequestBody
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -49,5 +50,10 @@ class QuestionRepositoryImpl @Inject constructor(
         val questionCardCommentRequestBody =
             QuestionCardCommentRequestBody(questionId.toInt(), user.groupId, user.name, comment)
         questionRemoteDataSource.postQuestionCardComment(questionCardCommentRequestBody)
+    }
+
+    override suspend fun editComment(commentId: String, comment: String) {
+        val commentRequestBody = CommentRequestBody(comment)
+        questionRemoteDataSource.putComment(commentId.toInt(), commentRequestBody)
     }
 }
