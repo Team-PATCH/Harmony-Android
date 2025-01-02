@@ -52,7 +52,7 @@ internal class AnswerViewModel @Inject constructor(
         }
     }
 
-    fun completeAnswer(answer: String) = viewModelScope.launch {
+    fun saveQuestionAnswer(answer: String) = viewModelScope.launch {
         try {
             if (answerUiState.value.questionDetail.content.isEmpty()) {
                 addAnswerUseCase(answerRoute.questionId, answer)

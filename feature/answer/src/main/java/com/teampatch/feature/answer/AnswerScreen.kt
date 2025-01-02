@@ -56,7 +56,7 @@ internal fun AnswerRoute(
         AnswerScreen(
             onBackRequest = onBackRequest,
             onCompleteRequest = {
-                viewModel.completeAnswer(it)
+                viewModel.saveQuestionAnswer(it)
                 onCompleteRequest()
             },
             uiState = uiState
