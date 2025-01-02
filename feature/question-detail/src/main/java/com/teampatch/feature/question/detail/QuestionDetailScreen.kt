@@ -182,7 +182,7 @@ internal fun QuestionDetailScreen(
             InputLargeTextBottomSheetContent(
                 onDismissRequest = { isCommentEditDialogShow = null },
                 onCompleteRequest = {
-                    commentEventListener(CommentEvent.Edit(editor.commentId, editor.answer))
+                    commentEventListener(CommentEvent.Edit(editor.commentId, text))
                     isCommentEditDialogShow = null
                 },
                 title = { Text(text = stringResource(R.string.text_title_edit_comment)) },
@@ -369,7 +369,7 @@ internal fun QuestionDetailScreen(
                                 modifier = Modifier.padding(start = 16.dp)
                             )
                         }
-                        if (comments.getOrNull(index)?.writerUid == uiState.user.uid) {
+                        if (comments.getOrNull(index)?.writerName == uiState.user.name) {
                             Box(
                                 modifier = Modifier
                                     .size(24.dp)
