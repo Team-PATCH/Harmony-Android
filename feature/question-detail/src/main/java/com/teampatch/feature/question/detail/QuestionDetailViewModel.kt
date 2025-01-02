@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import androidx.paging.filter
 import androidx.paging.insertHeaderItem
 import androidx.paging.map
 import com.teampatch.core.domain.model.Role
@@ -116,6 +117,11 @@ internal class QuestionDetailViewModel @Inject constructor(
     fun deleteComment(commentId: String) = viewModelScope.launch {
         try {
             deleteCommentUseCase(commentId)
+            uiState.value = uiState.value.copy(
+                comments = uiState.value.comments.map { pagingData ->
+                    pagingData.filter { it.id != commentId }
+                }
+            )
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.DeleteCommentError(e))
             e.printStackTrace()
