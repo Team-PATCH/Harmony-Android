@@ -6,11 +6,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.question.AddQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.DeleteQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.EditQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.GetQuestionDetailUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
+import com.teampatch.feature.question.detail.mapper.toCommentModel
+import com.teampatch.feature.question.detail.mapper.toPostModel
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,7 +56,10 @@ internal class QuestionDetailViewModel @Inject constructor(
 
             val user = getUserInfoUseCase().first()
             val detail = getQuestionDetailUseCase(questionId)
-            uiState.value = QuestionDetailUiState(user, detail, detail.comment, false)
+
+            val post = detail.toPostModel(user.role == Role.VIP)
+            val comments = detail.toCommentModel(user.name)
+            uiState.value = QuestionDetailUiState(post, comments, false)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.LoadError(e))
             e.printStackTrace()

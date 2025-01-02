@@ -1,5 +1,6 @@
 package com.teampatch.feature.question.detail
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -65,8 +66,8 @@ import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeQuestionComments
 import com.teampatch.core.domain.fake.FakeQuestionDetail
-import com.teampatch.core.domain.model.Role
-import com.teampatch.core.domain.model.User
+import com.teampatch.feature.question.detail.mapper.toCommentModel
+import com.teampatch.feature.question.detail.mapper.toPostModel
 import com.teampatch.feature.question.detail.model.AnswerEvent
 import com.teampatch.feature.question.detail.model.CommentEdit
 import com.teampatch.feature.question.detail.model.CommentEvent
@@ -134,9 +135,8 @@ internal fun QuestionDetailScreen(
         skipPartiallyExpanded = true,
         confirmValueChange = { it != SheetValue.Hidden }
     )
-    val comments = uiState.comment.collectAsLazyPagingItems()
+    val comments = uiState.comments.collectAsLazyPagingItems()
     var answerEventMenuExpanded by rememberSaveable { mutableStateOf(false) }
-    var commentEventMenuExpanded by rememberSaveable { mutableStateOf(false) }
 
     if (isCommentDialogShow) {
         var text by rememberSaveable { mutableStateOf("") }
@@ -205,7 +205,7 @@ internal fun QuestionDetailScreen(
             BackButtonAppBar(
                 onBackRequest = onBackRequest,
                 actions = {
-                    if (uiState.user.role == Role.VIP) {
+                    if (uiState.post.hasWritePermission) {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
@@ -283,7 +283,7 @@ internal fun QuestionDetailScreen(
                         .padding(top = 40.dp)
                 ) {
                     Text(
-                        text = "${uiState.detail.number}${stringResource(R.string.text_number_question)}",
+                        text = "${uiState.post.number}${stringResource(R.string.text_number_question)}",
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.Medium,
                         fontSize = 18.sp,
@@ -291,7 +291,7 @@ internal fun QuestionDetailScreen(
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                     Text(
-                        text = uiState.detail.title,
+                        text = uiState.post.title,
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 24.sp,
@@ -300,7 +300,7 @@ internal fun QuestionDetailScreen(
                             .padding(top = 12.dp, bottom = 8.dp, start = 20.dp, end = 20.dp)
                     )
                     Text(
-                        text = with(uiState.detail.dateTime) {
+                        text = with(uiState.post.dateTime) {
                             "${year}${stringResource(R.string.text_year_datetime)} " +
                                 "${monthValue}${stringResource(R.string.text_month_datetime)} " +
                                 "${dayOfMonth}${stringResource(R.string.text_day_datetime)}"
@@ -319,7 +319,7 @@ internal fun QuestionDetailScreen(
                             .padding(24.dp)
                     ) {
                         Text(
-                            text = uiState.detail.content,
+                            text = uiState.post.content,
                             fontFamily = PretendardFontFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = 20.sp,
@@ -331,7 +331,7 @@ internal fun QuestionDetailScreen(
 
             item {
                 Text(
-                    text = "${stringResource(R.string.text_count_comment)} ${uiState.detail.commentCount}",
+                    text = "${stringResource(R.string.text_count_comment)} ${uiState.post.commentCount}",
                     fontFamily = PretendardFontFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 18.sp,
@@ -361,7 +361,7 @@ internal fun QuestionDetailScreen(
                                 contentDescription = "profile image"
                             )
                             Text(
-                                text = comments.getOrNull(index)?.writerName ?: "",
+                                text = comments.getOrNull(index)?.writer?.name ?: "",
                                 fontFamily = PretendardFontFamily,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
@@ -369,13 +369,13 @@ internal fun QuestionDetailScreen(
                                 modifier = Modifier.padding(start = 16.dp)
                             )
                         }
-                        if (comments.getOrNull(index)?.writerName == uiState.user.name) {
+                        if (comments.getOrNull(index)?.hasWritePermission == true) {
                             Box(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .align(Alignment.CenterEnd)
                                     .noRippleClickable {
-                                        commentEventMenuExpanded = true
+                                        comments[index]?.isCommentEdited?.value = true
                                     }
                             ) {
                                 Icon(
@@ -387,8 +387,10 @@ internal fun QuestionDetailScreen(
                                         .align(Alignment.CenterEnd)
                                 )
                                 DropdownMenu(
-                                    expanded = commentEventMenuExpanded,
-                                    onDismissRequest = { commentEventMenuExpanded = false },
+                                    expanded = comments[index]?.isCommentEdited?.value == true,
+                                    onDismissRequest = {
+                                        comments[index]?.isCommentEdited?.value = false
+                                    },
                                     shape = RoundedCornerShape(10.dp),
                                     modifier = Modifier
                                         .widthIn(min = 200.dp)
@@ -409,13 +411,13 @@ internal fun QuestionDetailScreen(
                                             }
                                         },
                                         onClick = {
-                                            val comment =
-                                                comments.getOrNull(index) ?: return@DropdownMenuItem
-                                            isCommentEditDialogShow = CommentEdit(
-                                                commentId = comment.commentId,
-                                                answer = comment.content
-                                            )
-                                            commentEventMenuExpanded = false
+                                            comments.getOrNull(index)?.let { comment ->
+                                                isCommentEditDialogShow = CommentEdit(
+                                                    commentId = comment.id,
+                                                    answer = comment.content
+                                                )
+                                            } ?: Log.d("QuestionDetailScreen", "comment[$index] is null")
+                                            comments[index]?.isCommentEdited?.value = false
                                         }
                                     )
                                     DropdownMenuItem(
@@ -434,10 +436,10 @@ internal fun QuestionDetailScreen(
                                             }
                                         },
                                         onClick = {
-                                            comments.getOrNull(index)?.commentId?.let {
+                                            comments.getOrNull(index)?.id?.let {
                                                 commentEventListener(CommentEvent.Delete(it))
-                                            }
-                                            commentEventMenuExpanded = false
+                                            } ?: Log.d("QuestionDetailScreen", "comment[$index] is null")
+                                            comments[index]?.isCommentEdited?.value = false
                                         }
                                     )
                                 }
@@ -501,9 +503,10 @@ private fun QuestionDetailScreenPreview() {
             answerEventListener = {},
             commentEventListener = {},
             uiState = QuestionDetailUiState(
-                detail = FakeQuestionDetail().get(),
-                comment = flowOf(PagingData.from(FakeQuestionComments().get())),
-                user = User.createEmptyUser().copy(uid = "uid001", role = Role.VIP),
+                post = FakeQuestionDetail().get().toPostModel(true),
+                comments = FakeQuestionDetail().get()
+                    .copy(comment = flowOf(PagingData.from(FakeQuestionComments().get())))
+                    .toCommentModel("Alice Johnson"),
                 isLoading = false
             )
         )
