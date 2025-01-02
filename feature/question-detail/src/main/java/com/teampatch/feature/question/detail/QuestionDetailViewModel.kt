@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import androidx.paging.insertHeaderItem
+import androidx.paging.map
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.question.AddQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.DeleteQuestionCommentUseCase
@@ -96,6 +97,16 @@ internal class QuestionDetailViewModel @Inject constructor(
     fun editComment(commentId: String, text: String) = viewModelScope.launch {
         try {
             editCommentUseCase(commentId, text)
+            uiState.value = uiState.value.copy(
+                comments = uiState.value.comments.map { pagingData ->
+                    pagingData.map {
+                        if (it.id == commentId) {
+                            return@map it.copy(content = text)
+                        }
+                        it
+                    }
+                }
+            )
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.EditCommentError(e))
             e.printStackTrace()
