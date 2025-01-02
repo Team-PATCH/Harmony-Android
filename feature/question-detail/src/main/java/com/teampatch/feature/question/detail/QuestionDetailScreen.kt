@@ -170,7 +170,7 @@ internal fun QuestionDetailScreen(
     }
 
     isCommentEditDialogShow?.let { editor ->
-        var text by rememberSaveable { mutableStateOf(editor.answer) }
+        var text by rememberSaveable { mutableStateOf(editor.comment) }
 
         ModalBottomSheet(
             onDismissRequest = { },
@@ -414,7 +414,7 @@ internal fun QuestionDetailScreen(
                                             comments.getOrNull(index)?.let { comment ->
                                                 isCommentEditDialogShow = CommentEdit(
                                                     commentId = comment.id,
-                                                    answer = comment.content
+                                                    comment = comment.content
                                                 )
                                             } ?: Log.d("QuestionDetailScreen", "comment[$index] is null")
                                             comments[index]?.isCommentEdited?.value = false
