@@ -84,7 +84,7 @@ internal fun AnswerScreen(
     onCompleteRequest: (String) -> Unit,
     uiState: AnswerUiState,
 ) {
-    var answer by rememberSaveable { mutableStateOf("") }
+    var answer by rememberSaveable { mutableStateOf(uiState.questionDetail.content) }
 
     Scaffold(
         topBar = {
