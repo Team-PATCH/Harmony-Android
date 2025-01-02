@@ -3,6 +3,7 @@ package com.teampatch.core.data.repository
 import androidx.paging.PagingData
 import com.teampatch.core.data.mapper.toDomain
 import com.teampatch.core.domain.model.Question
+import com.teampatch.core.domain.model.QuestionComment
 import com.teampatch.core.domain.model.QuestionDetail
 import com.teampatch.core.domain.repository.QuestionRepository
 import com.teampatch.core.domain.repository.UserRepository
@@ -45,11 +46,13 @@ class QuestionRepositoryImpl @Inject constructor(
             .copy(commentCount = commentResponse.size, comment = flowOf(PagingData.from(comment)))
     }
 
-    override suspend fun addComment(questionId: String, comment: String) {
+    override suspend fun addComment(questionId: String, comment: String): QuestionComment {
         val user = userRepository.getUserInfo().first()
         val questionCardCommentRequestBody =
             QuestionCardCommentRequestBody(questionId.toInt(), user.groupId, user.name, comment)
-        questionRemoteDataSource.postQuestionCardComment(questionCardCommentRequestBody)
+        val commentCreateResponse = questionRemoteDataSource.postQuestionCardComment(questionCardCommentRequestBody)
+        val commentCreateResponseData = commentCreateResponse.data
+        return QuestionComment(commentCreateResponseData.commentId.toString(), user.uid, user.name, comment)
     }
 
     override suspend fun editComment(commentId: String, comment: String) {
