@@ -18,6 +18,8 @@ dependencies {
     api(libs.androidx.material3)
     debugApi(libs.androidx.ui.tooling)
     debugApi(libs.androidx.ui.test.manifest)
+    loggedInDebugApi(libs.androidx.ui.tooling)
+    loggedInDebugApi(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.paging.common)
     implementation(libs.androidx.paging.compose)
