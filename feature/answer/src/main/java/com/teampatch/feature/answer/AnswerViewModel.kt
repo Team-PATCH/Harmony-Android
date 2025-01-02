@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.teampatch.core.domain.usecase.answer.AddAnswerUseCase
+import com.teampatch.core.domain.usecase.answer.EditAnswerUseCase
 import com.teampatch.core.domain.usecase.question.GetQuestionDetailUseCase
 import com.teampatch.feature.answer.model.AnswerSideEffect
 import com.teampatch.feature.answer.model.AnswerUiState
@@ -21,6 +22,7 @@ internal class AnswerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getQuestionDetailUseCase: GetQuestionDetailUseCase,
     private val addAnswerUseCase: AddAnswerUseCase,
+    private val editAnswerUseCase: EditAnswerUseCase,
 ) : ViewModel() {
 
     private val answerRoute = savedStateHandle.toRoute<AnswerRoute>()
@@ -52,7 +54,11 @@ internal class AnswerViewModel @Inject constructor(
 
     fun completeAnswer(answer: String) = viewModelScope.launch {
         try {
-            addAnswerUseCase(answerRoute.questionId, answer)
+            if (answerUiState.value.questionDetail.content.isEmpty()) {
+                addAnswerUseCase(answerRoute.questionId, answer)
+                return@launch
+            }
+            editAnswerUseCase(answerRoute.questionId, answer)
         } catch (e: Exception) {
             _sideEffect.send(AnswerSideEffect.AddAnswerError(e))
             e.printStackTrace()
