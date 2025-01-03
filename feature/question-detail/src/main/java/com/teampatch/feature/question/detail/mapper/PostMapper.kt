@@ -9,6 +9,5 @@ internal fun QuestionDetail.toPostModel(hasWritePermission: Boolean): QuestionDe
     title = title,
     content = content,
     dateTime = dateTime,
-    commentCount = commentCount,
     hasWritePermission = hasWritePermission
 )

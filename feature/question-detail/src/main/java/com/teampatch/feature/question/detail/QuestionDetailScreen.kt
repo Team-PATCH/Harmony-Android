@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
@@ -29,12 +29,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,8 +47,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import com.teampatch.core.common.PagingDataHelper
 import com.teampatch.core.common.getOrNull
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
@@ -69,7 +75,6 @@ import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.feature.question.detail.mapper.toCommentModel
 import com.teampatch.feature.question.detail.mapper.toPostModel
 import com.teampatch.feature.question.detail.model.AnswerEvent
-import com.teampatch.feature.question.detail.model.CommentEdit
 import com.teampatch.feature.question.detail.model.CommentEvent
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
@@ -82,7 +87,7 @@ internal fun QuestionDetailRoute(
     viewModel: QuestionDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState
+    val uiState = viewModel.uiState
 
     if (!uiState.isLoading) {
         QuestionDetailScreen(
@@ -91,9 +96,9 @@ internal fun QuestionDetailRoute(
             commentEventListener = { event ->
                 when (event) {
                     is CommentEvent.Add -> viewModel.addComment(event.commentText)
-                    is CommentEvent.Delete -> viewModel.deleteComment(event.commentId)
+                    is CommentEvent.Delete -> viewModel.deleteComment(event.comment)
                     is CommentEvent.Edit -> viewModel.editComment(
-                        commentId = event.commentId,
+                        comment = event.comment,
                         text = event.commentText
                     )
                 }
@@ -129,14 +134,22 @@ internal fun QuestionDetailScreen(
     commentEventListener: (CommentEvent) -> Unit,
     uiState: QuestionDetailUiState,
 ) {
+    var answerEventMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var isCommentDialogShow by rememberSaveable { mutableStateOf(false) }
-    var isCommentEditDialogShow by rememberSaveable { mutableStateOf<CommentEdit?>(null) }
+    var isCommentEditDialogShow by rememberSaveable {
+        mutableStateOf<QuestionDetailUiState.Comment?>(
+            null
+        )
+    }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { it != SheetValue.Hidden }
     )
-    val comments = uiState.comments.collectAsLazyPagingItems()
-    var answerEventMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    val commentsInsertedItems by uiState.comments.pagingDataInsertedItems.collectAsStateWithLifecycle(emptyList())
+    val comments = uiState.comments.pagingDataFlow.collectAsLazyPagingItems()
+    val commentsSize: Int by remember(commentsInsertedItems, comments) {
+        derivedStateOf { commentsInsertedItems.size + comments.itemCount }
+    }
 
     if (isCommentDialogShow) {
         var text by rememberSaveable { mutableStateOf("") }
@@ -170,7 +183,7 @@ internal fun QuestionDetailScreen(
     }
 
     isCommentEditDialogShow?.let { editor ->
-        var text by rememberSaveable { mutableStateOf(editor.comment) }
+        var text: String by rememberSaveable { mutableStateOf(editor.content) }
 
         ModalBottomSheet(
             onDismissRequest = { },
@@ -182,16 +195,14 @@ internal fun QuestionDetailScreen(
             InputLargeTextBottomSheetContent(
                 onDismissRequest = { isCommentEditDialogShow = null },
                 onCompleteRequest = {
-                    commentEventListener(CommentEvent.Edit(editor.commentId, text))
+                    commentEventListener(CommentEvent.Edit(editor, text))
                     isCommentEditDialogShow = null
                 },
                 title = { Text(text = stringResource(R.string.text_title_edit_comment)) },
                 buttonText = { Text(text = stringResource(R.string.btn_complete_edit_comment)) },
                 buttonEnable = text.isNotBlank()
             ) {
-                CommentEditorContent(
-                    text = text
-                ) {
+                CommentEditorContent(text = text) {
                     if (it.length <= 100) {
                         text = it
                     }
@@ -331,7 +342,7 @@ internal fun QuestionDetailScreen(
 
             item {
                 Text(
-                    text = "${stringResource(R.string.text_count_comment)} ${uiState.post.commentCount}",
+                    text = "${stringResource(R.string.text_count_comment)} $commentsSize",
                     fontFamily = PretendardFontFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 18.sp,
@@ -341,120 +352,46 @@ internal fun QuestionDetailScreen(
                 )
             }
 
-            items(comments.itemCount) { index ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-                        .background(WH)
-                        .padding(all = 20.dp)
-                ) {
-                    Box(
-                        contentAlignment = Alignment.CenterStart,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(ic_my_appbar),
-                                contentDescription = "profile image"
-                            )
-                            Text(
-                                text = comments.getOrNull(index)?.writer?.name ?: "",
-                                fontFamily = PretendardFontFamily,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp,
-                                color = G5,
-                                modifier = Modifier.padding(start = 16.dp)
-                            )
-                        }
-                        if (comments.getOrNull(index)?.hasWritePermission == true) {
-                            Box(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .align(Alignment.CenterEnd)
-                                    .noRippleClickable {
-                                        comments[index]?.isCommentEdited?.value = true
-                                    }
-                            ) {
-                                Icon(
-                                    painter = painterResource(ic_more_question),
-                                    contentDescription = "more",
-                                    tint = G5,
-                                    modifier = Modifier
-                                        .size(width = 4.dp, height = 16.dp)
-                                        .align(Alignment.CenterEnd)
-                                )
-                                DropdownMenu(
-                                    expanded = comments[index]?.isCommentEdited?.value == true,
-                                    onDismissRequest = {
-                                        comments[index]?.isCommentEdited?.value = false
-                                    },
-                                    shape = RoundedCornerShape(10.dp),
-                                    modifier = Modifier
-                                        .widthIn(min = 200.dp)
-                                ) {
-                                    DropdownMenuItem(
-                                        text = {
-                                            Box(
-                                                contentAlignment = Alignment.Center,
-                                                modifier = Modifier.fillMaxSize()
-                                            ) {
-                                                Text(
-                                                    text = stringResource(R.string.dropdown_edit_comment),
-                                                    fontFamily = PretendardFontFamily,
-                                                    fontWeight = FontWeight.Medium,
-                                                    fontSize = 20.sp,
-                                                    color = BL
-                                                )
-                                            }
-                                        },
-                                        onClick = {
-                                            comments.getOrNull(index)?.let { comment ->
-                                                isCommentEditDialogShow = CommentEdit(
-                                                    commentId = comment.id,
-                                                    comment = comment.content
-                                                )
-                                            } ?: Log.d("QuestionDetailScreen", "comment[$index] is null")
-                                            comments[index]?.isCommentEdited?.value = false
-                                        }
-                                    )
-                                    DropdownMenuItem(
-                                        text = {
-                                            Box(
-                                                contentAlignment = Alignment.Center,
-                                                modifier = Modifier.fillMaxSize()
-                                            ) {
-                                                Text(
-                                                    text = stringResource(R.string.dropdown_delete_comment),
-                                                    fontFamily = PretendardFontFamily,
-                                                    fontWeight = FontWeight.Medium,
-                                                    fontSize = 20.sp,
-                                                    color = SubRed
-                                                )
-                                            }
-                                        },
-                                        onClick = {
-                                            comments.getOrNull(index)?.id?.let {
-                                                commentEventListener(CommentEvent.Delete(it))
-                                            } ?: Log.d("QuestionDetailScreen", "comment[$index] is null")
-                                            comments[index]?.isCommentEdited?.value = false
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    Text(
-                        text = comments.getOrNull(index)?.content ?: "",
-                        fontFamily = PretendardFontFamily,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 20.sp,
-                        color = BL,
-                        modifier = Modifier.padding(top = 12.dp)
-                    )
-                }
+            items(
+                items = commentsInsertedItems,
+                key = { it.id }
+            ) {
+                QuestionDetailCommentLayout(
+                    onEditCommentRequest = { isCommentEditDialogShow = it },
+                    onDeleteCommentRequest = { commentEventListener(CommentEvent.Delete(it)) },
+                    comment = it.content,
+                    username = it.writer.name,
+                    profileImage = painterResource(ic_my_appbar),
+                    hasWritePermission = it.hasWritePermission
+                )
+            }
+
+            items(
+                count = comments.itemCount,
+                key = comments.itemKey()
+            ) { index ->
+                QuestionDetailCommentLayout(
+                    onEditCommentRequest = {
+                        comments.getOrNull(index)?.let { comment ->
+                            isCommentEditDialogShow = comment
+                        } ?: Log.d(
+                            "QuestionDetailScreen",
+                            "comment[$index] is null"
+                        )
+                    },
+                    onDeleteCommentRequest = {
+                        comments.getOrNull(index)?.let {
+                            commentEventListener(CommentEvent.Delete(it))
+                        } ?: Log.d(
+                            "QuestionDetailScreen",
+                            "comment[$index] is null"
+                        )
+                    },
+                    comment = comments.getOrNull(index)?.content ?: "",
+                    username = comments.getOrNull(index)?.writer?.name ?: "",
+                    profileImage = painterResource(ic_my_appbar),
+                    hasWritePermission = comments.getOrNull(index)?.hasWritePermission ?: false
+                )
             }
 
             item { Box(modifier = Modifier.height(80.dp)) }
@@ -463,7 +400,125 @@ internal fun QuestionDetailScreen(
 }
 
 @Composable
-fun ColumnScope.CommentEditorContent(
+private fun QuestionDetailCommentLayout(
+    onEditCommentRequest: () -> Unit,
+    onDeleteCommentRequest: () -> Unit,
+    comment: String,
+    username: String,
+    profileImage: Painter,
+    hasWritePermission: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    var isDropDownMenuShow by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
+            .background(WH)
+            .padding(all = 20.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.CenterStart,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = profileImage,
+                    contentDescription = "profile image"
+                )
+                Text(
+                    text = username,
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp,
+                    color = G5,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+            if (hasWritePermission) {
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterEnd)
+                        .noRippleClickable {
+                            isDropDownMenuShow = true
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(ic_more_question),
+                        contentDescription = "more",
+                        tint = G5,
+                        modifier = Modifier
+                            .size(width = 4.dp, height = 16.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                    DropdownMenu(
+                        expanded = isDropDownMenuShow,
+                        onDismissRequest = { isDropDownMenuShow = false },
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .widthIn(min = 200.dp)
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.dropdown_edit_comment),
+                                        fontFamily = PretendardFontFamily,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 20.sp,
+                                        color = BL
+                                    )
+                                }
+                            },
+                            onClick = {
+                                onEditCommentRequest()
+                                isDropDownMenuShow = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.dropdown_delete_comment),
+                                        fontFamily = PretendardFontFamily,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 20.sp,
+                                        color = SubRed
+                                    )
+                                }
+                            },
+                            onClick = {
+                                onDeleteCommentRequest()
+                                isDropDownMenuShow = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+        Text(
+            text = comment,
+            fontFamily = PretendardFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 20.sp,
+            color = BL,
+            modifier = Modifier.padding(top = 12.dp)
+        )
+    }
+}
+
+@Composable
+private fun CommentEditorContent(
     text: String,
     onTextChange: (String) -> Unit,
 ) {
@@ -496,6 +551,13 @@ fun ColumnScope.CommentEditorContent(
 
 @Preview
 @Composable
+private fun QuestionDetailCommentLayoutPreview() {
+    HarmonyTheme {
+    }
+}
+
+@Preview
+@Composable
 private fun QuestionDetailScreenPreview() {
     HarmonyTheme {
         QuestionDetailScreen(
@@ -504,9 +566,11 @@ private fun QuestionDetailScreenPreview() {
             commentEventListener = {},
             uiState = QuestionDetailUiState(
                 post = FakeQuestionDetail().get().toPostModel(true),
-                comments = FakeQuestionDetail().get()
-                    .copy(comment = flowOf(PagingData.from(FakeQuestionComments().get())))
-                    .toCommentModel("Alice Johnson"),
+                comments = PagingDataHelper(
+                    FakeQuestionDetail().get()
+                        .copy(comment = flowOf(PagingData.from(FakeQuestionComments().get())))
+                        .toCommentModel("Alice Johnson")
+                ),
                 isLoading = false
             )
         )

@@ -1,6 +1,5 @@
 package com.teampatch.feature.question.detail.mapper
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.teampatch.core.domain.model.QuestionDetail
@@ -17,8 +16,7 @@ internal fun QuestionDetail.toCommentModel(currentUserName: String): Flow<Paging
                 uid = it.writerUid,
                 name = it.writerName
             ),
-            hasWritePermission = currentUserName == it.writerName,
-            isCommentEdited = mutableStateOf(false)
+            hasWritePermission = currentUserName == it.writerName
         )
     }
 }

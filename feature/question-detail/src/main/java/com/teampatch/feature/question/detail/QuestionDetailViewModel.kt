@@ -1,14 +1,15 @@
 package com.teampatch.feature.question.detail
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import androidx.paging.filter
-import androidx.paging.insertHeaderItem
-import androidx.paging.map
+import androidx.paging.cachedIn
+import com.teampatch.core.common.PagingDataHelper
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.question.AddQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.DeleteQuestionCommentUseCase
@@ -24,7 +25,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -41,7 +41,7 @@ internal class QuestionDetailViewModel @Inject constructor(
     private val questionDetailRoute: QuestionDetailRoute = savedStateHandle.toRoute()
     val questionId: String = questionDetailRoute.questionId
 
-    var uiState = mutableStateOf(QuestionDetailUiState())
+    var uiState by mutableStateOf(QuestionDetailUiState())
         private set
 
     private val _sideEffect: Channel<QuestionDetailSideEffect> = Channel()
@@ -62,8 +62,8 @@ internal class QuestionDetailViewModel @Inject constructor(
             val detail = getQuestionDetailUseCase(questionId)
 
             val post = detail.toPostModel(user.role == Role.VIP)
-            val comments = detail.toCommentModel(user.name)
-            uiState.value = QuestionDetailUiState(post, comments, false)
+            val comments = detail.toCommentModel(user.name).cachedIn(viewModelScope)
+            uiState = QuestionDetailUiState(post, PagingDataHelper(comments), false)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.LoadError(e))
             e.printStackTrace()
@@ -72,56 +72,37 @@ internal class QuestionDetailViewModel @Inject constructor(
 
     fun addComment(text: String) = viewModelScope.launch {
         try {
-            val questionComment = addCommentUseCase(questionId, text)
-            uiState.value = uiState.value.copy(
-                comments = uiState.value.comments.map { pagingData ->
-                    pagingData.insertHeaderItem(
-                        item = QuestionDetailUiState.Comment(
-                            id = questionComment.commentId,
-                            content = text,
-                            writer = QuestionDetailUiState.Comment.Writer(
-                                uid = questionComment.writerUid,
-                                name = questionComment.writerName
-                            ),
-                            hasWritePermission = true,
-                            isCommentEdited = mutableStateOf(false)
-                        )
-                    )
-                }
+            val comment = addCommentUseCase(questionId, text)
+            val a = QuestionDetailUiState.Comment(
+                id = comment.commentId,
+                content = comment.content,
+                writer = QuestionDetailUiState.Comment.Writer(
+                    uid = comment.writerUid,
+                    name = comment.writerName
+                ),
+                hasWritePermission = true
             )
+            uiState.comments.addItem(a, true)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.AddCommentError(e))
             e.printStackTrace()
         }
     }
 
-    fun editComment(commentId: String, text: String) = viewModelScope.launch {
+    fun editComment(comment: QuestionDetailUiState.Comment, text: String) = viewModelScope.launch {
         try {
-            editCommentUseCase(commentId, text)
-            uiState.value = uiState.value.copy(
-                comments = uiState.value.comments.map { pagingData ->
-                    pagingData.map {
-                        if (it.id == commentId) {
-                            return@map it.copy(content = text)
-                        }
-                        it
-                    }
-                }
-            )
+            editCommentUseCase(comment.id, text)
+            uiState.comments.editItem(comment, comment.copy(content = text))
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.EditCommentError(e))
             e.printStackTrace()
         }
     }
 
-    fun deleteComment(commentId: String) = viewModelScope.launch {
+    fun deleteComment(comment: QuestionDetailUiState.Comment) = viewModelScope.launch {
         try {
-            deleteCommentUseCase(commentId)
-            uiState.value = uiState.value.copy(
-                comments = uiState.value.comments.map { pagingData ->
-                    pagingData.filter { it.id != commentId }
-                }
-            )
+            deleteCommentUseCase(comment.id)
+            uiState.comments.deleteItem(comment)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.DeleteCommentError(e))
             e.printStackTrace()
