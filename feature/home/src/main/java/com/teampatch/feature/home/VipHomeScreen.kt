@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,7 +61,7 @@ import java.time.LocalDateTime
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun VipHomeScreen(
+internal fun VipHomeScreen(
     onUserPageRequest: () -> Unit,
     onDailyRoutineRegisterPageRequest: () -> Unit,
     onDailyRoutineClick: (String) -> Unit, // id
@@ -84,7 +85,9 @@ fun VipHomeScreen(
                         )
                 )
             }
-        }
+        },
+        modifier = Modifier
+            .statusBarsPadding()
     ) { scaffoldPaddingValues ->
         Column(
             modifier = Modifier

@@ -35,6 +35,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        create("loggedInDebug") {
+            initWith(getByName("debug"))
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -104,6 +107,7 @@ fun DefaultConfig.setBuildConfigOrManifest(
 
 dependencies {
 
+    implementation(project(":core:common"))
     implementation(project(":core:authentication"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
@@ -115,6 +119,7 @@ dependencies {
     implementation(project(":feature:profile-edit"))
     implementation(project(":feature:daily"))
     implementation(project(":feature:memorycard-registration"))
+    implementation(project(":feature:question"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

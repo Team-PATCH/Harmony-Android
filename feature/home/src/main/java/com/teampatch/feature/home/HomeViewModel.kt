@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+internal class HomeViewModel @Inject constructor(
     private val getDailyRoutineUseCase: GetDailyRoutineUseCase,
     private val getLatestMemoryCardUseCase: GetLatestMemoryCardUseCase,
     private val toggleDailyRoutineStatusUseCase: ToggleDailyRoutineStatusUseCase,

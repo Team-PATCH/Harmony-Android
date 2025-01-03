@@ -10,7 +10,7 @@ data class User(
 ) {
     companion object {
 
-        fun init(): User = User(
+        fun createEmptyUser(): User = User(
             uid = "",
             groupId = 0,
             name = "",

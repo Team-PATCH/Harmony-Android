@@ -58,13 +58,9 @@ import com.teampatch.core.domain.model.FamilyInfo
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.family.info.model.FamilyInfoSideEffect
 import com.teampatch.feature.family.info.model.FamilyInfoUiState
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object FamilyInfoRoute
 
 @Composable
-fun FamilyInfoRoute(
+internal fun FamilyInfoRoute(
     onBackRequest: () -> Unit,
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,
@@ -99,7 +95,7 @@ fun FamilyInfoRoute(
 }
 
 @Composable
-fun FamilyInfoScreen(
+internal fun FamilyInfoScreen(
     onBackRequest: () -> Unit,
     onSettingsClick: () -> Unit,
     onProfileEditClick: () -> Unit,

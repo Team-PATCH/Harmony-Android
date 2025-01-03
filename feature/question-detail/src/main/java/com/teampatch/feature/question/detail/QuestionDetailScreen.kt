@@ -507,7 +507,7 @@ private fun QuestionDetailScreenPreview() {
             uiState = QuestionDetailUiState(
                 detail = FakeQuestionDetail().get(),
                 comment = flowOf(PagingData.from(FakeQuestionComments().get())),
-                user = User.init().copy(uid = "uid001", role = Role.VIP),
+                user = User.createEmptyUser().copy(uid = "uid001", role = Role.VIP),
                 isLoading = false
             )
         )
