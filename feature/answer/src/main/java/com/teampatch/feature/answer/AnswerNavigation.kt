@@ -24,7 +24,7 @@ fun NavController.navigateToAnswerScreen(
 
 fun NavGraphBuilder.addAnswerScreen(
     onBackRequest: () -> Unit,
-    onCompleteRequest: () -> Unit,
+    onCompleteRequest: (String) -> Unit,
 ) {
     composable<AnswerRoute> {
         AnswerRoute(onBackRequest = onBackRequest, onCompleteRequest = onCompleteRequest)

@@ -14,6 +14,7 @@ import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.question.addQuestionScreen
+import com.teampatch.feature.question.detail.QuestionDetailParams
 import com.teampatch.feature.question.detail.addQuestionDetailScreen
 import com.teampatch.feature.question.detail.navigateToQuestionDetailScreen
 import com.teampatch.feature.question.expand.addQuestionExpandScreen
@@ -55,7 +56,13 @@ fun MainNavHost(
 
         addAnswerScreen(
             onBackRequest = navController::popBackStack,
-            onCompleteRequest = {}
+            onCompleteRequest = { answer ->
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                    key = QuestionDetailParams.ANSWER_UPDATE_DATA,
+                    value = answer
+                )
+                navController.popBackStack()
+            }
         )
 
         composable<SettingsRoute> {

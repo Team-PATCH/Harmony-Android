@@ -75,6 +75,11 @@ internal class QuestionDetailViewModel @Inject constructor(
         }
     }
 
+    fun updateQuestionAnswer(answer: String) {
+        val post = uiState.post.copy(content = answer)
+        uiState = uiState.copy(post = post)
+    }
+
     fun addComment(text: String) = viewModelScope.launch {
         try {
             val questionComment = addCommentUseCase(questionId, text)

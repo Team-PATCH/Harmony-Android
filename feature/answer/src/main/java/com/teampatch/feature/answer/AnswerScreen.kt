@@ -46,7 +46,7 @@ import com.teampatch.feature.answer.model.AnswerUiState
 @Composable
 internal fun AnswerRoute(
     onBackRequest: () -> Unit,
-    onCompleteRequest: () -> Unit,
+    onCompleteRequest: (String) -> Unit,
     viewModel: AnswerViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -57,7 +57,7 @@ internal fun AnswerRoute(
             onBackRequest = onBackRequest,
             onCompleteRequest = {
                 viewModel.saveQuestionAnswer(it)
-                onCompleteRequest()
+                onCompleteRequest(it)
             },
             uiState = uiState
         )
