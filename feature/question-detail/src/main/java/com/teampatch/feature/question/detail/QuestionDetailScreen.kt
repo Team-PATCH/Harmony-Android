@@ -2,6 +2,10 @@ package com.teampatch.feature.question.detail
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
@@ -210,6 +215,13 @@ internal fun QuestionDetailScreen(
         }
     }
 
+    val lazyColumnState = rememberLazyListState()
+    val isFabShow: Boolean by remember(lazyColumnState) {
+        derivedStateOf {
+            !lazyColumnState.isScrollInProgress && lazyColumnState.canScrollForward
+        }
+    }
+
     Scaffold(
         topBar = {
             BackButtonAppBar(
@@ -265,25 +277,33 @@ internal fun QuestionDetailScreen(
             )
         },
         floatingActionButton = {
-            RoundButton(
-                onClick = { isCommentDialogShow = true },
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .size(200.dp, 68.dp)
+            AnimatedVisibility(
+                visible = isFabShow,
+                enter = fadeIn(tween(600)),
+                exit = fadeOut(tween(600))
             ) {
-                Text(
-                    text = stringResource(R.string.float_add_comment),
-                    fontSize = 22.sp
-                )
+                RoundButton(
+                    onClick = { isCommentDialogShow = true },
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .size(200.dp, 68.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.float_add_comment),
+                        fontSize = 22.sp
+                    )
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { scaffoldPaddingValues ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(scaffoldPaddingValues)
-                .background(G1)
+                .background(G1),
+            state = lazyColumnState
         ) {
             item {
                 Column(
@@ -392,8 +412,6 @@ internal fun QuestionDetailScreen(
                     hasWritePermission = comments.getOrNull(index)?.hasWritePermission ?: false
                 )
             }
-
-            item { Box(modifier = Modifier.height(80.dp)) }
         }
     }
 }
