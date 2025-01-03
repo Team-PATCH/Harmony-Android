@@ -5,10 +5,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun OnboardingRoute(
-    onBackRequest: () -> Unit,
+internal fun OnboardingRoute(
+    onKakaoLoginRequest: () -> Unit,
+    onPermissionNotificationRequest: () -> Unit,
+
     onboardingViewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     // 현재 Context 가져오기
     val context = LocalContext.current
+    OnboardingLoginScreen(
+        onKakaoLoginRequest = onKakaoLoginRequest,
+        onPermissionNotificationRequest = onPermissionNotificationRequest
+    )
 }

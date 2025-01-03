@@ -11,6 +11,7 @@ import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
+import com.teampatch.feature.onboarding.login.ui.addOnboardingScreen
 import com.teampatch.feature.question.addQuestionScreen
 import com.teampatch.feature.settings.SettingsRoute
 
@@ -24,6 +25,12 @@ fun MainNavHost(
         navController = navController,
         startDestination = HomeRoute
     ) {
+
+        addOnboardingScreen(
+            onKakaoLoginRequest = {},
+            onPermissionNotificationRequest = {}
+        )
+
         addHomeScreen(
             onUserPageRequest = navController::navigateToFamilyInfoScreen,
             onDailyRoutineClick = { },

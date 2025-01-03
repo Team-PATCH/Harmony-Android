@@ -7,27 +7,27 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
 
-const val ONBOARDING_ROUTE = "Onboarding"
+@Serializable
+data object OnboardingRoute
 
 fun NavController.navigateToOnboardingScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(route = ONBOARDING_ROUTE, navOptions = navOptions, navigatorExtras = navigatorExtras)
+    navigate(OnboardingRoute, navOptions, navigatorExtras)
 }
 
+
+
 fun NavGraphBuilder.addOnboardingScreen(
-    title: String,
-    content: @Composable () -> Unit, // content 인자를 받음
-    onBackClick: () -> Unit,
-    onNextClick: (() -> Unit)? = null,
+    onKakaoLoginRequest: () -> Unit,
+    onPermissionNotificationRequest: () -> Unit,
 ) {
-    composable(ONBOARDING_ROUTE) {
-//        OnboardingScreen(
-//            title = title,
-//            onBackClick = onBackClick,
-//            onNextClick = onNextClick,
-//            content = content
-//        )
+    composable<OnboardingRoute> {
+        OnboardingRoute(
+            onKakaoLoginRequest = onKakaoLoginRequest,
+            onPermissionNotificationRequest = onPermissionNotificationRequest
+        )
     }
 }
+

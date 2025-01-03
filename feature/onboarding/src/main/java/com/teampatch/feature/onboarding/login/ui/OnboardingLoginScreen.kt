@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import com.teampatch.core.designsystem.R
 
 @Composable
-fun OnboardingLoginScreen() {
+fun OnboardingLoginScreen(
+    onKakaoLoginRequest: () -> Unit,
+    onPermissionNotificationRequest: () -> Unit,
+) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -81,5 +84,8 @@ fun OnboardingLoginScreen() {
 @Preview(showBackground = true)
 @Composable
 fun OnboardingLoginScreenPreview() {
-    OnboardingLoginScreen()
+    OnboardingLoginScreen(
+        onKakaoLoginRequest = {},
+        onPermissionNotificationRequest = {}
+    )
 }
