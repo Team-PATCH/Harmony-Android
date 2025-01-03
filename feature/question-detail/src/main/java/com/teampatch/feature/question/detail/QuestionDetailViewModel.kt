@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.teampatch.core.common.PagingDataHelper
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.question.AddQuestionCommentUseCase
@@ -16,8 +17,8 @@ import com.teampatch.core.domain.usecase.question.DeleteQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.EditQuestionCommentUseCase
 import com.teampatch.core.domain.usecase.question.GetQuestionDetailUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
-import com.teampatch.feature.question.detail.mapper.toCommentModel
-import com.teampatch.feature.question.detail.mapper.toPostModel
+import com.teampatch.feature.question.detail.mapper.toPresentationModel
+import com.teampatch.feature.question.detail.model.Comment
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -59,10 +61,13 @@ internal class QuestionDetailViewModel @Inject constructor(
             }
 
             val user = getUserInfoUseCase().first()
-            val detail = getQuestionDetailUseCase(questionId)
+            val questionDetail = getQuestionDetailUseCase(questionId)
 
-            val post = detail.toPostModel(user.role == Role.VIP)
-            val comments = detail.toCommentModel(user.name).cachedIn(viewModelScope)
+            val post = questionDetail.toPresentationModel(user.role == Role.VIP)
+            val comments = questionDetail.comment.map { pagingData ->
+                pagingData.map { it.toPresentationModel(user.name) }
+            }
+                .cachedIn(viewModelScope)
             uiState = QuestionDetailUiState(post, PagingDataHelper(comments), false)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.LoadError(e))
@@ -72,24 +77,17 @@ internal class QuestionDetailViewModel @Inject constructor(
 
     fun addComment(text: String) = viewModelScope.launch {
         try {
-            val comment = addCommentUseCase(questionId, text)
-            val a = QuestionDetailUiState.Comment(
-                id = comment.commentId,
-                content = comment.content,
-                writer = QuestionDetailUiState.Comment.Writer(
-                    uid = comment.writerUid,
-                    name = comment.writerName
-                ),
-                hasWritePermission = true
-            )
-            uiState.comments.addItem(a, true)
+            val questionComment = addCommentUseCase(questionId, text)
+            val comment = questionComment.toPresentationModel("")
+                .copy(hasWritePermission = true)
+            uiState.comments.addItem(comment, true)
         } catch (e: Exception) {
             _sideEffect.send(QuestionDetailSideEffect.AddCommentError(e))
             e.printStackTrace()
         }
     }
 
-    fun editComment(comment: QuestionDetailUiState.Comment, text: String) = viewModelScope.launch {
+    fun editComment(comment: Comment, text: String) = viewModelScope.launch {
         try {
             editCommentUseCase(comment.id, text)
             uiState.comments.editItem(comment, comment.copy(content = text))
@@ -99,7 +97,7 @@ internal class QuestionDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteComment(comment: QuestionDetailUiState.Comment) = viewModelScope.launch {
+    fun deleteComment(comment: Comment) = viewModelScope.launch {
         try {
             deleteCommentUseCase(comment.id)
             uiState.comments.deleteItem(comment)

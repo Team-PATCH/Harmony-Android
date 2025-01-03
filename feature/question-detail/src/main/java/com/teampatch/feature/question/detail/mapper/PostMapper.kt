@@ -1,9 +1,9 @@
 package com.teampatch.feature.question.detail.mapper
 
 import com.teampatch.core.domain.model.QuestionDetail
-import com.teampatch.feature.question.detail.model.QuestionDetailUiState
+import com.teampatch.feature.question.detail.model.Post
 
-internal fun QuestionDetail.toPostModel(hasWritePermission: Boolean): QuestionDetailUiState.Post = QuestionDetailUiState.Post(
+internal fun QuestionDetail.toPresentationModel(hasWritePermission: Boolean): Post = Post(
     id = id,
     number = number,
     title = title,

@@ -51,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import androidx.paging.map
 import com.teampatch.core.common.PagingDataHelper
 import com.teampatch.core.common.getOrNull
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
@@ -72,10 +73,10 @@ import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeQuestionComments
 import com.teampatch.core.domain.fake.FakeQuestionDetail
-import com.teampatch.feature.question.detail.mapper.toCommentModel
-import com.teampatch.feature.question.detail.mapper.toPostModel
-import com.teampatch.feature.question.detail.model.AnswerEvent
+import com.teampatch.feature.question.detail.mapper.toPresentationModel
+import com.teampatch.feature.question.detail.model.Comment
 import com.teampatch.feature.question.detail.model.CommentEvent
+import com.teampatch.feature.question.detail.model.PostEvent
 import com.teampatch.feature.question.detail.model.QuestionDetailSideEffect
 import com.teampatch.feature.question.detail.model.QuestionDetailUiState
 import kotlinx.coroutines.flow.flowOf
@@ -92,7 +93,7 @@ internal fun QuestionDetailRoute(
     if (!uiState.isLoading) {
         QuestionDetailScreen(
             onBackRequest = onBackRequest,
-            answerEventListener = { answerEditPageRequest(viewModel.questionId) },
+            postEventListener = { answerEditPageRequest(viewModel.questionId) },
             commentEventListener = { event ->
                 when (event) {
                     is CommentEvent.Add -> viewModel.addComment(event.commentText)
@@ -130,22 +131,20 @@ internal fun QuestionDetailRoute(
 @Composable
 internal fun QuestionDetailScreen(
     onBackRequest: () -> Unit,
-    answerEventListener: (AnswerEvent) -> Unit,
+    postEventListener: (PostEvent) -> Unit,
     commentEventListener: (CommentEvent) -> Unit,
     uiState: QuestionDetailUiState,
 ) {
     var answerEventMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var isCommentDialogShow by rememberSaveable { mutableStateOf(false) }
-    var isCommentEditDialogShow by rememberSaveable {
-        mutableStateOf<QuestionDetailUiState.Comment?>(
-            null
-        )
-    }
+    var isCommentEditDialogShow by rememberSaveable { mutableStateOf<Comment?>(null) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { it != SheetValue.Hidden }
     )
-    val commentsInsertedItems by uiState.comments.pagingDataInsertedItems.collectAsStateWithLifecycle(emptyList())
+    val commentsInsertedItems by uiState.comments.pagingDataInsertedItems.collectAsStateWithLifecycle(
+        emptyList()
+    )
     val comments = uiState.comments.pagingDataFlow.collectAsLazyPagingItems()
     val commentsSize: Int by remember(commentsInsertedItems, comments) {
         derivedStateOf { commentsInsertedItems.size + comments.itemCount }
@@ -254,7 +253,7 @@ internal fun QuestionDetailScreen(
                                     }
                                 },
                                 onClick = {
-                                    answerEventListener(AnswerEvent.EDIT)
+                                    postEventListener(PostEvent.EDIT)
                                     answerEventMenuExpanded = false
                                 }
                             )
@@ -562,14 +561,15 @@ private fun QuestionDetailScreenPreview() {
     HarmonyTheme {
         QuestionDetailScreen(
             onBackRequest = {},
-            answerEventListener = {},
+            postEventListener = {},
             commentEventListener = {},
             uiState = QuestionDetailUiState(
-                post = FakeQuestionDetail().get().toPostModel(true),
+                post = FakeQuestionDetail().get().toPresentationModel(true),
                 comments = PagingDataHelper(
-                    FakeQuestionDetail().get()
-                        .copy(comment = flowOf(PagingData.from(FakeQuestionComments().get())))
-                        .toCommentModel("Alice Johnson")
+                    flowOf(
+                        PagingData.from(FakeQuestionComments().get())
+                            .map { it.toPresentationModel("Alice Johnson") }
+                    )
                 ),
                 isLoading = false
             )

@@ -9,26 +9,4 @@ internal data class QuestionDetailUiState(
     val post: Post = Post("", 0, "", "", LocalDateTime.now(), false),
     val comments: PagingDataHelper<Comment> = PagingDataHelper(flowOf(PagingData.empty())),
     val isLoading: Boolean = true,
-) {
-
-    data class Post(
-        val id: String,
-        val number: Int,
-        val title: String,
-        val content: String,
-        val dateTime: LocalDateTime,
-        val hasWritePermission: Boolean,
-    )
-
-    data class Comment(
-        val id: String,
-        val content: String,
-        val writer: Writer,
-        val hasWritePermission: Boolean,
-    ) {
-        data class Writer(
-            val uid: String,
-            val name: String,
-        )
-    }
-}
+)
