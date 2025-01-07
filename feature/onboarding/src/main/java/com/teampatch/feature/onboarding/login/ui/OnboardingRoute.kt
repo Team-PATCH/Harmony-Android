@@ -8,13 +8,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 internal fun OnboardingRoute(
     onKakaoLoginRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
+    onStartScreenRequest: () -> Unit,
 
     onboardingViewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     // 현재 Context 가져오기
     val context = LocalContext.current
-    OnboardingLoginScreen(
+    OnboardingFirstScreen(
         onKakaoLoginRequest = onKakaoLoginRequest,
-        onPermissionNotificationRequest = onPermissionNotificationRequest
+        onPermissionNotificationRequest = onPermissionNotificationRequest,
+        onStartScreenRequest = onStartScreenRequest
     )
 }

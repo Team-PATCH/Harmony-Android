@@ -29,17 +29,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.teampatch.core.designsystem.R
 
 @Composable
-internal fun OnboardingLoginScreen(
+internal fun OnboardingFirstScreen(
     onKakaoLoginRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
+    onStartScreenRequest: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
     val isPermissionGranted by viewModel.isPermissionGranted.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
 
     LaunchedEffect(isLoginSuccessful, isPermissionGranted) {
+//        if (isLoginSuccessful && !isPermissionGranted) {
+//            onPermissionNotificationRequest()
+//        } // 지금 뷰모델에선 false로 초기화하고 있고 추측하기로는 !가 반대를 의미하니까 true라고 생각했는데
+        // 그게 아니라 false라면 반대로 밑에서도 !를 넣어서 false라고 한다면?
         if (isLoginSuccessful && !isPermissionGranted) {
-            onPermissionNotificationRequest()
+            onStartScreenRequest()
         }
     }
 
@@ -72,24 +79,31 @@ internal fun OnboardingLoginScreen(
                 Spacer(modifier = Modifier.height(465.dp))
 
                 Button(
-                    onClick = { /* Handle Kakao Login */ },
+                    onClick = { viewModel.loginKakao() },
+//                    onClick = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .height(68.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)), // 배경색은 이미지를 꽉 채우면 안 보이게 됩니다.
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
                     Image(
-                        painter = painterResource(id = R.drawable.kakao_login_medium_wide), // 카카오 로그인 이미지
+                        painter = painterResource(id = R.drawable.kakao_login_medium_wide),
                         contentDescription = "Kakao Login",
-                        modifier = Modifier.fillMaxSize(), // 버튼 크기를 꽉 채움
-//                    contentScale = ContentScale.Crop // 이미지가 버튼에 맞게 잘리거나 확장됨
-//                    modifier = Modifier.fillMaxHeight(), // 버튼 높이에 맞게 이미지 채우기
-                        contentScale = ContentScale.Fit // 이미지가 잘리지 않고 버튼 안에 맞춰짐
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
                     )
                 }
+
+//                // 에러 메시지 표시
+//                errorMessage?.let { message ->
+//                    Text(
+//                        text = message,
+//                        color = Color.Red,
+//                        modifier = Modifier.padding(top = 16.dp)
+//                    )
+//                }
             }
         }
     }
@@ -98,8 +112,9 @@ internal fun OnboardingLoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun OnboardingLoginScreenPreview() {
-    OnboardingLoginScreen(
+    OnboardingFirstScreen(
         onKakaoLoginRequest = {},
-        onPermissionNotificationRequest = {}
+        onPermissionNotificationRequest = {},
+        onStartScreenRequest = {}
     )
 }
