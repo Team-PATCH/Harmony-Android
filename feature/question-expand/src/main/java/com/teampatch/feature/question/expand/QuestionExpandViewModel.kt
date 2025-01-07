@@ -29,18 +29,13 @@ internal class QuestionExpandViewModel @Inject constructor(
     }
 
     private fun load() = viewModelScope.launch {
-        try {
-            val questions = getQuestionsUseCase(-1).catch {
-                _sideEffect.send(QuestionExpandSideEffect.LoadError(it))
-                it.printStackTrace()
-            }
-            questionExpandUiState.value = QuestionExpandUiState(
-                question = questions,
-                isLoading = false
-            )
-        } catch (e: Exception) {
-            _sideEffect.send(QuestionExpandSideEffect.LoadError(e))
-            e.printStackTrace()
+        val questions = getQuestionsUseCase(-1).catch {
+            _sideEffect.send(QuestionExpandSideEffect.LoadError(it))
+            it.printStackTrace()
         }
+        questionExpandUiState.value = QuestionExpandUiState(
+            question = questions,
+            isLoading = false
+        )
     }
 }
