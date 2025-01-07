@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.teampatch.core.domain.exception.FamilyRegistrationRequiredException
 import com.teampatch.core.domain.model.FamilyGroup
 import com.teampatch.core.domain.model.Host
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.InvitationMessage
+import com.teampatch.core.domain.usecase.onboarding.LoginKakaoUseCase
 import com.teampatch.core.domain.usecase.onboarding.LoginUseCase
 import com.teampatch.core.domain.usecase.onboarding.RegisterFamilyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
+    private val loginKakaoUseCase: LoginKakaoUseCase,
     private val loginUseCase: LoginUseCase,
     private val registerFamilyUseCase: RegisterFamilyUseCase,
 ) : ViewModel() {
@@ -30,16 +33,23 @@ internal class OnboardingViewModel @Inject constructor(
     private val _isPermissionGranted = MutableStateFlow(false)
     val isPermissionGranted: StateFlow<Boolean> = _isPermissionGranted
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     // 로그인 시도를 수행하는 함수
-    fun login(invitationCode: String) {
+    fun loginKakao() {
         viewModelScope.launch {
             runCatching {
-                loginUseCase(invitationCode)
+//                loginKakaoUseCase()
             }.onSuccess {
                 _isLoginSuccessful.value = true
-            }.onFailure {
+            }.onFailure { throwable ->
                 _isLoginSuccessful.value = false
-                // Handle login failure (e.g., show error message)
+                _errorMessage.value = throwable.message
+                // Handle specific exceptions like FamilyRegistrationRequiredException
+                if (throwable is FamilyRegistrationRequiredException) {
+                    _errorMessage.value = "Family registration required."
+                }
             }
         }
     }
