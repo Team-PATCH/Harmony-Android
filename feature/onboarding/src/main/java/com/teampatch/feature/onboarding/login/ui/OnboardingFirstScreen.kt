@@ -49,7 +49,7 @@ internal fun OnboardingFirstScreen(
             onPermissionNotificationRequest()
         } // 지금 뷰모델에선 false로 초기화하고 있고 추측하기로는 !가 반대를 의미하니까 true라고 생각했는데
         // 그게 아니라 false라면 반대로 밑에서도 !를 넣어서 false라고 한다면?
-z
+
     }
 
     Scaffold(
