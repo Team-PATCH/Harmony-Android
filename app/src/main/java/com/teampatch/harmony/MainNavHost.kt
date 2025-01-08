@@ -13,11 +13,13 @@ import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterScreen
+import com.teampatch.feature.onboarding.login.ui.addOnboardingInvitationScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingStartScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToEnterScreen
+import com.teampatch.feature.onboarding.login.ui.navigateToInvitationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
@@ -47,8 +49,11 @@ fun MainNavHost(
             onboardingEnterScreenRequest = {navController.navigateToEnterScreen()}
         )
         addOnboardingMakeGroupScreen()
-        addOnboardingEnterScreen()
+        addOnboardingEnterScreen(
+            onNextClick = {navController.navigateToInvitationScreen()}
+        )
 
+        addOnboardingInvitationScreen()
 
         addHomeScreen(
             onUserPageRequest = navController::navigateToFamilyInfoScreen,

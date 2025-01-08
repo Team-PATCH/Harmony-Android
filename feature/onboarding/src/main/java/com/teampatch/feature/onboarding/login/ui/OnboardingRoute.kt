@@ -1,8 +1,6 @@
 package com.teampatch.feature.onboarding.login.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 internal fun OnboardingRoute(
@@ -19,11 +17,20 @@ internal fun OnboardingRoute(
 
 @Composable
 internal fun OnboardingStartRoute(
-    onboardingMakeGroupRequest: () -> Unit,
-    onboardingEnterScreenRequest: () -> Unit
+    onMakeGroupRequest: () -> Unit,
+    onEnterScreenRequest: () -> Unit
 ) {
     OnboardingStartScreen(
-        onboardingMakeGroupRequest = onboardingMakeGroupRequest,
-        onboardingEnterScreenRequest = onboardingEnterScreenRequest
+        onboardingMakeGroupRequest = onMakeGroupRequest,
+        onboardingEnterScreenRequest = onEnterScreenRequest
+    )
+}
+
+@Composable
+internal fun OnboardingInvitationRoute(
+    onNextClick: () -> Unit
+) {
+    OnboardingEnterScreen(
+        onNextClick = onNextClick
     )
 }

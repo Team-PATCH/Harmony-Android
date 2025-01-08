@@ -2,17 +2,16 @@ package com.teampatch.feature.onboarding.login.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -35,17 +33,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teampatch.core.designsystem.component.SpeechBubble
-import com.teampatch.core.designsystem.component.TypeWriterText
 import com.teampatch.core.designsystem.theme.BL
-import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
-import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.feature.onboarding.R
 
-
 @Composable
-fun OnboardingEnterScreen() {
+fun OnboardingEnterScreen(
+    onNextClick: () -> Unit
+) {
     // 상태 변수로 초대 코드의 각 자리를 저장
     var code by remember { mutableStateOf("") }
 
@@ -92,7 +88,10 @@ fun OnboardingEnterScreen() {
 
             // 다음 버튼
             Button(
-                onClick = { /* 초대 코드 확인 처리 */ },
+                onClick = {
+                          /* 초대 코드 확인 처리 */
+                            onNextClick()
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp), // 버튼의 높이 설정
@@ -107,6 +106,8 @@ fun OnboardingEnterScreen() {
         }
     }
 }
+
+
 
 @Composable
 fun InputProfileSettings() {
@@ -158,7 +159,9 @@ fun InputProfileSettings() {
 @Composable
 private fun OnboardingEnterScreenPreview() {
     HarmonyTheme {
-        OnboardingEnterScreen()
+        OnboardingEnterScreen(
+            onNextClick = {}
+        )
     }
 }
 

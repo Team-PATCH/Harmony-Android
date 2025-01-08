@@ -67,8 +67,8 @@ fun NavGraphBuilder.addOnboardingStartScreen(
 ) {
     composable<OnboardingStartRoute> {
         OnboardingStartRoute(
-            onboardingMakeGroupRequest = onboardingMakeGroupRequest,
-            onboardingEnterScreenRequest = onboardingEnterScreenRequest
+            onMakeGroupRequest = onboardingMakeGroupRequest,
+            onEnterScreenRequest = onboardingEnterScreenRequest
         )
     }
 }
@@ -99,11 +99,34 @@ fun NavController.navigateToEnterScreen(
 }
 
 fun NavGraphBuilder.addOnboardingEnterScreen(
-) {
+    onNextClick: () -> Unit
+ ) {
     composable<OnboardingEnterRoute> {
-        OnboardingEnterScreen()
+        OnboardingEnterScreen(
+            onNextClick = onNextClick
+        )
     }
 }
+
+@Serializable
+data object OnboardingInvitationRoute
+fun NavController.navigateToInvitationScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingInvitationRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addOnboardingInvitationScreen(
+) {
+    composable<OnboardingInvitationRoute> {
+        OnboardingLastScreen()
+    }
+}
+
+
+
+
 
 
 
