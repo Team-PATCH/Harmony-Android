@@ -124,7 +124,7 @@ fun OnBoardingLayout(
 @Composable
 fun OnboardingStartScreen(
     onboardingMakeGroupRequest: () -> Unit,
-    onboardingEnterScreen: () -> Unit
+    onboardingEnterScreenRequest: () -> Unit
 ) {
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -167,7 +167,7 @@ fun OnboardingStartScreen(
                 painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
-                    .clickable { onboardingEnterScreen() }
+                    .clickable { onboardingEnterScreenRequest() }
             )
         }
     }
@@ -179,7 +179,7 @@ private fun OnboardingStartScreenPreview() {
     HarmonyTheme {
         OnboardingStartScreen(
             onboardingMakeGroupRequest = { },
-            onboardingEnterScreen = { }
+            onboardingEnterScreenRequest = { }
         )
     }
 }

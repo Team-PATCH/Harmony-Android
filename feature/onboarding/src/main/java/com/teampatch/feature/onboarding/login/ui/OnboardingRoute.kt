@@ -9,14 +9,21 @@ internal fun OnboardingRoute(
     onKakaoLoginRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
-
-    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
 ) {
-    // 현재 Context 가져오기
-    val context = LocalContext.current
     OnboardingFirstScreen(
         onKakaoLoginRequest = onKakaoLoginRequest,
         onPermissionNotificationRequest = onPermissionNotificationRequest,
         onStartScreenRequest = onStartScreenRequest
+    )
+}
+
+@Composable
+internal fun OnboardingStartRoute(
+    onboardingMakeGroupRequest: () -> Unit,
+    onboardingEnterScreenRequest: () -> Unit
+) {
+    OnboardingStartScreen(
+        onboardingMakeGroupRequest = onboardingMakeGroupRequest,
+        onboardingEnterScreenRequest = onboardingEnterScreenRequest
     )
 }
