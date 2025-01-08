@@ -1,5 +1,7 @@
 package com.teampatch.feature.onboarding.login.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.teampatch.core.designsystem.R
 
@@ -36,18 +40,16 @@ internal fun OnboardingFirstScreen(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
-    val isPermissionGranted by viewModel.isPermissionGranted.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val context = LocalContext.current
 
-
-    LaunchedEffect(isLoginSuccessful, isPermissionGranted) {
-//        if (isLoginSuccessful && !isPermissionGranted) {
-//            onPermissionNotificationRequest()
-//        } // 지금 뷰모델에선 false로 초기화하고 있고 추측하기로는 !가 반대를 의미하니까 true라고 생각했는데
+    LaunchedEffect(isLoginSuccessful) {
+        val hasNotificationGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        if (isLoginSuccessful && !hasNotificationGranted) {
+            onPermissionNotificationRequest()
+        } // 지금 뷰모델에선 false로 초기화하고 있고 추측하기로는 !가 반대를 의미하니까 true라고 생각했는데
         // 그게 아니라 false라면 반대로 밑에서도 !를 넣어서 false라고 한다면?
-        if (isLoginSuccessful && !isPermissionGranted) {
-            onStartScreenRequest()
-        }
+z
     }
 
     Scaffold(

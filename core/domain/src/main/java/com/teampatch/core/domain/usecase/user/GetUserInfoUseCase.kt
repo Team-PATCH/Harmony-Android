@@ -10,7 +10,7 @@ class GetUserInfoUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
 
-    operator fun invoke(): Flow<User> = userRepository.getUserInfo()
-//operator fun invoke(): Flow<User> = flowOf(User.createEmptyUser())
+//    operator fun invoke(): Flow<User> = userRepository.getUserInfo()
+operator fun invoke(): Flow<User> = flowOf(User.createEmptyUser())
 
 }
