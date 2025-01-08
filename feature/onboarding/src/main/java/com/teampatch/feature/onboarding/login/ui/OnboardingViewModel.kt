@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
     private val loginKakaoUseCase: LoginKakaoUseCase,
-    private val loginUseCase: LoginUseCase,
+    private val loginUseCase: LoginUseCase, // 이것도 언젠간 쓰여야할 것 같은데..
     private val registerFamilyUseCase: RegisterFamilyUseCase,
 ) : ViewModel() {
 
@@ -29,10 +29,9 @@ internal class OnboardingViewModel @Inject constructor(
     private val _isLoginSuccessful = MutableStateFlow(false)
     val isLoginSuccessful: StateFlow<Boolean> = _isLoginSuccessful
 
-    // 알림 권한 상태
-    private val _isPermissionGranted = MutableStateFlow(false)
-    val isPermissionGranted: StateFlow<Boolean> = _isPermissionGranted
-
+    /**
+     * 에러 메시지가 필요한지 고민이 필요함
+     */
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
@@ -73,8 +72,4 @@ internal class OnboardingViewModel @Inject constructor(
         )
     }
 
-    // 알림 권한 상태를 업데이트하는 함수
-    fun updatePermissionStatus(granted: Boolean) {
-        _isPermissionGranted.value = granted
-    }
 }
