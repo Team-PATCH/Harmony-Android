@@ -64,7 +64,7 @@ fun OnBoardingLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(scaffoldPaddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 20.dp)
         ) {
             // Title, Subtitle, and Spacer sections
             item {
@@ -98,7 +98,7 @@ fun OnBoardingLayout(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 24.dp)
+                        .padding(vertical = 34.dp)
                         .background(G1)
                 ) {
                     content() // Passing the composable content
@@ -142,8 +142,6 @@ fun OnboardingStartScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White) // 배경색 설정
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Image(
