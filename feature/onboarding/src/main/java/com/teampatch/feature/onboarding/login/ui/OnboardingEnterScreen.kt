@@ -1,6 +1,7 @@
 package com.teampatch.feature.onboarding.login.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,14 +12,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -26,12 +30,17 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teampatch.core.designsystem.component.SpeechBubble
+import com.teampatch.core.designsystem.component.TypeWriterText
 import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
+import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.feature.onboarding.R
 
 
@@ -61,7 +70,7 @@ fun OnboardingEnterScreen() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .background(Color.White)
         ) {
             // 초대 코드 입력 필드
             OutlinedTextField(
@@ -79,7 +88,7 @@ fun OnboardingEnterScreen() {
                 visualTransformation = PasswordVisualTransformation() // 코드 숨김 처리
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(402.dp))
 
             // 다음 버튼
             Button(
@@ -113,25 +122,34 @@ fun InputProfileSettings() {
                 append(stringArrayResource(R.array.title_onboarding_setting_prfile_image)[2])
             }
         },
-        subtext = stringResource(R.string.subtext_onboarding_setting_prfile_image),
+        subtext = "",
         onBackRequest = { }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .background(Color.White),
+            horizontalAlignment = Alignment.CenterHorizontally // 요소를 수평 중앙으로 정렬
+
         ) {
             Image(
                 painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_add_profile),
                 null,
                 contentScale = ContentScale.Crop, // 이미지가 잘리지 않고 버튼 안에 맞춰짐
                 modifier = Modifier
-                    .fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(120.dp)) // 이거 수정해야됨
 
-            Image(painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_share_code_invitation), null)
+
+            SpeechBubble {
+                Text(text = "조다은님에 대해서 \n더 깊게 알아가볼까요?",
+                    textAlign = TextAlign.Center)
+            }
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            Image(painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space), null)
         }
     }
 }
