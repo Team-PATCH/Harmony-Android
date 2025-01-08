@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onEach
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -19,14 +18,14 @@ class MainViewModel @Inject constructor(
     val isAppInitFinished: StateFlow<Boolean> =
         savedStateHandle.getStateFlow(IS_APP_INIT_FINISHED, false)
 
-    val isLoginRequiredFlow: Flow<Boolean> = flowErrorCatch(
-        block = {
-            isLoginRequiredUseCase()
-                .onEach { savedStateHandle[IS_APP_INIT_FINISHED] = true }
+    val isLoginRequiredFlow: Flow<Boolean> =
+        flowErrorCatch({ isLoginRequiredUseCase() }) { t ->
+            t.printStackTrace()
+            emit(false)
         }
-    ) { t ->
-        t.printStackTrace()
-        emit(false)
+
+    fun finishAppInit() {
+        savedStateHandle[IS_APP_INIT_FINISHED] = true
     }
 
     companion object {
