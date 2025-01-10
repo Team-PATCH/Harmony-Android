@@ -6,6 +6,7 @@ import com.teampatch.core.network.model.group.response.GroupCreationResponse
 import com.teampatch.core.network.model.group.response.GroupInviteResponse
 import com.teampatch.core.network.model.group.response.GroupJoinResponse
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -25,4 +26,14 @@ interface GroupRemoteDataSource {
     suspend fun regenerateGroupInviteCode(
         @Path("groupId") groupId: Int,
     ): GroupInviteResponse
+
+    @GET("/group/user/{userId}")
+    suspend fun queryUserGroupList(
+        @Path("userId") userId: String,
+    ): GroupInviteResponse // 확신은 없음
+
+    @GET("/group/{groupId}/invite")
+    suspend fun queryGroupInvitationCode(
+        @Path("")
+    )
 }
