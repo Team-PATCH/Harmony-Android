@@ -120,7 +120,7 @@ fun NavController.navigateToInvitationScreen(
 fun NavGraphBuilder.addOnboardingInvitationScreen(
 ) {
     composable<OnboardingInvitationRoute> {
-        OnboardingLastScreen()
+//        OnboardingLastScreen()
     }
 }
 

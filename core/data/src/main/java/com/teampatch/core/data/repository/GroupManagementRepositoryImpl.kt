@@ -45,10 +45,10 @@ class GroupManagementRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun queryUserGroupList(): String {
-        val user = userRepository.getUserInfo().first()
-        val response = groupRemoteDataSource.queryUserGroupList(user.uid) // groudId는 아닌거같고, 이거 맞는지 모르겠음
-        return response.groups.permissionId
-    }
+//    override suspend fun queryUserGroupList(): String {
+//        val user = userRepository.getUserInfo().first()
+//        val response = groupRemoteDataSource.queryUserGroupList(user.uid) // groudId는 아닌거같고, 이거 맞는지 모르겠음
+//        return response.groups.permissionId
+//    }
     // 이거 override 뜨는거 보니까 joinFamilyGroup()로 참고 해보니 domain usecase도 만들어주어야하네..
 }
