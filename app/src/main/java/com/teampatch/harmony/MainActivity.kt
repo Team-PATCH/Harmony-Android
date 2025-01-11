@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.kakao.sdk.common.util.Utility
@@ -36,7 +35,6 @@ import com.teampatch.feature.question.navigateToQuestionScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import androidx.navigation.compose.rememberNavController as rememberNavController1
 
@@ -69,7 +67,7 @@ class MainActivity : ComponentActivity() {
         HarmonyTheme {
             val navController: NavHostController = rememberNavController1()
             val currentBackStackEntry: NavBackStackEntry? by
-                navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
+            navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
             val navigationItem: NavigationItem by remember(currentBackStackEntry) {
                 derivedStateOf {
                     when (currentBackStackEntry?.destination?.route) {
