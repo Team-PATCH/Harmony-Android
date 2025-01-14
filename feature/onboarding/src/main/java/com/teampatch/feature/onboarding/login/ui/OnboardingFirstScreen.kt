@@ -37,7 +37,7 @@ internal fun OnboardingFirstScreen(
     onKakaoLoginRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()

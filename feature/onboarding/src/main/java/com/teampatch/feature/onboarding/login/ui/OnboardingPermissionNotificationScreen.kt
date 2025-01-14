@@ -29,7 +29,6 @@ import com.teampatch.core.designsystem.R
 
 @Composable
 fun OnboardingPermissionNotificationScreen() {
-
     val context = LocalContext.current
     Scaffold(
         modifier = Modifier
@@ -69,13 +68,13 @@ fun OnboardingPermissionNotificationScreen() {
 
                 Button(
                     onClick = {
-                        ( context as? Activity )?.requestPermissions(
+                        (context as? Activity)?.requestPermissions(
                             arrayOf(
                                 android.Manifest.permission.POST_NOTIFICATIONS
                             ),
                             1
                         )
-                              },
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)

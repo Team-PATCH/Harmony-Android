@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.exception.FamilyRegistrationRequiredException
-import com.teampatch.core.domain.model.FamilyGroup
 import com.teampatch.core.domain.model.Host
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.InvitationMessage
@@ -13,10 +12,10 @@ import com.teampatch.core.domain.usecase.onboarding.LoginKakaoUseCase
 import com.teampatch.core.domain.usecase.onboarding.LoginUseCase
 import com.teampatch.core.domain.usecase.onboarding.RegisterFamilyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
@@ -71,5 +70,4 @@ internal class OnboardingViewModel @Inject constructor(
             }
         )
     }
-
 }

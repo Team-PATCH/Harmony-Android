@@ -11,7 +11,6 @@ import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
-import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingInvitationScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingMakeGroupScreen
@@ -36,21 +35,20 @@ fun MainNavHost(
         navController = navController,
         startDestination = HomeRoute
     ) {
-
         addOnboardingScreen(
             onKakaoLoginRequest = {},
-            onPermissionNotificationRequest = {navController.navigateToPermissionNotificationScreen()},
-            onStartScreenRequest = {navController.navigateToStartScreen()}
+            onPermissionNotificationRequest = { navController.navigateToPermissionNotificationScreen() },
+            onStartScreenRequest = { navController.navigateToStartScreen() }
         )
 
         addOnboardingPermissionNotificationScreen()
         addOnboardingStartScreen(
-            onboardingMakeGroupRequest = {navController.navigateToMakeGroupScreen()},
-            onboardingEnterScreenRequest = {navController.navigateToEnterScreen()}
+            onboardingMakeGroupRequest = { navController.navigateToMakeGroupScreen() },
+            onboardingEnterScreenRequest = { navController.navigateToEnterScreen() }
         )
         addOnboardingMakeGroupScreen()
         addOnboardingEnterScreen(
-            onNextClick = {navController.navigateToInvitationScreen()}
+            onNextClick = { navController.navigateToInvitationScreen() }
         )
 
         addOnboardingInvitationScreen()

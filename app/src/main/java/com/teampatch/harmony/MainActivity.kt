@@ -20,9 +20,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController as rememberNavController1
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.v2.auth.BuildConfig
 import com.teampatch.core.designsystem.component.DefaultBottomNavigation
@@ -36,9 +36,7 @@ import com.teampatch.feature.question.navigateToQuestionScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import androidx.navigation.compose.rememberNavController as rememberNavController1
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

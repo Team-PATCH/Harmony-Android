@@ -18,7 +18,7 @@ internal fun OnboardingRoute(
 @Composable
 internal fun OnboardingStartRoute(
     onMakeGroupRequest: () -> Unit,
-    onEnterScreenRequest: () -> Unit
+    onEnterScreenRequest: () -> Unit,
 ) {
     OnboardingStartScreen(
         onboardingMakeGroupRequest = onMakeGroupRequest,
@@ -28,7 +28,7 @@ internal fun OnboardingStartRoute(
 
 @Composable
 internal fun OnboardingInvitationRoute(
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
 ) {
     OnboardingEnterScreen(
         onNextClick = onNextClick
