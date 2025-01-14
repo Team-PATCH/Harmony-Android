@@ -218,7 +218,7 @@ internal fun QuestionDetailScreen(
     val lazyColumnState = rememberLazyListState()
     val isFabShow: Boolean by remember(lazyColumnState) {
         derivedStateOf {
-            !lazyColumnState.isScrollInProgress && lazyColumnState.canScrollForward
+            !lazyColumnState.isScrollInProgress && !lazyColumnState.canScrollBackward
         }
     }
 
