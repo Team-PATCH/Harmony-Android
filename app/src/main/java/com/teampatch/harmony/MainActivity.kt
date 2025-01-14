@@ -25,6 +25,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.v2.auth.BuildConfig
+import com.teampatch.core.designsystem.component.DefaultBottomNavigation
+import com.teampatch.core.designsystem.component.NavigationItem
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.navigateToHomeScreen
@@ -32,6 +34,7 @@ import com.teampatch.feature.onboarding.login.ui.navigateToOnboardingScreen
 import com.teampatch.feature.question.QuestionRoute
 import com.teampatch.feature.question.navigateToQuestionScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
