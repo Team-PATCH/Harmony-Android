@@ -1,6 +1,10 @@
 package com.teampatch.core.domain.entity
 
+import kotlinx.coroutines.flow.Flow
+
 abstract class TokenManager {
+
+    abstract val isTokenInvalidListener: Flow<Boolean>
 
     abstract fun getAccessToken(): String
     abstract fun setAccessToken(token: String)
