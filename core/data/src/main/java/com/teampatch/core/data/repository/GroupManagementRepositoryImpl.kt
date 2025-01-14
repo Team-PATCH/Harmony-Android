@@ -8,8 +8,8 @@ import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.GroupRemoteDataSource
 import com.teampatch.core.network.model.group.request.GroupCreationRequestBody
 import com.teampatch.core.network.model.group.request.GroupJoinRequestBody
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
 class GroupManagementRepositoryImpl @Inject constructor(
     private val tokenManager: TokenManager,
@@ -45,10 +45,10 @@ class GroupManagementRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun queryUserGroupList(): String {
-        val user = userRepository.getUserInfo().first()
-        val response = groupRemoteDataSource.queryUserGroupList(user.uid) // groudId는 아닌거같고, 이거 맞는지 모르겠음
-        return response.groups.permissionId
-    }
+//    override suspend fun queryUserGroupList(): String {
+//        val user = userRepository.getUserInfo().first()
+//        val response = groupRemoteDataSource.queryUserGroupList(user.uid) // groudId는 아닌거같고, 이거 맞는지 모르겠음
+//        return response.groups.permissionId
+//    }
     // 이거 override 뜨는거 보니까 joinFamilyGroup()로 참고 해보니 domain usecase도 만들어주어야하네..
 }
