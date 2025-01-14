@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController as rememberNavController1
+import androidx.navigation.compose.rememberNavController
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.v2.auth.BuildConfig
 import com.teampatch.core.designsystem.component.DefaultBottomNavigation
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
 
     private fun initView() = setContent {
         HarmonyTheme {
-            val navController: NavHostController = rememberNavController1()
+            val navController: NavHostController = rememberNavController()
             val currentBackStackEntry: NavBackStackEntry? by
                 navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
             val navigationItem: NavigationItem by remember(currentBackStackEntry) {
