@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
         HarmonyTheme {
             val navController: NavHostController = rememberNavController1()
             val currentBackStackEntry: NavBackStackEntry? by
-            navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
+                navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
             val navigationItem: NavigationItem by remember(currentBackStackEntry) {
                 derivedStateOf {
                     when (currentBackStackEntry?.destination?.route) {
