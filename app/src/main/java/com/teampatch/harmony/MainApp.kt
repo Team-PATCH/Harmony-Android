@@ -109,8 +109,8 @@ fun MainApp(viewModel: MainViewModel = hiltViewModel()) {
                 if (isRequired) {
                     navController.popBackStack(HomeRoute::class.qualifiedName.toString(), true)
 //                    navController.navigateToOnboardingScreen()
-                    viewModel.finishAppInit()
                 }
+                viewModel.finishAppInit()
             }
     }
 }
