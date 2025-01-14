@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "com.teampatch.core.network"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

@@ -1,10 +1,12 @@
 package com.teampatch.core.domain.usecase.question
 
-import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.core.domain.model.QuestionDetail
+import com.teampatch.core.domain.repository.QuestionRepository
 import javax.inject.Inject
 
-class GetQuestionDetailUseCase @Inject constructor() {
+class GetQuestionDetailUseCase @Inject constructor(
+    private val questionRepository: QuestionRepository,
+) {
 
-    operator fun invoke(questionId: String): QuestionDetail = FakeQuestionDetail().get()
+    suspend operator fun invoke(questionId: String): QuestionDetail = questionRepository.getQuestionDetail(questionId = questionId)
 }

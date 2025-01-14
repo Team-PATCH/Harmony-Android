@@ -9,6 +9,7 @@ import com.teampatch.feature.question.expand.model.QuestionExpandUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -28,12 +29,13 @@ internal class QuestionExpandViewModel @Inject constructor(
     }
 
     private fun load() = viewModelScope.launch {
-        try {
-            val questions = getQuestionsUseCase()
-            questionExpandUiState.value = QuestionExpandUiState(question = questions)
-        } catch (e: Exception) {
-            _sideEffect.send(QuestionExpandSideEffect.LoadError(e))
-            e.printStackTrace()
+        val questions = getQuestionsUseCase(-1).catch {
+            _sideEffect.send(QuestionExpandSideEffect.LoadError(it))
+            it.printStackTrace()
         }
+        questionExpandUiState.value = QuestionExpandUiState(
+            question = questions,
+            isLoading = false
+        )
     }
 }
