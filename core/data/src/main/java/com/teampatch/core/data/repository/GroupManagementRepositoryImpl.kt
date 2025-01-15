@@ -44,4 +44,19 @@ class GroupManagementRepositoryImpl @Inject constructor(
         val response = groupRemoteDataSource.joinGroup(body)
         return response.toDomain()
     }
+
+    /**
+     * 이 부분은 논의가 아직 명확히 안돠어 있고 명세에만 있어서 구현체만 만들고 interface는 삭제하였음.
+     */
+    suspend fun queryUserGroupList(): String {
+        val user = userRepository.getUserInfo().first()
+        val response = groupRemoteDataSource.queryUserGroupList(user.uid) // groudId는 아닌거같고, 이거 맞는지 모르겠음
+        return response.groups.permissionId
+    }
+
+    override suspend fun queryGroupInvitationCode(): String {
+        val user = userRepository.getUserInfo().first()
+        val response = groupRemoteDataSource.queryGroupInvitationCode(user.groupId)
+        return response.groupName
+    }
 }

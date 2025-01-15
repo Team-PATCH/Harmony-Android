@@ -1,5 +1,6 @@
 package com.teampatch.feature.onboarding.login.ui
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import com.teampatch.core.designsystem.R
 
 @Composable
 fun OnboardingPermissionNotificationScreen() {
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +67,14 @@ fun OnboardingPermissionNotificationScreen() {
                 Spacer(modifier = Modifier.height(36.dp))
 
                 Button(
-                    onClick = { /* Handle Start Process */ },
+                    onClick = {
+                        (context as? Activity)?.requestPermissions(
+                            arrayOf(
+                                android.Manifest.permission.POST_NOTIFICATIONS
+                            ),
+                            1
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)

@@ -1,5 +1,7 @@
 package com.teampatch.feature.onboarding.login.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,17 +17,42 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.teampatch.core.designsystem.R
 
 @Composable
-fun OnboardingLoginScreen() {
+internal fun OnboardingFirstScreen(
+    onKakaoLoginRequest: () -> Unit,
+    onPermissionNotificationRequest: () -> Unit,
+    onStartScreenRequest: () -> Unit,
+    viewModel: OnboardingViewModel = hiltViewModel(),
+) {
+    val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(isLoginSuccessful) {
+        val hasNotificationGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        if (isLoginSuccessful && !hasNotificationGranted) {
+            onPermissionNotificationRequest()
+        }
+        if (isLoginSuccessful && hasNotificationGranted) {
+            onStartScreenRequest()
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -55,24 +82,31 @@ fun OnboardingLoginScreen() {
                 Spacer(modifier = Modifier.height(465.dp))
 
                 Button(
-                    onClick = { /* Handle Kakao Login */ },
+                    onClick = { viewModel.loginKakao() },
+//                    onClick = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .height(68.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)), // 배경색은 이미지를 꽉 채우면 안 보이게 됩니다.
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
                     Image(
-                        painter = painterResource(id = R.drawable.kakao_login_medium_wide), // 카카오 로그인 이미지
+                        painter = painterResource(id = R.drawable.kakao_login_medium_wide),
                         contentDescription = "Kakao Login",
-                        modifier = Modifier.fillMaxSize(), // 버튼 크기를 꽉 채움
-//                    contentScale = ContentScale.Crop // 이미지가 버튼에 맞게 잘리거나 확장됨
-//                    modifier = Modifier.fillMaxHeight(), // 버튼 높이에 맞게 이미지 채우기
-                        contentScale = ContentScale.Fit // 이미지가 잘리지 않고 버튼 안에 맞춰짐
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
                     )
                 }
+
+//                // 에러 메시지 표시
+//                errorMessage?.let { message ->
+//                    Text(
+//                        text = message,
+//                        color = Color.Red,
+//                        modifier = Modifier.padding(top = 16.dp)
+//                    )
+//                }
             }
         }
     }
@@ -81,5 +115,9 @@ fun OnboardingLoginScreen() {
 @Preview(showBackground = true)
 @Composable
 fun OnboardingLoginScreenPreview() {
-    OnboardingLoginScreen()
+    OnboardingFirstScreen(
+        onKakaoLoginRequest = {},
+        onPermissionNotificationRequest = {},
+        onStartScreenRequest = {}
+    )
 }
