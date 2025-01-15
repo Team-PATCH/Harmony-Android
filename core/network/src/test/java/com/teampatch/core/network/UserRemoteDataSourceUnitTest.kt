@@ -3,6 +3,7 @@ package com.teampatch.core.network
 import com.teampatch.core.network.impl.UserRemoteDataSourceImpl
 import com.teampatch.core.network.model.FileUploadRequest
 import com.teampatch.core.network.model.user.SignupOrLoginRequestBody
+import java.io.File
 import kotlinx.coroutines.runBlocking
 import org.junit.BeforeClass
 import org.junit.Test
@@ -47,5 +48,18 @@ class UserRemoteDataSourceUnitTest {
     fun `사용자_정보_조회_테스트`(): Unit = runBlocking {
         val response = userRemoteDataSource.getMyProfile()
         println("사용자_정보_조회_테스트: ${response.pretty()}")
+    }
+
+    @Test
+    fun `사용자_프로필 수정`(): Unit = runBlocking {
+        val name: String? = null
+        val file = File("C:\\Users\\MinJun\\Desktop\\th.jpg")
+        val profileImage = FileUploadRequest(
+            fileName = file.name,
+            fileMediaType = null,
+            fileContent = file.inputStream()
+        )
+        val response = userRemoteDataSource.editMyProfile(name, profileImage)
+        println("사용자_프로필 수정: ${response.pretty()}")
     }
 }
