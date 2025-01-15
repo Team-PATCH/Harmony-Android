@@ -25,7 +25,7 @@ fun NavController.navigateToOnboardingScreen(
 fun NavGraphBuilder.addOnboardingScreen(
     onKakaoLoginRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
-    onStartScreenRequest: () -> Unit
+    onStartScreenRequest: () -> Unit,
 ) {
     composable<OnboardingRoute> {
         OnboardingRoute(
@@ -45,8 +45,7 @@ fun NavController.navigateToPermissionNotificationScreen(
     navigate(OnboardingPermissionRoute, navOptions, navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnboardingPermissionNotificationScreen(
-) {
+fun NavGraphBuilder.addOnboardingPermissionNotificationScreen() {
     composable<OnboardingPermissionRoute> {
         OnboardingPermissionNotificationScreen()
     }
@@ -62,8 +61,8 @@ fun NavController.navigateToStartScreen(
 }
 
 fun NavGraphBuilder.addOnboardingStartScreen(
-    onboardingMakeGroupRequest : () -> Unit,
-    onboardingEnterScreenRequest: () -> Unit
+    onboardingMakeGroupRequest: () -> Unit,
+    onboardingEnterScreenRequest: () -> Unit,
 ) {
     composable<OnboardingStartRoute> {
         OnboardingStartRoute(
@@ -74,7 +73,7 @@ fun NavGraphBuilder.addOnboardingStartScreen(
 }
 
 @Serializable
-data object  OnboardingMakeGroupRoute
+data object OnboardingMakeGroupRoute
 fun NavController.navigateToMakeGroupScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
@@ -82,15 +81,14 @@ fun NavController.navigateToMakeGroupScreen(
     navigate(OnboardingMakeGroupRoute, navOptions, navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnboardingMakeGroupScreen(
-) {
+fun NavGraphBuilder.addOnboardingMakeGroupScreen() {
     composable<OnboardingMakeGroupRoute> {
         OnboardingMakeGroupScreen()
     }
 }
 
 @Serializable
-data object  OnboardingEnterRoute
+data object OnboardingEnterRoute
 fun NavController.navigateToEnterScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
@@ -99,8 +97,8 @@ fun NavController.navigateToEnterScreen(
 }
 
 fun NavGraphBuilder.addOnboardingEnterScreen(
-    onNextClick: () -> Unit
- ) {
+    onNextClick: () -> Unit,
+) {
     composable<OnboardingEnterRoute> {
         OnboardingEnterScreen(
             onNextClick = onNextClick
@@ -117,18 +115,8 @@ fun NavController.navigateToInvitationScreen(
     navigate(OnboardingInvitationRoute, navOptions, navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnboardingInvitationScreen(
-) {
+fun NavGraphBuilder.addOnboardingInvitationScreen() {
     composable<OnboardingInvitationRoute> {
-        OnboardingLastScreen()
+//        OnboardingLastScreen()
     }
 }
-
-
-
-
-
-
-
-
-

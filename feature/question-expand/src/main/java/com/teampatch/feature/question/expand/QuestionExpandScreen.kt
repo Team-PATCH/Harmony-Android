@@ -43,19 +43,15 @@ import com.teampatch.core.domain.fake.FakeQuestions
 import com.teampatch.feature.question.expand.model.QuestionExpandSideEffect
 import com.teampatch.feature.question.expand.model.QuestionExpandUiState
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object QuestionExpandRoute
 
 @Composable
-fun QuestionExpandRoute(
+internal fun QuestionExpandRoute(
     onBackRequest: () -> Unit,
     questionDetailPageRequest: (String) -> Unit,
+    viewModel: QuestionExpandViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val questionExpandViewModel: QuestionExpandViewModel = hiltViewModel()
-    val uiState: QuestionExpandUiState by questionExpandViewModel.questionExpandUiState
+    val uiState: QuestionExpandUiState by viewModel.questionExpandUiState
 
     if (!uiState.isLoading) {
         QuestionExpandScreen(
@@ -66,7 +62,7 @@ fun QuestionExpandRoute(
     }
 
     LaunchedEffect(Unit) {
-        questionExpandViewModel.sideEffect.collect { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is QuestionExpandSideEffect.LoadError ->
                     Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()

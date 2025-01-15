@@ -3,6 +3,7 @@ package com.teampatch.feature.question
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.teampatch.core.domain.usecase.question.GetQuestionsUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.question.model.QuestionSideEffect
@@ -10,6 +11,7 @@ import com.teampatch.feature.question.model.QuestionUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -34,7 +36,13 @@ internal class QuestionViewModel @Inject constructor(
         try {
             val user = getUserInfoUseCase().first()
             val questions = getQuestionsUseCase()
-            questionUiState.value = QuestionUiState(user = user, question = questions, isLoading = false)
+                .catch {
+                    it.printStackTrace()
+                    _sideEffect.send(QuestionSideEffect.LoadError(it))
+                }
+                .cachedIn(viewModelScope)
+            questionUiState.value =
+                QuestionUiState(user = user, question = questions, isLoading = false)
         } catch (e: Exception) {
             _sideEffect.send(QuestionSideEffect.LoadError(e))
             e.printStackTrace()

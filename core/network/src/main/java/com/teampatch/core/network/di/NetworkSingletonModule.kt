@@ -6,6 +6,7 @@ import com.teampatch.core.network.BASE_URL
 import com.teampatch.core.network.GroupRemoteDataSource
 import com.teampatch.core.network.QuestionRemoteDataSource
 import com.teampatch.core.network.UserRemoteDataSource
+import com.teampatch.core.network.interceptor.TokenAuthenticator
 import com.teampatch.core.network.interceptor.TokenInterceptor
 import dagger.Module
 import dagger.Provides
@@ -25,8 +26,10 @@ internal object NetworkSingletonModule {
     @Provides
     fun provideOkhttpClient(
         tokenInterceptor: TokenInterceptor,
+        tokenAuthenticator: TokenAuthenticator,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(tokenInterceptor)
+        .authenticator(tokenAuthenticator)
         .build()
 
     @Provides

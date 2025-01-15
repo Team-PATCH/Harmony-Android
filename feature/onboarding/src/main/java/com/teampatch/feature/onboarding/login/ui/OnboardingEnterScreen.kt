@@ -2,7 +2,6 @@ package com.teampatch.feature.onboarding.login.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +39,7 @@ import com.teampatch.feature.onboarding.R
 
 @Composable
 fun OnboardingEnterScreen(
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
 ) {
     // 상태 변수로 초대 코드의 각 자리를 저장
     var code by remember { mutableStateOf("") }
@@ -89,9 +88,9 @@ fun OnboardingEnterScreen(
             // 다음 버튼
             Button(
                 onClick = {
-                          /* 초대 코드 확인 처리 */
-                            onNextClick()
-                          },
+                    /* 초대 코드 확인 처리 */
+                    onNextClick()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp), // 버튼의 높이 설정
@@ -106,8 +105,6 @@ fun OnboardingEnterScreen(
         }
     }
 }
-
-
 
 @Composable
 fun InputProfileSettings() {
@@ -142,10 +139,11 @@ fun InputProfileSettings() {
 
             Spacer(modifier = Modifier.height(120.dp)) // 이거 수정해야됨
 
-
             SpeechBubble {
-                Text(text = "조다은님에 대해서 \n더 깊게 알아가볼까요?",
-                    textAlign = TextAlign.Center)
+                Text(
+                    text = "조다은님에 대해서 \n더 깊게 알아가볼까요?",
+                    textAlign = TextAlign.Center
+                )
             }
 
             Spacer(modifier = Modifier.height(15.dp))

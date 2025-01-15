@@ -4,12 +4,33 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.teampatch.core.domain.entity.TokenManager
 import javax.inject.Inject
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.onStart
 
 class TokenManagerImpl @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) : TokenManager() {
 
-    override fun getAccessToken(): String = sharedPreferences.getString(ACCESS_TOKEN_KEY, null) ?: ""
+    override val isTokenInvalidListener: Flow<Boolean> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == ACCESS_TOKEN_KEY) {
+                trySendBlocking(getAccessToken().isEmpty())
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+
+        awaitClose {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }
+        .onStart {
+            emit(getAccessToken().isEmpty())
+        }
+
+    override fun getAccessToken(): String = sharedPreferences.getString(ACCESS_TOKEN_KEY, "") ?: ""
 
     override fun setAccessToken(token: String) {
         sharedPreferences.edit {

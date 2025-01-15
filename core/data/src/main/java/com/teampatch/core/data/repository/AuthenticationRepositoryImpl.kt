@@ -32,21 +32,4 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
         return LoginResult(groupId = signupOrLoginResponse.user.groupId)
     }
-
-    override suspend fun loginTestAccount(): LoginResult {
-        val signupOrLoginRequestBody = SignupOrLoginRequestBody(
-            userId = "yeojeong@naver.com",
-            nick = "윤여정",
-            profile = "profile.png",
-            authProvider = "kakao",
-            socialToken = "kakao_social_token_example",
-            refreshToken = "kakao_refresh_token_example",
-            socialTokenExpiredAt = "2024-08-08 02:44:07"
-        )
-
-        val signupOrLoginResponse = userRemoteDataSource.signupOrLogin(signupOrLoginRequestBody)
-        tokenManager.setAccessToken(signupOrLoginResponse.token)
-
-        return LoginResult(groupId = signupOrLoginResponse.user.groupId)
-    }
 }

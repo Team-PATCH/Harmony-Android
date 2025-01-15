@@ -4,11 +4,15 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,26 +46,22 @@ import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeQuestionDetail
 import com.teampatch.feature.answer.model.AnswerSideEffect
 import com.teampatch.feature.answer.model.AnswerUiState
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class AnswerRoute(val questionId: String)
 
 @Composable
-fun AnswerRoute(
+internal fun AnswerRoute(
     onBackRequest: () -> Unit,
-    onCompleteRequest: () -> Unit,
+    onCompleteRequest: (String) -> Unit,
+    viewModel: AnswerViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewModel: AnswerViewModel = hiltViewModel()
     val uiState by viewModel.answerUiState
 
     if (!uiState.isLoading) {
         AnswerScreen(
             onBackRequest = onBackRequest,
             onCompleteRequest = {
-                viewModel.completeAnswer(it)
-                onCompleteRequest()
+                viewModel.saveQuestionAnswer(it)
+                onCompleteRequest(it)
             },
             uiState = uiState
         )
@@ -88,7 +88,7 @@ internal fun AnswerScreen(
     onCompleteRequest: (String) -> Unit,
     uiState: AnswerUiState,
 ) {
-    var answer by rememberSaveable { mutableStateOf("") }
+    var answer by rememberSaveable { mutableStateOf(uiState.questionDetail.content) }
 
     Scaffold(
         topBar = {
@@ -125,9 +125,10 @@ internal fun AnswerScreen(
     ) { scaffoldPaddingValues ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(scaffoldPaddingValues)
-                .padding(top = 40.dp)
+                .verticalScroll(rememberScrollState())
+                .height(IntrinsicSize.Max)
         ) {
             Text(
                 text = stringResource(R.string.text_per_question, uiState.questionDetail.number),
@@ -135,7 +136,8 @@ internal fun AnswerScreen(
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
                 color = MainGreen,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier
+                    .padding(top = 40.dp, start = 20.dp, end = 20.dp)
             )
             Text(
                 text = uiState.questionDetail.title,
