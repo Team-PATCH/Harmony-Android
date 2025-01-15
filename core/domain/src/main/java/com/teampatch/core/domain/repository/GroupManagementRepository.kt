@@ -10,7 +10,8 @@ interface GroupManagementRepository {
     suspend fun createFamilyGroup(): String
 
     /**
-     * @return Group 초대 코드 재생성
+     * Group 초대 코드를 재생성
+     * @return Group 초대 코드
      */
 
     suspend fun generateInviteCode(): String
@@ -18,7 +19,8 @@ interface GroupManagementRepository {
     suspend fun joinFamilyGroup(inviteCode: String): InvitedGroup
 
     /**
-     * @return Group 초대 코드 조회
+     * Group 초대 코드 조회
+     * @return Group 초대 코드
      */
     suspend fun queryGroupInvitationCode(): String
 }
