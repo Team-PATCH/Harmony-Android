@@ -5,9 +5,9 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.teampatch.core.network.BASE_URL
 import com.teampatch.core.network.GroupRemoteDataSource
 import com.teampatch.core.network.QuestionRemoteDataSource
-import com.teampatch.core.network.UserRemoteDataSource
 import com.teampatch.core.network.interceptor.TokenAuthenticator
 import com.teampatch.core.network.interceptor.TokenInterceptor
+import com.teampatch.core.network.service.UserNetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,13 +51,13 @@ internal object NetworkSingletonModule {
         .build()
 
     @Provides
-    fun provideUserRemoteDataSource(retrofit: Retrofit): UserRemoteDataSource = retrofit.create<UserRemoteDataSource>()
-
-    @Provides
     fun providesQuestionRemoteDataSource(
         retrofit: Retrofit,
     ): QuestionRemoteDataSource = retrofit.create()
 
     @Provides
     fun providesGroupRemoteDataSource(retrofit: Retrofit): GroupRemoteDataSource = retrofit.create()
+
+    @Provides
+    fun providesUserNetworkService(retrofit: Retrofit): UserNetworkService = retrofit.create()
 }

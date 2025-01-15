@@ -4,6 +4,8 @@ import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.network.di.NetworkSingletonModule
 import com.teampatch.core.network.interceptor.TokenInterceptor
 import java.util.regex.Pattern
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,6 +19,8 @@ internal object TestRetrofit {
     val tokenManager = object : TokenManager() {
         private var token: String = ""
         private val jsonContentType = "application/json; charset=utf-8".toMediaTypeOrNull()
+        override val isTokenInvalidListener: Flow<Boolean>
+            get() = flowOf(false)
 
         override fun getAccessToken(): String {
             if (token.isEmpty()) {

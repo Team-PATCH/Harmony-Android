@@ -1,11 +1,13 @@
 package com.teampatch.core.network
 
-import com.teampatch.core.network.di.NetworkSingletonModule
+import com.teampatch.core.network.impl.UserRemoteDataSourceImpl
+import com.teampatch.core.network.model.FileUploadRequest
 import com.teampatch.core.network.model.user.SignupOrLoginRequestBody
 import kotlinx.coroutines.runBlocking
 import org.junit.BeforeClass
 import org.junit.Test
 import retrofit2.Retrofit
+import retrofit2.create
 
 class UserRemoteDataSourceUnitTest {
 
@@ -21,7 +23,7 @@ class UserRemoteDataSourceUnitTest {
         }
 
         private fun initUserRemoteDataSource() {
-            userRemoteDataSource = NetworkSingletonModule.provideUserRemoteDataSource(retrofit)
+            userRemoteDataSource = UserRemoteDataSourceImpl(retrofit.create())
         }
     }
 
