@@ -10,4 +10,5 @@ data class UserResponse(
     @Json(name = "authProvider") val authProvider: String,
     @Json(name = "groupId") val groupId: Int,
     @Json(name = "permissionId") val permissionId: String,
+    @Json(name = "profileImage") val profileImage: String?,
 )
