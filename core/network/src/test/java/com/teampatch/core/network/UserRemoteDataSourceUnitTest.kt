@@ -45,6 +45,11 @@ class UserRemoteDataSourceUnitTest {
     }
 
     @Test
+    fun `로그아웃_테스트`(): Unit = runBlocking {
+        userRemoteDataSource.logout()
+    }
+
+    @Test
     fun `사용자_정보_조회_테스트`(): Unit = runBlocking {
         val response = userRemoteDataSource.getMyProfile()
         println("사용자_정보_조회_테스트: ${response.pretty()}")
