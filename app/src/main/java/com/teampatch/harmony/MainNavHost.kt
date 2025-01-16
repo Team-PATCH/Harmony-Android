@@ -13,6 +13,8 @@ import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
+import com.teampatch.feature.profile.edit.addProfileEditScreen
+import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
 import com.teampatch.feature.question.detail.QuestionDetailParams
 import com.teampatch.feature.question.detail.addQuestionDetailScreen
@@ -77,12 +79,16 @@ fun MainNavHost(
         addFamilyInfoScreen(
             onBackRequest = navController::popBackStack,
             onSettingsClick = {},
-            onProfileEditClick = {}
+            onProfileEditClick = navController::navigateToProfileEditScreen
         )
 
         addMemoryCardRegistrationScreen(
             onDismissRequest = navController::popBackStack,
             onMemoryStorePageRequest = { } // TODO: 메모리 저장소 페이지 가기
+        )
+
+        addProfileEditScreen(
+            onCompleteRequest = navController::popBackStack
         )
     }
 }

@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class ProfileEditViewModel @Inject constructor(
+internal class ProfileEditViewModel @Inject constructor(
     private val editProfileUseCase: EditProfileUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
