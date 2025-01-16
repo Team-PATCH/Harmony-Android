@@ -33,11 +33,10 @@ class UserRepositoryImpl @Inject constructor(
     private val user: MutableStateFlow<User?> = MutableStateFlow(null)
 
     override fun getUserInfo(): Flow<User> = user.map {
-        if (it == null) {
+        it ?: user.updateAndGet {
             val userResponse = userRemoteDataSource.getMyProfile()
-            return@map user.updateAndGet { userResponse.toDomain() }!!
-        }
-        it
+            userResponse.toDomain()
+        }!!
     }
 
     override suspend fun editProfile(name: String?, profileImageUri: String?) {
