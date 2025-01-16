@@ -65,9 +65,10 @@ class ProfileEditViewModel @Inject constructor(
     fun editProfile() = viewModelScope.launch {
         try {
             val uiState = profileEditUiState.value
-            editProfileUseCase(uiState.relation, uiState.name, uiState.profileImage)
+            editProfileUseCase(uiState.name, (uiState.profileImage as? Image.Uri)?.uri)
             _sideEffect.send(ProfileEditSideEffect.ProfileEditSuccess)
         } catch (e: Exception) {
+            e.printStackTrace()
             _sideEffect.send(ProfileEditSideEffect.ProfileEditError(e))
         }
     }
