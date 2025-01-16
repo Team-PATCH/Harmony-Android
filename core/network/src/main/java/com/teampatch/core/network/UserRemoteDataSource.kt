@@ -11,6 +11,8 @@ interface UserRemoteDataSource {
         signupOrLoginRequestBody: SignupOrLoginRequestBody,
     ): SignupOrLoginResponse
 
+    suspend fun logout()
+
     suspend fun getMyProfile(): ProfileResponse
 
     /**

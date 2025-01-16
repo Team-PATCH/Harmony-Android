@@ -24,6 +24,10 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
         signupOrLoginRequestBody: SignupOrLoginRequestBody,
     ): SignupOrLoginResponse = userNetworkService.signupOrLogin(signupOrLoginRequestBody)
 
+    override suspend fun logout() {
+        userNetworkService.logout()
+    }
+
     override suspend fun getMyProfile(): ProfileResponse = userNetworkService.getMyProfile()
 
     override suspend fun editMyProfile(username: String?, profileImage: FileUploadRequest?): ProfileResponse {

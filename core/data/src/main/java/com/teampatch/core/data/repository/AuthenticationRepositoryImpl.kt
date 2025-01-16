@@ -32,4 +32,8 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
         return LoginResult(groupId = signupOrLoginResponse.user.groupId)
     }
+
+    override suspend fun logout() {
+        userRemoteDataSource.logout()
+    }
 }

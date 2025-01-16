@@ -20,6 +20,10 @@ internal interface UserNetworkService {
     ): SignupOrLoginResponse
 
     @AuthorizedRequest
+    @POST("/user/logout")
+    suspend fun logout()
+
+    @AuthorizedRequest
     @GET("/user/profile")
     suspend fun getMyProfile(): ProfileResponse
 
