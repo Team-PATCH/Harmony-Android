@@ -28,6 +28,7 @@ import com.teampatch.core.designsystem.component.DefaultBottomNavigation
 import com.teampatch.core.designsystem.component.NavigationItem
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.navigateToHomeScreen
+import com.teampatch.feature.onboarding.login.ui.navigateToOnboardingScreen
 import com.teampatch.feature.question.QuestionRoute
 import com.teampatch.feature.question.navigateToQuestionScreen
 import kotlinx.coroutines.flow.collectLatest
@@ -108,7 +109,7 @@ fun MainApp(viewModel: MainViewModel = hiltViewModel()) {
             .collectLatest { isRequired ->
                 if (isRequired) {
                     navController.popBackStack(HomeRoute::class.qualifiedName.toString(), true)
-//                    navController.navigateToOnboardingScreen()
+                    navController.navigateToOnboardingScreen()
                 }
                 viewModel.finishAppInit()
             }
