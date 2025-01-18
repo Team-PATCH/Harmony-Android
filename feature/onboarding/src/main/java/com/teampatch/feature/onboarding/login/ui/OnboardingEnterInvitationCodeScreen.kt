@@ -51,7 +51,7 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.feature.onboarding.R
 
 @Composable
-fun OnboardingEnterScreen(
+fun OnboardingEnterInvitationCodeScreen(
     onNextClick: () -> Unit,
 ) {
     // 상태 변수로 초대 코드의 각 자리를 저장
@@ -151,7 +151,9 @@ fun OnboardingEnterScreen(
 }
 
 @Composable
-fun InputProfileSettings() {
+fun OnboardingEnterSpaceScreen(
+    onNextClick: () -> Unit
+) {
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = BL)) {
@@ -192,16 +194,21 @@ fun InputProfileSettings() {
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            Image(painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space), null)
+            Image(
+                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space),
+                null,
+                modifier = Modifier.fillMaxWidth()
+                    .clickable { onNextClick() })
+
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun OnboardingEnterScreenPreview() {
+private fun OnboardingEnterInvitationCodeScreenPreview() {
     HarmonyTheme {
-        OnboardingEnterScreen(
+        OnboardingEnterInvitationCodeScreen(
             onNextClick = {}
         )
     }
@@ -209,8 +216,10 @@ private fun OnboardingEnterScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun InputProfileSettingsPreview() {
+private fun OnboardingEnterSpaceScreenPreview() {
     HarmonyTheme {
-        InputProfileSettings()
+        OnboardingEnterSpaceScreen(
+            onNextClick = {}
+        )
     }
 }

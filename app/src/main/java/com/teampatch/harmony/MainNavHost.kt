@@ -12,15 +12,16 @@ import com.teampatch.feature.family.info.addFamilyInfoScreen
 import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
+import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
-import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterScreen
-import com.teampatch.feature.onboarding.login.ui.addOnboardingInvitationScreen
+import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingStartScreen
-import com.teampatch.feature.onboarding.login.ui.navigateToEnterScreen
-import com.teampatch.feature.onboarding.login.ui.navigateToInvitationScreen
+import com.teampatch.feature.onboarding.login.ui.navigateToEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.login.ui.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
@@ -51,14 +52,14 @@ fun MainNavHost(
         addOnboardingPermissionNotificationScreen()
         addOnboardingStartScreen(
             onboardingMakeGroupRequest = { navController.navigateToMakeGroupScreen() },
-            onboardingEnterScreenRequest = { navController.navigateToEnterScreen() }
+            onboardingEnterScreenRequest = { navController.navigateToEnterInvitationCodeScreen() }
         )
         addOnboardingMakeGroupScreen()
-        addOnboardingEnterScreen(
-            onNextClick = { navController.navigateToInvitationScreen() }
+        addOnboardingEnterInvitationCodeScreen(
+            onNextClick = { navController.navigateToEnterSpaceScreen() }
         )
 
-        addOnboardingInvitationScreen()
+        addOnboardingEnterSpaceScreen(onNextClick = { navController.navigateToHomeScreen() })
 
         addHomeScreen(
             onUserPageRequest = navController::navigateToFamilyInfoScreen,
