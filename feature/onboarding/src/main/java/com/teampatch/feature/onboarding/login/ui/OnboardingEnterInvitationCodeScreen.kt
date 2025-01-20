@@ -152,7 +152,7 @@ fun OnboardingEnterInvitationCodeScreen(
 
 @Composable
 fun OnboardingEnterSpaceScreen(
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
 ) {
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -198,8 +198,8 @@ fun OnboardingEnterSpaceScreen(
                 painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space),
                 null,
                 modifier = Modifier.fillMaxWidth()
-                    .clickable { onNextClick() })
-
+                    .clickable { onNextClick() }
+            )
         }
     }
 }
