@@ -218,7 +218,8 @@ internal fun FamilyInfoScreen(
                     FamilyProfile(
                         profileImage = rememberAsyncImagePainter(
                             model = family.profileImageUrl ?: ic_my_appbar,
-                            placeholder = previewPlaceholder(ic_my_appbar)
+                            placeholder = previewPlaceholder(ic_my_appbar),
+                            error = painterResource(ic_my_appbar)
                         ),
                         title = family.title,
                         name = family.name,

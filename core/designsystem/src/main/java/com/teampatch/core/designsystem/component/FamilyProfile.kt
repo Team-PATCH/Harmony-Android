@@ -68,7 +68,6 @@ fun FamilyProfile(
             fontSize = 20.sp,
             modifier = Modifier
                 .padding(start = 16.dp, end = 8.dp)
-                .widthIn(max = 80.dp)
         )
         Text(
             text = name,
@@ -77,13 +76,14 @@ fun FamilyProfile(
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
             modifier = Modifier
-                .widthIn(max = 80.dp)
         )
         when (role) {
             FamilyRole.ADMIN -> {
                 Image(
                     painter = painterResource(R.drawable.ic_crown_family_info),
-                    contentDescription = "admin"
+                    contentDescription = "admin",
+                    modifier = Modifier
+                        .padding(start = 12.dp)
                 )
             }
 
