@@ -2,10 +2,11 @@ package com.teampatch.harmony
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.teampatch.core.common.findActivity
 import com.teampatch.feature.answer.addAnswerScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
 import com.teampatch.feature.family.info.addFamilyInfoScreen
@@ -32,13 +33,16 @@ import com.teampatch.feature.question.detail.addQuestionDetailScreen
 import com.teampatch.feature.question.detail.navigateToQuestionDetailScreen
 import com.teampatch.feature.question.expand.addQuestionExpandScreen
 import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
-import com.teampatch.feature.settings.SettingsRoute
+import com.teampatch.feature.settings.addSettingsScreen
+import com.teampatch.feature.settings.navigateToSettingsScreen
 
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    val context = LocalContext.current
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -96,18 +100,16 @@ fun MainNavHost(
             }
         )
 
-        composable<SettingsRoute> {
-            SettingsRoute(
-                onBackRequest = navController::popBackStack,
-                onExitAppRequest = { },
-                onPrivacyPolicyClick = { },
-                onTosClick = { }
-            )
-        }
+        addSettingsScreen(
+            onBackRequest = navController::popBackStack,
+            onExitAppRequest = { context.findActivity()?.finishAffinity() },
+            onPrivacyPolicyClick = { },
+            onTosClick = { }
+        )
 
         addFamilyInfoScreen(
             onBackRequest = navController::popBackStack,
-            onSettingsClick = {},
+            onSettingsClick = navController::navigateToSettingsScreen,
             onProfileEditClick = navController::navigateToProfileEditScreen
         )
 

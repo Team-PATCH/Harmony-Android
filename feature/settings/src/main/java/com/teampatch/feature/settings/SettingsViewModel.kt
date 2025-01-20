@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+internal class SettingsViewModel @Inject constructor(
     private val getAppLatestVersionUseCase: GetAppLatestVersionUseCase,
     private val logoutAppUseCase: LogoutAppUseCase,
     private val withdrawAppUseCase: WithdrawAppUseCase,
