@@ -1,5 +1,6 @@
 package com.teampatch.feature.family.info
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -88,6 +89,15 @@ internal fun FamilyInfoRoute(
 
                 is FamilyInfoSideEffect.LoadError -> {
                     Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+                is FamilyInfoSideEffect.Invite -> {
+                    val shareIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, sideEffect.inviteCode)
+                        type = "text/*"
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, null))
                 }
             }
         }

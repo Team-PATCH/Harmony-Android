@@ -52,7 +52,7 @@ internal class FamilyInfoViewModel @Inject constructor(
 
     fun inviteFamily() = viewModelScope.launch {
         try {
-            inviteFamilyUseCase()
+            _sideEffect.send(FamilyInfoSideEffect.Invite(inviteFamilyUseCase()))
         } catch (e: Exception) {
             e.printStackTrace()
             _sideEffect.send(FamilyInfoSideEffect.InviteError(e))
