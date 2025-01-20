@@ -40,7 +40,6 @@ internal fun OnboardingFirstScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
     val context = LocalContext.current
 
     LaunchedEffect(isLoginSuccessful) {
@@ -67,8 +66,6 @@ internal fun OnboardingFirstScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
-//                verticalArrangement = Arrangement.Center,
-//                verticalArrangement = Arrangement.Top,
                 verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -83,7 +80,6 @@ internal fun OnboardingFirstScreen(
 
                 Button(
                     onClick = { viewModel.loginKakao() },
-//                    onClick = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
@@ -98,15 +94,6 @@ internal fun OnboardingFirstScreen(
                         contentScale = ContentScale.Fit
                     )
                 }
-
-//                // 에러 메시지 표시
-//                errorMessage?.let { message ->
-//                    Text(
-//                        text = message,
-//                        color = Color.Red,
-//                        modifier = Modifier.padding(top = 16.dp)
-//                    )
-//                }
             }
         }
     }
