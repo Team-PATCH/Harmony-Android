@@ -3,9 +3,12 @@ package com.teampatch.core.network
 import com.teampatch.core.network.model.group.request.GroupCreationRequestBody
 import com.teampatch.core.network.model.group.request.GroupJoinRequestBody
 import com.teampatch.core.network.model.group.response.GroupCreationResponse
-import com.teampatch.core.network.model.group.response.GroupInviteResponse
+import com.teampatch.core.network.model.group.response.GroupInvitationCodeQueryResponse
+import com.teampatch.core.network.model.group.response.GroupInviteRegenerateResponse
 import com.teampatch.core.network.model.group.response.GroupJoinResponse
+import com.teampatch.core.network.model.group.response.UserGroupListQueryResponse
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -24,5 +27,15 @@ interface GroupRemoteDataSource {
     @POST("/group/{groupId}/regenerate-invite")
     suspend fun regenerateGroupInviteCode(
         @Path("groupId") groupId: Int,
-    ): GroupInviteResponse
+    ): GroupInviteRegenerateResponse
+
+    @GET("/group/user/{userId}")
+    suspend fun queryUserGroupList(
+        @Path("userId") userId: String,
+    ): UserGroupListQueryResponse
+
+    @GET("/group/{groupId}/invite")
+    suspend fun queryGroupInvitationCode(
+        @Path("groupId") groupId: Int,
+    ): GroupInvitationCodeQueryResponse
 }
