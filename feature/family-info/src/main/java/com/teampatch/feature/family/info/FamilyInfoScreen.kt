@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -234,8 +235,16 @@ internal fun FamilyInfoScreen(
                 }
             }
 
+            var inviteButtonThrottleTime: Long = remember { 0L }
+
             DefaultButton(
-                onClick = { onInviteClick() },
+                onClick = {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - inviteButtonThrottleTime >= 1000L) {
+                        onInviteClick()
+                        inviteButtonThrottleTime = currentTime
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
