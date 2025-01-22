@@ -126,7 +126,7 @@ fun OnboardingStartScreen(
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_space),
-        onBackRequest = { onBackRequest }
+        onBackRequest = { onBackRequest() }
     ) {
         Column(
             modifier = Modifier

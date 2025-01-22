@@ -65,59 +65,6 @@ class MainActivity : ComponentActivity() {
 
     private fun initView() = setContent {
         HarmonyTheme {
-            val navController: NavHostController = rememberNavController()
-            val currentBackStackEntry: NavBackStackEntry? by
-                navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
-            val navigationItem: NavigationItem by remember(currentBackStackEntry) {
-                derivedStateOf {
-                    when (currentBackStackEntry?.destination?.route) {
-                        HomeRoute::class.qualifiedName -> {
-                            NavigationItem.HOME
-                        }
-
-                        QuestionRoute::class.qualifiedName -> {
-                            NavigationItem.QUESTION
-                        }
-
-                        else -> NavigationItem.HOME
-                    }
-                }
-            }
-
-            LaunchedEffect(Unit) {
-                viewModel.isLoginRequiredFlow.collectLatest { isRequired ->
-                    if (isRequired) {
-                        navController.navigateToOnboardingScreen()
-                    }
-                }
-            }
-
-            Scaffold(
-                bottomBar = {
-                    DefaultBottomNavigation(
-                        onClick = {
-                            when (it) {
-                                NavigationItem.HOME -> navController.navigateToHomeScreen()
-                                NavigationItem.STORE -> {}
-                                NavigationItem.QUESTION -> navController.navigateToQuestionScreen()
-                                NavigationItem.CALENDAR -> {}
-                            }
-                        },
-                        navigationItem = navigationItem
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .safeDrawingPadding()
-            ) { scaffoldPaddingValue ->
-                MainNavHost(
-                    navController = navController,
-                    modifier = Modifier
-                        .padding(scaffoldPaddingValue)
-                )
-            }
             MainApp(viewModel = viewModel)
         }
     }
