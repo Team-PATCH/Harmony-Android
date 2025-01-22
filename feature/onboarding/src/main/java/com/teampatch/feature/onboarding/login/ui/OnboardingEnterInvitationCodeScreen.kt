@@ -44,6 +44,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teampatch.core.designsystem.R.drawable.btn_add_profile
+import com.teampatch.core.designsystem.R.drawable.btn_enter_space
 import com.teampatch.core.designsystem.component.SpeechBubble
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme
@@ -177,7 +179,7 @@ fun OnboardingEnterSpaceScreen(
 
         ) {
             Image(
-                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_add_profile),
+                painter = painterResource(btn_add_profile),
                 null,
                 contentScale = ContentScale.Crop, // 이미지가 잘리지 않고 버튼 안에 맞춰짐
                 modifier = Modifier
@@ -195,7 +197,7 @@ fun OnboardingEnterSpaceScreen(
             Spacer(modifier = Modifier.height(15.dp))
 
             Image(
-                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space),
+                painter = painterResource(btn_enter_space),
                 null,
                 modifier = Modifier.fillMaxWidth()
                     .clickable { onNextClick() }

@@ -28,6 +28,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding
+import com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
@@ -132,7 +134,7 @@ fun OnboardingStartScreen(
                 .background(Color.White) // 배경색 설정
         ) {
             Image(
-                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding),
+                painter = painterResource(btn_make_space_onboarding),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,7 +150,7 @@ fun OnboardingStartScreen(
             )
 
             Image(
-                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding),
+                painter = painterResource(btn_enter_space_onboarding),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

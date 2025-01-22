@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.common.getOrNull
+import com.teampatch.core.designsystem.R.drawable.ic_chevron_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G2
@@ -175,7 +176,7 @@ internal fun DailyManageScreen(
                                     .padding(top = 20.dp, start = 26.dp, end = 4.dp)
                             )
                             Icon(
-                                painter = painterResource(com.teampatch.core.designsystem.R.drawable.ic_chevron_question),
+                                painter = painterResource(ic_chevron_question),
                                 contentDescription = "chevron",
                                 tint = G3
                             )
