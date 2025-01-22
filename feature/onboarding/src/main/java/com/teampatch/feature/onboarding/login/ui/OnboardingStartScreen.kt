@@ -165,7 +165,7 @@ private fun OnboardingStartScreenPreview() {
         OnboardingStartScreen(
             onBackRequest = {},
             onboardingMakeGroupRequest = {},
-            onboardingEnterScreenRequest = {},
+            onboardingEnterScreenRequest = {}
         )
     }
 }
