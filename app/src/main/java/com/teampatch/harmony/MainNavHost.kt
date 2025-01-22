@@ -51,6 +51,7 @@ fun MainNavHost(
 
         addOnboardingPermissionNotificationScreen()
         addOnboardingStartScreen(
+            onBackRequest = navController::popBackStack,
             onboardingMakeGroupRequest = { navController.navigateToMakeGroupScreen() },
             onboardingEnterScreenRequest = { navController.navigateToEnterInvitationCodeScreen() }
         )

@@ -17,10 +17,12 @@ internal fun OnboardingRoute(
 
 @Composable
 internal fun OnboardingStartRoute(
+    onBackRequest: () -> Unit,
     onMakeGroupRequest: () -> Unit,
     onEnterScreenRequest: () -> Unit,
 ) {
     OnboardingStartScreen(
+        onBackRequest = onBackRequest,
         onboardingMakeGroupRequest = onMakeGroupRequest,
         onboardingEnterScreenRequest = onEnterScreenRequest
     )

@@ -110,6 +110,7 @@ fun OnBoardingLayout(
 
 @Composable
 fun OnboardingStartScreen(
+    onBackRequest: () -> Unit,
     onboardingMakeGroupRequest: () -> Unit,
     onboardingEnterScreenRequest: () -> Unit,
 ) {
@@ -123,7 +124,7 @@ fun OnboardingStartScreen(
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_space),
-        onBackRequest = { /*TODO*/ }
+        onBackRequest = { onBackRequest }
     ) {
         Column(
             modifier = Modifier
@@ -162,8 +163,9 @@ fun OnboardingStartScreen(
 private fun OnboardingStartScreenPreview() {
     HarmonyTheme {
         OnboardingStartScreen(
-            onboardingMakeGroupRequest = { },
-            onboardingEnterScreenRequest = { }
+            onBackRequest = {},
+            onboardingMakeGroupRequest = {},
+            onboardingEnterScreenRequest = {},
         )
     }
 }

@@ -63,11 +63,13 @@ fun NavController.navigateToStartScreen(
 }
 
 fun NavGraphBuilder.addOnboardingStartScreen(
+    onBackRequest: () -> Unit,
     onboardingMakeGroupRequest: () -> Unit,
     onboardingEnterScreenRequest: () -> Unit,
 ) {
     composable<OnboardingStartRoute> {
         OnboardingStartRoute(
+            onBackRequest = onBackRequest,
             onMakeGroupRequest = onboardingMakeGroupRequest,
             onEnterScreenRequest = onboardingEnterScreenRequest
         )
