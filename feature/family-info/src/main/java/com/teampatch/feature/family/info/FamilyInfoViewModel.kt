@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -35,19 +36,19 @@ internal class FamilyInfoViewModel @Inject constructor(
         load()
     }
 
-    private fun load() = viewModelScope.launch {
-        try {
-            combine(getUserInfoUseCase(), getFamilyInfoUseCase()) { user, familyInfo ->
-                _familyInfoUiState.value = FamilyInfoUiState(
-                    user = user,
-                    familyInfo = familyInfo,
-                    isLoading = false
-                )
-            }.launchIn(this)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _sideEffect.send(FamilyInfoSideEffect.LoadError(e))
+    private fun load() {
+        combine(getUserInfoUseCase(), getFamilyInfoUseCase()) { user, familyInfo ->
+            _familyInfoUiState.value = FamilyInfoUiState(
+                user = user,
+                familyInfo = familyInfo,
+                isLoading = false
+            )
         }
+            .catch {
+                it.printStackTrace()
+                _sideEffect.send(FamilyInfoSideEffect.LoadError(it))
+            }
+            .launchIn(viewModelScope)
     }
 
     fun inviteFamily() = viewModelScope.launch {
