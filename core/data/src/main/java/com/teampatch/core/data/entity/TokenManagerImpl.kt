@@ -2,6 +2,7 @@ package com.teampatch.core.data.entity
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.teampatch.core.common.BuildConfig
 import com.teampatch.core.domain.entity.TokenManager
 import javax.inject.Inject
 import kotlinx.coroutines.channels.awaitClose
@@ -27,6 +28,11 @@ class TokenManagerImpl @Inject constructor(
         }
     }
         .onStart {
+            if (LOGGED_IN_BUILD_TYPE) {
+                emit(false)
+                return@onStart
+            }
+
             emit(getAccessToken().isEmpty())
         }
 
@@ -36,5 +42,10 @@ class TokenManagerImpl @Inject constructor(
         sharedPreferences.edit {
             putString(ACCESS_TOKEN_KEY, token)
         }
+    }
+
+    companion object {
+        @Suppress("KotlinConstantConditions")
+        private const val LOGGED_IN_BUILD_TYPE: Boolean = BuildConfig.BUILD_TYPE == "loggedInDebug"
     }
 }

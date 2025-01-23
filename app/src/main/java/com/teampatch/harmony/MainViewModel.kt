@@ -1,34 +1,39 @@
 package com.teampatch.harmony
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.teampatch.core.common.flowErrorCatch
 import com.teampatch.core.domain.usecase.authentication.IsLoginRequiredUseCase
+import com.teampatch.harmony.model.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val isLoginRequiredUseCase: IsLoginRequiredUseCase,
 ) : ViewModel() {
 
-    val isAppInitFinished: StateFlow<Boolean> =
-        savedStateHandle.getStateFlow(IS_APP_INIT_FINISHED, false)
+    private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState())
+    val uiState: StateFlow<MainUiState> = _uiState
 
-    val isLoginRequiredFlow: Flow<Boolean> =
-        flowErrorCatch({ isLoginRequiredUseCase() }) { t ->
-            t.printStackTrace()
-            emit(false)
+    init {
+        viewModelScope.launch {
+            flowErrorCatch(
+                block = { isLoginRequiredUseCase() },
+                action = { it.printStackTrace() }
+            )
+                .collect { isLoginRequired ->
+                    _uiState.update {
+                        it.copy(
+                            isLoginRequired = isLoginRequired,
+                            isLoading = false
+                        )
+                    }
+                }
         }
-
-    fun finishAppInit() {
-        savedStateHandle[IS_APP_INIT_FINISHED] = true
-    }
-
-    companion object {
-        private const val IS_APP_INIT_FINISHED = "is_app_init_finished"
     }
 }
