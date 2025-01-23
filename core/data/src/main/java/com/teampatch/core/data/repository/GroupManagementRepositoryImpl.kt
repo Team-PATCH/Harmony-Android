@@ -48,7 +48,7 @@ class GroupManagementRepositoryImpl @Inject constructor(
 
     override suspend fun getUserGroupList(uid: String): List<UserGroup> {
         val response = groupRemoteDataSource.queryUserGroupList(uid)
-        return response.toDomain()
+        return response.groups.map { it.toDomain() }
     }
 
     override suspend fun queryGroupInvitationCode(): String {
