@@ -55,7 +55,7 @@ fun FamilyProfile(
     ) {
         Image(
             painter = profileImage,
-            contentDescription = "profile image",
+            contentDescription = stringResource(R.string.family_profile_image_content_description),
             modifier = Modifier
                 .size(54.dp)
                 .clip(CircleShape)
@@ -81,7 +81,7 @@ fun FamilyProfile(
             FamilyRole.ADMIN -> {
                 Image(
                     painter = painterResource(R.drawable.ic_crown_family_info),
-                    contentDescription = "admin",
+                    contentDescription = stringResource(R.string.family_profile_admin_icon_content_description),
                     modifier = Modifier
                         .padding(start = 12.dp)
                 )
