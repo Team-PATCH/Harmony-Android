@@ -80,17 +80,17 @@ fun MainNavHost(
         )
 
         addQuestionExpandScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             questionDetailPageRequest = navController::navigateToQuestionDetailScreen
         )
 
         addQuestionDetailScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             answerEditPageRequest = navController::navigateToAnswerScreen
         )
 
         addAnswerScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onCompleteRequest = { answer ->
                 navController.previousBackStackEntry?.savedStateHandle?.set(
                     key = QuestionDetailParams.ANSWER_UPDATE_DATA,
@@ -101,25 +101,25 @@ fun MainNavHost(
         )
 
         addSettingsScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onExitAppRequest = { context.findActivity()?.finishAffinity() },
             onPrivacyPolicyClick = { },
             onTosClick = { }
         )
 
         addFamilyInfoScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onSettingsClick = navController::navigateToSettingsScreen,
             onProfileEditClick = navController::navigateToProfileEditScreen
         )
 
         addMemoryCardRegistrationScreen(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = navController::navigateUp,
             onMemoryStorePageRequest = { } // TODO: 메모리 저장소 페이지 가기
         )
 
         addProfileEditScreen(
-            onCompleteRequest = navController::popBackStack
+            onCompleteRequest = navController::navigateUp
         )
     }
 }
