@@ -5,6 +5,7 @@ import com.teampatch.core.network.model.FileUploadRequest
 import com.teampatch.core.network.model.user.SignupOrLoginRequestBody
 import java.io.File
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
 import retrofit2.Retrofit
@@ -56,8 +57,8 @@ class UserRemoteDataSourceUnitTest {
     }
 
     @Test
-    fun `사용자_프로필 수정`(): Unit = runBlocking {
-        val name: String? = null
+    fun `사용자_프로필_수정`(): Unit = runBlocking {
+        val name: String = "윤여정"
         val file = File("C:\\Users\\MinJun\\Desktop\\th.jpg")
         val profileImage = FileUploadRequest(
             fileName = file.name,
@@ -66,5 +67,6 @@ class UserRemoteDataSourceUnitTest {
         )
         val response = userRemoteDataSource.editMyProfile(name, profileImage)
         println("사용자_프로필 수정: ${response.pretty()}")
+        Assert.assertTrue(name in listOf(response.user.nick, null))
     }
 }
