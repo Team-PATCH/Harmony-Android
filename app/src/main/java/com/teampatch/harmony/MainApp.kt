@@ -31,7 +31,7 @@ import com.teampatch.feature.question.QuestionRoute
 import com.teampatch.feature.question.navigateToQuestionScreen
 import com.teampatch.harmony.model.MainUiState
 
-private val BottomNavigationEnableScreens: Set<String?> = hashSetOf(
+private val BottomNavigationEnableScreens: Set<String?> = setOf(
     HomeRoute::class.qualifiedName,
     QuestionRoute::class.qualifiedName
 )
