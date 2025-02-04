@@ -35,5 +35,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun logout() {
         userRemoteDataSource.logout()
+        tokenManager.setAccessToken("")
     }
 }
