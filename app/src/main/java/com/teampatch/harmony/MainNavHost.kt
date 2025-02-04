@@ -2,10 +2,11 @@ package com.teampatch.harmony
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.teampatch.core.common.findActivity
 import com.teampatch.feature.answer.addAnswerScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
 import com.teampatch.feature.family.info.addFamilyInfoScreen
@@ -24,19 +25,24 @@ import com.teampatch.feature.onboarding.login.ui.navigateToInvitationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
+import com.teampatch.feature.profile.edit.addProfileEditScreen
+import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
 import com.teampatch.feature.question.detail.QuestionDetailParams
 import com.teampatch.feature.question.detail.addQuestionDetailScreen
 import com.teampatch.feature.question.detail.navigateToQuestionDetailScreen
 import com.teampatch.feature.question.expand.addQuestionExpandScreen
 import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
-import com.teampatch.feature.settings.SettingsRoute
+import com.teampatch.feature.settings.addSettingsScreen
+import com.teampatch.feature.settings.navigateToSettingsScreen
 
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    val context = LocalContext.current
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -74,17 +80,17 @@ fun MainNavHost(
         )
 
         addQuestionExpandScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             questionDetailPageRequest = navController::navigateToQuestionDetailScreen
         )
 
         addQuestionDetailScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             answerEditPageRequest = navController::navigateToAnswerScreen
         )
 
         addAnswerScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onCompleteRequest = { answer ->
                 navController.previousBackStackEntry?.savedStateHandle?.set(
                     key = QuestionDetailParams.ANSWER_UPDATE_DATA,
@@ -94,24 +100,26 @@ fun MainNavHost(
             }
         )
 
-        composable<SettingsRoute> {
-            SettingsRoute(
-                onBackRequest = navController::popBackStack,
-                onExitAppRequest = { },
-                onPrivacyPolicyClick = { },
-                onTosClick = { }
-            )
-        }
+        addSettingsScreen(
+            onBackRequest = navController::navigateUp,
+            onExitAppRequest = { context.findActivity()?.finishAffinity() },
+            onPrivacyPolicyClick = { },
+            onTosClick = { }
+        )
 
         addFamilyInfoScreen(
-            onBackRequest = navController::popBackStack,
-            onSettingsClick = {},
-            onProfileEditClick = {}
+            onBackRequest = navController::navigateUp,
+            onSettingsClick = navController::navigateToSettingsScreen,
+            onProfileEditClick = navController::navigateToProfileEditScreen
         )
 
         addMemoryCardRegistrationScreen(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = navController::navigateUp,
             onMemoryStorePageRequest = { } // TODO: 메모리 저장소 페이지 가기
+        )
+
+        addProfileEditScreen(
+            onCompleteRequest = navController::navigateUp
         )
     }
 }

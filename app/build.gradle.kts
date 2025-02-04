@@ -17,8 +17,8 @@ android {
         applicationId = "com.teampatch.harmony"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = rootProject.ext["versionCode"].toString().toInt()
+        versionName = rootProject.ext["versionName"].toString()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

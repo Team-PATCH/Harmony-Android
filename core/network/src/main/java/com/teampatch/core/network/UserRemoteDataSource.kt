@@ -1,21 +1,27 @@
 package com.teampatch.core.network
 
-import com.teampatch.core.network.annotation.AuthorizedRequest
+import com.teampatch.core.network.model.FileUploadRequest
 import com.teampatch.core.network.model.user.ProfileResponse
 import com.teampatch.core.network.model.user.SignupOrLoginRequestBody
 import com.teampatch.core.network.model.user.SignupOrLoginResponse
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
 
 interface UserRemoteDataSource {
 
-    @POST("/user/signup")
     suspend fun signupOrLogin(
-        @Body body: SignupOrLoginRequestBody,
+        signupOrLoginRequestBody: SignupOrLoginRequestBody,
     ): SignupOrLoginResponse
 
-    @AuthorizedRequest
-    @GET("/user/profile")
+    suspend fun logout()
+
     suspend fun getMyProfile(): ProfileResponse
+
+    /**
+     * @param username 사용자 이름
+     * @param profileImage 프로필 이미지 파일 (10MB 이하, jpg/jpeg/png)
+     */
+
+    suspend fun editMyProfile(
+        username: String?,
+        profileImage: FileUploadRequest?,
+    ): ProfileResponse
 }

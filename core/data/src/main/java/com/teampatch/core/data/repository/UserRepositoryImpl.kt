@@ -1,28 +1,64 @@
 package com.teampatch.core.data.repository
 
+import androidx.core.net.toUri
 import com.teampatch.core.data.mapper.toDomain
+import com.teampatch.core.data.service.ImageUriCompressor
 import com.teampatch.core.domain.model.User
 import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.UserRemoteDataSource
+import com.teampatch.core.network.model.FileUploadRequest
+import com.teampatch.core.network.model.user.ProfileResponse
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.updateAndGet
+import kotlinx.coroutines.withContext
 
 @Singleton
-class UserRepositoryImpl @Inject constructor(
+internal class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
+    private val imageUriCompressor: ImageUriCompressor,
 ) : UserRepository {
 
     private val user: MutableStateFlow<User?> = MutableStateFlow(null)
 
     override fun getUserInfo(): Flow<User> = user.map {
-        if (it == null) {
+        it ?: user.updateAndGet {
             val userResponse = userRemoteDataSource.getMyProfile()
-            return@map user.updateAndGet { userResponse.toDomain() }!!
+            userResponse.toDomain()
+        }!!
+    }
+
+    override suspend fun editProfile(
+        name: String?,
+        profileImageUri: String?,
+    ) = withContext(Dispatchers.IO) {
+        val profileImage: FileUploadRequest? = profileImageUri?.let {
+            imageUriCompressor.loadImage(it.toUri())
+
+            withContext(Dispatchers.Default) {
+                imageUriCompressor.compressImage(PROFILE_IMAGE_LIMIT_SIZE, qualityRange = IntRange(0, 1000))
+            }.run {
+                FileUploadRequest(
+                    fileName = displayName,
+                    fileMediaType = mimeType,
+                    fileContent = bitmapInputStream
+                )
+            }
         }
-        it
+
+        val profileResponse: ProfileResponse = userRemoteDataSource.editMyProfile(
+            username = name,
+            profileImage = profileImage
+        )
+
+        user.value = profileResponse.toDomain()
+    }
+
+    companion object {
+        private const val PROFILE_IMAGE_LIMIT_SIZE: Int = 10485760
     }
 }

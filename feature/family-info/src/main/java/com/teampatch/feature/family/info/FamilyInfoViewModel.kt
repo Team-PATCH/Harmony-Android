@@ -13,7 +13,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -34,24 +36,24 @@ internal class FamilyInfoViewModel @Inject constructor(
         load()
     }
 
-    private fun load() = viewModelScope.launch {
-        try {
-            val user = getUserInfoUseCase().first()
-            val familyInfo = getFamilyInfoUseCase().first()
+    private fun load() {
+        combine(getUserInfoUseCase(), getFamilyInfoUseCase()) { user, familyInfo ->
             _familyInfoUiState.value = FamilyInfoUiState(
                 user = user,
                 familyInfo = familyInfo,
                 isLoading = false
             )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _sideEffect.send(FamilyInfoSideEffect.LoadError(e))
         }
+            .catch {
+                it.printStackTrace()
+                _sideEffect.send(FamilyInfoSideEffect.LoadError(it))
+            }
+            .launchIn(viewModelScope)
     }
 
     fun inviteFamily() = viewModelScope.launch {
         try {
-            inviteFamilyUseCase()
+            _sideEffect.send(FamilyInfoSideEffect.Invite(inviteFamilyUseCase()))
         } catch (e: Exception) {
             e.printStackTrace()
             _sideEffect.send(FamilyInfoSideEffect.InviteError(e))

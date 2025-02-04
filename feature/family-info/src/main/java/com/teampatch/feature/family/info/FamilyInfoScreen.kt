@@ -1,5 +1,6 @@
 package com.teampatch.feature.family.info
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -88,6 +90,15 @@ internal fun FamilyInfoRoute(
 
                 is FamilyInfoSideEffect.LoadError -> {
                     Toast.makeText(context, "정보를 불러오는 도중에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+                is FamilyInfoSideEffect.Invite -> {
+                    val shareIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, sideEffect.inviteCode)
+                        type = "text/*"
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, null))
                 }
             }
         }
@@ -208,7 +219,8 @@ internal fun FamilyInfoScreen(
                     FamilyProfile(
                         profileImage = rememberAsyncImagePainter(
                             model = family.profileImageUrl ?: ic_my_appbar,
-                            placeholder = previewPlaceholder(ic_my_appbar)
+                            placeholder = previewPlaceholder(ic_my_appbar),
+                            error = painterResource(ic_my_appbar)
                         ),
                         title = family.title,
                         name = family.name,
@@ -223,8 +235,16 @@ internal fun FamilyInfoScreen(
                 }
             }
 
+            var inviteButtonThrottleTime: Long = remember { 0L }
+
             DefaultButton(
-                onClick = { onInviteClick() },
+                onClick = {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - inviteButtonThrottleTime >= 1000L) {
+                        onInviteClick()
+                        inviteButtonThrottleTime = currentTime
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
