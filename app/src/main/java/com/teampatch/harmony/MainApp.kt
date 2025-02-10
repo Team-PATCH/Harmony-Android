@@ -37,8 +37,10 @@ private val BottomNavigationEnableScreens: Set<String?> = setOf(
 )
 
 @Composable
-fun MainApp(viewModel: MainViewModel = hiltViewModel()) {
-    val navController: NavHostController = rememberNavController()
+fun MainApp(
+    navController: NavHostController = rememberNavController(),
+    viewModel: MainViewModel = hiltViewModel(),
+) {
     val currentBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
         initialValue = null
     )
