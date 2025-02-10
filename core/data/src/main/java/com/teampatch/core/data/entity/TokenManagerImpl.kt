@@ -28,7 +28,7 @@ class TokenManagerImpl @Inject constructor(
         }
     }
         .onStart {
-            if (LOGGED_IN_BUILD_TYPE) {
+            if (IS_LOGGED_IN_BUILD_TYPE) {
                 emit(false)
                 return@onStart
             }
@@ -46,6 +46,6 @@ class TokenManagerImpl @Inject constructor(
 
     companion object {
         @Suppress("KotlinConstantConditions")
-        private const val LOGGED_IN_BUILD_TYPE: Boolean = BuildConfig.BUILD_TYPE == "loggedInDebug"
+        private const val IS_LOGGED_IN_BUILD_TYPE: Boolean = BuildConfig.BUILD_TYPE == "loggedInDebug"
     }
 }
