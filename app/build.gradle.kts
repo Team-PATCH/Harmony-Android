@@ -20,7 +20,7 @@ android {
         versionCode = rootProject.ext["versionCode"].toString().toInt()
         versionName = rootProject.ext["versionName"].toString()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.harmony.core.ui.test.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -123,6 +123,11 @@ dependencies {
     implementation(project(":feature:question-expand"))
     implementation(project(":feature:question-detail"))
     implementation(project(":feature:answer"))
+    androidTestImplementation(project(":core:ui-test"))
+
+    androidTestImplementation(libs.hilt.android)
+    androidTestImplementation(libs.hilt.android.test)
+    kspAndroidTest(libs.hilt.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -8,7 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.runtime.getValue
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.v2.auth.BuildConfig
 import com.teampatch.core.designsystem.theme.HarmonyTheme
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
         val content: View = findViewById(android.R.id.content)
         val preDrawListener = object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                runBlocking { viewModel.isAppInitFinished.first { true } }
+                runBlocking { viewModel.uiState.first { !it.isLoading } }
                 content.viewTreeObserver.removeOnPreDrawListener(this)
                 return true
             }
