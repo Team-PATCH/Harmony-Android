@@ -14,6 +14,7 @@ import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
+import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
 import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingInvitationScreen
@@ -72,7 +73,7 @@ fun MainNavHost(
             onUserPageRequest = navController::navigateToFamilyInfoScreen,
             onDailyRoutineClick = { },
             onDailyRoutineRegisterPageRequest = { },
-            onMemoryCardClick = { }
+            onMemoryCardClick = navController::navigateToMemoryCardRegistrationScreen
         )
 
         addQuestionScreen(
