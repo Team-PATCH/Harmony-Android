@@ -1,6 +1,7 @@
 package com.teampatch.core.domain.usecase.memory
 
 import com.teampatch.core.domain.repository.MemoryCardRepository
+import java.io.InputStream
 import javax.inject.Inject
 
 class AddMemoryCardRecordUseCase @Inject constructor(
@@ -10,8 +11,8 @@ class AddMemoryCardRecordUseCase @Inject constructor(
     suspend operator fun invoke(
         memoryCardId: String,
         question: String,
+        audioFile: InputStream,
     ) {
-        val audioFile = memoryCardRepository.getRecordingResult()
         memoryCardRepository.addCommunication(memoryCardId, question, audioFile)
     }
 }

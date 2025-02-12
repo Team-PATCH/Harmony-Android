@@ -5,16 +5,6 @@ import java.io.InputStream
 
 interface MemoryCardRepository {
 
-    fun startRecord()
-
-    fun stopRecording()
-
-    fun resumeRecording()
-
-    fun pauseRecording()
-
-    fun getRecordingResult(): InputStream
-
     /**
      * 추억카드 의사소통 과정을 Server 보내기 위한 함수입니다.
      *
