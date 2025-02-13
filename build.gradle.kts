@@ -44,3 +44,8 @@ subprojects {
         }
     }
 }
+
+ext {
+    set("versionCode", 1)
+    set("versionName", "1.0.0")
+}

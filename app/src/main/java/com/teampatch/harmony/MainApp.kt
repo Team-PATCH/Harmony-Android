@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,17 +30,18 @@ import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToOnboardingScreen
 import com.teampatch.feature.question.QuestionRoute
 import com.teampatch.feature.question.navigateToQuestionScreen
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import com.teampatch.harmony.model.MainUiState
 
-private val BottomNavigationEnableScreens: Set<String?> = hashSetOf(
+private val BottomNavigationEnableScreens: Set<String?> = setOf(
     HomeRoute::class.qualifiedName,
     QuestionRoute::class.qualifiedName
 )
 
 @Composable
-fun MainApp(viewModel: MainViewModel = hiltViewModel()) {
-    val navController: NavHostController = rememberNavController()
+fun MainApp(
+    navController: NavHostController = rememberNavController(),
+    viewModel: MainViewModel = hiltViewModel(),
+) {
     val currentBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
         initialValue = null
     )
@@ -70,6 +70,7 @@ fun MainApp(viewModel: MainViewModel = hiltViewModel()) {
             currentBackStackEntry?.destination?.route in BottomNavigationEnableScreens
         }
     }
+    val uiState: MainUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         bottomBar = {
@@ -98,11 +99,12 @@ fun MainApp(viewModel: MainViewModel = hiltViewModel()) {
             .safeDrawingPadding()
     ) { scaffoldPaddingValue ->
         MainNavHost(
+            isLoginRequired = uiState.isLoginRequired,
             navController = navController,
             modifier = Modifier.padding(scaffoldPaddingValue)
         )
     }
-
+    
     LaunchedEffect(Unit) {
         viewModel.isLoginRequiredFlow
             .distinctUntilChanged()

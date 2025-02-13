@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class ProfileEditViewModel @Inject constructor(
+internal class ProfileEditViewModel @Inject constructor(
     private val editProfileUseCase: EditProfileUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
@@ -65,9 +65,10 @@ class ProfileEditViewModel @Inject constructor(
     fun editProfile() = viewModelScope.launch {
         try {
             val uiState = profileEditUiState.value
-            editProfileUseCase(uiState.relation, uiState.name, uiState.profileImage)
+            editProfileUseCase(uiState.name, (uiState.profileImage as? Image.Uri)?.uri)
             _sideEffect.send(ProfileEditSideEffect.ProfileEditSuccess)
         } catch (e: Exception) {
+            e.printStackTrace()
             _sideEffect.send(ProfileEditSideEffect.ProfileEditError(e))
         }
     }

@@ -2,6 +2,7 @@ package com.teampatch.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teampatch.core.common.flowErrorCatch
 import com.teampatch.core.domain.usecase.authentication.LogoutAppUseCase
 import com.teampatch.core.domain.usecase.authentication.WithdrawAppUseCase
 import com.teampatch.core.domain.usecase.authentication.WithdrawFamilyUseCase
@@ -15,14 +16,13 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+internal class SettingsViewModel @Inject constructor(
     private val getAppLatestVersionUseCase: GetAppLatestVersionUseCase,
     private val logoutAppUseCase: LogoutAppUseCase,
     private val withdrawAppUseCase: WithdrawAppUseCase,
@@ -33,19 +33,20 @@ class SettingsViewModel @Inject constructor(
     val sideEffect: Flow<SettingsSideEffect> = _sideEffect.receiveAsFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val settingsUiState: StateFlow<SettingsUiState> = kotlin.runCatching {
-        getAppLatestVersionUseCase().mapLatest {
-            SettingsUiState(
-                isLatestVersion = it.isLatest,
-                installedVersion = it.installedVersionName,
-                isLoading = false
-            )
+    val settingsUiState: StateFlow<SettingsUiState> = flowErrorCatch(
+        block = {
+            getAppLatestVersionUseCase().mapLatest {
+                SettingsUiState(
+                    isLatestVersion = it.isLatest,
+                    installedVersion = it.installedVersionName,
+                    isLoading = false
+                )
+            }
         }
+    ) {
+        it.printStackTrace()
+        _sideEffect.send(SettingsSideEffect.LoadError(it))
     }
-        .getOrElse {
-            _sideEffect.trySend(SettingsSideEffect.LoadError(it))
-            emptyFlow()
-        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

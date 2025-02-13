@@ -1,6 +1,7 @@
 package com.teampatch.core.domain.repository
 
 import com.teampatch.core.domain.model.InvitedGroup
+import com.teampatch.core.domain.model.UserGroup
 
 interface GroupManagementRepository {
 
@@ -17,6 +18,8 @@ interface GroupManagementRepository {
     suspend fun generateInviteCode(): String
 
     suspend fun joinFamilyGroup(inviteCode: String): InvitedGroup
+
+    suspend fun getUserGroupList(uid: String): List<UserGroup>
 
     /**
      * Group 초대 코드 조회

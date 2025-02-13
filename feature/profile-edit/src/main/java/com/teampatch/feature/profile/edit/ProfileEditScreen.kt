@@ -52,13 +52,9 @@ import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.Role
 import com.teampatch.feature.profile.edit.model.ProfileEditSideEffect
 import com.teampatch.feature.profile.edit.model.ProfileEditUiState
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object ProfileEditRoute
 
 @Composable
-fun ProfileEditRoute(
+internal fun ProfileEditRoute(
     onCompleteRequest: () -> Unit,
     profileEditViewModel: ProfileEditViewModel = hiltViewModel(),
 ) {
@@ -97,7 +93,7 @@ fun ProfileEditRoute(
 }
 
 @Composable
-fun ProfileEditScreen(
+internal fun ProfileEditScreen(
     onBackRequest: () -> Unit,
     onEditClick: () -> Unit,
     onRelationChange: (String) -> Unit,

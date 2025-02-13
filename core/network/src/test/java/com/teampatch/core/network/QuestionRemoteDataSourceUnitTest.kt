@@ -71,7 +71,7 @@ class QuestionRemoteDataSourceUnitTest {
         val questionCardCommentRequestBody = QuestionCardCommentRequestBody(
             questionId = 1,
             groupId = 1,
-            authorId = 1,
+            authorId = "1",
             content = "android_test"
         )
         val questionCardCommentResponse =
