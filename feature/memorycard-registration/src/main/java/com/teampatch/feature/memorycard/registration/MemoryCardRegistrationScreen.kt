@@ -1,6 +1,7 @@
 package com.teampatch.feature.memorycard.registration
 
-import android.net.Uri
+import android.app.Activity
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,10 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -29,9 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.teampatch.core.common.checkRadioAudioPermission
 import com.teampatch.core.common.findActivity
 import com.teampatch.core.common.requestRadioAudioPermission
 import com.teampatch.core.designsystem.R.drawable.ic_camera_memory
@@ -51,7 +50,6 @@ import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationSideEffect
 import com.teampatch.feature.memorycard.registration.model.MemoryCardRegistrationUiState
 import com.teampatch.feature.memorycard.registration.model.RecordState
-import com.teampatch.feature.memorycard.registration.utils.AudioRecorderHelper
 
 @Composable
 internal fun MemoryCardRegistrationRoute(
@@ -59,29 +57,40 @@ internal fun MemoryCardRegistrationRoute(
     onMemoryStorePageRequest: () -> Unit,
     viewModel: MemoryCardRegistrationViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val uiState = viewModel.uiState
+    val context: Context = LocalContext.current
+    val activity: Activity? = context.findActivity()
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val uiState: MemoryCardRegistrationUiState = viewModel.uiState
 
     if (!uiState.isLoading) {
         MemoryCardRegistrationScreen(
             onDismissRequest = onDismissRequest,
-            onRecordComplete = {
-                viewModel.uploadMemoryCardAudioRecordFile(it)
+            onRecordStartRequest = viewModel::startMemoryCardAudioRecord,
+            onRecordStopRequest = {
+                viewModel.stopMemoryCardAudioRecord()
+                viewModel.uploadMemoryCardAudioRecordFile()
                 onMemoryStorePageRequest()
             },
             uiState = uiState
         )
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect {
+    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+        viewModel.stopMemoryCardAudioRecord()
+    }
+
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle).collect {
             when (it) {
-                MemoryCardRegistrationSideEffect.LoadError -> {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.toast_data_load_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                MemoryCardRegistrationSideEffect.LoadError ->
+                    Toast.makeText(context, context.getString(R.string.toast_data_load_error), Toast.LENGTH_SHORT).show()
+
+                MemoryCardRegistrationSideEffect.RecordingError ->
+                    Toast.makeText(context, context.getString(R.string.toast_audio_recording_error), Toast.LENGTH_SHORT).show()
+
+                MemoryCardRegistrationSideEffect.RecordingPermissionDeniedError -> {
+                    Toast.makeText(context, context.getString(R.string.toast_audio_permission_request), Toast.LENGTH_LONG).show()
+                    activity?.requestRadioAudioPermission()
                 }
             }
         }
@@ -91,21 +100,10 @@ internal fun MemoryCardRegistrationRoute(
 @Composable
 internal fun MemoryCardRegistrationScreen(
     onDismissRequest: () -> Unit,
-    onRecordComplete: (Uri) -> Unit,
+    onRecordStartRequest: () -> Unit,
+    onRecordStopRequest: () -> Unit,
     uiState: MemoryCardRegistrationUiState,
 ) {
-    val context = LocalContext.current
-    val activity = context.findActivity()
-    val audioRecorderHelper = remember { AudioRecorderHelper(context) }
-    var recordState: RecordState by remember { mutableStateOf(RecordState.INIT) }
-
-    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-        if (recordState != RecordState.RECORDING) return@LifecycleEventEffect
-        audioRecorderHelper.stop()
-        audioRecorderHelper.release()
-        recordState = RecordState.INIT
-    }
-
     Scaffold(
         topBar = {
             AppBar(
@@ -131,45 +129,14 @@ internal fun MemoryCardRegistrationScreen(
         bottomBar = {
             DefaultButton(
                 onClick = {
-                    if (!context.checkRadioAudioPermission()) {
-                        activity?.requestRadioAudioPermission()
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.toast_audio_permission_request),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        return@DefaultButton
-                    }
-
-                    try {
-                        when (recordState) {
-                            RecordState.INIT -> {
-                                audioRecorderHelper.prepare()
-                                audioRecorderHelper.start()
-                                recordState = RecordState.RECORDING
-                            }
-
-                            RecordState.RECORDING -> {
-                                audioRecorderHelper.stop()
-                                audioRecorderHelper.release()
-                                onRecordComplete(audioRecorderHelper.getResultRecordFile())
-                                recordState = RecordState.COMPLETE
-                            }
-
-                            RecordState.COMPLETE -> {}
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.toast_audio_recording_error),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        onDismissRequest()
+                    when (uiState.recordState) {
+                        RecordState.INIT -> onRecordStartRequest()
+                        RecordState.RECORDING -> onRecordStopRequest()
+                        RecordState.COMPLETE -> {}
                     }
                 },
                 color = DefaultButtonColor(
-                    containerColor = when (recordState) {
+                    containerColor = when (uiState.recordState) {
                         RecordState.RECORDING -> BL
                         else -> MainGreen
                     }
@@ -179,7 +146,7 @@ internal fun MemoryCardRegistrationScreen(
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
             ) {
                 Text(
-                    text = when (recordState) {
+                    text = when (uiState.recordState) {
                         RecordState.INIT -> stringResource(R.string.btn_communication_start)
                         RecordState.RECORDING -> stringResource(R.string.btn_communication_end)
                         RecordState.COMPLETE -> stringResource(R.string.btn_communication_complete)
@@ -219,7 +186,7 @@ internal fun MemoryCardRegistrationScreen(
             }
             SpeechBubble {
                 TypeWriterText(
-                    text = when (recordState) {
+                    text = when (uiState.recordState) {
                         RecordState.INIT -> {
                             stringResource(R.string.text_speechbuble_init)
                         }
@@ -241,7 +208,7 @@ internal fun MemoryCardRegistrationScreen(
                     .padding(top = 24.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            if (recordState == RecordState.RECORDING) {
+            if (uiState.recordState == RecordState.RECORDING) {
                 Image(
                     painter = painterResource(ic_voice_memorycard),
                     contentDescription = "recording",
@@ -260,7 +227,8 @@ private fun MemoryCardRegistrationScreenPreview() {
     HarmonyTheme {
         MemoryCardRegistrationScreen(
             onDismissRequest = {},
-            onRecordComplete = {},
+            onRecordStartRequest = {},
+            onRecordStopRequest = {},
             uiState = MemoryCardRegistrationUiState()
         )
     }

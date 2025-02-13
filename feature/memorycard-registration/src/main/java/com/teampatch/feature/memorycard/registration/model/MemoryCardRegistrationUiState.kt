@@ -5,5 +5,6 @@ internal data class MemoryCardRegistrationUiState(
     val imageUrl: String? = null,
     val questions: List<String> = emptyList(),
     val questionProgressIndex: Int = 0,
+    val recordState: RecordState = RecordState.INIT,
     val isLoading: Boolean = true,
 )

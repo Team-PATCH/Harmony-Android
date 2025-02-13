@@ -8,12 +8,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.LocalDateTime
+import javax.inject.Inject
 import kotlin.random.Random
 
-class AudioRecorderHelper(private val context: Context) {
+class AudioRecorderHelper @Inject constructor(
+    @ApplicationContext private val appContext: Context,
+) {
 
-    private val contentResolver: ContentResolver = context.contentResolver
+    private val contentResolver: ContentResolver = appContext.contentResolver
 
     private lateinit var audioContentValues: ContentValues
     private lateinit var audioRecordFileUri: Uri
@@ -69,7 +73,7 @@ class AudioRecorderHelper(private val context: Context) {
     ): MediaRecorder = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
         MediaRecorder()
     } else {
-        MediaRecorder(context)
+        MediaRecorder(appContext)
     }
         .apply {
             setOutputFile(audioFileDescriptor.fileDescriptor)
