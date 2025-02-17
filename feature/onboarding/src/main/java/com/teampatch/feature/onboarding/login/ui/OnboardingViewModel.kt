@@ -11,10 +11,10 @@ import com.teampatch.core.domain.usecase.onboarding.LoginKakaoUseCase
 import com.teampatch.core.domain.usecase.onboarding.LoginUseCase
 import com.teampatch.core.domain.usecase.onboarding.RegisterFamilyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
@@ -23,19 +23,17 @@ internal class OnboardingViewModel @Inject constructor(
     private val registerFamilyUseCase: RegisterFamilyUseCase,
 ) : ViewModel() {
 
-    // 로그인 성공 상태
-    private val _isLoginSuccessful = MutableStateFlow(false)
-    val isLoginSuccessful: StateFlow<Boolean> = _isLoginSuccessful
+    private val _loginSuccessEvent = Channel<Boolean>()
+    val loginSuccessEvent = _loginSuccessEvent.receiveAsFlow()
 
-    // 로그인 시도를 수행하는 함수
     fun loginKakao() {
         viewModelScope.launch {
             runCatching {
                 loginKakaoUseCase()
             }.onSuccess {
-                _isLoginSuccessful.value = true
-            }.onFailure { throwable ->
-                _isLoginSuccessful.value = false
+                _loginSuccessEvent.send(true)
+            }.onFailure {
+                _loginSuccessEvent.send(false)
             }
         }
     }
