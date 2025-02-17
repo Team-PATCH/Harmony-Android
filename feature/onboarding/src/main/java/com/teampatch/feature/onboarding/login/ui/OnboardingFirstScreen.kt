@@ -3,6 +3,7 @@ package com.teampatch.feature.onboarding.login.ui
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,21 +43,24 @@ internal fun OnboardingFirstScreen(
 
     LaunchedEffect(Unit) {
         viewModel.loginSuccessEvent.collect { isLoginSuccessful ->
-            val hasNotificationGranted =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) == PackageManager.PERMISSION_GRANTED
-                } else {
-                    true
-                }
+            if (isLoginSuccessful) {
+                val hasNotificationGranted =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    } else {
+                        true
+                    }
 
-            if (isLoginSuccessful && !hasNotificationGranted) {
-                onPermissionNotificationRequest()
-            }
-            if (isLoginSuccessful && hasNotificationGranted) {
-                onStartScreenRequest()
+                if (!hasNotificationGranted) {
+                    onPermissionNotificationRequest()
+                } else {
+                    onStartScreenRequest()
+                }
+            } else {
+                Toast.makeText(context, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
