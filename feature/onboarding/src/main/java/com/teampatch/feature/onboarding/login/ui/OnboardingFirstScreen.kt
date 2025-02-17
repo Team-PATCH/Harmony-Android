@@ -19,8 +19,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,24 +38,26 @@ internal fun OnboardingFirstScreen(
     onStartScreenRequest: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
-    val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(isLoginSuccessful) {
-        val hasNotificationGranted =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-            } else {
-                true
+    LaunchedEffect(Unit) {
+        viewModel.loginSuccessEvent.collect { isLoginSuccessful ->
+            val hasNotificationGranted =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                } else {
+                    true
+                }
+
+            if (isLoginSuccessful && !hasNotificationGranted) {
+                onPermissionNotificationRequest()
             }
-        if (isLoginSuccessful && !hasNotificationGranted) {
-            onPermissionNotificationRequest()
-        }
-        if (isLoginSuccessful && hasNotificationGranted) {
-            onStartScreenRequest()
+            if (isLoginSuccessful && hasNotificationGranted) {
+                onStartScreenRequest()
+            }
         }
     }
 
