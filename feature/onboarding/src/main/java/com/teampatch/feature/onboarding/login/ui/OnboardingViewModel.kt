@@ -11,10 +11,10 @@ import com.teampatch.core.domain.usecase.onboarding.LoginKakaoUseCase
 import com.teampatch.core.domain.usecase.onboarding.LoginUseCase
 import com.teampatch.core.domain.usecase.onboarding.RegisterFamilyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
