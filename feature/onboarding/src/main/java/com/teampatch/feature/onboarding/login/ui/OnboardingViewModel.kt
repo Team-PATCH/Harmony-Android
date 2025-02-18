@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.teampatch.core.domain.exception.FamilyRegistrationRequiredException
 import com.teampatch.core.domain.model.Host
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.InvitationMessage
@@ -13,8 +12,8 @@ import com.teampatch.core.domain.usecase.onboarding.LoginUseCase
 import com.teampatch.core.domain.usecase.onboarding.RegisterFamilyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -24,30 +23,17 @@ internal class OnboardingViewModel @Inject constructor(
     private val registerFamilyUseCase: RegisterFamilyUseCase,
 ) : ViewModel() {
 
-    // 로그인 성공 상태
-    private val _isLoginSuccessful = MutableStateFlow(false)
-    val isLoginSuccessful: StateFlow<Boolean> = _isLoginSuccessful
+    private val _loginSuccessEvent = Channel<Boolean>()
+    val loginSuccessEvent = _loginSuccessEvent.receiveAsFlow()
 
-    /**
-     * 에러 메시지가 필요한지 고민이 필요함
-     */
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage
-
-    // 로그인 시도를 수행하는 함수
     fun loginKakao() {
         viewModelScope.launch {
             runCatching {
-//                loginKakaoUseCase()
+                loginKakaoUseCase()
             }.onSuccess {
-                _isLoginSuccessful.value = true
-            }.onFailure { throwable ->
-                _isLoginSuccessful.value = false
-                _errorMessage.value = throwable.message
-                // Handle specific exceptions like FamilyRegistrationRequiredException
-                if (throwable is FamilyRegistrationRequiredException) {
-                    _errorMessage.value = "Family registration required."
-                }
+                _loginSuccessEvent.send(true)
+            }.onFailure {
+                _loginSuccessEvent.send(false)
             }
         }
     }

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +28,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding
+import com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
@@ -61,7 +62,6 @@ fun OnBoardingLayout(
                 .padding(scaffoldPaddingValues)
                 .padding(horizontal = 20.dp)
         ) {
-            // Title, Subtitle, and Spacer sections
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -88,7 +88,6 @@ fun OnBoardingLayout(
                 }
             }
 
-            // Content Section
             item {
                 Box(
                     modifier = Modifier
@@ -96,7 +95,7 @@ fun OnBoardingLayout(
                         .padding(vertical = 34.dp)
                         .background(G1)
                 ) {
-                    content() // Passing the composable content
+                    content()
                 }
             }
         }
@@ -111,12 +110,9 @@ fun OnBoardingLayout(
  * 파라미터로 request 2개, route 2개, 스크린도 2개(MakeGroup, Enter) 만들기
  */
 
-/**
- * 위에 루트 만들기
- *
- */
 @Composable
 fun OnboardingStartScreen(
+    onBackRequest: () -> Unit,
     onboardingMakeGroupRequest: () -> Unit,
     onboardingEnterScreenRequest: () -> Unit,
 ) {
@@ -130,7 +126,7 @@ fun OnboardingStartScreen(
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_space),
-        onBackRequest = { /*TODO*/ }
+        onBackRequest = { onBackRequest() }
     ) {
         Column(
             modifier = Modifier
@@ -138,7 +134,7 @@ fun OnboardingStartScreen(
                 .background(Color.White) // 배경색 설정
         ) {
             Image(
-                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_make_space_onboarding),
+                painter = painterResource(btn_make_space_onboarding),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,9 +150,10 @@ fun OnboardingStartScreen(
             )
 
             Image(
-                painter = painterResource(com.teampatch.core.designsystem.R.drawable.btn_enter_space_onboarding),
+                painter = painterResource(btn_enter_space_onboarding),
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .clickable { onboardingEnterScreenRequest() }
             )
         }
@@ -168,8 +165,9 @@ fun OnboardingStartScreen(
 private fun OnboardingStartScreenPreview() {
     HarmonyTheme {
         OnboardingStartScreen(
-            onboardingMakeGroupRequest = { },
-            onboardingEnterScreenRequest = { }
+            onBackRequest = {},
+            onboardingMakeGroupRequest = {},
+            onboardingEnterScreenRequest = {}
         )
     }
 }

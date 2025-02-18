@@ -1,7 +1,10 @@
 package com.teampatch.feature.onboarding.login.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +21,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,17 +40,28 @@ internal fun OnboardingFirstScreen(
     onStartScreenRequest: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
-    val isLoginSuccessful by viewModel.isLoginSuccessful.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(isLoginSuccessful) {
-        val hasNotificationGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-        if (isLoginSuccessful && !hasNotificationGranted) {
-            onPermissionNotificationRequest()
-        }
-        if (isLoginSuccessful && hasNotificationGranted) {
-            onStartScreenRequest()
+    fun hasNotificationGranted(context: Context): Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    } else {
+        true
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.loginSuccessEvent.collect { isLoginSuccessful ->
+            if (isLoginSuccessful) {
+                if (!hasNotificationGranted(context)) {
+                    onPermissionNotificationRequest()
+                } else {
+                    onStartScreenRequest()
+                }
+            } else {
+                Toast.makeText(context, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -67,8 +79,6 @@ internal fun OnboardingFirstScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
-//                verticalArrangement = Arrangement.Center,
-//                verticalArrangement = Arrangement.Top,
                 verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -83,7 +93,6 @@ internal fun OnboardingFirstScreen(
 
                 Button(
                     onClick = { viewModel.loginKakao() },
-//                    onClick = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
@@ -98,15 +107,6 @@ internal fun OnboardingFirstScreen(
                         contentScale = ContentScale.Fit
                     )
                 }
-
-//                // 에러 메시지 표시
-//                errorMessage?.let { message ->
-//                    Text(
-//                        text = message,
-//                        color = Color.Red,
-//                        modifier = Modifier.padding(top = 16.dp)
-//                    )
-//                }
             }
         }
     }

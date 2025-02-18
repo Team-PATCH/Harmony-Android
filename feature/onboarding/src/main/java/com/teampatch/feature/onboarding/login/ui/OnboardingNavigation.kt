@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 /**
  * 1. OnboardingRoute
  * 2. 파라미터가 되는 OnboardingPermissionRoute, OnboardingStartRoute
- * 3. StartScreen의 파라미터가 되는 OnboardingMakeGroupRoute, OnboardingEnterRoute
+ * 3. StartScreen의 파라미터가 되는 OnboardingMakeGroupRoute, OnboardingEnterInvitationCodeRoute
  */
 @Serializable
 data object OnboardingRoute
@@ -38,6 +38,7 @@ fun NavGraphBuilder.addOnboardingScreen(
 
 @Serializable
 data object OnboardingPermissionRoute
+
 fun NavController.navigateToPermissionNotificationScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
@@ -53,6 +54,7 @@ fun NavGraphBuilder.addOnboardingPermissionNotificationScreen() {
 
 @Serializable
 data object OnboardingStartRoute
+
 fun NavController.navigateToStartScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
@@ -61,11 +63,13 @@ fun NavController.navigateToStartScreen(
 }
 
 fun NavGraphBuilder.addOnboardingStartScreen(
+    onBackRequest: () -> Unit,
     onboardingMakeGroupRequest: () -> Unit,
     onboardingEnterScreenRequest: () -> Unit,
 ) {
     composable<OnboardingStartRoute> {
         OnboardingStartRoute(
+            onBackRequest = onBackRequest,
             onMakeGroupRequest = onboardingMakeGroupRequest,
             onEnterScreenRequest = onboardingEnterScreenRequest
         )
@@ -74,6 +78,7 @@ fun NavGraphBuilder.addOnboardingStartScreen(
 
 @Serializable
 data object OnboardingMakeGroupRoute
+
 fun NavController.navigateToMakeGroupScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
@@ -88,35 +93,41 @@ fun NavGraphBuilder.addOnboardingMakeGroupScreen() {
 }
 
 @Serializable
-data object OnboardingEnterRoute
-fun NavController.navigateToEnterScreen(
+data object OnboardingEnterInvitationCodeRoute
+
+fun NavController.navigateToEnterInvitationCodeScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(OnboardingEnterRoute, navOptions, navigatorExtras)
+    navigate(OnboardingEnterInvitationCodeRoute, navOptions, navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnboardingEnterScreen(
+fun NavGraphBuilder.addOnboardingEnterInvitationCodeScreen(
     onNextClick: () -> Unit,
 ) {
-    composable<OnboardingEnterRoute> {
-        OnboardingEnterScreen(
+    composable<OnboardingEnterInvitationCodeRoute> {
+        OnboardingEnterInvitationCodeScreen(
             onNextClick = onNextClick
         )
     }
 }
 
 @Serializable
-data object OnboardingInvitationRoute
-fun NavController.navigateToInvitationScreen(
+data object OnboardingEnterSpaceRoute
+
+fun NavController.navigateToEnterSpaceScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(OnboardingInvitationRoute, navOptions, navigatorExtras)
+    navigate(OnboardingEnterSpaceRoute, navOptions, navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnboardingInvitationScreen() {
-    composable<OnboardingInvitationRoute> {
-//        OnboardingLastScreen()
+fun NavGraphBuilder.addOnboardingEnterSpaceScreen(
+    onNextClick: () -> Unit,
+) {
+    composable<OnboardingEnterSpaceRoute> {
+        OnboardingEnterSpaceScreen(
+            onNextClick = onNextClick
+        )
     }
 }
