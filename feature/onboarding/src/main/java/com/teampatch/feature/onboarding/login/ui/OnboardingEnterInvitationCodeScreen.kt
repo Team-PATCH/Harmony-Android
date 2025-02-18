@@ -21,8 +21,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,9 +57,9 @@ import com.teampatch.feature.onboarding.R
 fun OnboardingEnterInvitationCodeScreen(
     onNextClick: () -> Unit,
 ) {
-    // 상태 변수로 초대 코드의 각 자리를 저장
-    var code by remember { mutableStateOf(listOf("", "", "", "", "")) }
-    val isNextEnabled = code.all { it.isNotEmpty() } // 5자리가 모두 입력되면 활성화
+    val code = remember { mutableStateListOf("", "", "", "", "") }
+    val isNextEnabled by remember { derivedStateOf { code.all { it.isNotEmpty() } } }
+    val focusManager = LocalFocusManager.current
 
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -88,7 +89,6 @@ fun OnboardingEnterInvitationCodeScreen(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val focusManager = LocalFocusManager.current
                 code.forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
@@ -102,9 +102,7 @@ fun OnboardingEnterInvitationCodeScreen(
                             value = code[index],
                             onValueChange = { value ->
                                 if (value.length <= 1) {
-                                    code = code.toMutableList().apply {
-                                        this[index] = value
-                                    }
+                                    code[index] = value
                                     // 다음 입력칸으로 포커스 이동
                                     if (value.isNotEmpty() && index < code.size - 1) {
                                         focusManager.moveFocus(FocusDirection.Next)
@@ -133,10 +131,7 @@ fun OnboardingEnterInvitationCodeScreen(
 
             // 다음 버튼
             Button(
-                onClick = {
-                    /* 초대 코드 확인 처리 */
-                    onNextClick()
-                },
+                onClick = onNextClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp), // 버튼의 높이 설정
