@@ -1,6 +1,7 @@
 package com.teampatch.feature.onboarding.login.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
@@ -41,20 +42,19 @@ internal fun OnboardingFirstScreen(
 ) {
     val context = LocalContext.current
 
+    fun hasNotificationGranted(context: Context): Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    } else {
+        true
+    }
+
     LaunchedEffect(Unit) {
         viewModel.loginSuccessEvent.collect { isLoginSuccessful ->
             if (isLoginSuccessful) {
-                val hasNotificationGranted =
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    } else {
-                        true
-                    }
-
-                if (!hasNotificationGranted) {
+                if (!hasNotificationGranted(context)) {
                     onPermissionNotificationRequest()
                 } else {
                     onStartScreenRequest()
