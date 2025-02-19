@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -144,40 +146,45 @@ internal fun DailyScreen(
                 .padding(scaffoldPaddingValues)
         ) {
             item {
-                Text(
-                    text = "완료된 일과에 응원의 한 마디를 남겨요!",
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    color = G5,
-                    modifier = Modifier
-                        .padding(top = 17.dp, start = 20.dp, end = 97.dp)
-                )
-                Text(
-                    text = "33% 완료",
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    color = MainGreen,
-                    modifier = Modifier
-                        .padding(top = 0.dp, start = 20.dp, end = 272.dp)
-                )
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(Color.LightGray) // 배경 색상
+                        .padding(horizontal = 20.dp, vertical = 17.dp) // 패딩 조정
                 ) {
-                    LinearProgressIndicator(
-                        progress = { progress },
+                    Text(
+                        text = "완료된 일과에 응원의 한 마디를 남겨요!",
+                        fontFamily = PretendardFontFamily,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp,
+                        color = G5,
+                        modifier = Modifier.fillMaxWidth() // 가로 너비 최대 설정
+                    )
+                    Spacer(modifier = Modifier.height(4.dp)) // 간격 추가
+                    Text(
+                        text = "33% 완료",
+                        fontFamily = PretendardFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        color = MainGreen,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
                             .height(8.dp)
-                            .clip(RoundedCornerShape(4.dp)),
-                        color = Color(0xFF4CAF50) // 프로그레스 바 색상
-                    )
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color.LightGray) // 배경 색상
+                    ) {
+                        LinearProgressIndicator(
+                            progress = { progress },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(8.dp)
+                                .clip(RoundedCornerShape(4.dp)),
+                            color = Color(0xFF4CAF50) // 프로그레스 바 색상
+                        )
+                    }
                 }
             }
             items(dailyRoutine.itemCount) { index ->
