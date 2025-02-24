@@ -3,6 +3,7 @@ package com.harmony.core.database.di
 import android.content.Context
 import androidx.room.Room
 import com.harmony.core.database.HarmonyDatabase
+import com.harmony.core.database.dao.TodoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +26,12 @@ internal object DatabaseModule {
             name = DB_NAME
         )
             .build()
+    }
+
+    @Provides
+    fun providesTodoDao(
+        harmonyDatabase: HarmonyDatabase
+    ): TodoDao {
+        return harmonyDatabase.todoDao()
     }
 }
