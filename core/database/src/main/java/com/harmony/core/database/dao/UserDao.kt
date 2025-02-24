@@ -17,10 +17,10 @@ interface UserDao {
     fun getUsers(): Flow<List<UserEntity>>
 
     @Insert
-    fun insertUsers(vararg userEntity: UserEntity)
+    suspend fun insertUsers(vararg userEntity: UserEntity)
 
     @Update
-    fun updateUser(userEntity: UserEntity)
+    suspend fun updateUser(userEntity: UserEntity)
 
     @Query("DELETE FROM user WHERE uid = :uid")
     fun deleteUser(uid: Long): Int

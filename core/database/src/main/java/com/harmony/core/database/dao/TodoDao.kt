@@ -14,7 +14,7 @@ interface TodoDao {
     fun getAllTodos(): Flow<List<TodoEntity>>
 
     @Insert
-    fun insertAll(vararg todos: TodoEntity)
+    suspend fun insertAll(vararg todos: TodoEntity)
 
     @Query("DELETE FROM todo WHERE id = :id")
     fun deleteById(id: Long)
