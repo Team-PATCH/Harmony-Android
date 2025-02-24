@@ -6,12 +6,14 @@ import com.teampatch.core.data.repository.AuthenticationRepositoryImpl
 import com.teampatch.core.data.repository.GroupManagementRepositoryImpl
 import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
 import com.teampatch.core.data.repository.QuestionRepositoryImpl
+import com.teampatch.core.data.repository.TodoOfflineRepositoryImpl
 import com.teampatch.core.domain.repository.AnswerRepository
 import com.teampatch.core.domain.repository.AppManagementRepository
 import com.teampatch.core.domain.repository.AuthenticationRepository
 import com.teampatch.core.domain.repository.GroupManagementRepository
 import com.teampatch.core.domain.repository.MemoryCardRepository
 import com.teampatch.core.domain.repository.QuestionRepository
+import com.teampatch.core.domain.repository.TodoRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -50,4 +52,9 @@ internal abstract class DataViewModelModule {
     abstract fun bindsGroupManagementRepository(
         groupManagementRepositoryImpl: GroupManagementRepositoryImpl,
     ): GroupManagementRepository
+
+    @Binds
+    abstract fun bindsTodoRepository(
+        todoOfflineRepositoryImpl: TodoOfflineRepositoryImpl
+    ): TodoRepository
 }
