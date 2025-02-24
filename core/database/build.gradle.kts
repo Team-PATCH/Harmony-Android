@@ -1,6 +1,7 @@
 plugins {
     id("teampatch.android.library")
     id("com.google.devtools.ksp")
+    id("teampatch.android.hilt")
 }
 
 android {
