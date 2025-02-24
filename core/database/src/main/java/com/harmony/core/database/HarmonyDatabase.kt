@@ -3,12 +3,18 @@ package com.harmony.core.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.harmony.core.database.dao.TodoDao
+import com.harmony.core.database.dao.UserDao
 import com.harmony.core.database.model.TodoEntity
+import com.harmony.core.database.model.UserEntity
 
 @Database(
-    entities = [TodoEntity::class],
+    entities = [
+        TodoEntity::class,
+        UserEntity::class,
+    ],
     version = 1,
 )
 internal abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
+    abstract fun userDao(): UserDao
 }
