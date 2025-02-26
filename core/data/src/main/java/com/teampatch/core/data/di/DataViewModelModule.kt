@@ -3,6 +3,7 @@ package com.teampatch.core.data.di
 import com.teampatch.core.data.repository.AnswerRepositoryImpl
 import com.teampatch.core.data.repository.AppManagementRepositoryImpl
 import com.teampatch.core.data.repository.AuthenticationRepositoryImpl
+import com.teampatch.core.data.repository.GroupManagementOfflineRepositoryImpl
 import com.teampatch.core.data.repository.GroupManagementRepositoryImpl
 import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
 import com.teampatch.core.data.repository.QuestionRepositoryImpl
@@ -52,7 +53,7 @@ internal abstract class DataViewModelModule {
 
     @Binds
     abstract fun bindsGroupManagementRepository(
-        groupManagementRepositoryImpl: GroupManagementRepositoryImpl,
+        groupManagementOfflineRepositoryImpl: GroupManagementOfflineRepositoryImpl
     ): GroupManagementRepository
 
     @Binds
