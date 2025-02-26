@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "user")
 data class UserEntity(
     @PrimaryKey val uid: Long,
-    @ColumnInfo(name = "groupId") val groupId: Int,
+    @ColumnInfo(name = "groupId") val groupId: Long?,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "relation") val relation: String,
     @ColumnInfo(name = "profileImageUri") val profileImageUri: String?,
