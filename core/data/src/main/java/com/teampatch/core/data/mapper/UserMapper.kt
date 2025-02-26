@@ -5,45 +5,32 @@ import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.model.User
 import com.teampatch.core.network.model.user.ProfileResponse
 
-private const val MEMBER = "m"
-private const val VIP = "v"
-
 internal fun ProfileResponse.toDomain(): User {
-    val role = when (user.permissionId) {
-        VIP -> Role.VIP
-        MEMBER -> Role.MEMBER
-        else -> throw IllegalStateException()
-    }
-
     return User(
         uid = user.userId,
         groupId = user.groupId,
         name = user.nick,
         relation = "",
         profileImageUrl = null,
-        role = role
+        role = roleStringMapper(user.permissionId)
     )
 }
 
 internal fun UserEntity.toDomain(): User {
     return User(
         uid = uid.toString(),
-        groupId = groupId,
+        groupId = groupId?.toInt() ?: -1,
         name = name,
         relation = relation,
         profileImageUrl = profileImageUri,
-        role = when (role) {
-            MEMBER -> Role.MEMBER
-            VIP -> Role.VIP
-            else -> throw IllegalArgumentException()
-        }
+        role = roleStringMapper(role)
     )
 }
 
 internal fun User.toEntity(): UserEntity {
     return UserEntity(
         uid = uid.toLong(),
-        groupId = groupId,
+        groupId = groupId.toLong(),
         name = name,
         relation = relation,
         profileImageUri = profileImageUrl,
