@@ -57,7 +57,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun DailyRoute(
     dailyManagePageRequest: () -> Unit,
-    editDailyPageRequest: (String) -> Unit,
+    dailyExpandPageRequest: (String) -> Unit,
     dailyAlarmPageRequest: (String) -> Unit,
     certificateDailyPageRequest: (String) -> Unit,
 ) {
@@ -67,13 +67,12 @@ internal fun DailyRoute(
 
     if (!uiState.isLoading) {
         DailyScreen(
-            onBackRequest = { },
             progress = 0f,
             onDailyRoutineClick = {},
             onDailyRoutineCheckChanged = { _, _ -> },
             dailyRoutine = flowOf(PagingData.empty<CheckableData<Todo>>()).collectAsLazyPagingItems(),
             dailyManagePageRequest = dailyManagePageRequest,
-            editDailyPageRequest = editDailyPageRequest,
+            dailyExpandPageRequest = dailyExpandPageRequest,
             dailyAlarmPageRequest = dailyAlarmPageRequest,
             certificateDailyPageRequest = certificateDailyPageRequest,
             uiState = uiState
@@ -93,13 +92,12 @@ internal fun DailyRoute(
 @Composable
 internal fun DailyScreen(
     // TODO: Route
-    onBackRequest: () -> Unit,
     progress: Float, // 진행률 (0f부터 1f까지의 값)
     onDailyRoutineClick: (String) -> Unit, // id
     onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
     dailyRoutine: LazyPagingItems<CheckableData<Todo>>,
     dailyManagePageRequest: () -> Unit,
-    editDailyPageRequest: (String) -> Unit,
+    dailyExpandPageRequest: (String) -> Unit,
     dailyAlarmPageRequest: (String) -> Unit,
     certificateDailyPageRequest: (String) -> Unit,
     uiState: DailyUiState,
@@ -222,22 +220,7 @@ internal fun DailyScreen(
 @Composable
 private fun DailyManageScreenPreview() {
     HarmonyTheme {
-//        DailyScreen(
-//            onBackRequest = { /* TODO: Handle back request */ },
-//            onEditClick = { /* TODO: Handle edit click */ },
-//            progress = 0.33f, // 33% 완료
-//            onDailyRoutineClick = {},
-//            onDailyRoutineCheckChanged = { _, _ -> },
-//            dailyRoutine = flowOf(
-//                PagingData.from(
-//                    data = TodoPreviewParameterProvider().values.first()
-//                        .map { CheckableData(it, mutableStateOf(it.isFinished)) },
-//                ),
-//            )
-//                .collectAsLazyPagingItems()
-//        )
         DailyScreen(
-            onBackRequest = { },
             progress = 0f,
             onDailyRoutineClick = {},
             onDailyRoutineCheckChanged = { _, _ -> },
@@ -249,7 +232,7 @@ private fun DailyManageScreenPreview() {
             )
                 .collectAsLazyPagingItems(),
             dailyManagePageRequest = { },
-            editDailyPageRequest = { },
+            dailyExpandPageRequest = { },
             dailyAlarmPageRequest = { },
             certificateDailyPageRequest = { },
             uiState = DailyUiState()
