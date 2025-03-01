@@ -39,7 +39,7 @@ import com.teampatch.core.designsystem.theme.G4
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.utils.noRippleClickable
-import com.teampatch.core.domain.fake.FakeDaily
+import com.teampatch.core.domain.fake.FakeDailyManage
 import com.teampatch.feature.daily.expand.model.DailyExpandSideEffect
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
 import kotlinx.coroutines.flow.flowOf
@@ -74,7 +74,7 @@ internal fun DailyExpandScreen(
     onBackRequest: () -> Unit,
     uiState: DailyExpandUiState,
 ) {
-    val daily = uiState.daily.collectAsLazyPagingItems()
+    val daily = uiState.dailyManage.collectAsLazyPagingItems()
     Scaffold(
         topBar = {
             BackButtonAppBar(
@@ -143,7 +143,7 @@ private fun DailyExpandScreenPreview() {
     HarmonyTheme {
         DailyExpandScreen(
             onBackRequest = {},
-            uiState = DailyExpandUiState(daily = flowOf(PagingData.from(FakeDaily().get())))
+            uiState = DailyExpandUiState(dailyManage = flowOf(PagingData.from(listOf(FakeDailyManage().get()))))
         )
     }
 }

@@ -3,19 +3,20 @@ package com.teampatch.feature.daily.expand
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teampatch.core.domain.usecase.daily.GetDailyUseCase
+import androidx.paging.PagingData
+import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import com.teampatch.feature.daily.expand.model.DailyExpandSideEffect
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class DailyExpandViewModel @Inject constructor(
-    private val getDailyUseCase: GetDailyUseCase,
+    private val getDailyManageUseCase: GetDailyManageUseCase,
 ) : ViewModel() {
     var dailyExpandUiState = mutableStateOf(DailyExpandUiState())
         private set
@@ -28,13 +29,17 @@ internal class DailyExpandViewModel @Inject constructor(
     }
 
     private fun load() = viewModelScope.launch {
-        val daily = getDailyUseCase(-1).catch {
+        runCatching {
+            val daily = getDailyManageUseCase("someId") // 적절한 dailyId 값 사용
+            flowOf(PagingData.from(listOf(daily))) // DailyManage를 Flow<PagingData<DailyManage>>로 변환
+        }.onSuccess { dailyFlow ->
+            dailyExpandUiState.value = DailyExpandUiState(
+                dailyManage = dailyFlow,
+                isLoading = false
+            )
+        }.onFailure {
             _sideEffect.send(DailyExpandSideEffect.LoadError(it))
             it.printStackTrace()
         }
-        dailyExpandUiState.value = DailyExpandUiState(
-            daily = daily,
-            isLoading = false
-        )
     }
 }
