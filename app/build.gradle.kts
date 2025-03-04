@@ -118,6 +118,7 @@ dependencies {
     implementation(project(":feature:family-info"))
     implementation(project(":feature:profile-edit"))
     implementation(project(":feature:daily"))
+    implementation(project(":feature:daily-edit"))
     implementation(project(":feature:daily-expand"))
     implementation(project(":feature:memorycard-registration"))
     implementation(project(":feature:question"))
