@@ -2,19 +2,25 @@ package com.teampatch.feature.daily.edit
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,19 +42,27 @@ import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.AppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.theme.G4
+import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.G2
 import com.teampatch.core.designsystem.theme.HarmonyTheme
-import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeDailyManage
+import com.teampatch.feature.daily.edit.R.string.btn_complete_daily
+import com.teampatch.feature.daily.edit.R.string.text_alarm_time
+import com.teampatch.feature.daily.edit.R.string.text_per_daily
+import com.teampatch.feature.daily.edit.R.string.title_daily
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Composable
 internal fun DailyEditRoute(
     onDismissRequest: () -> Unit,
     onCompleteRequest: (String) -> Unit,
     viewModel: DailyEditViewModel = hiltViewModel(),
-    ) {
+) {
     val context = LocalContext.current
     val uiState by viewModel.dailyEditUiState
     if (!uiState.isLoading) {
@@ -74,29 +88,53 @@ internal fun DailyEditRoute(
                 }
             }
         }
-
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DailyEditScreen(
     onDismissRequest: () -> Unit,
     onCompleteRequest: (String) -> Unit,
     uiState: DailyEditUiState,
-    ) {
-    var daily by rememberSaveable { mutableStateOf(uiState.dailyExpand.content)}
+) {
+    var daily by rememberSaveable { mutableStateOf(uiState.dailyExpand.content) }
+    var dateTime: LocalDateTime? by rememberSaveable { mutableStateOf(null) }
+    var isDatePickerDialogShow by rememberSaveable { mutableStateOf(false) }
+
+    if (isDatePickerDialogShow) {
+        val datePickerState = rememberDatePickerState()
+        DatePickerDialog(
+            onDismissRequest = { isDatePickerDialogShow = false },
+            confirmButton = {
+                Text(
+                    text = stringResource(R.string.date_picker_ok),
+                    modifier = Modifier
+                        .padding(start = 16.dp, bottom = 12.dp, end = 12.dp)
+                        .noRippleClickable {
+                            val dateMillis =
+                                datePickerState.selectedDateMillis ?: return@noRippleClickable
+                            val instant = Instant.ofEpochMilli(dateMillis)
+                            dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
+                            isDatePickerDialogShow = false
+                        }
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = stringResource(R.string.date_picker_cancel),
+                    modifier = Modifier.noRippleClickable { isDatePickerDialogShow = false }
+                )
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
 
     Scaffold(
         topBar = {
             AppBar(
-                title = {
-                    Text(
-                        text = "이거 좋은 방법은 아닌거 같고 uiState써야되나",
-                        maxLines = 1,
-                        modifier = Modifier
-                            .widthIn(max = 240.dp)
-                    )
-                },
+                title = { Text(stringResource(title_daily)) },
                 actions = {
                     Image(
                         painter = painterResource(R.drawable.ic_close_memory_card),
@@ -116,52 +154,71 @@ internal fun DailyEditScreen(
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
             ) {
-                Text(stringResource(R.string.btn_complete_daily))
+                Text(stringResource(btn_complete_daily))
             }
         }
     ) { scaffoldPaddingValues ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(scaffoldPaddingValues)
-                .verticalScroll(rememberScrollState())
                 .height(IntrinsicSize.Max)
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(top = 24.dp, bottom = 14.dp, start = 16.dp, end = 16.dp)
         ) {
             Text(
-                text = stringResource(R.string.text_per_daily),
+                text = stringResource(text_per_daily),
                 fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.Medium,
+                color = BL,
                 fontSize = 18.sp,
-                color = MainGreen,
-                modifier = Modifier
-                    .padding(top = 40.dp, start = 20.dp, end = 20.dp)
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(top = 40.dp, start = 20.dp, end = 20.dp)
             )
 
             Box(
-                modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp, top = 36.dp, bottom = 32.dp)
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 36.dp, bottom = 32.dp)
             ) {
                 DefaultTextField(
                     value = daily,
-                    onValueChange = {
-                        if (it.length <= 200) {
-                            daily = it
-                        }
-                    },
+                    onValueChange = { if (it.length <= 200) daily = it },
                     singleLine = false,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.height(IntrinsicSize.Max)
+                )
+            }
+
+            Text(
+                text = stringResource(text_alarm_time),
+                fontFamily = PretendardFontFamily,
+                color = BL,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 52.dp)
+                    .background(color = WH, shape = RoundedCornerShape(10.dp))
+                    .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
+                    .padding(horizontal = 20.dp)
+                    .noRippleClickable { isDatePickerDialogShow = true }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_date_memory_card),
+                    contentDescription = "date"
                 )
                 Text(
-                    text = stringResource(R.string.text_count_answer, daily.length),
+                    text = dateTime?.let { "${it.year}.${it.monthValue}.${it.dayOfMonth}" } ?: "",
+                    color = BL,
+                    fontSize = 20.sp,
                     fontFamily = PretendardFontFamily,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    color = G4,
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .align(Alignment.BottomEnd)
+                    modifier = Modifier.padding(start = 20.dp)
                 )
             }
         }
