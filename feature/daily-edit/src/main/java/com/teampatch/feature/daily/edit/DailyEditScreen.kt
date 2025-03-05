@@ -13,10 +13,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -203,13 +203,13 @@ internal fun DailyEditScreen(
                 modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
             )
 
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly, // 🔥 7개의 요일을 균등 배치
                 modifier = Modifier
                     .fillMaxWidth() // fillMaxWidth() 적용
                     .height(40.dp) // IntrinsicSize 사용하지 않고 명시적 높이 설정
             ) {
-                items(DayOfWeek.values()) { day ->
+                DayOfWeek.values().forEach { day ->
                     FilterChip(
                         selected = selectedDays.contains(day),
                         onClick = {
@@ -220,7 +220,10 @@ internal fun DailyEditScreen(
                             }
                         },
                         label = { Text(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN)) },
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(horizontal = 2.dp), // 간격 최소화
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = Color.Green // 선택된 배경색
+                        )
                     )
                 }
             }
