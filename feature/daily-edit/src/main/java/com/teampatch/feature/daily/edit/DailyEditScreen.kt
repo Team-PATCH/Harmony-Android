@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -206,9 +205,11 @@ internal fun DailyEditScreen(
 
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth() // fillMaxWidth() 적용
+                    .height(40.dp) // IntrinsicSize 사용하지 않고 명시적 높이 설정
             ) {
-                items(DayOfWeek.entries.toTypedArray()) { day ->
+                items(DayOfWeek.values()) { day ->
                     FilterChip(
                         selected = selectedDays.contains(day),
                         onClick = {
@@ -237,7 +238,7 @@ internal fun DailyEditScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 52.dp)
+                    .height(52.dp) // IntrinsicSize 제거 후 명시적 높이 설정
                     .background(color = WH, shape = RoundedCornerShape(10.dp))
                     .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
                     .padding(horizontal = 20.dp)
