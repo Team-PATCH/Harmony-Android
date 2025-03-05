@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -13,8 +14,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -49,10 +53,14 @@ import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeDailyManage
 import com.teampatch.feature.daily.edit.R.string.btn_complete_daily
 import com.teampatch.feature.daily.edit.R.string.select_time
+import com.teampatch.feature.daily.edit.R.string.select_week_days
 import com.teampatch.feature.daily.edit.R.string.text_per_daily
 import com.teampatch.feature.daily.edit.R.string.title_daily
+import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.format.TextStyle
 import java.util.Calendar
+import java.util.Locale
 
 @Composable
 internal fun DailyEditRoute(
@@ -122,6 +130,7 @@ internal fun DailyEditScreen(
     var daily by rememberSaveable { mutableStateOf(uiState.dailyExpand.content) }
     var time: LocalTime? by rememberSaveable { mutableStateOf(null) }
     var isTimePickerDialogShow by remember { mutableStateOf(false) }
+    var selectedDays by rememberSaveable { mutableStateOf(setOf<DayOfWeek>()) }
 
     Scaffold(
         topBar = {
@@ -166,12 +175,12 @@ internal fun DailyEditScreen(
                 color = BL,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 40.dp, start = 20.dp, end = 20.dp)
+                modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
             )
 
             Box(
                 modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp, top = 36.dp, bottom = 32.dp)
+                    .padding(horizontal = 20.dp)
             ) {
                 DefaultTextField(
                     value = daily,
@@ -184,6 +193,35 @@ internal fun DailyEditScreen(
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
                     modifier = Modifier.height(IntrinsicSize.Max)
                 )
+            }
+
+            Text(
+                text = stringResource(select_week_days),
+                fontFamily = PretendardFontFamily,
+                color = BL,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
+            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(DayOfWeek.entries.toTypedArray()) { day ->
+                    FilterChip(
+                        selected = selectedDays.contains(day),
+                        onClick = {
+                            selectedDays = if (selectedDays.contains(day)) {
+                                selectedDays - day
+                            } else {
+                                selectedDays + day
+                            }
+                        },
+                        label = { Text(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN)) },
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
             }
 
             Text(
