@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.teampatch.core.common.findActivity
 import com.teampatch.feature.answer.addAnswerScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
+import com.teampatch.feature.daily.edit.navigateToDailyEditScreen
+import com.teampatch.feature.daily.expand.addDailyExpandScreen
 import com.teampatch.feature.family.info.addFamilyInfoScreen
 import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
@@ -129,6 +131,12 @@ fun MainNavHost(
 
         addDailyScreen(
             dailyExpandPageRequest = { navController.navigateToDailyScreen() }
+        )
+
+        addDailyExpandScreen(
+            onBackRequest = navController::navigateUp,
+            dailyEditPageRequest = { navController.navigateToDailyEditScreen() },
+            onDeleteClick = {} // 임시
         )
     }
 }
