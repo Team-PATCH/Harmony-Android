@@ -3,6 +3,7 @@ package com.teampatch.harmony
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,10 +57,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun DailyRoute(
-    dailyManagePageRequest: () -> Unit,
-    dailyExpandPageRequest: (String) -> Unit,
-    dailyAlarmPageRequest: (String) -> Unit,
-    certificateDailyPageRequest: (String) -> Unit,
+    dailyExpandPageRequest: () -> Unit,
 ) {
     val context = LocalContext.current
     val dailyViewModel: DailyViewModel = hiltViewModel()
@@ -71,10 +69,7 @@ internal fun DailyRoute(
             onDailyRoutineClick = {},
             onDailyRoutineCheckChanged = { _, _ -> },
             dailyRoutine = flowOf(PagingData.empty<CheckableData<Todo>>()).collectAsLazyPagingItems(),
-            dailyManagePageRequest = dailyManagePageRequest,
             dailyExpandPageRequest = dailyExpandPageRequest,
-            dailyAlarmPageRequest = dailyAlarmPageRequest,
-            certificateDailyPageRequest = certificateDailyPageRequest,
             uiState = uiState
         )
     }
@@ -96,10 +91,7 @@ internal fun DailyScreen(
     onDailyRoutineClick: (String) -> Unit, // id
     onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
     dailyRoutine: LazyPagingItems<CheckableData<Todo>>,
-    dailyManagePageRequest: () -> Unit,
-    dailyExpandPageRequest: (String) -> Unit,
-    dailyAlarmPageRequest: (String) -> Unit,
-    certificateDailyPageRequest: (String) -> Unit,
+    dailyExpandPageRequest: () -> Unit,
     uiState: DailyUiState,
 ) {
     val daily = uiState.daily.collectAsLazyPagingItems()
@@ -129,7 +121,7 @@ internal fun DailyScreen(
                         contentDescription = "edit",
                         modifier = Modifier
                             .padding(end = 21.dp)
-                            .noRippleClickable(onClick = dailyManagePageRequest)
+                            .clickable { dailyExpandPageRequest() }
                     )
                 },
                 modifier = Modifier
@@ -231,10 +223,7 @@ private fun DailyManageScreenPreview() {
                 )
             )
                 .collectAsLazyPagingItems(),
-            dailyManagePageRequest = { },
             dailyExpandPageRequest = { },
-            dailyAlarmPageRequest = { },
-            certificateDailyPageRequest = { },
             uiState = DailyUiState()
         )
     }

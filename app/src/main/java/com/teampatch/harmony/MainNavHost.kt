@@ -126,5 +126,9 @@ fun MainNavHost(
         addProfileEditScreen(
             onCompleteRequest = navController::navigateUp
         )
+
+        addDailyScreen(
+            dailyExpandPageRequest = { navController.navigateToDailyScreen() }
+        )
     }
 }
