@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,30 +27,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.common.getOrNull
-import com.teampatch.core.designsystem.R.drawable.ic_daily_edit
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
-import com.teampatch.core.designsystem.theme.G3
 import com.teampatch.core.designsystem.theme.G4
+import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.domain.fake.FakeDailyManage
 import com.teampatch.core.domain.model.DailyManage
+import com.teampatch.feature.daily.expand.R.string.dropdown_delete_daily
+import com.teampatch.feature.daily.expand.R.string.dropdown_edit_daily
 import com.teampatch.feature.daily.expand.model.DailyExpandSideEffect
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
 import kotlinx.coroutines.flow.flowOf
@@ -57,8 +57,8 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun DailyExpandRoute(
     onBackRequest: () -> Unit,
-    onEditClick: (DailyManage) -> Unit,
-    onDeleteClick: (DailyManage) -> Unit,
+    onEditDailyRequest: (DailyManage) -> Unit,
+    onDeleteDailyRequest: (DailyManage) -> Unit,
     viewModel: DailyExpandViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -67,8 +67,8 @@ internal fun DailyExpandRoute(
     if (!uiState.isLoading) {
         DailyExpandScreen(
             onBackRequest = onBackRequest,
-            onEditClick = onEditClick,
-            onDeleteClick = onDeleteClick,
+            onEditDailyRequest = onEditDailyRequest,
+            onDeleteDailyRequest = onDeleteDailyRequest,
             uiState = uiState
         )
     }
@@ -86,8 +86,8 @@ internal fun DailyExpandRoute(
 @Composable
 internal fun DailyExpandScreen(
     onBackRequest: () -> Unit,
-    onEditClick: (DailyManage) -> Unit,
-    onDeleteClick: (DailyManage) -> Unit,
+    onEditDailyRequest: (DailyManage) -> Unit,
+    onDeleteDailyRequest: (DailyManage) -> Unit,
     uiState: DailyExpandUiState,
 ) {
     val daily = uiState.dailyManage.collectAsLazyPagingItems()
@@ -111,8 +111,8 @@ internal fun DailyExpandScreen(
                 val item = daily.getOrNull(index) ?: return@items
                 DailyItem(
                     dailyItem = daily.getOrNull(index),
-                    onEditClick = { daily.getOrNull(index)?.let { onEditClick(it) } },
-                    onDeleteClick = { daily.getOrNull(index)?.let { onDeleteClick(it) } }
+                    onEditDailyRequest = { daily.getOrNull(index)?.let { onEditDailyRequest(it) } },
+                    onDeleteDailyRequest = { daily.getOrNull(index)?.let { onDeleteDailyRequest(it) } }
                 )
             }
         }
@@ -122,10 +122,10 @@ internal fun DailyExpandScreen(
 @Composable
 fun DailyItem(
     dailyItem: DailyManage?,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    onEditDailyRequest: () -> Unit,
+    onDeleteDailyRequest: () -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var isDropDownMenuShow by remember { mutableStateOf(false) }
     if (dailyItem == null) return
 
     Box(
@@ -137,7 +137,6 @@ fun DailyItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(G1, RoundedCornerShape(10.dp))
-                .clickable { expanded = !expanded } // 클릭 시 expanded 상태 변경
                 .padding(12.dp)
         ) {
             Row(
@@ -154,12 +153,68 @@ fun DailyItem(
                     fontSize = 18.sp,
                     color = G4
                 )
-                Icon(
-                    painter = painterResource(id = ic_daily_edit),
-                    contentDescription = "daily_edit",
-                    tint = G3,
-                    modifier = Modifier.clickable { expanded = !expanded } // 클릭하면 메뉴 활성화
-                )
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { isDropDownMenuShow = true }
+                ) {
+                    Icon(
+                        painter = painterResource(com.teampatch.core.designsystem.R.drawable.ic_more_question),
+                        contentDescription = "more",
+                        tint = G5,
+                        modifier = Modifier
+                            .size(width = 4.dp, height = 16.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                    DropdownMenu(
+                        expanded = isDropDownMenuShow,
+                        onDismissRequest = { isDropDownMenuShow = false },
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .widthIn(min = 200.dp)
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Text(
+                                        text = stringResource(dropdown_edit_daily),
+                                        fontFamily = PretendardFontFamily,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 20.sp,
+                                        color = BL
+                                    )
+                                }
+                            },
+                            onClick = {
+                                onEditDailyRequest()
+                                isDropDownMenuShow = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Text(
+                                        text = stringResource(dropdown_delete_daily),
+                                        fontFamily = PretendardFontFamily,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 20.sp,
+                                        color = SubRed
+                                    )
+                                }
+                            },
+                            onClick = {
+                                onDeleteDailyRequest()
+                                isDropDownMenuShow = false
+                            }
+                        )
+                    }
+                }
             }
 
             Row(
@@ -178,41 +233,6 @@ fun DailyItem(
                     modifier = Modifier.widthIn(max = 240.dp)
                 )
             }
-            // DropdownMenu 추가
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                offset = DpOffset(250.dp, -80.dp), // 오른쪽으로 이동
-                modifier = Modifier.background(Color.White)
-
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            "일과 수정",
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    },
-                    onClick = {
-                        expanded = false
-                        onEditClick()
-                    }
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            "일과 수정",
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    },
-                    onClick = {
-                        expanded = false
-                        onDeleteClick()
-                    }
-                )
-            }
         }
     }
 }
@@ -223,8 +243,8 @@ private fun DailyExpandScreenPreview() {
     HarmonyTheme {
         DailyExpandScreen(
             onBackRequest = {},
-            onEditClick = {},
-            onDeleteClick = {},
+            onEditDailyRequest = {},
+            onDeleteDailyRequest = {},
             uiState = DailyExpandUiState(dailyManage = flowOf(PagingData.from(listOf(FakeDailyManage().get()))))
         )
     }
