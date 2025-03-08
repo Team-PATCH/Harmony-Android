@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
     private val loginKakaoUseCase: LoginKakaoUseCase,
-    private val loginUseCase: LoginUseCase, // 이것도 언젠간 쓰여야할 것 같은데..
+    private val loginUseCase: LoginUseCase,
     private val registerFamilyUseCase: RegisterFamilyUseCase,
 ) : ViewModel() {
 
