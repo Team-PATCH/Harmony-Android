@@ -1,10 +1,8 @@
 package com.teampatch.feature.daily.edit
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -18,11 +16,8 @@ import kotlinx.coroutines.launch
  */
 @HiltViewModel
 internal class DailyEditViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val getDailyManageUseCase: GetDailyManageUseCase,
 ) : ViewModel() {
-    private val dailyEditRoute = savedStateHandle.toRoute<DailyEditRoute>()
-
     var dailyEditUiState = mutableStateOf(DailyEditUiState())
         private set
 
@@ -37,18 +32,17 @@ internal class DailyEditViewModel @Inject constructor(
     }
 
     private fun load() = viewModelScope.launch {
-        try {
-            if (dailyEditRoute.dailyId.isEmpty()) return@launch
-
-            val expand = getDailyManageUseCase(dailyEditRoute.dailyId)
+        runCatching {
+            getDailyManageUseCase("someId") // 올바른 dailyId 사용
+        }.onSuccess { dailyManage ->
             dailyEditUiState.value = DailyEditUiState(
-                dailyExpand = expand,
+                dailyExpand = dailyManage,
                 isLoading = false
             )
-            selectedDays.value = setOf(expand.dateTime.dayOfWeek.name)
-        } catch (e: Exception) {
-            _sideEffect.send(DailyEditSideEffect.LoadError(e))
-            e.printStackTrace()
+            selectedDays.value = setOf(dailyManage.dateTime.dayOfWeek.name)
+        }.onFailure {
+            _sideEffect.send(DailyEditSideEffect.LoadError(it))
+            it.printStackTrace()
         }
     }
 
