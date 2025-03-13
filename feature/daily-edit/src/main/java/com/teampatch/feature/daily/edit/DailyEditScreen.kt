@@ -101,19 +101,23 @@ fun TimePickerDialog(
     onConfirm: (hour: Int, minute: Int) -> Unit,
 ) {
     val context = LocalContext.current
-    val calendar = Calendar.getInstance()
-    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    val minute = calendar.get(Calendar.MINUTE)
+    val calendar = remember { Calendar.getInstance() }
+    val hour = remember { calendar.get(Calendar.HOUR_OF_DAY) }
+    val minute = remember { calendar.get(Calendar.MINUTE) }
 
-    val timePickerDialog = TimePickerDialog(
-        context,
-        { _, selectedHour, selectedMinute ->
-            onConfirm(selectedHour, selectedMinute)
-        },
-        hour,
-        minute,
-        true
-    )
+    val timePickerDialog = remember {
+        TimePickerDialog(
+            context,
+            { _, selectedHour, selectedMinute ->
+                onConfirm(selectedHour, selectedMinute)
+            },
+            hour,
+            minute,
+            true
+        ).apply {
+            setOnDismissListener { onDismissRequest() }
+        }
+    }
 
     LaunchedEffect(Unit) {
         timePickerDialog.show()
