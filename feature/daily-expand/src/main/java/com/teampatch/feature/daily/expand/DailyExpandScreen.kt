@@ -35,6 +35,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.common.getOrNull
@@ -63,6 +66,7 @@ internal fun DailyExpandRoute(
     viewModel: DailyExpandViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val uiState: DailyExpandUiState by viewModel.dailyExpandUiState
 
     if (!uiState.isLoading) {
@@ -74,11 +78,13 @@ internal fun DailyExpandRoute(
         )
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.event.collect { sideEffect ->
-            when (sideEffect) {
-                is DailyExpandEvent.LoadError ->
-                    Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
+    LaunchedEffect(viewModel.event) {
+        lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+            viewModel.event.collect {
+                when (it) {
+                    is DailyExpandEvent.LoadError ->
+                        Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -113,7 +119,9 @@ internal fun DailyExpandScreen(
                 DailyItem(
                     dailyItem = daily.getOrNull(index),
                     onEditDailyRequest = { daily.getOrNull(index)?.let { onEditDailyRequest(it) } },
-                    onDeleteDailyRequest = { daily.getOrNull(index)?.let { onDeleteDailyRequest(it) } }
+                    onDeleteDailyRequest = {
+                        daily.getOrNull(index)?.let { onDeleteDailyRequest(it) }
+                    }
                 )
             }
         }
