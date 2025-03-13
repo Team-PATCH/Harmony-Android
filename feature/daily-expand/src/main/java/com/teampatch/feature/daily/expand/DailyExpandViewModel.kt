@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
-import com.teampatch.feature.daily.expand.model.DailyExpandSideEffect
+import com.teampatch.feature.daily.expand.model.DailyExpandEvent
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,8 +21,8 @@ internal class DailyExpandViewModel @Inject constructor(
     var dailyExpandUiState = mutableStateOf(DailyExpandUiState())
         private set
 
-    private val _sideEffect = Channel<DailyExpandSideEffect>()
-    val sideEffect = _sideEffect.receiveAsFlow()
+    private val _event = Channel<DailyExpandEvent>()
+    val event = _event.receiveAsFlow()
 
     init {
         load()
@@ -38,7 +38,7 @@ internal class DailyExpandViewModel @Inject constructor(
                 isLoading = false
             )
         }.onFailure {
-            _sideEffect.send(DailyExpandSideEffect.LoadError(it))
+            _event.send(DailyExpandEvent.LoadError(it))
             it.printStackTrace()
         }
     }

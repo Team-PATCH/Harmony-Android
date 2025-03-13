@@ -81,14 +81,14 @@ internal fun DailyEditRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect {
+        viewModel.event.collect {
             when (it) {
-                is DailyEditSideEffect.AddDailyError -> {
-                    Toast.makeText(context, "서버로 부터 데이터 전송 오류", Toast.LENGTH_SHORT).show()
+                is DailyEditEvent.AddDailyError -> {
+                    Toast.makeText(context, "서버로 부터 데이터 전송 오류", Toast.LENGTH_LONG).show()
                 }
 
-                is DailyEditSideEffect.LoadError -> {
-                    Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
+                is DailyEditEvent.LoadError -> {
+                    Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_LONG).show()
                 }
             }
         }

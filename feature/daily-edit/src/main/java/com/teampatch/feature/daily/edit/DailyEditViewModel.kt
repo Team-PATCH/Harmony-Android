@@ -21,11 +21,8 @@ internal class DailyEditViewModel @Inject constructor(
     var dailyEditUiState = mutableStateOf(DailyEditUiState())
         private set
 
-    private val _sideEffect: Channel<DailyEditSideEffect> = Channel()
-    val sideEffect: Flow<DailyEditSideEffect> = _sideEffect.receiveAsFlow()
-
-    var selectedDays = mutableStateOf(setOf<String>())
-        private set
+    private val _event: Channel<DailyEditEvent> = Channel()
+    val event: Flow<DailyEditEvent> = _event.receiveAsFlow()
 
     init {
         load()
@@ -37,21 +34,23 @@ internal class DailyEditViewModel @Inject constructor(
         }.onSuccess { dailyManage ->
             dailyEditUiState.value = DailyEditUiState(
                 dailyExpand = dailyManage,
-                isLoading = false
+                isLoading = false,
+                selectedDays = setOf(dailyManage.dateTime.dayOfWeek.name)
             )
-            selectedDays.value = setOf(dailyManage.dateTime.dayOfWeek.name)
         }.onFailure {
-            _sideEffect.send(DailyEditSideEffect.LoadError(it))
+            _event.send(DailyEditEvent.LoadError(it))
             it.printStackTrace()
         }
     }
 
     fun toggleDaySelection(day: String) {
-        selectedDays.value = if (selectedDays.value.contains(day)) {
-            selectedDays.value - day
-        } else {
-            selectedDays.value + day
-        }
+        dailyEditUiState.value = dailyEditUiState.value.copy(
+            selectedDays = if (dailyEditUiState.value.selectedDays.contains(day)) {
+                dailyEditUiState.value.selectedDays - day
+            } else {
+                dailyEditUiState.value.selectedDays + day
+            }
+        )
     }
 
     fun saveDaily(daily: String) = viewModelScope.launch {

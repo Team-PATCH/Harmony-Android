@@ -13,4 +13,5 @@ internal data class DailyEditUiState(
         commentCount = 0
     ),
     val isLoading: Boolean = true,
+    val selectedDays: Set<String> = emptySet(),
 )

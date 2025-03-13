@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.common.getOrNull
+import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
@@ -50,7 +51,7 @@ import com.teampatch.core.domain.fake.FakeDailyManage
 import com.teampatch.core.domain.model.DailyManage
 import com.teampatch.feature.daily.expand.R.string.dropdown_delete_daily
 import com.teampatch.feature.daily.expand.R.string.dropdown_edit_daily
-import com.teampatch.feature.daily.expand.model.DailyExpandSideEffect
+import com.teampatch.feature.daily.expand.model.DailyExpandEvent
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
 import kotlinx.coroutines.flow.flowOf
 
@@ -74,9 +75,9 @@ internal fun DailyExpandRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
+        viewModel.event.collect { sideEffect ->
             when (sideEffect) {
-                is DailyExpandSideEffect.LoadError ->
+                is DailyExpandEvent.LoadError ->
                     Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -131,7 +132,8 @@ fun DailyItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .padding(horizontal = 24.dp)
+            .padding(vertical = 16.dp)
     ) {
         Column(
             modifier = Modifier
@@ -159,7 +161,7 @@ fun DailyItem(
                         .clickable { isDropDownMenuShow = true }
                 ) {
                     Icon(
-                        painter = painterResource(com.teampatch.core.designsystem.R.drawable.ic_more_question),
+                        painter = painterResource(ic_more_question),
                         contentDescription = "more",
                         tint = G5,
                         modifier = Modifier
