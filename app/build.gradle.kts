@@ -123,6 +123,8 @@ dependencies {
     implementation(project(":feature:question-expand"))
     implementation(project(":feature:question-detail"))
     implementation(project(":feature:answer"))
+    implementation(project(":feature:memorystorage"))
+    implementation(project(":feature:memorystorage-detail"))
     androidTestImplementation(project(":core:ui-test"))
 
     androidTestImplementation(libs.hilt.android)
