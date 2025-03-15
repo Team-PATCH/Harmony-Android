@@ -134,6 +134,7 @@ internal fun DailyEditScreen(
     var time: LocalTime? by rememberSaveable { mutableStateOf(null) }
     var isTimePickerDialogShow by remember { mutableStateOf(false) }
     var selectedDays by rememberSaveable { mutableStateOf(setOf<DayOfWeek>()) }
+    val daysOfWeek = remember { DayOfWeek.values() }
 
     Scaffold(
         topBar = {
@@ -208,12 +209,12 @@ internal fun DailyEditScreen(
             )
 
             Row(
-                horizontalArrangement = Arrangement.SpaceEvenly, // 🔥 7개의 요일을 균등 배치
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
-                    .fillMaxWidth() // fillMaxWidth() 적용
-                    .height(40.dp) // IntrinsicSize 사용하지 않고 명시적 높이 설정
+                    .fillMaxWidth()
+                    .height(40.dp)
             ) {
-                DayOfWeek.values().forEach { day ->
+                daysOfWeek.forEach { day ->
                     FilterChip(
                         selected = selectedDays.contains(day),
                         onClick = {
@@ -224,9 +225,9 @@ internal fun DailyEditScreen(
                             }
                         },
                         label = { Text(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN)) },
-                        modifier = Modifier.padding(horizontal = 2.dp), // 간격 최소화
+                        modifier = Modifier.padding(horizontal = 2.dp),
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color.Green // 선택된 배경색
+                            selectedContainerColor = Color.Green
                         )
                     )
                 }
