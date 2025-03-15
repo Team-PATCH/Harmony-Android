@@ -246,7 +246,7 @@ internal fun DailyEditScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp) // IntrinsicSize 제거 후 명시적 높이 설정
+                    .height(52.dp)
                     .background(color = WH, shape = RoundedCornerShape(10.dp))
                     .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
                     .padding(horizontal = 20.dp)
