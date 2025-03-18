@@ -29,7 +29,7 @@ internal class OnboardingViewModel @Inject constructor(
     fun loginKakao() {
         viewModelScope.launch {
             runCatching {
-                loginKakaoUseCase()
+//                loginKakaoUseCase()
             }.onSuccess {
                 _loginSuccessEvent.send(true)
             }.onFailure {
