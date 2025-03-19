@@ -27,13 +27,16 @@ import com.teampatch.core.designsystem.component.DefaultBottomNavigation
 import com.teampatch.core.designsystem.component.NavigationItem
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.navigateToHomeScreen
+import com.teampatch.feature.memorystorage.MemoryStorageRoute
+import com.teampatch.feature.memorystorage.navigateToMemoryStorageScreen
 import com.teampatch.feature.question.QuestionRoute
 import com.teampatch.feature.question.navigateToQuestionScreen
 import com.teampatch.harmony.model.MainUiState
 
 private val BottomNavigationEnableScreens: Set<String?> = setOf(
     HomeRoute::class.qualifiedName,
-    QuestionRoute::class.qualifiedName
+    QuestionRoute::class.qualifiedName,
+    MemoryStorageRoute::class.qualifiedName
 )
 
 @Composable
@@ -50,6 +53,12 @@ fun MainApp(
             when (currentBackStackEntry?.destination?.route) {
                 HomeRoute::class.qualifiedName -> {
                     NavigationItem.HOME.also {
+                        previousNavigationItem = it
+                    }
+                }
+
+                MemoryStorageRoute::class.qualifiedName -> {
+                    NavigationItem.STORE.also {
                         previousNavigationItem = it
                     }
                 }
@@ -82,7 +91,7 @@ fun MainApp(
                     onClick = {
                         when (it) {
                             NavigationItem.HOME -> navController.navigateToHomeScreen()
-                            NavigationItem.STORE -> {}
+                            NavigationItem.STORE -> navController.navigateToMemoryStorageScreen()
                             NavigationItem.QUESTION -> navController.navigateToQuestionScreen()
                             NavigationItem.CALENDAR -> {}
                         }
