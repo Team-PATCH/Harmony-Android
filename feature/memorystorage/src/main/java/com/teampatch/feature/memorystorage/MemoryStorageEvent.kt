@@ -1,4 +1,5 @@
 package com.teampatch.feature.memorystorage
 
-class MemoryStorageEvent {
+sealed class MemoryStorageEvent {
+    object LoadError : MemoryStorageEvent()
 }
