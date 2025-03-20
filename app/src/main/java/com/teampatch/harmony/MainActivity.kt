@@ -8,6 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kakao.sdk.common.util.Utility
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +43,9 @@ class MainActivity : ComponentActivity() {
 
     private fun initView() = setContent {
         HarmonyTheme {
-            MainApp(viewModel = viewModel)
+            val mainUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+            MainApp(mainUiState)
         }
     }
 

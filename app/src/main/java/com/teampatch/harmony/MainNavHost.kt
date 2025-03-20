@@ -16,6 +16,7 @@ import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
+import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterInvitationCodeScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingMakeGroupScreen
@@ -40,6 +41,7 @@ import com.teampatch.feature.settings.navigateToSettingsScreen
 
 @Composable
 fun MainNavHost(
+    isFirstUser: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -48,7 +50,7 @@ fun MainNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = HomeRoute
+        startDestination = if (isFirstUser) OnboardingRoute else HomeRoute
     ) {
         addOnboardingScreen(
             onKakaoLoginRequest = {},

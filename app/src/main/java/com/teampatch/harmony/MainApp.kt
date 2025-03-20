@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -40,8 +39,8 @@ private val BottomNavigationEnableScreens: Set<String?> = setOf(
 
 @Composable
 fun MainApp(
+    mainUiState: MainUiState,
     navController: NavHostController = rememberNavController(),
-    viewModel: MainViewModel = hiltViewModel(),
 ) {
     val currentBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
         initialValue = null
@@ -71,7 +70,6 @@ fun MainApp(
             currentBackStackEntry?.destination?.route in BottomNavigationEnableScreens
         }
     }
-    val uiState: MainUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         bottomBar = {
@@ -100,13 +98,14 @@ fun MainApp(
             .safeDrawingPadding()
     ) { scaffoldPaddingValue ->
         MainNavHost(
+            isFirstUser = mainUiState.isFirstUser,
             navController = navController,
             modifier = Modifier.padding(scaffoldPaddingValue)
         )
     }
 
-    LaunchedEffect(uiState.isLoginRequired) {
-        if (uiState.isLoginRequired) {
+    LaunchedEffect(mainUiState.isLoginRequired) {
+        if (mainUiState.isLoginRequired) {
             navController.navigateToOnboardingScreen()
         }
     }
