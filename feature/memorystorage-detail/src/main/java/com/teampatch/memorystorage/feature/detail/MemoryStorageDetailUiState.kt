@@ -1,4 +1,5 @@
 package com.teampatch.memorystorage.feature.detail
 
-class MemoryStorageDetailUiState {
-}
+data class MemoryStorageDetailUiState(
+    val isLoading: Boolean = true,
+)

@@ -1,4 +1,5 @@
 package com.teampatch.memorystorage.feature.detail
 
-class MemoryStorageDetailEvent {
+internal sealed interface MemoryStorageDetailEvent {
+    data class LoadError(val t: Throwable) : MemoryStorageDetailEvent
 }
