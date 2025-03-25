@@ -32,6 +32,7 @@ fun OnBoardingLayout(
     title: AnnotatedString,
     subtext: String,
     onBackRequest: () -> Unit,
+    bottomBar: (@Composable () -> Unit)? = null, // ✅ bottomBar를 선택적으로 추가
     content: @Composable () -> Unit, // content 인자를 받음
 ) {
     Scaffold(
@@ -41,7 +42,8 @@ fun OnBoardingLayout(
                 title = {},
                 actions = {}
             )
-        }
+        },
+        bottomBar = { bottomBar?.invoke() } // ✅ bottomBar가 null이면 아무것도 표시되지 않음
     ) { scaffoldPaddingValues ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -68,7 +70,6 @@ fun OnBoardingLayout(
 
                     Text(
                         text = subtext,
-                        color = G5,
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.W500,
                         fontSize = 18.sp
@@ -81,7 +82,6 @@ fun OnBoardingLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 34.dp)
-                        .background(G1)
                 ) {
                     content()
                 }
