@@ -1,6 +1,5 @@
 package com.teampatch.core.designsystem.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +17,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.teampatch.core.designsystem.theme.G1
-import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 
 /**
