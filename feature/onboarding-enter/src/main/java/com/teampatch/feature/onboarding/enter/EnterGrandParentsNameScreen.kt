@@ -1,9 +1,11 @@
 package com.teampatch.feature.onboarding.enter
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenuItem
@@ -28,8 +30,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 
@@ -37,6 +41,7 @@ import com.teampatch.core.designsystem.theme.MainGreen
 internal fun OnboardingEnterRoute(
     onBackRequest: () -> Unit,
     onEnterRelationScreenRequest: () -> Unit,
+    onCompleteRequest: () -> Unit,
     viewModel: OnboardingEnterViewModel = hiltViewModel(),
 ) {
 }
@@ -45,7 +50,11 @@ internal fun OnboardingEnterRoute(
 internal fun EnterGrandParentsNameScreen(
     onBackRequest: () -> Unit,
     onEnterRelationScreenRequest: (String) -> Unit,
+    onCompleteRequest: () -> Unit,
 ) {
+    var selectedText by remember { mutableStateOf("") } // ✅ 상태를 상위에서 관리
+    var name by remember { mutableStateOf("") } // ✅ 상태를 상위에서 관리
+
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MainGreen)) {
@@ -59,18 +68,39 @@ internal fun EnterGrandParentsNameScreen(
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_enter_name),
-        onBackRequest = { onBackRequest() }
+        onBackRequest = { onBackRequest() },
+        bottomBar = {
+            DefaultButton(
+                onClick = { onCompleteRequest() },
+                enabled = selectedText.isNotBlank() && name.isNotBlank(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+                Text("추가하기")
+            }
+        }
     ) {
-        CustomDropdownAndTextField()
+        // ✅ 상태를 전달
+        CustomDropdownAndTextField(
+            selectedText = selectedText,
+            onSelectedTextChange = { selectedText = it },
+            name = name,
+            onNameChange = { name = it }
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomDropdownAndTextField() {
+fun CustomDropdownAndTextField(
+    selectedText: String,
+    onSelectedTextChange: (String) -> Unit,
+    name: String,
+    onNameChange: (String) -> Unit,
+) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("할머니") } // 기본 선택값
-    val options = listOf("할머니", "할아버지", "어머니", "아버지")
+    val options = listOf("할머니", "할아버지")
 
     Row(
         modifier = Modifier
@@ -86,13 +116,19 @@ fun CustomDropdownAndTextField() {
         ) {
             OutlinedTextField(
                 value = selectedText,
+                placeholder = { Text("할머니", color = Color.Gray) },
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
-                    Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown")
+                    Icon(
+                        Icons.Filled.ArrowDropDown,
+                        contentDescription = "Dropdown",
+                        tint = MainGreen
+                    )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .menuAnchor() // ✅ ExposedDropdownMenuBoxScope 내에서 사용해야 함
             )
 
             ExposedDropdownMenu(
@@ -103,7 +139,7 @@ fun CustomDropdownAndTextField() {
                     DropdownMenuItem(
                         text = { Text(option) },
                         onClick = {
-                            selectedText = option
+                            onSelectedTextChange(option) // ✅ 부모에 값 전달
                             expanded = false
                         }
                     )
@@ -112,10 +148,13 @@ fun CustomDropdownAndTextField() {
         }
 
         OutlinedTextField(
-            value = "성함",
-            onValueChange = {},
-            enabled = false,
-            modifier = Modifier.weight(1f),
+            value = name,
+            onValueChange = { onNameChange(it) }, // ✅ 부모에 값 전달
+            enabled = true, // ✅ 입력 가능하도록 설정
+            placeholder = { Text("성함", color = Color.Gray) }, // ✅ 입력 전 힌트 표시
+            modifier = Modifier
+                .weight(1f)
+                .background(G1, RoundedCornerShape(10.dp)),
             colors = OutlinedTextFieldDefaults.colors(
                 disabledTextColor = Color.Gray,
                 disabledBorderColor = Color.LightGray,
@@ -131,7 +170,8 @@ private fun EnterGrandParentsNameScreenPreview() {
     HarmonyTheme {
         EnterGrandParentsNameScreen(
             onBackRequest = {},
-            onEnterRelationScreenRequest = {}
+            onEnterRelationScreenRequest = {},
+            onCompleteRequest = {}
         )
     }
 }
