@@ -40,6 +40,7 @@ import com.teampatch.feature.question.expand.addQuestionExpandScreen
 import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
+import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailScreen
 
 @Composable
 fun MainNavHost(
@@ -132,5 +133,7 @@ fun MainNavHost(
         addMemoryStorageScreen(
             onDetailPageRequest = navController::navigateToMemoryStorageScreen
         )
+
+        addMemoryStorageDetailScreen()
     }
 }

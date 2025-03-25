@@ -2,6 +2,7 @@ package com.teampatch.memorystorage.feature.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,15 +11,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +39,6 @@ import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.MemoryInfoView
-import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
@@ -43,7 +46,6 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
-import com.teampatch.feature.memorystorage.detail.R.string.dropdown_edit_answer
 
 @Composable
 internal fun MemoryStorageDetailRoute(
@@ -59,6 +61,7 @@ internal fun MemoryStorageDetailScreen(
     uiState: MemoryStorageDetailUiState,
 ) {
     var answerEditMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -71,39 +74,12 @@ internal fun MemoryStorageDetailScreen(
                             .padding(end = 20.dp)
                             .size(36.dp)
                             .noRippleClickable {
-                                answerEditMenuExpanded = true
+                                showBottomSheet = true
                             }
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_more_question),
                             contentDescription = "more"
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = answerEditMenuExpanded,
-                        onDismissRequest = { answerEditMenuExpanded = false },
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier
-                            .widthIn(min = 200.dp)
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    Text(
-                                        text = stringResource(dropdown_edit_answer),
-                                        fontFamily = PretendardFontFamily,
-                                        fontWeight = FontWeight.Medium,
-                                        fontSize = 20.sp,
-                                        color = BL
-                                    )
-                                }
-                            },
-                            onClick = {
-                                answerEditMenuExpanded = false
-                            }
                         )
                     }
                 }
@@ -171,6 +147,56 @@ internal fun MemoryStorageDetailScreen(
                     fontWeight = FontWeight.Medium,
                     fontSize = 20.sp,
                     color = G5
+                )
+            }
+        }
+    }
+    BottomSheetForMemory(
+        showBottomSheet = showBottomSheet,
+        onDismiss = { showBottomSheet = false }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetForMemory(
+    showBottomSheet: Boolean,
+    onDismiss: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState()
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "다시 대화하기",
+                    fontSize = 34.sp,
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 22.dp)
+                        .clickable { onDismiss() }
+                )
+                HorizontalDivider()
+
+                Text(
+                    text = "삭제하기",
+                    fontSize = 34.sp,
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 23.dp)
+                        .clickable { onDismiss() }
                 )
             }
         }
