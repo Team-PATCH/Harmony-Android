@@ -29,6 +29,7 @@ class MainViewModel @Inject constructor(
                 .collect { isLoginRequired ->
                     _uiState.update {
                         it.copy(
+                            isFirstUser = if (uiState.value.isLoading) isLoginRequired else it.isFirstUser,
                             isLoginRequired = isLoginRequired,
                             isLoading = false
                         )
