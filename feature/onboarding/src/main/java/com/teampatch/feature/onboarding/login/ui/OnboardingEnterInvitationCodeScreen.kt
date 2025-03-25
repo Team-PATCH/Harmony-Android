@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.R.drawable.btn_add_profile
 import com.teampatch.core.designsystem.R.drawable.btn_enter_space
+import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.component.SpeechBubble
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.HarmonyTheme

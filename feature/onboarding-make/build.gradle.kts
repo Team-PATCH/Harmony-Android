@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.daily.manage"
+    namespace = "com.teampatch.feature.onboarding.make"
 }
 
 dependencies {
