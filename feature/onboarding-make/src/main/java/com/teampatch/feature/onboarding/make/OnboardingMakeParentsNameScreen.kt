@@ -168,7 +168,7 @@ private fun EnterGrandParentsNameScreenPreview() {
     HarmonyTheme {
         OnboardingMakeParentsNameScreen(
             onBackRequest = {},
-            onEnterRelationScreenRequest = {},
+            onEnterRelationScreenRequest = {}
         )
     }
 }

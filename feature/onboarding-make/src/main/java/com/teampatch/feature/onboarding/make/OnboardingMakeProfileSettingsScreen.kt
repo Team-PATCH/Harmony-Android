@@ -1,3 +1,3 @@
 package com.teampatch.feature.onboarding.make
 
-class ProfileSettingScreen
+class OnboardingMakeProfileSettingsScreen

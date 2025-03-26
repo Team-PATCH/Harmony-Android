@@ -7,7 +7,6 @@ import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data object OnboardingMakeGroupRoute
 
@@ -37,7 +36,7 @@ fun NavGraphBuilder.addOnboardingMakeRelationScreen(
     composable<OnboardingMakeGroupRoute> {
         OnboardingMakeRelationScreen(
             onBackRequest = onBackRequest,
-            onInviteGrandParentsScreenRequest = onInviteGrandParentsScreenRequest,
+            onInviteGrandParentsScreenRequest = onInviteGrandParentsScreenRequest
         )
     }
 }
