@@ -1,3 +1,9 @@
 package com.teampatch.feature.onboarding.make
 
-class OnboardingMakeProfileSettingsScreen
+import androidx.compose.runtime.Composable
+
+@Composable
+internal fun OnboardingMakeProfileSettingsScreen(
+    onBackRequest: () -> Unit,
+    onInviteGrandParentsScreenRequest: () -> Unit,
+) {}

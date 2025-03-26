@@ -37,8 +37,9 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 @Composable
 internal fun OnboardingMakeRelationScreen(
     onBackRequest: () -> Unit,
-    onInviteGrandParentsScreenRequest: () -> Unit,
+    onProfileSettingsScreenRequest: () -> Unit,
 ) {
+
     var name by remember { mutableStateOf("") }
 
     OnBoardingLayout(
@@ -57,7 +58,7 @@ internal fun OnboardingMakeRelationScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onInviteGrandParentsScreenRequest() },
+                onClick = { onProfileSettingsScreenRequest() },
                 enabled = name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,7 +154,7 @@ private fun OnboardingMakeRelationScreenPreview() {
     HarmonyTheme {
         OnboardingMakeRelationScreen(
             onBackRequest = {},
-            onInviteGrandParentsScreenRequest = {}
+            onProfileSettingsScreenRequest = {}
         )
     }
 }

@@ -41,10 +41,32 @@ fun NavController.navigateToMakeRelationScreen(
 
 fun NavGraphBuilder.addOnboardingMakeRelationScreen(
     onBackRequest: () -> Unit,
-    onInviteGrandParentsScreenRequest: () -> Unit,
+    onProfileSettingsScreenRequest: () -> Unit,
 ) {
     composable<OnboardingMakeRelationRoute> {
         OnboardingMakeRelationScreen(
+            onBackRequest = onBackRequest,
+            onProfileSettingsScreenRequest = onProfileSettingsScreenRequest
+        )
+    }
+}
+
+@Serializable
+data object OnboardingMakeProfileRoute
+
+fun NavController.navigateToMakeProfileSettingsScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingMakeProfileRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addOnboardingMakeProfileSettingsScreen(
+    onBackRequest: () -> Unit,
+    onInviteGrandParentsScreenRequest: () -> Unit,
+) {
+    composable<OnboardingMakeProfileRoute> {
+        OnboardingMakeProfileSettingsScreen(
             onBackRequest = onBackRequest,
             onInviteGrandParentsScreenRequest = onInviteGrandParentsScreenRequest
         )
