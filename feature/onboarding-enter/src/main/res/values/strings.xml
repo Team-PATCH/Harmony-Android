@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="title_onboarding_enter_invitation">
+        <item>"초대코드"</item>
+        <item>"를\n"</item>
+        <item>"입력해 주세요."</item>
+    </string-array>
+
+    <string-array name="title_onboarding_enter_space">
+        <item>"손녀 조다은"</item>
+        <item>"님이\n"</item>
+        <item>"만든 가족공간이에요."</item>
+    </string-array>
+
+    <string name="subtext_onboarding_enter_invitation">"가족 매니저가 전송한\n5자리 코드를 입력해 주세요."</string>
+
+    <string name="text_onboarding_enter_speech_bubble">"가족과 함께\n소중한 추억을 기록해볼까요?"</string>
+
+
+
 
 </resources>
