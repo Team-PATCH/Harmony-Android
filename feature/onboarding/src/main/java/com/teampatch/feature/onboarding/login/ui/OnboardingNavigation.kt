@@ -77,22 +77,6 @@ fun NavGraphBuilder.addOnboardingStartScreen(
 }
 
 @Serializable
-data object OnboardingMakeGroupRoute
-
-fun NavController.navigateToMakeGroupScreen(
-    navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null,
-) {
-    navigate(OnboardingMakeGroupRoute, navOptions, navigatorExtras)
-}
-
-fun NavGraphBuilder.addOnboardingMakeGroupScreen() {
-    composable<OnboardingMakeGroupRoute> {
-        OnboardingMakeGroupScreen()
-    }
-}
-
-@Serializable
 data object OnboardingEnterInvitationCodeRoute
 
 fun NavController.navigateToEnterInvitationCodeScreen(

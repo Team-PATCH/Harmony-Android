@@ -28,6 +28,8 @@ import com.teampatch.feature.onboarding.login.ui.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
+import com.teampatch.feature.onboarding.make.addOnboardingMakeParentsNameScreen
+import com.teampatch.feature.onboarding.make.navigateToMakeGroupScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
@@ -64,7 +66,16 @@ fun MainNavHost(
             onboardingMakeGroupRequest = { navController.navigateToMakeGroupScreen() },
             onboardingEnterScreenRequest = { navController.navigateToEnterInvitationCodeScreen() }
         )
-        addOnboardingMakeGroupScreen()
+        addOnboardingMakeParentsNameScreen(
+            onBackRequest = navController::popBackStack,
+            onEnterRelationScreenRequest = { navController.navigateUp() }
+        )
+
+//        addOnboardingMakeRelationScreen(
+//            onBackRequest = navController::popBackStack,
+//            onInviteGrandParentsScreenRequest = { navController.navigateUp() }
+//        )
+
         addOnboardingEnterInvitationCodeScreen(
             onNextClick = { navController.navigateToEnterSpaceScreen() }
         )
