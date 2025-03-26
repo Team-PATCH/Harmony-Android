@@ -38,7 +38,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 
 @Composable
-internal fun OnboardingMakeGroupRoute(
+internal fun OnboardingMakeParentsNameRoute(
     onBackRequest: () -> Unit,
     onEnterRelationScreenRequest: () -> Unit,
     viewModel: OnboardingMakeViewModel = hiltViewModel(),

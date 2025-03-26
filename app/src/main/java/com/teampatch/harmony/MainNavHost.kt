@@ -29,7 +29,9 @@ import com.teampatch.feature.onboarding.login.ui.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeParentsNameScreen
+import com.teampatch.feature.onboarding.make.addOnboardingMakeRelationScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeGroupScreen
+import com.teampatch.feature.onboarding.make.navigateToMakeRelationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen

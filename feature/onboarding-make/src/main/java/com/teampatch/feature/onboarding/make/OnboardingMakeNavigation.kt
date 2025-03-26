@@ -8,20 +8,20 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object OnboardingMakeGroupRoute
+data object OnboardingMakeParentsNameRoute
 
 fun NavController.navigateToMakeGroupScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(OnboardingMakeGroupRoute, navOptions, navigatorExtras)
+    navigate(OnboardingMakeParentsNameRoute, navOptions, navigatorExtras)
 }
 
 fun NavGraphBuilder.addOnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
     onEnterRelationScreenRequest: () -> Unit,
 ) {
-    composable<OnboardingMakeGroupRoute> {
+    composable<OnboardingMakeParentsNameRoute> {
         OnboardingMakeParentsNameScreen(
             onBackRequest = onBackRequest,
             onEnterRelationScreenRequest = onEnterRelationScreenRequest
@@ -33,7 +33,7 @@ fun NavGraphBuilder.addOnboardingMakeRelationScreen(
     onBackRequest: () -> Unit,
     onInviteGrandParentsScreenRequest: () -> Unit,
 ) {
-    composable<OnboardingMakeGroupRoute> {
+    composable<OnboardingMakeRelationRoute> {
         OnboardingMakeRelationScreen(
             onBackRequest = onBackRequest,
             onInviteGrandParentsScreenRequest = onInviteGrandParentsScreenRequest
