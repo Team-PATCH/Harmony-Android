@@ -1,4 +1,4 @@
-package com.teampatch.feature.onboarding.enter
+package com.teampatch.feature.onboarding.make
 
 import android.net.Uri
 import androidx.compose.runtime.getValue
@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardingEnterViewModel @Inject constructor() : ViewModel() {
+class OnboardingMakeViewModel @Inject constructor() : ViewModel() {
     var relationship by mutableStateOf("")
         private set
 

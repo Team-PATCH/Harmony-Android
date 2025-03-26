@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="title_onboarding_enter_name">
+        <item>"누구"</item>
+        <item>"를 위해\n"</item>
+        <item>"만드시나요?"</item>
+    </string-array>
+
+    <string name="subtext_onboarding_enter_name">"할머니나 할아버지의 성함을\n입력해 주세요."</string>
+</resources>

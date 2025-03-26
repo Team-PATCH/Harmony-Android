@@ -1,4 +1,4 @@
-package com.teampatch.feature.onboarding.enter
+package com.teampatch.feature.onboarding.make
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,19 +38,17 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 
 @Composable
-internal fun OnboardingEnterRoute(
+internal fun OnboardingMakeGroupRoute(
     onBackRequest: () -> Unit,
     onEnterRelationScreenRequest: () -> Unit,
-    onCompleteRequest: () -> Unit,
-    viewModel: OnboardingEnterViewModel = hiltViewModel(),
+    viewModel: OnboardingMakeViewModel = hiltViewModel(),
 ) {
 }
 
 @Composable
-internal fun EnterGrandParentsNameScreen(
+internal fun OnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
-    onEnterRelationScreenRequest: (String) -> Unit,
-    onCompleteRequest: () -> Unit,
+    onEnterRelationScreenRequest: () -> Unit,
 ) {
     var selectedText by remember { mutableStateOf("") } // ✅ 상태를 상위에서 관리
     var name by remember { mutableStateOf("") } // ✅ 상태를 상위에서 관리
@@ -71,7 +69,7 @@ internal fun EnterGrandParentsNameScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onCompleteRequest() },
+                onClick = { onEnterRelationScreenRequest() },
                 enabled = selectedText.isNotBlank() && name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -168,10 +166,9 @@ fun CustomDropdownAndTextField(
 @Composable
 private fun EnterGrandParentsNameScreenPreview() {
     HarmonyTheme {
-        EnterGrandParentsNameScreen(
+        OnboardingMakeParentsNameScreen(
             onBackRequest = {},
             onEnterRelationScreenRequest = {},
-            onCompleteRequest = {}
         )
     }
 }
