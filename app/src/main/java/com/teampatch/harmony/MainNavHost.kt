@@ -17,7 +17,9 @@ import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.enter.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterInvitationCodeScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingEnterSpaceScreen
@@ -98,7 +100,10 @@ fun MainNavHost(
             onEnterSpaceScreenRequest = { navController.navigateToEnterSpaceScreen() }
         )
 
-        addOnboardingEnterSpaceScreen(onNextClick = { navController.navigateToHomeScreen() })
+        addOnboardingEnterSpaceScreen(
+            onBackRequest = navController::popBackStack,
+            onHomeRouteRequest = { navController.navigateToHomeScreen() }
+        )
 
         addHomeScreen(
             onUserPageRequest = navController::navigateToFamilyInfoScreen,
