@@ -16,7 +16,7 @@ class OnboardingMakeViewModel @Inject constructor() : ViewModel() {
     var name by mutableStateOf("")
         private set
 
-    var profileImageUri by mutableStateOf<Uri?>(null)
+    var profileImageUri by mutableStateOf<Uri?>(null) // 프로필 이미지 상태 관리
         private set
 
     fun updateRelationship(value: String) {

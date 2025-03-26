@@ -1,3 +1,8 @@
 package com.teampatch.feature.onboarding.make
 
-class OnboardingMakeInviteGrandParentsScreen
+import androidx.compose.runtime.Composable
+
+@Composable
+internal fun OnboardingMakeInviteGrandParentsScreen(
+    onBackRequest: () -> Unit,
+) {}

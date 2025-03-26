@@ -28,10 +28,12 @@ import com.teampatch.feature.onboarding.login.ui.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
+import com.teampatch.feature.onboarding.make.addOnboardingMakeInviteGrandParentsScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeParentsNameScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeRelationScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeGroupScreen
+import com.teampatch.feature.onboarding.make.navigateToMakeInviteGrandParentsScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeRelationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
@@ -82,7 +84,11 @@ fun MainNavHost(
 
         addOnboardingMakeProfileSettingsScreen(
             onBackRequest = navController::popBackStack,
-            onInviteGrandParentsScreenRequest = {}
+            onInviteGrandParentsScreenRequest = { navController.navigateToMakeInviteGrandParentsScreen() }
+        )
+
+        addOnboardingMakeInviteGrandParentsScreen(
+            onBackRequest = navController::popBackStack
         )
 
         addOnboardingEnterInvitationCodeScreen(

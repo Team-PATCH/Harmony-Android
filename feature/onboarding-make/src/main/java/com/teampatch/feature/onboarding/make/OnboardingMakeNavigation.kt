@@ -72,3 +72,23 @@ fun NavGraphBuilder.addOnboardingMakeProfileSettingsScreen(
         )
     }
 }
+
+@Serializable
+data object OnboardingMakeInvitationRoute
+
+fun NavController.navigateToMakeInviteGrandParentsScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingMakeInvitationRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addOnboardingMakeInviteGrandParentsScreen(
+    onBackRequest: () -> Unit,
+) {
+    composable<OnboardingMakeInvitationRoute> {
+        OnboardingMakeInviteGrandParentsScreen(
+            onBackRequest = onBackRequest
+        )
+    }
+}

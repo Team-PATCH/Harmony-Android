@@ -39,17 +39,15 @@ internal fun OnboardingMakeRelationScreen(
     onBackRequest: () -> Unit,
     onProfileSettingsScreenRequest: () -> Unit,
 ) {
-
     var relation by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
 
-
     OnBoardingLayout(
         title = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = MainGreen)) {
+            withStyle(style = SpanStyle(color = BL)) {
                 append(stringArrayResource(R.array.title_onboarding_make_relation)[0])
             }
-            withStyle(style = SpanStyle(color = BL)) {
+            withStyle(style = SpanStyle(color = MainGreen)) {
                 append(stringArrayResource(R.array.title_onboarding_make_relation)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
@@ -74,7 +72,7 @@ internal fun OnboardingMakeRelationScreen(
             relation = relation,
             onRelationChange = { relation = it },
             name = name,
-            onNameChange = { name = it}
+            onNameChange = { name = it }
         )
     }
 }
@@ -84,7 +82,7 @@ fun CustomTextField(
     relation: String,
     onRelationChange: (String) -> Unit,
     name: String,
-    onNameChange: (String) -> Unit
+    onNameChange: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
