@@ -40,7 +40,9 @@ internal fun OnboardingMakeRelationScreen(
     onProfileSettingsScreenRequest: () -> Unit,
 ) {
 
+    var relation by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
+
 
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -59,7 +61,7 @@ internal fun OnboardingMakeRelationScreen(
         bottomBar = {
             DefaultButton(
                 onClick = { onProfileSettingsScreenRequest() },
-                enabled = name.isNotBlank(),
+                enabled = relation.isNotBlank() && name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -69,16 +71,20 @@ internal fun OnboardingMakeRelationScreen(
         }
     ) {
         CustomTextField(
+            relation = relation,
+            onRelationChange = { relation = it },
             name = name,
-            onNameChange = { name = it }
+            onNameChange = { name = it}
         )
     }
 }
 
 @Composable
 fun CustomTextField(
+    relation: String,
+    onRelationChange: (String) -> Unit,
     name: String,
-    onNameChange: (String) -> Unit,
+    onNameChange: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -100,8 +106,8 @@ fun CustomTextField(
                 )
 
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { onNameChange(it) },
+                    value = relation,
+                    onValueChange = { onRelationChange(it) },
                     enabled = true,
                     placeholder = { Text("예) 손녀", color = Color.Gray) },
                     modifier = Modifier
