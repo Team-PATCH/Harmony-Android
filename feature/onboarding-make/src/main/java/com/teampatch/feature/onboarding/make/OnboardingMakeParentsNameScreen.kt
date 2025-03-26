@@ -50,22 +50,22 @@ internal fun OnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
     onEnterRelationScreenRequest: () -> Unit,
 ) {
-    var selectedText by remember { mutableStateOf("") } // ✅ 상태를 상위에서 관리
-    var name by remember { mutableStateOf("") } // ✅ 상태를 상위에서 관리
+    var selectedText by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") } //
 
     OnBoardingLayout(
         title = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MainGreen)) {
-                append(stringArrayResource(R.array.title_onboarding_enter_name)[0])
+                append(stringArrayResource(R.array.title_onboarding_make_name)[0])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(R.array.title_onboarding_enter_name)[1])
+                append(stringArrayResource(R.array.title_onboarding_make_name)[1])
             }
             withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(R.array.title_onboarding_enter_name)[2])
+                append(stringArrayResource(R.array.title_onboarding_make_name)[2])
             }
         },
-        subtext = stringResource(R.string.subtext_onboarding_enter_name),
+        subtext = stringResource(R.string.subtext_onboarding_make_name),
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
@@ -79,7 +79,6 @@ internal fun OnboardingMakeParentsNameScreen(
             }
         }
     ) {
-        // ✅ 상태를 전달
         CustomDropdownAndTextField(
             selectedText = selectedText,
             onSelectedTextChange = { selectedText = it },
@@ -126,7 +125,7 @@ fun CustomDropdownAndTextField(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .menuAnchor() // ✅ ExposedDropdownMenuBoxScope 내에서 사용해야 함
+                    .menuAnchor()
             )
 
             ExposedDropdownMenu(
@@ -137,7 +136,7 @@ fun CustomDropdownAndTextField(
                     DropdownMenuItem(
                         text = { Text(option) },
                         onClick = {
-                            onSelectedTextChange(option) // ✅ 부모에 값 전달
+                            onSelectedTextChange(option)
                             expanded = false
                         }
                     )
@@ -147,9 +146,9 @@ fun CustomDropdownAndTextField(
 
         OutlinedTextField(
             value = name,
-            onValueChange = { onNameChange(it) }, // ✅ 부모에 값 전달
-            enabled = true, // ✅ 입력 가능하도록 설정
-            placeholder = { Text("성함", color = Color.Gray) }, // ✅ 입력 전 힌트 표시
+            onValueChange = { onNameChange(it) },
+            enabled = true,
+            placeholder = { Text("성함", color = Color.Gray) },
             modifier = Modifier
                 .weight(1f)
                 .background(G1, RoundedCornerShape(10.dp)),
