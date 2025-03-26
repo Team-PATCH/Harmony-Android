@@ -29,6 +29,16 @@ fun NavGraphBuilder.addOnboardingMakeParentsNameScreen(
     }
 }
 
+@Serializable
+data object OnboardingMakeRelationRoute
+
+fun NavController.navigateToMakeRelationScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingMakeRelationRoute, navOptions, navigatorExtras)
+}
+
 fun NavGraphBuilder.addOnboardingMakeRelationScreen(
     onBackRequest: () -> Unit,
     onInviteGrandParentsScreenRequest: () -> Unit,

@@ -70,13 +70,13 @@ fun MainNavHost(
         )
         addOnboardingMakeParentsNameScreen(
             onBackRequest = navController::popBackStack,
-            onEnterRelationScreenRequest = { navController.navigateUp() }
+            onEnterRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
         )
 
-//        addOnboardingMakeRelationScreen(
-//            onBackRequest = navController::popBackStack,
-//            onInviteGrandParentsScreenRequest = { navController.navigateUp() }
-//        )
+        addOnboardingMakeRelationScreen(
+            onBackRequest = navController::popBackStack,
+            onInviteGrandParentsScreenRequest = { }
+        )
 
         addOnboardingEnterInvitationCodeScreen(
             onNextClick = { navController.navigateToEnterSpaceScreen() }
