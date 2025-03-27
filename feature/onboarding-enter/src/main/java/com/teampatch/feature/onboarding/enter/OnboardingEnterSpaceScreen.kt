@@ -37,6 +37,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.feature.onboarding.enter.R.array.title_onboarding_enter_space
+import com.teampatch.feature.onboarding.enter.R.drawable.img_onboarding_enter_space
 import com.teampatch.feature.onboarding.enter.R.string.text_onboarding_enter_speech_bubble
 
 @Composable
@@ -65,9 +66,18 @@ fun OnboardingEnterSpaceScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("공간 입장하기")
+                Text("가족 공간 입장하기")
             }
-        }
+        },
+        image = {
+            Image(
+                painter = painterResource(img_onboarding_enter_space),
+                contentDescription = "Onboarding Illustration",
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        },
+        imagePadding = 15.dp // ✅ bottomBar가 있을 때 이미지와의 간격 조정
     ) {
         Column(
             modifier = Modifier
@@ -83,24 +93,6 @@ fun OnboardingEnterSpaceScreen(
                     .size(144.dp)
                     .clip(CircleShape)
             )
-
-            Spacer(modifier = Modifier.height(148.dp)) // TODO: 이거 어떻게 위치 조정하지...
-
-            SpeechBubble(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(bottom = 20.dp) // bottomBar와 동일한 패딩
-            ) {
-                Text(
-                    text = stringResource(text_onboarding_enter_speech_bubble),
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
         }
     }
 }

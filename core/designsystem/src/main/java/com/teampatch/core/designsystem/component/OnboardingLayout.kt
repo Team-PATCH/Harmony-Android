@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
@@ -30,6 +31,8 @@ fun OnBoardingLayout(
     subtext: String,
     onBackRequest: () -> Unit,
     bottomBar: (@Composable () -> Unit)? = null, // ✅ bottomBar를 선택적으로 추가
+    image: (@Composable () -> Unit)? = null, // ✅ 선택적 image 추가
+    imagePadding: Dp = 0.dp, // ✅ 화면에서 조정 가능한 padding 추가
     content: @Composable () -> Unit, // content 인자를 받음
 ) {
     Scaffold(
@@ -40,7 +43,21 @@ fun OnBoardingLayout(
                 actions = {}
             )
         },
-        bottomBar = { bottomBar?.invoke() } // ✅ bottomBar가 null이면 아무것도 표시되지 않음
+        bottomBar = {
+            Column {
+                if (image != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = imagePadding), // ✅ bottomBar 위에 간격 추가
+                        contentAlignment = Alignment.Center
+                    ) {
+                        image()
+                    }
+                }
+                bottomBar?.invoke() // ✅ bottomBar는 항상 맨 아래 위치
+            }
+        }
     ) { scaffoldPaddingValues ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
