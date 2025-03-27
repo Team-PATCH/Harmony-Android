@@ -19,12 +19,34 @@ fun NavController.navigateToMakeGroupScreen(
 
 fun NavGraphBuilder.addOnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
-    onEnterRelationScreenRequest: () -> Unit,
+    onShareInvitationScreenRequest: () -> Unit,
 ) {
     composable<OnboardingMakeParentsNameRoute> {
         OnboardingMakeParentsNameScreen(
             onBackRequest = onBackRequest,
-            onEnterRelationScreenRequest = onEnterRelationScreenRequest
+            onShareInvitationScreenRequest = onShareInvitationScreenRequest
+        )
+    }
+}
+
+@Serializable
+data object OnboardingMakeInvitationRoute
+
+fun NavController.navigateToShareInvitationScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingMakeInvitationRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addOnboardingMakeInviteGrandParentsScreen(
+    onBackRequest: () -> Unit,
+    onRelationScreenRequest: () -> Unit,
+) {
+    composable<OnboardingMakeInvitationRoute> {
+        OnboardingMakeInviteGrandParentsScreen(
+            onBackRequest = onBackRequest,
+            onRelationScreenRequest = onRelationScreenRequest
         )
     }
 }
@@ -63,32 +85,12 @@ fun NavController.navigateToMakeProfileSettingsScreen(
 
 fun NavGraphBuilder.addOnboardingMakeProfileSettingsScreen(
     onBackRequest: () -> Unit,
-    onInviteGrandParentsScreenRequest: () -> Unit,
+    /* TODO: 클릭 이벤트 */
 ) {
     composable<OnboardingMakeProfileRoute> {
         OnboardingMakeProfileSettingsScreen(
-            onBackRequest = onBackRequest,
-            onInviteGrandParentsScreenRequest = onInviteGrandParentsScreenRequest
-        )
-    }
-}
-
-@Serializable
-data object OnboardingMakeInvitationRoute
-
-fun NavController.navigateToMakeInviteGrandParentsScreen(
-    navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null,
-) {
-    navigate(OnboardingMakeInvitationRoute, navOptions, navigatorExtras)
-}
-
-fun NavGraphBuilder.addOnboardingMakeInviteGrandParentsScreen(
-    onBackRequest: () -> Unit,
-) {
-    composable<OnboardingMakeInvitationRoute> {
-        OnboardingMakeInviteGrandParentsScreen(
             onBackRequest = onBackRequest
+            /* TODO: 클릭 이벤트 */
         )
     }
 }

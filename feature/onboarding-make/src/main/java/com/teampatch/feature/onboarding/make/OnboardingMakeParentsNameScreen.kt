@@ -29,7 +29,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.theme.BL
@@ -38,17 +37,9 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 
 @Composable
-internal fun OnboardingMakeParentsNameRoute(
-    onBackRequest: () -> Unit,
-    onEnterRelationScreenRequest: () -> Unit,
-    viewModel: OnboardingMakeViewModel = hiltViewModel(),
-) {
-}
-
-@Composable
 internal fun OnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
-    onEnterRelationScreenRequest: () -> Unit,
+    onShareInvitationScreenRequest: () -> Unit,
 ) {
     var selectedText by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") } //
@@ -69,7 +60,7 @@ internal fun OnboardingMakeParentsNameScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onEnterRelationScreenRequest() },
+                onClick = { onShareInvitationScreenRequest() },
                 enabled = selectedText.isNotBlank() && name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -167,7 +158,7 @@ private fun EnterGrandParentsNameScreenPreview() {
     HarmonyTheme {
         OnboardingMakeParentsNameScreen(
             onBackRequest = {},
-            onEnterRelationScreenRequest = {}
+            onShareInvitationScreenRequest = {}
         )
     }
 }

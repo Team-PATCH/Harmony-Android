@@ -40,6 +40,7 @@ import com.teampatch.feature.onboarding.make.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeInviteGrandParentsScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeRelationScreen
+import com.teampatch.feature.onboarding.make.navigateToShareInvitationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
@@ -78,7 +79,12 @@ fun MainNavHost(
         )
         addOnboardingMakeParentsNameScreen(
             onBackRequest = navController::popBackStack,
-            onEnterRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
+            onShareInvitationScreenRequest = { navController.navigateToShareInvitationScreen() }
+        )
+
+        addOnboardingMakeInviteGrandParentsScreen(
+            onBackRequest = navController::popBackStack,
+            onRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
         )
 
         addOnboardingMakeRelationScreen(
@@ -93,6 +99,7 @@ fun MainNavHost(
 
         addOnboardingMakeInviteGrandParentsScreen(
             onBackRequest = navController::popBackStack
+            /* TODO: 클릭 이벤트 */
         )
 
         addOnboardingEnterInvitationCodeScreen(
