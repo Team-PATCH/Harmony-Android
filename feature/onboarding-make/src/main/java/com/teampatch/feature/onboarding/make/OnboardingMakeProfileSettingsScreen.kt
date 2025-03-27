@@ -40,6 +40,7 @@ import com.teampatch.core.designsystem.utils.previewPlaceholder
 internal fun OnboardingMakeProfileSettingsScreen(
     viewModel: OnboardingMakeViewModel = hiltViewModel(), // ViewModel 주입
     onBackRequest: () -> Unit,
+    /* TODO */
 ) {
     val profileImageUri = viewModel.profileImageUri
 
@@ -73,7 +74,7 @@ internal fun OnboardingMakeProfileSettingsScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("다음")
+                Text("가족 공간 입장하기")
             }
         }
     ) {
