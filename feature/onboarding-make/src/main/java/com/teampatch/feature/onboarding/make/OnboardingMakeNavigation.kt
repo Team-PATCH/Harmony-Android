@@ -85,12 +85,12 @@ fun NavController.navigateToMakeProfileSettingsScreen(
 
 fun NavGraphBuilder.addOnboardingMakeProfileSettingsScreen(
     onBackRequest: () -> Unit,
-    /* TODO: 클릭 이벤트 */
+    onHomeRouteRequest: () -> Unit,
 ) {
     composable<OnboardingMakeProfileRoute> {
         OnboardingMakeProfileSettingsScreen(
-            onBackRequest = onBackRequest
-            /* TODO: 클릭 이벤트 */
+            onBackRequest = onBackRequest,
+            onHomeRouteRequest = onHomeRouteRequest
         )
     }
 }

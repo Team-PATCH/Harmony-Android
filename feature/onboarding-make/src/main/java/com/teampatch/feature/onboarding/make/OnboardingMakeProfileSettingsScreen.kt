@@ -40,7 +40,7 @@ import com.teampatch.core.designsystem.utils.previewPlaceholder
 internal fun OnboardingMakeProfileSettingsScreen(
     viewModel: OnboardingMakeViewModel = hiltViewModel(), // ViewModel 주입
     onBackRequest: () -> Unit,
-    /* TODO */
+    onHomeRouteRequest: () -> Unit,
 ) {
     val profileImageUri = viewModel.profileImageUri
 
@@ -69,7 +69,7 @@ internal fun OnboardingMakeProfileSettingsScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { /* TODO */ },
+                onClick = { onHomeRouteRequest() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -130,8 +130,8 @@ internal fun OnboardingMakeProfileSettingsScreen(
 private fun OnboardingMakeProfileSettingsScreenPreview() {
     HarmonyTheme {
         OnboardingMakeProfileSettingsScreen(
-            onBackRequest = {}
-            /* TODO: 클릭 이벤트 */
+            onBackRequest = {},
+            onHomeRouteRequest = {}
         )
     }
 }

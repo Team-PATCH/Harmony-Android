@@ -58,6 +58,8 @@ fun MainNavHost(
         navController = navController,
         startDestination = if (isLoginRequired) OnboardingRoute else HomeRoute
     ) {
+        /** 온보딩 */
+
         addOnboardingScreen(
             onKakaoLoginRequest = {},
             onPermissionNotificationRequest = { navController.navigateToPermissionNotificationScreen() },
@@ -65,11 +67,15 @@ fun MainNavHost(
         )
 
         addOnboardingPermissionNotificationScreen()
+
         addOnboardingStartScreen(
             onBackRequest = navController::popBackStack,
             onboardingMakeGroupRequest = { navController.navigateToMakeGroupScreen() },
             onboardingEnterScreenRequest = { navController.navigateToEnterInvitationCodeScreen() }
         )
+
+        /** 온보딩-Make */
+
         addOnboardingMakeParentsNameScreen(
             onBackRequest = navController::popBackStack,
             onShareInvitationScreenRequest = { navController.navigateToShareInvitationScreen() }
@@ -86,8 +92,11 @@ fun MainNavHost(
         )
 
         addOnboardingMakeProfileSettingsScreen(
-            onBackRequest = navController::popBackStack
+            onBackRequest = navController::popBackStack,
+            onHomeRouteRequest = { navController.navigateToHomeScreen() }
         )
+
+        /** 온보딩-Enter */
 
         addOnboardingEnterInvitationCodeScreen(
             onBackRequest = navController::popBackStack,
