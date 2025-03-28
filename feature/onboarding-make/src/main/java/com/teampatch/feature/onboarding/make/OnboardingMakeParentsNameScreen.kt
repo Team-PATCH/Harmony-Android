@@ -66,7 +66,7 @@ internal fun OnboardingMakeParentsNameScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("추가하기")
+                Text("다음")
             }
         }
     ) {

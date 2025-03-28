@@ -7,6 +7,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -73,8 +73,8 @@ internal fun OnboardingFirstScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues) // Scaffold의 기본 패딩
-                .padding(top = 135.dp, bottom = 8.dp) // Column 시작 위치에 추가 패딩
+                .padding(paddingValues)
+                .padding(top = 135.dp, bottom = 8.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -91,14 +91,14 @@ internal fun OnboardingFirstScreen(
 
                 Spacer(modifier = Modifier.height(465.dp))
 
-                Button(
-                    onClick = { viewModel.loginKakao() },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .height(68.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)),
-                    shape = RoundedCornerShape(10.dp)
+                        .height(68.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable { viewModel.loginKakao() },
+                    contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.kakao_login_medium_wide),
