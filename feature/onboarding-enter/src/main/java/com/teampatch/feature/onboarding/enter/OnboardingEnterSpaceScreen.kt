@@ -34,7 +34,7 @@ import com.teampatch.feature.onboarding.enter.R.drawable.img_onboarding_enter_sp
 @Composable
 fun OnboardingEnterSpaceScreen(
     onBackRequest: () -> Unit,
-    onHomeRouteRequest: () -> Unit, /* TODO */
+    onHomeRouteRequest: () -> Unit,
 ) {
     OnBoardingLayout(
         title = buildAnnotatedString {
