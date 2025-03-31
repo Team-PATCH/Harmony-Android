@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,8 +19,8 @@ class OnboardingMakeViewModel @Inject constructor() : ViewModel() {
     var name by mutableStateOf("")
         private set
 
-    var profileImageUri by mutableStateOf<Uri?>(null) // 프로필 이미지 상태 관리
-        private set
+    private val _profileImageUri = MutableStateFlow<Uri?>(null)
+    val profileImageUri: StateFlow<Uri?> = _profileImageUri.asStateFlow()
 
     fun updateRelationship(value: String) {
         relationship = value
