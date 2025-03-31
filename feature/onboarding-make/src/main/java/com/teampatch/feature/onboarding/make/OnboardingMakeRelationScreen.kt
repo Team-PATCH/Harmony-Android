@@ -2,7 +2,6 @@ package com.teampatch.feature.onboarding.make
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,6 +29,7 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
+import com.teampatch.core.designsystem.theme.G2
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
@@ -95,69 +95,61 @@ fun CustomTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                Text(
-                    text = stringResource(R.string.text_onboarding_make_relation_title),
-                    fontFamily = PretendardFontFamily,
-                    color = BL,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 9.dp)
-                )
+        Column {
+            Text(
+                text = stringResource(R.string.text_onboarding_make_relation_title),
+                fontFamily = PretendardFontFamily,
+                color = BL,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 9.dp)
+            )
 
-                OutlinedTextField(
-                    value = relation,
-                    onValueChange = { onRelationChange(it) },
-                    enabled = true,
-                    placeholder = { Text("예) 손녀", color = Color.Gray) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(G1, RoundedCornerShape(10.dp)),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        disabledTextColor = Color.Gray,
-                        disabledBorderColor = Color.LightGray,
-                        disabledContainerColor = Color(0xFFF5F5F5)
-                    )
+            OutlinedTextField(
+                value = relation,
+                onValueChange = { onRelationChange(it) },
+                enabled = true,
+                placeholder = { Text("예) 손녀", color = Color.Gray) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(G1),
+                shape = RoundedCornerShape(10.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = G2
                 )
-            }
+            )
         }
 
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                Text(
-                    text = stringResource(R.string.text_onboarding_make_name_title),
-                    fontFamily = PretendardFontFamily,
-                    color = BL,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 9.dp)
-                )
+        Column {
+            Text(
+                text = stringResource(R.string.text_onboarding_make_name_title),
+                fontFamily = PretendardFontFamily,
+                color = BL,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 9.dp)
+            )
 
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { onNameChange(it) },
-                    enabled = true,
-                    placeholder = { Text("이름을 입력해 주세요.", color = Color.Gray) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(G1, RoundedCornerShape(10.dp)),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        disabledTextColor = Color.Gray,
-                        disabledBorderColor = Color.LightGray,
-                        disabledContainerColor = Color(0xFFF5F5F5)
-                    )
+            OutlinedTextField(
+                value = name,
+                onValueChange = { onNameChange(it) },
+                enabled = true,
+                placeholder = { Text("이름을 입력해 주세요.", color = Color.Gray) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(G1),
+                shape = RoundedCornerShape(10.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = G2
+
                 )
-            }
+            )
         }
     }
 }
+
 
 @Preview
 @Composable
