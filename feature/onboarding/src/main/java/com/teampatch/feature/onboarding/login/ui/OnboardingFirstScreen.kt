@@ -75,7 +75,7 @@ internal fun OnboardingFirstScreen(
                 .background(Color(0xFFF5F5F5))
                 .padding(paddingValues)
                 .padding(top = 135.dp, bottom = 8.dp),
-            verticalArrangement = Arrangement.SpaceBetween, 
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
