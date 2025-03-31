@@ -68,45 +68,40 @@ internal fun OnboardingFirstScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color(0xFFF5F5F5))
                 .padding(paddingValues)
-                .padding(top = 135.dp, bottom = 8.dp)
+                .padding(top = 135.dp, bottom = 8.dp),
+            verticalArrangement = Arrangement.SpaceBetween, 
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
+            Image(
+                painter = painterResource(id = R.drawable.img_logo_in_login),
+                contentDescription = "Logo Harmony",
                 modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(465.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(68.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { viewModel.loginKakao() },
+                contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.img_logo_in_login),
-                    contentDescription = "Logo Harmony",
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    painter = painterResource(id = R.drawable.kakao_login_medium_wide),
+                    contentDescription = "Kakao Login",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
                 )
-
-                Spacer(modifier = Modifier.height(465.dp))
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .height(68.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable { viewModel.loginKakao() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.kakao_login_medium_wide),
-                        contentDescription = "Kakao Login",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
-                    )
-                }
             }
         }
     }

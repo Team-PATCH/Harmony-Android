@@ -150,7 +150,6 @@ fun CustomTextField(
     }
 }
 
-
 @Preview
 @Composable
 private fun OnboardingMakeRelationScreenPreview() {
