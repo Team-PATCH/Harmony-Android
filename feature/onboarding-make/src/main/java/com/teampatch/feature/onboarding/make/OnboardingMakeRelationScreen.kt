@@ -33,6 +33,7 @@ import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
+import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_relation
 
 @Composable
 internal fun OnboardingMakeRelationScreen(
@@ -42,16 +43,22 @@ internal fun OnboardingMakeRelationScreen(
     var relation by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
 
+    val titles = stringArrayResource(title_onboarding_make_relation)
+
     OnBoardingLayout(
         title = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(R.array.title_onboarding_make_relation)[0])
-            }
-            withStyle(style = SpanStyle(color = MainGreen)) {
-                append(stringArrayResource(R.array.title_onboarding_make_relation)[1])
-            }
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(R.array.title_onboarding_make_relation)[2])
+            if (titles.size >= 3) {
+                withStyle(style = SpanStyle(color = BL)) {
+                    append(titles[0])
+                }
+                withStyle(style = SpanStyle(color = MainGreen)) {
+                    append(titles[1])
+                }
+                withStyle(style = SpanStyle(color = BL)) {
+                    append(titles[2])
+                }
+            } else {
+                append("Error: Missing Strings")
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_relation),

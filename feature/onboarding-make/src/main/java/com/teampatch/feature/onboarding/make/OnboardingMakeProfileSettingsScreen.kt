@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.theme.BL
@@ -35,6 +36,7 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.utils.previewPlaceholder
+import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_profile
 
 @Composable
 internal fun OnboardingMakeProfileSettingsScreen(
@@ -53,7 +55,7 @@ internal fun OnboardingMakeProfileSettingsScreen(
         }
     )
 
-    val titles = stringArrayResource(R.array.title_onboarding_make_profile)
+    val titles = stringArrayResource(title_onboarding_make_profile)
 
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -68,7 +70,7 @@ internal fun OnboardingMakeProfileSettingsScreen(
                     append(titles[2])
                 }
             } else {
-                append("Error: Missing Strings") // 기본 오류 메시지 처리
+                append("Error: Missing Strings")
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_name),
@@ -102,8 +104,8 @@ internal fun OnboardingMakeProfileSettingsScreen(
                 Image(
                     painter = rememberAsyncImagePainter(
                         model = profileImageUri
-                            ?: com.teampatch.core.designsystem.R.drawable.ic_my_appbar, // 기본 이미지 설정
-                        placeholder = previewPlaceholder(com.teampatch.core.designsystem.R.drawable.ic_my_appbar)
+                            ?: ic_my_appbar, // 기본 이미지 설정
+                        placeholder = previewPlaceholder(ic_my_appbar)
                     ),
                     contentDescription = "profile",
                     contentScale = ContentScale.Crop,
