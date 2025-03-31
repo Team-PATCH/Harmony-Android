@@ -53,16 +53,22 @@ internal fun OnboardingMakeProfileSettingsScreen(
         }
     )
 
+    val titles = stringArrayResource(R.array.title_onboarding_make_profile)
+
     OnBoardingLayout(
         title = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(R.array.title_onboarding_make_profile)[0])
-            }
-            withStyle(style = SpanStyle(color = MainGreen)) {
-                append(stringArrayResource(R.array.title_onboarding_make_profile)[1])
-            }
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(R.array.title_onboarding_make_profile)[2])
+            if (titles.size >= 3) {
+                withStyle(style = SpanStyle(color = BL)) {
+                    append(titles[0])
+                }
+                withStyle(style = SpanStyle(color = MainGreen)) {
+                    append(titles[1])
+                }
+                withStyle(style = SpanStyle(color = BL)) {
+                    append(titles[2])
+                }
+            } else {
+                append("Error: Missing Strings") // 기본 오류 메시지 처리
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_name),
