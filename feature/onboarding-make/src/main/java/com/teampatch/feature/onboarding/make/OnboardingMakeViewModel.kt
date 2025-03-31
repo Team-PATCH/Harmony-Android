@@ -31,6 +31,6 @@ class OnboardingMakeViewModel @Inject constructor() : ViewModel() {
     }
 
     fun updateProfileImage(value: Uri) {
-        profileImageUri = value
+        _profileImageUri.value = value
     }
 }
