@@ -2,7 +2,6 @@ package com.teampatch.feature.onboarding.enter
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,19 +47,27 @@ fun OnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
-    val code = remember { mutableStateListOf("", "", "", "", "") }
+    val code = remember { mutableStateOf("") }
+    val maxLength = 5
+    val isCodeComplete = code.value.length == maxLength
     val focusManager = LocalFocusManager.current
+
+    val titles = stringArrayResource(title_onboarding_enter_invitation)
 
     OnBoardingLayout(
         title = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = MainGreen)) {
-                append(stringArrayResource(title_onboarding_enter_invitation)[0])
-            }
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(title_onboarding_enter_invitation)[1])
-            }
-            withStyle(style = SpanStyle(color = BL)) {
-                append(stringArrayResource(title_onboarding_enter_invitation)[2])
+            if (titles.size >= 3) {
+                withStyle(style = SpanStyle(color = MainGreen)) {
+                    append(titles[0])
+                }
+                withStyle(style = SpanStyle(color = BL)) {
+                    append(titles[1])
+                }
+                withStyle(style = SpanStyle(color = BL)) {
+                    append(titles[2])
+                }
+            } else {
+                append("Error: Missing Strings")
             }
         },
         subtext = stringResource(subtext_onboarding_enter_invitation),
@@ -68,7 +75,7 @@ fun OnboardingEnterInvitationCodeScreen(
         bottomBar = {
             DefaultButton(
                 onClick = { onEnterSpaceScreenRequest() },
-                enabled = code.isNotEmpty(),
+                enabled = isCodeComplete,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -90,22 +97,29 @@ fun OnboardingEnterInvitationCodeScreen(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                code.forEachIndexed { index, _ ->
+                repeat(maxLength) { index ->
                     Box(
                         modifier = Modifier
                             .size(60.dp)
                             .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                            .background(Color(0xFFF7F7F7), RoundedCornerShape(8.dp))
-                            .clickable { /* Focus the respective field */ },
+                            .background(Color(0xFFF7F7F7)),
                         contentAlignment = Alignment.Center
                     ) {
                         BasicTextField(
-                            value = code[index],
+                            value = code.value.getOrNull(index)?.toString() ?: "",
                             onValueChange = { value ->
                                 if (value.length <= 1) {
-                                    code[index] = value
-                                    // 다음 입력칸으로 포커스 이동
-                                    if (value.isNotEmpty() && index < code.size - 1) {
+                                    val newCode = StringBuilder(code.value).apply {
+                                        if (index < length) {
+                                            setCharAt(index, value.singleOrNull() ?: ' ')
+                                        } else {
+                                            append(value)
+                                        }
+                                    }.toString().trim()
+
+                                    code.value = newCode
+
+                                    if (value.isNotEmpty() && index < maxLength - 1) {
                                         focusManager.moveFocus(FocusDirection.Next)
                                     }
                                 }
