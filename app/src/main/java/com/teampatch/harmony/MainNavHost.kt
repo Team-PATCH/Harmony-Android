@@ -69,7 +69,7 @@ fun MainNavHost(
         addOnboardingPermissionNotificationScreen()
 
         addOnboardingStartScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onboardingMakeGroupRequest = { navController.navigateToMakeGroupScreen() },
             onboardingEnterScreenRequest = { navController.navigateToEnterInvitationCodeScreen() }
         )
@@ -77,34 +77,34 @@ fun MainNavHost(
         /** 온보딩-Make */
 
         addOnboardingMakeParentsNameScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onShareInvitationScreenRequest = { navController.navigateToShareInvitationScreen() }
         )
 
         addOnboardingMakeInviteGrandParentsScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
         )
 
         addOnboardingMakeRelationScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onProfileSettingsScreenRequest = { navController.navigateToMakeProfileSettingsScreen() }
         )
 
         addOnboardingMakeProfileSettingsScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onHomeRouteRequest = { navController.navigateToHomeScreen() }
         )
 
         /** 온보딩-Enter */
 
         addOnboardingEnterInvitationCodeScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onEnterSpaceScreenRequest = { navController.navigateToEnterSpaceScreen() }
         )
 
         addOnboardingEnterSpaceScreen(
-            onBackRequest = navController::popBackStack,
+            onBackRequest = navController::navigateUp,
             onHomeRouteRequest = { navController.navigateToHomeScreen() }
         )
 
