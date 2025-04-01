@@ -34,6 +34,9 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_relation
+import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_grandson
+import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_name_placeholder
+import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_next
 
 @Composable
 internal fun OnboardingMakeRelationScreen(
@@ -71,7 +74,7 @@ internal fun OnboardingMakeRelationScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("다음")
+                Text(stringResource(text_onboarding_make_next))
             }
         }
     ) {
@@ -111,7 +114,7 @@ fun CustomTextField(
                 value = relation,
                 onValueChange = { onRelationChange(it) },
                 enabled = true,
-                placeholder = { Text("예) 손녀", color = Color.Gray) },
+                placeholder = { Text(stringResource(text_onboarding_make_grandson), color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(G1),
@@ -136,7 +139,7 @@ fun CustomTextField(
                 value = name,
                 onValueChange = { onNameChange(it) },
                 enabled = true,
-                placeholder = { Text("이름을 입력해 주세요.", color = Color.Gray) },
+                placeholder = { Text(stringResource(text_onboarding_make_name_placeholder), color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(G1),

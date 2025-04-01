@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
-class OnboardingMakeViewModel @Inject constructor() : ViewModel() {
+internal class OnboardingMakeViewModel @Inject constructor() : ViewModel() {
     var relationship by mutableStateOf("")
         private set
 

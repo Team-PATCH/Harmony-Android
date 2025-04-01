@@ -37,6 +37,7 @@ import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.designsystem.utils.previewPlaceholder
 import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_profile
+import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_enter_space
 
 @Composable
 internal fun OnboardingMakeProfileSettingsScreen(
@@ -82,7 +83,7 @@ internal fun OnboardingMakeProfileSettingsScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("가족 공간 입장하기")
+                Text(stringResource(text_onboarding_make_enter_space))
             }
         }
     ) {

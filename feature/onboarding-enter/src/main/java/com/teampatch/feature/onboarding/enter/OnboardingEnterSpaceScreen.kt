@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -30,6 +31,7 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.feature.onboarding.enter.R.array.title_onboarding_enter_space
 import com.teampatch.feature.onboarding.enter.R.drawable.img_onboarding_enter_space
+import com.teampatch.feature.onboarding.enter.R.string.text_onboarding_enter_space
 
 @Composable
 fun OnboardingEnterSpaceScreen(
@@ -57,7 +59,7 @@ fun OnboardingEnterSpaceScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("가족 공간 입장하기")
+                Text(stringResource(text_onboarding_enter_space))
             }
         },
         image = {

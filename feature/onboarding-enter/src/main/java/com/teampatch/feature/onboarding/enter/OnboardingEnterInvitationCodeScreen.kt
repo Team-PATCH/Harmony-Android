@@ -41,9 +41,10 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.feature.onboarding.enter.R.array.title_onboarding_enter_invitation
 import com.teampatch.feature.onboarding.enter.R.string.subtext_onboarding_enter_invitation
+import com.teampatch.feature.onboarding.enter.R.string.text_onboarding_enter_next
 
 @Composable
-fun OnboardingEnterInvitationCodeScreen(
+internal fun OnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
@@ -80,7 +81,7 @@ fun OnboardingEnterInvitationCodeScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("다음")
+                Text(stringResource(text_onboarding_enter_next))
             }
         }
     ) {

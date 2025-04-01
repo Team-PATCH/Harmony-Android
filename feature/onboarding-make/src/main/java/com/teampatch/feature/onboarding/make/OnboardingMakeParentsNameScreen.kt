@@ -35,6 +35,9 @@ import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
+import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_option_of_gp
+import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_name
+import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_next
 
 @Composable
 internal fun OnboardingMakeParentsNameScreen(
@@ -42,7 +45,7 @@ internal fun OnboardingMakeParentsNameScreen(
     onShareInvitationScreenRequest: () -> Unit,
 ) {
     var selectedText by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") } //
+    var name by remember { mutableStateOf("") }
 
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -66,7 +69,7 @@ internal fun OnboardingMakeParentsNameScreen(
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
-                Text("다음")
+                Text(stringResource(text_onboarding_make_next))
             }
         }
     ) {
@@ -88,7 +91,7 @@ fun CustomDropdownAndTextField(
     onNameChange: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val options = listOf("할머니", "할아버지")
+    val options = stringArrayResource(title_onboarding_make_option_of_gp)
 
     Row(
         modifier = Modifier
@@ -104,7 +107,7 @@ fun CustomDropdownAndTextField(
         ) {
             OutlinedTextField(
                 value = selectedText,
-                placeholder = { Text("할머니", color = Color.Gray) },
+                placeholder = { Text(stringArrayResource(title_onboarding_make_option_of_gp)[0], color = Color.Gray) },
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -139,7 +142,7 @@ fun CustomDropdownAndTextField(
             value = name,
             onValueChange = { onNameChange(it) },
             enabled = true,
-            placeholder = { Text("성함", color = Color.Gray) },
+            placeholder = { Text(stringResource(text_onboarding_make_name), color = Color.Gray) },
             modifier = Modifier
                 .weight(1f)
                 .background(G1, RoundedCornerShape(10.dp)),
@@ -154,7 +157,7 @@ fun CustomDropdownAndTextField(
 
 @Preview
 @Composable
-private fun EnterGrandParentsNameScreenPreview() {
+private fun OnboardingMakeParentsNameScreenPreview() {
     HarmonyTheme {
         OnboardingMakeParentsNameScreen(
             onBackRequest = {},
