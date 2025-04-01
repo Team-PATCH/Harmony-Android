@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,8 +45,8 @@ internal fun OnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
     onShareInvitationScreenRequest: () -> Unit,
 ) {
-    var selectedText by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
+    var selectedText by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
 
     OnBoardingLayout(
         title = buildAnnotatedString {
