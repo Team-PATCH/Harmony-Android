@@ -1,5 +1,6 @@
 package com.teampatch.feature.onboarding.enter
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -69,7 +70,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
                     append(titles[2])
                 }
             } else {
-                append("Error: Missing Strings")
+                Log.e("TitleCheck", "Error: Missing Strings")
             }
         },
         subtext = stringResource(subtext_onboarding_enter_invitation),

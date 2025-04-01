@@ -1,5 +1,6 @@
 package com.teampatch.feature.onboarding.make
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -71,7 +72,7 @@ internal fun OnboardingMakeProfileSettingsScreen(
                     append(titles[2])
                 }
             } else {
-                append("Error: Missing Strings")
+                Log.e("TitleCheck", "Error: Missing Strings")
             }
         },
         subtext = stringResource(R.string.subtext_onboarding_make_name),
