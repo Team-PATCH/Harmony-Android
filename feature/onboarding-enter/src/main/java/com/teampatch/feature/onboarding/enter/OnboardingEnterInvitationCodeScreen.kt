@@ -15,8 +15,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -48,8 +50,8 @@ internal fun OnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
-    val code = remember { mutableStateOf("") }
-    val isCodeComplete = code.value.length == Config.MAX_LENGTH
+    var code by remember { mutableStateOf("") }
+    val isCodeComplete = code.length == Config.MAX_LENGTH
     val focusManager = LocalFocusManager.current
 
     val titles = stringArrayResource(title_onboarding_enter_invitation)
@@ -106,10 +108,10 @@ internal fun OnboardingEnterInvitationCodeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         BasicTextField(
-                            value = code.value.getOrNull(index)?.toString() ?: "",
+                            value = code.getOrNull(index)?.toString() ?: "",
                             onValueChange = { value ->
                                 if (value.length <= 1) {
-                                    val newCode = StringBuilder(code.value).apply {
+                                    val newCode = StringBuilder(code).apply {
                                         if (index < length) {
                                             setCharAt(index, value.singleOrNull() ?: ' ')
                                         } else {
@@ -117,7 +119,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
                                         }
                                     }.toString().trim()
 
-                                    code.value = newCode
+                                    code = newCode
 
                                     if (value.isNotEmpty() && index < Config.MAX_LENGTH - 1) {
                                         focusManager.moveFocus(FocusDirection.Next)
