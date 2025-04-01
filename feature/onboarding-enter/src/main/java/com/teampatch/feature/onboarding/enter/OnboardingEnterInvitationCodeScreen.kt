@@ -49,8 +49,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
     val code = remember { mutableStateOf("") }
-    val maxLength = 5
-    val isCodeComplete = code.value.length == maxLength
+    val isCodeComplete = code.value.length == Config.MAX_LENGTH
     val focusManager = LocalFocusManager.current
 
     val titles = stringArrayResource(title_onboarding_enter_invitation)
@@ -98,7 +97,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                repeat(maxLength) { index ->
+                repeat(Config.MAX_LENGTH) { index ->
                     Box(
                         modifier = Modifier
                             .size(60.dp)
@@ -120,7 +119,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
 
                                     code.value = newCode
 
-                                    if (value.isNotEmpty() && index < maxLength - 1) {
+                                    if (value.isNotEmpty() && index < Config.MAX_LENGTH - 1) {
                                         focusManager.moveFocus(FocusDirection.Next)
                                     }
                                 }
@@ -144,6 +143,10 @@ internal fun OnboardingEnterInvitationCodeScreen(
             }
         }
     }
+}
+
+object Config {
+    const val MAX_LENGTH = 5
 }
 
 @Preview
