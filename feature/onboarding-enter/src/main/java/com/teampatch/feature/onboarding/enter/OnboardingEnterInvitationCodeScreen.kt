@@ -46,13 +46,16 @@ import com.teampatch.feature.onboarding.enter.R.array.title_onboarding_enter_inv
 import com.teampatch.feature.onboarding.enter.R.string.subtext_onboarding_enter_invitation
 import com.teampatch.feature.onboarding.enter.R.string.text_onboarding_enter_next
 
+private const val MAX_LENGTH = 5
+
 @Composable
 internal fun OnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
     var code by remember { mutableStateOf("") }
-    val isCodeComplete = code.length == Config.MAX_LENGTH
+
+    val isCodeComplete = code.length == MAX_LENGTH
     val focusManager = LocalFocusManager.current
 
     val titles = stringArrayResource(title_onboarding_enter_invitation)
@@ -100,7 +103,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                repeat(Config.MAX_LENGTH) { index ->
+                repeat(MAX_LENGTH) { index ->
                     Box(
                         modifier = Modifier
                             .size(60.dp)
@@ -122,7 +125,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
 
                                     code = newCode
 
-                                    if (value.isNotEmpty() && index < Config.MAX_LENGTH - 1) {
+                                    if (value.isNotEmpty() && index < MAX_LENGTH - 1) {
                                         focusManager.moveFocus(FocusDirection.Next)
                                     }
                                 }
@@ -146,10 +149,6 @@ internal fun OnboardingEnterInvitationCodeScreen(
             }
         }
     }
-}
-
-object Config {
-    const val MAX_LENGTH = 5
 }
 
 @Preview
