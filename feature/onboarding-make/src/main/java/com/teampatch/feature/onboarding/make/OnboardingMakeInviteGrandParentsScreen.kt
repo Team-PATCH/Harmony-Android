@@ -32,7 +32,7 @@ import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_invit
 import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_next
 
 @Composable
-internal fun OnboardingMakeInviteGrandParentsScreen(
+internal fun OnboardingMakeInviteCodeCreationScreen(
     onBackRequest: () -> Unit,
     onRelationScreenRequest: () -> Unit,
 ) {
@@ -88,9 +88,9 @@ internal fun OnboardingMakeInviteGrandParentsScreen(
 
 @Preview
 @Composable
-private fun OnboardingMakeInviteGrandParentsScreenPreview() {
+private fun OnboardingMakeInviteCodeCreationScreenPreview() {
     HarmonyTheme {
-        OnboardingMakeInviteGrandParentsScreen(
+        OnboardingMakeInviteCodeCreationScreen(
             onBackRequest = {},
             onRelationScreenRequest = {}
         )

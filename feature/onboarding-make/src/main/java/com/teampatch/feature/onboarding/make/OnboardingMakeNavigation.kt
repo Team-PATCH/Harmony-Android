@@ -44,7 +44,7 @@ fun NavGraphBuilder.addOnboardingMakeInviteGrandParentsScreen(
     onRelationScreenRequest: () -> Unit,
 ) {
     composable<OnboardingMakeInvitationRoute> {
-        OnboardingMakeInviteGrandParentsScreen(
+        OnboardingMakeInviteCodeCreationScreen(
             onBackRequest = onBackRequest,
             onRelationScreenRequest = onRelationScreenRequest
         )
