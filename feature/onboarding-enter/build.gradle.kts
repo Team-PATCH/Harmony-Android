@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.onboarding"
+    namespace = "com.teampatch.feature.onboarding.enter"
 }
 
 dependencies {
