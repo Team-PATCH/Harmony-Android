@@ -47,7 +47,7 @@ import com.teampatch.feature.settings.navigateToSettingsScreen
 
 @Composable
 fun MainNavHost(
-    isLoginRequired: Boolean,
+    isFirstUser: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -56,7 +56,7 @@ fun MainNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = if (isLoginRequired) OnboardingRoute else HomeRoute
+        startDestination = if (isFirstUser) OnboardingRoute else HomeRoute
     ) {
         /** 온보딩 */
 
