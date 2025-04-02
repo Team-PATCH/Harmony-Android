@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -38,9 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.teampatch.core.common.getOrNull
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
@@ -56,7 +53,6 @@ import com.teampatch.feature.daily.expand.R.string.dropdown_delete_daily
 import com.teampatch.feature.daily.expand.R.string.dropdown_edit_daily
 import com.teampatch.feature.daily.expand.model.DailyExpandEvent
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
-import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun DailyExpandRoute(
@@ -97,7 +93,7 @@ internal fun DailyExpandScreen(
     onDeleteDailyRequest: (DailyManage) -> Unit,
     uiState: DailyExpandUiState,
 ) {
-    val daily = uiState.dailyManage.collectAsLazyPagingItems()
+    val daily = uiState.dailyManage
     Scaffold(
         topBar = {
             BackButtonAppBar(
@@ -108,20 +104,20 @@ internal fun DailyExpandScreen(
             )
         }
     ) { scaffoldPaddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(scaffoldPaddingValues)
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            items(daily.itemCount) { index ->
-                val item = daily.getOrNull(index) ?: return@items
+            if (daily == null) {
+                CircularProgressIndicator() // 로딩 상태 처리
+            } else {
                 DailyItem(
-                    dailyItem = daily.getOrNull(index),
-                    onEditDailyRequest = { daily.getOrNull(index)?.let { onEditDailyRequest(it) } },
-                    onDeleteDailyRequest = {
-                        daily.getOrNull(index)?.let { onDeleteDailyRequest(it) }
-                    }
+                    dailyItem = daily,
+                    onEditDailyRequest = { onEditDailyRequest(daily) },
+                    onDeleteDailyRequest = { onDeleteDailyRequest(daily) }
                 )
             }
         }
@@ -140,7 +136,6 @@ fun DailyItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
             .padding(vertical = 16.dp)
     ) {
         Column(
@@ -255,7 +250,7 @@ private fun DailyExpandScreenPreview() {
             onBackRequest = {},
             onEditDailyRequest = {},
             onDeleteDailyRequest = {},
-            uiState = DailyExpandUiState(dailyManage = flowOf(PagingData.from(listOf(FakeDailyManage().get()))))
+            uiState = DailyExpandUiState(dailyManage = FakeDailyManage().get())
         )
     }
 }
