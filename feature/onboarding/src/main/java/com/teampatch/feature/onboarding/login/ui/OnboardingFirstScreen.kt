@@ -67,7 +67,25 @@ internal fun OnboardingFirstScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(68.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { viewModel.loginKakao() },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.kakao_login_medium_wide),
+                    contentDescription = "Kakao Login",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -86,23 +104,6 @@ internal fun OnboardingFirstScreen(
             )
 
             Spacer(modifier = Modifier.height(465.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(68.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { viewModel.loginKakao() },
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.kakao_login_medium_wide),
-                    contentDescription = "Kakao Login",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
-            }
         }
     }
 }
