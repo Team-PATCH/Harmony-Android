@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -27,6 +27,7 @@ import com.teampatch.core.designsystem.component.DefaultBottomNavigation
 import com.teampatch.core.designsystem.component.NavigationItem
 import com.teampatch.feature.home.HomeRoute
 import com.teampatch.feature.home.navigateToHomeScreen
+import com.teampatch.feature.onboarding.login.ui.navigateToOnboardingScreen
 import com.teampatch.feature.question.QuestionRoute
 import com.teampatch.feature.question.navigateToQuestionScreen
 import com.teampatch.harmony.model.MainUiState
@@ -39,8 +40,8 @@ private val BottomNavigationEnableScreens: Set<String?> = setOf(
 
 @Composable
 fun MainApp(
+    mainUiState: MainUiState,
     navController: NavHostController = rememberNavController(),
-    viewModel: MainViewModel = hiltViewModel(),
 ) {
     val currentBackStackEntry: NavBackStackEntry? by navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(
         initialValue = null
@@ -76,7 +77,6 @@ fun MainApp(
             currentBackStackEntry?.destination?.route in BottomNavigationEnableScreens
         }
     }
-    val uiState: MainUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         bottomBar = {
@@ -105,9 +105,15 @@ fun MainApp(
             .safeDrawingPadding()
     ) { scaffoldPaddingValue ->
         MainNavHost(
-            isLoginRequired = uiState.isLoginRequired,
+            isFirstUser = mainUiState.isFirstUser,
             navController = navController,
             modifier = Modifier.padding(scaffoldPaddingValue)
         )
+    }
+
+    LaunchedEffect(mainUiState.isLoginRequired) {
+        if (mainUiState.isLoginRequired) {
+            navController.navigateToOnboardingScreen()
+        }
     }
 }
