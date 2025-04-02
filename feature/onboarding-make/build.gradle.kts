@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.daily.manage"
+    namespace = "com.teampatch.feature.onboarding.make"
 }
 
 dependencies {
@@ -17,6 +17,8 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+
+    implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -27,21 +27,3 @@ internal fun OnboardingStartRoute(
         onboardingEnterScreenRequest = onEnterScreenRequest
     )
 }
-
-@Composable
-internal fun OnboardingEnterInvitationCodeRoute(
-    onNextClick: () -> Unit,
-) {
-    OnboardingEnterInvitationCodeScreen(
-        onNextClick = onNextClick
-    )
-}
-
-@Composable
-internal fun OnboardingEnterSpaceRoute(
-    onNextClick: () -> Unit,
-) {
-    OnboardingEnterSpaceScreen(
-        onNextClick = onNextClick
-    )
-}
