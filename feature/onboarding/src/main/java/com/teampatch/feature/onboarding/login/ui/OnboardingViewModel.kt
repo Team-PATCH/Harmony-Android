@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.teampatch.core.domain.exception.FamilyRegistrationRequiredException
 import com.teampatch.core.domain.model.Host
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.InvitationMessage
@@ -32,8 +33,14 @@ internal class OnboardingViewModel @Inject constructor(
                 loginKakaoUseCase()
             }.onSuccess {
                 _loginSuccessEvent.send(true)
-            }.onFailure {
+            }.onFailure { t ->
+                if (t is FamilyRegistrationRequiredException) {
+                    _loginSuccessEvent.send(true)
+                    return@launch
+                }
+
                 _loginSuccessEvent.send(false)
+                t.printStackTrace()
             }
         }
     }
