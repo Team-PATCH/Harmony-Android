@@ -26,14 +26,12 @@ import com.teampatch.feature.onboarding.login.ui.addOnboardingScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingStartScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
-import com.teampatch.feature.onboarding.make.addOnboardingMakeInviteGrandParentsScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeParentsNameScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeRelationScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeRelationScreen
-import com.teampatch.feature.onboarding.make.navigateToShareInvitationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
@@ -78,17 +76,17 @@ fun MainNavHost(
 
         addOnboardingMakeParentsNameScreen(
             onBackRequest = navController::navigateUp,
-            onShareInvitationScreenRequest = { navController.navigateToShareInvitationScreen() }
+            onShareInvitationScreenRequest = navController::navigateToMakeRelationScreen
         )
 
-        addOnboardingMakeInviteGrandParentsScreen(
-            onBackRequest = navController::navigateUp,
-            onRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
-        )
+//        addOnboardingMakeInviteGrandParentsScreen(
+//            onBackRequest = navController::navigateUp,
+//            onRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
+//        )
 
         addOnboardingMakeRelationScreen(
             onBackRequest = navController::navigateUp,
-            onProfileSettingsScreenRequest = { navController.navigateToMakeProfileSettingsScreen() }
+            onProfileSettingsScreenRequest = navController::navigateToMakeProfileSettingsScreen
         )
 
         addOnboardingMakeProfileSettingsScreen(

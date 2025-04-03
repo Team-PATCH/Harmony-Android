@@ -1,6 +1,8 @@
 package com.teampatch.feature.onboarding.make
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,12 +13,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -26,6 +30,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.theme.BL
@@ -38,14 +46,55 @@ import com.teampatch.feature.onboarding.make.R.array.title_onboarding_make_relat
 import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_grandson
 import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_name_placeholder
 import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_next
+import com.teampatch.feature.onboarding.make.model.GroupMakingEvent
+import kotlinx.coroutines.flow.collectLatest
+
+@Composable
+internal fun OnboardingMakeRelationRoute(
+    onBackRequest: () -> Unit,
+    onProfileSettingsScreenRequest: () -> Unit,
+    viewModel: OnboardingMakeRelationViewModel = hiltViewModel(),
+) {
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val context: Context = LocalContext.current
+
+    OnboardingMakeRelationScreen(
+        onBackRequest = onBackRequest,
+        onProfileSettingsScreenRequest = { relation: String, name: String ->
+            viewModel.createGroup(relation, name)
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.isGroupMakingEvent
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collectLatest {
+                when (it) {
+                    is GroupMakingEvent.Success -> onProfileSettingsScreenRequest()
+                    is GroupMakingEvent.Error -> {
+                        Toast.makeText(
+                            context,
+                            "그룹 생성 과정에서 에러가 발생하였습니다.\n다시 시도 해주세요.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    is GroupMakingEvent.Init -> {}
+                    is GroupMakingEvent.Loading -> {
+                        Toast.makeText(context, "그룹 생성 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+    }
+}
 
 @Composable
 internal fun OnboardingMakeRelationScreen(
     onBackRequest: () -> Unit,
-    onProfileSettingsScreenRequest: () -> Unit,
+    onProfileSettingsScreenRequest: (relation: String, name: String) -> Unit,
 ) {
-    var relation by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
+    var relation by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
 
     val titles = stringArrayResource(title_onboarding_make_relation)
 
@@ -69,7 +118,7 @@ internal fun OnboardingMakeRelationScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onProfileSettingsScreenRequest() },
+                onClick = { onProfileSettingsScreenRequest(relation, name) },
                 enabled = relation.isNotBlank() && name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,7 +164,12 @@ fun CustomTextField(
                 value = relation,
                 onValueChange = { onRelationChange(it) },
                 enabled = true,
-                placeholder = { Text(stringResource(text_onboarding_make_grandson), color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        stringResource(text_onboarding_make_grandson),
+                        color = Color.Gray
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(G1),
@@ -140,7 +194,12 @@ fun CustomTextField(
                 value = name,
                 onValueChange = { onNameChange(it) },
                 enabled = true,
-                placeholder = { Text(stringResource(text_onboarding_make_name_placeholder), color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        stringResource(text_onboarding_make_name_placeholder),
+                        color = Color.Gray
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(G1),
@@ -160,7 +219,7 @@ private fun OnboardingMakeRelationScreenPreview() {
     HarmonyTheme {
         OnboardingMakeRelationScreen(
             onBackRequest = {},
-            onProfileSettingsScreenRequest = {}
+            onProfileSettingsScreenRequest = { _, _ -> }
         )
     }
 }

@@ -19,7 +19,7 @@ fun NavController.navigateToMakeGroupScreen(
 
 fun NavGraphBuilder.addOnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
-    onShareInvitationScreenRequest: () -> Unit,
+    onShareInvitationScreenRequest: (vipAlias: String, vipName: String) -> Unit,
 ) {
     composable<OnboardingMakeParentsNameRoute> {
         OnboardingMakeParentsNameScreen(
@@ -52,13 +52,19 @@ fun NavGraphBuilder.addOnboardingMakeInviteGrandParentsScreen(
 }
 
 @Serializable
-data object OnboardingMakeRelationRoute
+data class OnboardingMakeRelationRoute(
+    val vipAlias: String,
+    val vipName: String,
+)
 
 fun NavController.navigateToMakeRelationScreen(
+    vipAlias: String,
+    vipName: String,
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(OnboardingMakeRelationRoute, navOptions, navigatorExtras)
+    val onboardingMakeRelationRoute = OnboardingMakeRelationRoute(vipAlias, vipName)
+    navigate(onboardingMakeRelationRoute, navOptions, navigatorExtras)
 }
 
 fun NavGraphBuilder.addOnboardingMakeRelationScreen(
@@ -66,7 +72,7 @@ fun NavGraphBuilder.addOnboardingMakeRelationScreen(
     onProfileSettingsScreenRequest: () -> Unit,
 ) {
     composable<OnboardingMakeRelationRoute> {
-        OnboardingMakeRelationScreen(
+        OnboardingMakeRelationRoute(
             onBackRequest = onBackRequest,
             onProfileSettingsScreenRequest = onProfileSettingsScreenRequest
         )
