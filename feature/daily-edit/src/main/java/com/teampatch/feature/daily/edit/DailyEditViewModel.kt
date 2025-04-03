@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.DayOfWeek
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -34,12 +35,20 @@ internal class DailyEditViewModel @Inject constructor(
         }.onSuccess { dailyManage ->
             dailyEditUiState.value = DailyEditUiState(
                 dailyExpand = dailyManage,
-                isLoading = false,
-                selectedDays = setOf(dailyManage.dateTime.dayOfWeek.name)
+                isLoading = false
             )
         }.onFailure {
             _event.send(DailyEditEvent.LoadError(it))
             it.printStackTrace()
         }
+    }
+
+    /** ✅ 요일 선택을 업데이트하는 메서드 추가 **/
+    fun toggleSelectedDay(day: DayOfWeek) {
+        dailyEditUiState.value = dailyEditUiState.value.copy(
+            selectedDays = dailyEditUiState.value.selectedDays.toMutableSet().apply {
+                if (contains(day)) remove(day) else add(day)
+            }
+        )
     }
 }

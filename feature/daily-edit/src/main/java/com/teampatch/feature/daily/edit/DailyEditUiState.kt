@@ -1,6 +1,7 @@
 package com.teampatch.feature.daily.edit
 
 import com.teampatch.core.domain.model.DailyManage
+import java.time.DayOfWeek
 import java.time.LocalDateTime
 
 internal data class DailyEditUiState(
@@ -13,5 +14,5 @@ internal data class DailyEditUiState(
         commentCount = 0
     ),
     val isLoading: Boolean = true,
-    val selectedDays: Set<String> = emptySet(),
+    val selectedDays: Set<DayOfWeek> = emptySet(),
 )

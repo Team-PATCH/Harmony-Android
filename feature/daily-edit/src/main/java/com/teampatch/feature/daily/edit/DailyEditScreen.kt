@@ -74,11 +74,11 @@ internal fun DailyEditRoute(
         DailyEditScreen(
             onDismissRequest = onDismissRequest,
             onCompleteRequest = {
-//                onCompleteRequest.save
                 onCompleteRequest(it)
             },
-            uiState = uiState
-        )
+            uiState = uiState,
+            selectedDays = uiState.selectedDays
+        ) { viewModel.toggleSelectedDay(it) }
     }
 
     LaunchedEffect(Unit) {
@@ -128,11 +128,12 @@ internal fun DailyEditScreen(
     onDismissRequest: () -> Unit,
     onCompleteRequest: (String) -> Unit,
     uiState: DailyEditUiState,
+    selectedDays: Set<DayOfWeek>,
+    onDaySelected: (DayOfWeek) -> Unit,
 ) {
     var daily by rememberSaveable { mutableStateOf(uiState.dailyExpand.content) }
     var time: LocalTime? by rememberSaveable { mutableStateOf(null) }
     var isTimePickerDialogShow by remember { mutableStateOf(false) }
-    var selectedDays by rememberSaveable { mutableStateOf(setOf<DayOfWeek>()) }
     val daysOfWeek = remember { DayOfWeek.values() }
 
     Scaffold(
@@ -216,13 +217,7 @@ internal fun DailyEditScreen(
                 daysOfWeek.forEach { day ->
                     FilterChip(
                         selected = selectedDays.contains(day),
-                        onClick = {
-                            selectedDays = if (selectedDays.contains(day)) {
-                                selectedDays - day
-                            } else {
-                                selectedDays + day
-                            }
-                        },
+                        onClick = { onDaySelected(day) },
                         label = { Text(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN)) },
                         modifier = Modifier.padding(horizontal = 2.dp),
                         colors = FilterChipDefaults.filterChipColors(
@@ -282,12 +277,22 @@ internal fun DailyEditScreen(
 @Composable
 private fun DailyEditScreenPreview() {
     HarmonyTheme {
+        var selectedDays by remember { mutableStateOf(setOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY)) } // ✅ 상태 관리
+
         DailyEditScreen(
             onDismissRequest = {},
             onCompleteRequest = {},
             uiState = DailyEditUiState(
-                dailyExpand = FakeDailyManage().get()
-            )
+                dailyExpand = FakeDailyManage().get(),
+                isLoading = false,
+                selectedDays = selectedDays
+            ),
+            selectedDays = selectedDays,
+            onDaySelected = { day ->
+                selectedDays = selectedDays.toMutableSet().apply {
+                    if (contains(day)) remove(day) else add(day)
+                }
+            }
         )
     }
 }
