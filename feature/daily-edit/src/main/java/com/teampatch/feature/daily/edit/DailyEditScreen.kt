@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,31 +97,29 @@ internal fun DailyEditRoute(
 }
 
 @Composable
-fun TimePickerDialog(
+fun TimePickerDialogEffect(
+    onConfirm: (Int, Int) -> Unit,
     onDismissRequest: () -> Unit,
-    onConfirm: (hour: Int, minute: Int) -> Unit,
 ) {
     val context = LocalContext.current
-    val calendar = remember { Calendar.getInstance() }
-    val hour = remember { calendar.get(Calendar.HOUR_OF_DAY) }
-    val minute = remember { calendar.get(Calendar.MINUTE) }
 
-    val timePickerDialog = remember {
-        TimePickerDialog(
+    DisposableEffect(Unit) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val dialog = TimePickerDialog(
             context,
-            { _, selectedHour, selectedMinute ->
-                onConfirm(selectedHour, selectedMinute)
-            },
+            { _, selectedHour, selectedMinute -> onConfirm(selectedHour, selectedMinute) },
             hour,
             minute,
             true
-        ).apply {
-            setOnDismissListener { onDismissRequest() }
-        }
-    }
+        )
 
-    LaunchedEffect(Unit) {
-        timePickerDialog.show()
+        dialog.setOnDismissListener { onDismissRequest() }
+        dialog.show()
+
+        onDispose { dialog.dismiss() }
     }
 }
 
@@ -257,7 +256,8 @@ internal fun DailyEditScreen(
                     contentDescription = "time"
                 )
                 Text(
-                    text = time?.let { "${it.hour}:${it.minute}" } ?: stringResource(select_time),
+                    text = time?.let { String.format("%02d:%02d", it.hour, it.minute) }
+                        ?: stringResource(select_time),
                     color = BL,
                     fontSize = 20.sp,
                     fontFamily = PretendardFontFamily,
@@ -265,14 +265,13 @@ internal fun DailyEditScreen(
                     modifier = Modifier.padding(start = 20.dp)
                 )
             }
-
             if (isTimePickerDialogShow) {
-                TimePickerDialog(
-                    onDismissRequest = { isTimePickerDialogShow = false },
+                TimePickerDialogEffect(
                     onConfirm = { hour, minute ->
                         time = LocalTime.of(hour, minute)
                         isTimePickerDialogShow = false
-                    }
+                    },
+                    onDismissRequest = { isTimePickerDialogShow = false }
                 )
             }
         }
