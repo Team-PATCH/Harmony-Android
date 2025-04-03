@@ -42,18 +42,4 @@ internal class DailyEditViewModel @Inject constructor(
             it.printStackTrace()
         }
     }
-
-    fun toggleDaySelection(day: String) {
-        dailyEditUiState.value = dailyEditUiState.value.copy(
-            selectedDays = if (dailyEditUiState.value.selectedDays.contains(day)) {
-                dailyEditUiState.value.selectedDays - day
-            } else {
-                dailyEditUiState.value.selectedDays + day
-            }
-        )
-    }
-
-    fun saveDaily(daily: String) = viewModelScope.launch {
-        // UseCase를 호출하여 선택한 요일과 함께 저장
-    }
 }
