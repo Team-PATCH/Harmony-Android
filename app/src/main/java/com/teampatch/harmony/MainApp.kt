@@ -99,6 +99,7 @@ fun MainApp(
     ) { scaffoldPaddingValue ->
         MainNavHost(
             isFirstUser = mainUiState.isFirstUser,
+            hasGroup = mainUiState.hasGroup,
             navController = navController,
             modifier = Modifier.padding(scaffoldPaddingValue)
         )

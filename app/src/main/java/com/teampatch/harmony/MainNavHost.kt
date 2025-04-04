@@ -22,6 +22,7 @@ import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
+import com.teampatch.feature.onboarding.login.ui.OnboardingStartRoute
 import com.teampatch.feature.onboarding.login.ui.addOnboardingPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingStartScreen
@@ -47,6 +48,7 @@ import com.teampatch.feature.settings.navigateToSettingsScreen
 @Composable
 fun MainNavHost(
     isFirstUser: Boolean,
+    hasGroup: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -55,7 +57,13 @@ fun MainNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = if (isFirstUser) OnboardingRoute else HomeRoute
+        startDestination = if (isFirstUser) {
+            OnboardingRoute
+        } else if (!hasGroup) {
+            OnboardingStartRoute
+        } else {
+            HomeRoute
+        }
     ) {
         /** 온보딩 */
 
@@ -63,7 +71,7 @@ fun MainNavHost(
             onHomeScreenRequest = {
                 navController.navigateToHomeScreen(
                     navOptions = navOptions {
-                        popUpTo(HomeRoute) {
+                        popUpTo(OnboardingRoute) {
                             inclusive = true
                         }
                         launchSingleTop = true
