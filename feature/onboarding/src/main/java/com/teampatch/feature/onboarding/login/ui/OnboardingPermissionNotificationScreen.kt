@@ -1,6 +1,8 @@
 package com.teampatch.feature.onboarding.login.ui
 
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +29,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teampatch.core.designsystem.R
 
+private val requiredPermissions: Array<String> = arrayOf(
+    android.Manifest.permission.POST_NOTIFICATIONS
+)
+
 @Composable
 fun OnboardingPermissionNotificationScreen() {
     val context = LocalContext.current
@@ -34,12 +40,9 @@ fun OnboardingPermissionNotificationScreen() {
         bottomBar = {
             Button(
                 onClick = {
-                    (context as? Activity)?.requestPermissions(
-                        arrayOf(
-                            android.Manifest.permission.POST_NOTIFICATIONS
-                        ),
-                        1
-                    )
+                    (context as? Activity)
+                        ?.requestPermissions(requiredPermissions, 1)
+                    onNextPageRequest()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
