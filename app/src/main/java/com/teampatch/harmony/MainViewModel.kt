@@ -27,7 +27,16 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             flowErrorCatch(
                 block = { isLoginRequiredUseCase() },
-                action = { it.printStackTrace() }
+                action = {
+                    _uiState.update { state ->
+                        state.copy(
+                            isFirstUser = true,
+                            isLoginRequired = false,
+                            isLoading = false,
+                        )
+                    }
+                    it.printStackTrace()
+                }
             )
                 .collect { isLoginRequired ->
                     _uiState.update {
