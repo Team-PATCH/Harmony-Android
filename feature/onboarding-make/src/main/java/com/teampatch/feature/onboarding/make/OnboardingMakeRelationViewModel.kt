@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class OnboardingMakeRelationViewModel @Inject constructor(
+internal class OnboardingMakeRelationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val createFamilyGroupUseCase: CreateFamilyGroupUseCase,
 ) : ViewModel() {
