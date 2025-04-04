@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.teampatch.core.common.findActivity
 import com.teampatch.feature.answer.addAnswerScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
@@ -59,7 +60,16 @@ fun MainNavHost(
         /** 온보딩 */
 
         addOnboardingScreen(
-            onKakaoLoginRequest = {},
+            onHomeScreenRequest = {
+                navController.navigateToHomeScreen(
+                    navOptions = navOptions {
+                        popUpTo(HomeRoute) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                )
+            },
             onPermissionNotificationRequest = { navController.navigateToPermissionNotificationScreen() },
             onStartScreenRequest = { navController.navigateToStartScreen() }
         )

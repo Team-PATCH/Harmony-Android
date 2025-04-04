@@ -23,13 +23,13 @@ fun NavController.navigateToOnboardingScreen(
 }
 
 fun NavGraphBuilder.addOnboardingScreen(
-    onKakaoLoginRequest: () -> Unit,
+    onHomeScreenRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
 ) {
     composable<OnboardingRoute> {
         OnboardingRoute(
-            onKakaoLoginRequest = onKakaoLoginRequest,
+            onHomeScreenRequest = onHomeScreenRequest,
             onPermissionNotificationRequest = onPermissionNotificationRequest,
             onStartScreenRequest = onStartScreenRequest
         )
@@ -47,7 +47,7 @@ fun NavController.navigateToPermissionNotificationScreen(
 }
 
 fun NavGraphBuilder.addOnboardingPermissionNotificationScreen(
-    onNextPageRequest: () -> Unit
+    onNextPageRequest: () -> Unit,
 ) {
     composable<OnboardingPermissionRoute> {
         OnboardingPermissionNotificationScreen(onNextPageRequest = onNextPageRequest)
