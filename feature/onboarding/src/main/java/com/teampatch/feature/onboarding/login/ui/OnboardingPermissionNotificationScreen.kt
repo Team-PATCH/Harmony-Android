@@ -1,7 +1,6 @@
 package com.teampatch.feature.onboarding.login.ui
 
 import android.app.Activity
-import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +33,9 @@ private val requiredPermissions: Array<String> = arrayOf(
 )
 
 @Composable
-fun OnboardingPermissionNotificationScreen() {
+fun OnboardingPermissionNotificationScreen(
+    onNextPageRequest: () -> Unit
+) {
     val context = LocalContext.current
     Scaffold(
         bottomBar = {
@@ -101,5 +102,5 @@ fun OnboardingPermissionNotificationScreen() {
 @Preview(showBackground = true)
 @Composable
 fun OnboardingPermissionNotificationScreenPreview() {
-    OnboardingPermissionNotificationScreen()
+    OnboardingPermissionNotificationScreen({})
 }

@@ -46,9 +46,11 @@ fun NavController.navigateToPermissionNotificationScreen(
     navigate(OnboardingPermissionRoute, navOptions, navigatorExtras)
 }
 
-fun NavGraphBuilder.addOnboardingPermissionNotificationScreen() {
+fun NavGraphBuilder.addOnboardingPermissionNotificationScreen(
+    onNextPageRequest: () -> Unit
+) {
     composable<OnboardingPermissionRoute> {
-        OnboardingPermissionNotificationScreen()
+        OnboardingPermissionNotificationScreen(onNextPageRequest = onNextPageRequest)
     }
 }
 

@@ -64,7 +64,9 @@ fun MainNavHost(
             onStartScreenRequest = { navController.navigateToStartScreen() }
         )
 
-        addOnboardingPermissionNotificationScreen()
+        addOnboardingPermissionNotificationScreen(
+            onNextPageRequest = { navController.navigateToStartScreen() }
+        )
 
         addOnboardingStartScreen(
             onBackRequest = navController::navigateUp,
