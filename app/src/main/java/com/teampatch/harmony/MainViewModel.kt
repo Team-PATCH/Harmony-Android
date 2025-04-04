@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
                         state.copy(
                             isFirstUser = true,
                             isLoginRequired = false,
-                            isLoading = false,
+                            isLoading = false
                         )
                     }
                     it.printStackTrace()
