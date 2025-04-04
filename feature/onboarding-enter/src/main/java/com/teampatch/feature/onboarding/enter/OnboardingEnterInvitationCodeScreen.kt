@@ -1,6 +1,8 @@
 package com.teampatch.feature.onboarding.enter
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,14 +18,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +38,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.OnBoardingLayout
 import com.teampatch.core.designsystem.theme.BL
@@ -45,19 +51,55 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.feature.onboarding.enter.R.array.title_onboarding_enter_invitation
 import com.teampatch.feature.onboarding.enter.R.string.subtext_onboarding_enter_invitation
 import com.teampatch.feature.onboarding.enter.R.string.text_onboarding_enter_next
+import com.teampatch.feature.onboarding.enter.model.OnboardingEnterInvitationCodeEvent
+import com.teampatch.feature.onboarding.enter.model.OnboardingEnterInvitationCodeUiState
+import com.teampatch.feature.onboarding.enter.viewmodel.OnboardingEnterInvitationCodeViewModel
 
 private const val MAX_LENGTH = 5
+
+@Composable
+internal fun OnboardingEnterInvitationCodeRoute(
+    onBackRequest: () -> Unit,
+    onEnterSpaceScreenRequest: () -> Unit,
+    viewModel: OnboardingEnterInvitationCodeViewModel = hiltViewModel(),
+) {
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val context: Context = LocalContext.current
+    val uiState: OnboardingEnterInvitationCodeUiState by
+        viewModel.uiState.collectAsStateWithLifecycle()
+
+    OnboardingEnterInvitationCodeScreen(
+        onBackRequest = onBackRequest,
+        onEnterSpaceScreenRequest = { viewModel.joinGroup() },
+        onInviteCodeChange = viewModel::updateInviteCode,
+        uiState = uiState
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.onboardingEnterInvitationCodeEvent
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { event ->
+                when (event) {
+                    is OnboardingEnterInvitationCodeEvent.Error -> {
+                        Toast.makeText(context, "초대 코드가 올바르지 않습니다.", Toast.LENGTH_LONG).show()
+                    }
+
+                    OnboardingEnterInvitationCodeEvent.Success -> {
+                        onEnterSpaceScreenRequest()
+                    }
+                }
+            }
+    }
+}
 
 @Composable
 internal fun OnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
     onEnterSpaceScreenRequest: () -> Unit,
+    onInviteCodeChange: (String) -> Unit,
+    uiState: OnboardingEnterInvitationCodeUiState,
 ) {
-    var code by remember { mutableStateOf("") }
-
-    val isCodeComplete = code.length == MAX_LENGTH
     val focusManager = LocalFocusManager.current
-
     val titles = stringArrayResource(title_onboarding_enter_invitation)
 
     OnBoardingLayout(
@@ -81,7 +123,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
         bottomBar = {
             DefaultButton(
                 onClick = { onEnterSpaceScreenRequest() },
-                enabled = isCodeComplete,
+                enabled = !uiState.isProgress,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -112,10 +154,10 @@ internal fun OnboardingEnterInvitationCodeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         BasicTextField(
-                            value = code.getOrNull(index)?.toString() ?: "",
+                            value = uiState.inviteCode.getOrNull(index)?.toString() ?: "",
                             onValueChange = { value ->
                                 if (value.length <= 1) {
-                                    val newCode = StringBuilder(code).apply {
+                                    val newCode = StringBuilder(uiState.inviteCode).apply {
                                         if (index < length) {
                                             setCharAt(index, value.singleOrNull() ?: ' ')
                                         } else {
@@ -123,7 +165,7 @@ internal fun OnboardingEnterInvitationCodeScreen(
                                         }
                                     }.toString().trim()
 
-                                    code = newCode
+                                    onInviteCodeChange(newCode)
 
                                     if (value.isNotEmpty() && index < MAX_LENGTH - 1) {
                                         focusManager.moveFocus(FocusDirection.Next)
@@ -157,7 +199,9 @@ private fun OnboardingEnterInvitationCodeScreenPreview() {
     HarmonyTheme {
         OnboardingEnterInvitationCodeScreen(
             onBackRequest = {},
-            onEnterSpaceScreenRequest = {}
+            onEnterSpaceScreenRequest = {},
+            onInviteCodeChange = {},
+            uiState = OnboardingEnterInvitationCodeUiState()
         )
     }
 }
