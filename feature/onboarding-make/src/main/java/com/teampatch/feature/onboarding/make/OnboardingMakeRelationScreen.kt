@@ -78,9 +78,7 @@ internal fun OnboardingMakeRelationRoute(
                             Toast.LENGTH_LONG
                         ).show()
                     }
-
-                    is GroupMakingEvent.Init -> {}
-                    is GroupMakingEvent.Loading -> {
+                    is GroupMakingEvent.Progress -> {
                         Toast.makeText(context, "그룹 생성 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_LONG).show()
                     }
                 }

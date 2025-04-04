@@ -8,9 +8,9 @@ import com.teampatch.core.domain.usecase.group.CreateFamilyGroupUseCase
 import com.teampatch.feature.onboarding.make.model.GroupMakingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -22,24 +22,26 @@ class OnboardingMakeRelationViewModel @Inject constructor(
     private val onboardingMakeRelationRoute: OnboardingMakeRelationRoute =
         savedStateHandle.toRoute<OnboardingMakeRelationRoute>()
 
-    private val _isGroupMakingEvent: MutableStateFlow<GroupMakingEvent> = MutableStateFlow(
-        GroupMakingEvent.Init
-    )
-    val isGroupMakingEvent: StateFlow<GroupMakingEvent> = _isGroupMakingEvent.asStateFlow()
+    private val _isGroupMakingEvent: Channel<GroupMakingEvent> = Channel()
+    val isGroupMakingEvent: Flow<GroupMakingEvent> = _isGroupMakingEvent.receiveAsFlow()
 
-    fun createGroup(relation: String, name: String) {
-        if (isGroupMakingEvent.value is GroupMakingEvent.Loading) return
+    private var isCreatingGroup: Boolean = false
 
-        _isGroupMakingEvent.value = GroupMakingEvent.Loading
-
-        viewModelScope.launch {
-            try {
-                createFamilyGroupUseCase()
-                _isGroupMakingEvent.value = GroupMakingEvent.Success
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _isGroupMakingEvent.value = GroupMakingEvent.Error(e)
+    fun createGroup(relation: String, name: String) = viewModelScope.launch {
+        try {
+            if (!isCreatingGroup) {
+                _isGroupMakingEvent.send(GroupMakingEvent.Progress)
+                return@launch
             }
+            isCreatingGroup = true
+            createFamilyGroupUseCase()
+            _isGroupMakingEvent.send(GroupMakingEvent.Success)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _isGroupMakingEvent.send(GroupMakingEvent.Error(e))
         }
     }
+        .invokeOnCompletion {
+            isCreatingGroup = false
+        }
 }
