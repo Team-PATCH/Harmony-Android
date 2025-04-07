@@ -4,5 +4,5 @@ data class MainUiState(
     val isFirstUser: Boolean = false,
     val isLoginRequired: Boolean = false,
     val isLoading: Boolean = true,
-    val hasGroup: Boolean = true,
+    val isOnboardingComplete: Boolean = true,
 )

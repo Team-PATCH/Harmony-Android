@@ -44,11 +44,11 @@ import com.teampatch.feature.question.expand.addQuestionExpandScreen
 import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
+import com.teampatch.harmony.model.MainUiState
 
 @Composable
 fun MainNavHost(
-    isFirstUser: Boolean,
-    hasGroup: Boolean,
+    mainUiState: MainUiState,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -57,9 +57,9 @@ fun MainNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = if (isFirstUser) {
+        startDestination = if (mainUiState.isFirstUser) {
             OnboardingRoute
-        } else if (!hasGroup) {
+        } else if (!mainUiState.isOnboardingComplete) {
             OnboardingStartRoute
         } else {
             HomeRoute
