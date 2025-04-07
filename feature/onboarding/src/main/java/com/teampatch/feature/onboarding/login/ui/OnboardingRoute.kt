@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 
 @Composable
 internal fun OnboardingRoute(
-    onKakaoLoginRequest: () -> Unit,
+    onHomeScreenRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
 ) {
     OnboardingFirstScreen(
-        onKakaoLoginRequest = onKakaoLoginRequest,
+        onHomeScreenRequest = onHomeScreenRequest,
         onPermissionNotificationRequest = onPermissionNotificationRequest,
         onStartScreenRequest = onStartScreenRequest
     )

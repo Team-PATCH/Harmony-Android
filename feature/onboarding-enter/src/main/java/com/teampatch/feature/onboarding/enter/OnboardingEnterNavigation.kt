@@ -22,7 +22,7 @@ fun NavGraphBuilder.addOnboardingEnterInvitationCodeScreen(
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
     composable<OnboardingEnterInvitationCodeRoute> {
-        OnboardingEnterInvitationCodeScreen(
+        OnboardingEnterInvitationCodeRoute(
             onBackRequest = onBackRequest,
             onEnterSpaceScreenRequest = onEnterSpaceScreenRequest
         )

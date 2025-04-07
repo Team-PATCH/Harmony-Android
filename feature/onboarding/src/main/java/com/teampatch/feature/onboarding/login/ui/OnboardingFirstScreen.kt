@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.teampatch.core.designsystem.R
+import com.teampatch.feature.onboarding.login.model.LoginEvent
 
 @Composable
 internal fun OnboardingFirstScreen(
-    onKakaoLoginRequest: () -> Unit,
+    onHomeScreenRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
@@ -52,22 +53,46 @@ internal fun OnboardingFirstScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.loginSuccessEvent.collect { isLoginSuccessful ->
-            if (isLoginSuccessful) {
-                if (!hasNotificationGranted(context)) {
-                    onPermissionNotificationRequest()
-                } else {
-                    onStartScreenRequest()
+        viewModel.loginEvent.collect { event ->
+            when (event) {
+                is LoginEvent.Error -> {
+                    Toast.makeText(context, "로그인에 실패했습니다.", Toast.LENGTH_LONG).show()
                 }
-            } else {
-                Toast.makeText(context, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                LoginEvent.FamilyRegistrationRequired -> {
+                    if (!hasNotificationGranted(context)) {
+                        onPermissionNotificationRequest()
+                    } else {
+                        onStartScreenRequest()
+                    }
+                }
+                LoginEvent.Success -> {
+                    onHomeScreenRequest()
+                }
             }
         }
     }
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(68.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { viewModel.loginKakao() },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.kakao_login_medium_wide),
+                    contentDescription = "Kakao Login",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -86,23 +111,6 @@ internal fun OnboardingFirstScreen(
             )
 
             Spacer(modifier = Modifier.height(465.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(68.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { viewModel.loginKakao() },
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.kakao_login_medium_wide),
-                    contentDescription = "Kakao Login",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
-            }
         }
     }
 }
@@ -111,7 +119,7 @@ internal fun OnboardingFirstScreen(
 @Composable
 fun OnboardingLoginScreenPreview() {
     OnboardingFirstScreen(
-        onKakaoLoginRequest = {},
+        onHomeScreenRequest = {},
         onPermissionNotificationRequest = {},
         onStartScreenRequest = {}
     )
