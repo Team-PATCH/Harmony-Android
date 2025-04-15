@@ -97,33 +97,6 @@ internal fun DailyEditRoute(
 }
 
 @Composable
-fun TimePickerDialogEffect(
-    onConfirm: (Int, Int) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    val context = LocalContext.current
-
-    DisposableEffect(Unit) {
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        val dialog = TimePickerDialog(
-            context,
-            { _, selectedHour, selectedMinute -> onConfirm(selectedHour, selectedMinute) },
-            hour,
-            minute,
-            true
-        )
-
-        dialog.setOnDismissListener { onDismissRequest() }
-        dialog.show()
-
-        onDispose { dialog.dismiss() }
-    }
-}
-
-@Composable
 internal fun DailyEditScreen(
     onDismissRequest: () -> Unit,
     onCompleteRequest: (String) -> Unit,
@@ -131,9 +104,24 @@ internal fun DailyEditScreen(
     selectedDays: Set<DayOfWeek>,
     onDaySelected: (DayOfWeek) -> Unit,
 ) {
+    val context = LocalContext.current
     var daily by rememberSaveable { mutableStateOf(uiState.dailyExpand.content) }
     var time: LocalTime? by rememberSaveable { mutableStateOf(null) }
-    var isTimePickerDialogShow by remember { mutableStateOf(false) }
+    val calendar = remember { Calendar.getInstance() }
+    val hour = remember { calendar.get(Calendar.HOUR_OF_DAY) }
+    val minute = remember { calendar.get(Calendar.MINUTE) }
+
+    val timePickerDialog = remember {
+        TimePickerDialog(
+            context,
+            { _, selectedHour, selectedMinute ->
+                time = LocalTime.of(selectedHour, selectedMinute)
+            },
+            hour,
+            minute,
+            true
+        )
+    }
     val daysOfWeek = remember { DayOfWeek.values() }
 
     Scaffold(
@@ -244,7 +232,7 @@ internal fun DailyEditScreen(
                     .background(color = WH, shape = RoundedCornerShape(10.dp))
                     .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
                     .padding(horizontal = 20.dp)
-                    .noRippleClickable { isTimePickerDialogShow = true }
+                    .noRippleClickable { timePickerDialog.show() }
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_date_memory_card),
@@ -258,15 +246,6 @@ internal fun DailyEditScreen(
                     fontFamily = PretendardFontFamily,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(start = 20.dp)
-                )
-            }
-            if (isTimePickerDialogShow) {
-                TimePickerDialogEffect(
-                    onConfirm = { hour, minute ->
-                        time = LocalTime.of(hour, minute)
-                        isTimePickerDialogShow = false
-                    },
-                    onDismissRequest = { isTimePickerDialogShow = false }
                 )
             }
         }

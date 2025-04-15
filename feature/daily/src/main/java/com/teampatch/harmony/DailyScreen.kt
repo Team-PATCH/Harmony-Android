@@ -94,9 +94,7 @@ internal fun DailyScreen(
     dailyExpandPageRequest: () -> Unit,
     uiState: DailyUiState,
 ) {
-    val daily = uiState.daily.collectAsLazyPagingItems()
 
-    // TODO:  ??
     Scaffold(
         topBar = {
             AppBar(
