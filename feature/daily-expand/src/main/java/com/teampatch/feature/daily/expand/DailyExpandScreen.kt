@@ -74,7 +74,7 @@ internal fun DailyExpandRoute(
         )
     }
 
-    LaunchedEffect(viewModel.event) {
+    LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
             viewModel.event.collect {
                 when (it) {
