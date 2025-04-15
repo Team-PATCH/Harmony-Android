@@ -126,12 +126,11 @@ internal fun DailyExpandScreen(
 
 @Composable
 fun DailyItem(
-    dailyItem: DailyManage?,
+    dailyItem: DailyManage,
     onEditDailyRequest: () -> Unit,
     onDeleteDailyRequest: () -> Unit,
 ) {
     var isDropDownMenuShow by remember { mutableStateOf(false) }
-    if (dailyItem == null) return
 
     Box(
         modifier = Modifier
