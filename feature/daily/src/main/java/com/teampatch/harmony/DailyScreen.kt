@@ -94,7 +94,6 @@ internal fun DailyScreen(
     dailyExpandPageRequest: () -> Unit,
     uiState: DailyUiState,
 ) {
-
     Scaffold(
         topBar = {
             AppBar(
