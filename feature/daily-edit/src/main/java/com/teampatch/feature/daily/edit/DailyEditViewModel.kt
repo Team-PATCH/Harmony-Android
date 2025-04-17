@@ -1,5 +1,6 @@
 package com.teampatch.feature.daily.edit
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,8 +20,9 @@ import kotlinx.coroutines.launch
 internal class DailyEditViewModel @Inject constructor(
     private val getDailyManageUseCase: GetDailyManageUseCase,
 ) : ViewModel() {
-    var dailyEditUiState = mutableStateOf(DailyEditUiState())
-        private set
+
+    private val _dailyEditUiState = mutableStateOf(DailyEditUiState())
+    val dailyEditUiState: State<DailyEditUiState> = _dailyEditUiState
 
     private val _event: Channel<DailyEditEvent> = Channel()
     val event: Flow<DailyEditEvent> = _event.receiveAsFlow()
@@ -33,7 +35,7 @@ internal class DailyEditViewModel @Inject constructor(
         runCatching {
             getDailyManageUseCase("someId") // 올바른 dailyId 사용
         }.onSuccess { dailyManage ->
-            dailyEditUiState.value = DailyEditUiState(
+            _dailyEditUiState.value = DailyEditUiState(
                 dailyExpand = dailyManage,
                 isLoading = false
             )
@@ -43,9 +45,15 @@ internal class DailyEditViewModel @Inject constructor(
         }
     }
 
+    fun changeDailyContent(content: String) {
+        _dailyEditUiState.value = _dailyEditUiState.value.copy(
+            dailyExpand = _dailyEditUiState.value.dailyExpand.copy(content = content)
+        )
+    }
+
     /** ✅ 요일 선택을 업데이트하는 메서드 추가 **/
     fun toggleSelectedDay(day: DayOfWeek) {
-        dailyEditUiState.value = dailyEditUiState.value.copy(
+        _dailyEditUiState.value = dailyEditUiState.value.copy(
             selectedDays = dailyEditUiState.value.selectedDays.toMutableSet().apply {
                 if (contains(day)) remove(day) else add(day)
             }

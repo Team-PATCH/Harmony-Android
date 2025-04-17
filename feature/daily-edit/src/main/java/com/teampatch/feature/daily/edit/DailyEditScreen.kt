@@ -76,8 +76,10 @@ internal fun DailyEditRoute(
                 onCompleteRequest(it)
             },
             uiState = uiState,
-            selectedDays = uiState.selectedDays
-        ) { viewModel.toggleSelectedDay(it) }
+            selectedDays = uiState.selectedDays,
+            onDaySelected = { viewModel.toggleSelectedDay(it) },
+            onChangeDaily = { viewModel.changeDailyContent(it) }
+        )
     }
 
     LaunchedEffect(Unit) {
@@ -102,9 +104,10 @@ internal fun DailyEditScreen(
     uiState: DailyEditUiState,
     selectedDays: Set<DayOfWeek>,
     onDaySelected: (DayOfWeek) -> Unit,
+    onChangeDaily: (String) -> Unit,
 ) {
     val context = LocalContext.current
-    var daily by rememberSaveable { mutableStateOf(uiState.dailyExpand.content) }
+    val daily = uiState.dailyExpand.content
     var time: LocalTime? by rememberSaveable { mutableStateOf(null) }
     val calendar = remember { Calendar.getInstance() }
     val hour = remember { calendar.get(Calendar.HOUR_OF_DAY) }
@@ -174,10 +177,10 @@ internal fun DailyEditScreen(
                     .padding(horizontal = 20.dp)
             ) {
                 DefaultTextField(
-                    value = daily,
+                    value = uiState.dailyExpand.content,
                     onValueChange = {
                         if (it.length <= 200) {
-                            daily = it
+                            onChangeDaily(it) // ViewModel의 함수 호출
                         }
                     },
                     singleLine = false,
@@ -270,7 +273,8 @@ private fun DailyEditScreenPreview() {
                 selectedDays = selectedDays.toMutableSet().apply {
                     if (contains(day)) remove(day) else add(day)
                 }
-            }
+            },
+            onChangeDaily = {}
         )
     }
 }
