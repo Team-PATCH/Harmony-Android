@@ -9,6 +9,7 @@ import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
 import com.teampatch.core.data.repository.QuestionRepositoryImpl
 import com.teampatch.core.data.repository.TodoOfflineRepositoryImpl
 import com.teampatch.core.data.repository.UserOfflineRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalAuthenticationRepositoryImpl
 import com.teampatch.core.domain.repository.AnswerRepository
 import com.teampatch.core.domain.repository.AppManagementRepository
 import com.teampatch.core.domain.repository.AuthenticationRepository
@@ -33,7 +34,7 @@ internal abstract class DataViewModelModule {
 
     @Binds
     abstract fun bindsAuthenticationRepository(
-        authenticationRepositoryImpl: AuthenticationRepositoryImpl,
+        localAuthenticationRepositoryImpl: LocalAuthenticationRepositoryImpl,
     ): AuthenticationRepository
 
     @Binds
