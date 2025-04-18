@@ -1,8 +1,8 @@
 <resources>
     
     <string-array name="title_onboarding_make_space">
-        <item>"초대"</item>
-        <item>"를\n받으셨나요?"</item>
+        <item>"먼저 "</item>
+        <item>"가족공간"</item>
         <item>"을\n만들어 주세요."</item>
     </string-array>
     <string-array name="title_onboarding_enter_grandparents_name">
@@ -37,7 +37,7 @@
     </string-array>
 
 
-    <string name="subtext_onboarding_make_space">"나의 추억을 기록하고 싶다면\n새로운 그룹을 만들어 시작해 보세요."</string>
+    <string name="subtext_onboarding_make_space">"가족 공간을 만든 사람이\n우리 가족의 매니저가 돼요."</string>
     <string name="subtext_onboarding_enter_grandparents_name">"할머니나 할아버지의 성함을\n" +"입력해 주세요."</string>
     <string name="subtext_onboarding_enter_my_name">"할머니에게 보여질\n닉네임을 입력해 주세요."</string>
     <string name="subtext_onboarding_setting_prfile_image">"할머니에게 보여질\n" + "프로필 사진을 설정해 주세요."</string>

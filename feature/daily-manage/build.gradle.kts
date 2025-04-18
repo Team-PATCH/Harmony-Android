@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.daily.manage"
+    namespace = "com.teampatch.feature.daily.manage"
 }
 
 dependencies {
