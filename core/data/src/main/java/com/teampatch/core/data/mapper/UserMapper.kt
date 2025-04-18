@@ -12,7 +12,7 @@ internal fun ProfileResponse.toDomain(): User {
         name = user.nick,
         relation = "",
         profileImageUrl = null,
-        role = roleStringMapper(user.permissionId)
+        role = roleStringMapper(user.permissionId!!)
     )
 }
 
