@@ -111,7 +111,7 @@ internal class KakaoLoginHelperActivity : Activity() {
     ): Token {
         Log.i("kakao", "카카오계정으로 로그인 성공")
         return Token(
-            userId = user?.kakaoAccount?.email ?: "null",
+            userId = user?.id?.toString() ?: "null",
             nickname = user?.kakaoAccount?.name ?: "null",
             profileUrl = user?.kakaoAccount?.profile?.profileImageUrl ?: "null",
             authProvider = PROVIDER,
