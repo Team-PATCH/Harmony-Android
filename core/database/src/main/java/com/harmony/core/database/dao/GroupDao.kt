@@ -19,6 +19,9 @@ interface GroupDao {
     @Query("SELECT EXISTS(SELECT 1 FROM `group` WHERE id = :groupId) AS is_present")
     suspend fun queryIsGroupIdPresent(groupId: Long): Boolean
 
+    @Query("SELECT * FROM `group` WHERE invite_code = :inviteCode")
+    fun queryGroupByInviteCode(inviteCode: String): Flow<GroupEntity>
+
     @Insert
     suspend fun insertGroups(vararg groupEntity: GroupEntity): List<Long>
 

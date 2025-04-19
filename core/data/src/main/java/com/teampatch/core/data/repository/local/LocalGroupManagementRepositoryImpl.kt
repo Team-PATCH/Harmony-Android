@@ -37,7 +37,17 @@ internal class LocalGroupManagementRepositoryImpl @Inject constructor(
     }
 
     override suspend fun joinFamilyGroup(inviteCode: String): InvitedGroup {
-        TODO("Not yet implemented")
+        val group = groupDao.queryGroupByInviteCode(inviteCode).first()
+        val groupMembers = userDao.getUserByGroupId(group.id!!.toLong()).first()
+        val managerUserData = userDao.getUserById(group.managerUid!!).first()
+
+        return InvitedGroup(
+            groupId = group.id?.toInt()!!,
+            groupManagerInfo = InvitedGroup.GroupManagerInfo(managerUserData.name),
+            users = groupMembers.map {
+                InvitedGroup.User(it.profileImageUri)
+            }
+        )
     }
 
     override suspend fun getUserGroupList(uid: String): List<UserGroup> {

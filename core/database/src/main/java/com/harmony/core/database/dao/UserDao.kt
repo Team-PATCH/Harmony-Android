@@ -16,6 +16,12 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE uid > 0")
     fun getUsers(): Flow<List<UserEntity>>
 
+    @Query("SELECT * FROM user WHERE uid = :uid")
+    fun getUserById(uid: Long): Flow<UserEntity>
+
+    @Query("SELECT * FROM user WHERE groupId = :id")
+    fun getUserByGroupId(id: Long): Flow<List<UserEntity>>
+
     @Query("SELECT * FROM user WHERE sns_id = :id")
     fun getUserBySnsId(id: String): Flow<UserEntity>
 
