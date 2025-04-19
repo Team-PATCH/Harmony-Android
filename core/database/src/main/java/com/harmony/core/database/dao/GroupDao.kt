@@ -13,19 +13,16 @@ interface GroupDao {
     @Query("SELECT * FROM `group`")
     fun queryGroups(): Flow<List<GroupEntity>>
 
-    @Query("SELECT * FROM `group` WHERE uid = :uid")
-    fun queryGroupByUserId(uid: Long): Flow<List<GroupEntity>>
+    @Query("SELECT * FROM `group` WHERE id = :groupId")
+    fun queryGroupById(groupId: Long): Flow<GroupEntity>
 
-    @Query("SELECT * FROM `group` WHERE group_id = :groupId")
-    fun queryGroupById(groupId: Long): Flow<List<GroupEntity>>
-
-    @Query("SELECT EXISTS(SELECT 1 FROM `group` WHERE group_id = :groupId) AS is_present")
+    @Query("SELECT EXISTS(SELECT 1 FROM `group` WHERE id = :groupId) AS is_present")
     suspend fun queryIsGroupIdPresent(groupId: Long): Boolean
 
     @Insert
-    suspend fun insertGroups(vararg groupEntity: GroupEntity)
+    suspend fun insertGroups(vararg groupEntity: GroupEntity): List<Long>
 
-    @Query("DELETE FROM `group` WHERE group_id = :groupId")
+    @Query("DELETE FROM `group` WHERE id = :groupId")
     fun deleteGroupById(groupId: Long)
 
     @Delete
