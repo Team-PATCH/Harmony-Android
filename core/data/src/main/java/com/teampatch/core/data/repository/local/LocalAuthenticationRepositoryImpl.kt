@@ -6,6 +6,7 @@ import com.teampatch.core.domain.entity.SocialLoginHelper
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.domain.model.LoginResult
 import com.teampatch.core.domain.repository.AuthenticationRepository
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -24,6 +25,8 @@ internal class LocalAuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logout() {
+        val myUserData = userDao.getMyUserData().first()
+        userDao.updateUser(myUserData.copy(isMe = false))
         tokenManager.setAccessToken("")
     }
 }
