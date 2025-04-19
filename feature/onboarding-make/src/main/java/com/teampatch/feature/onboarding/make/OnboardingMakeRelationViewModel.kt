@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.group.CreateFamilyGroupUseCase
+import com.teampatch.core.domain.usecase.user.RegisterAppUseCase
 import com.teampatch.feature.onboarding.make.model.GroupMakingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 internal class OnboardingMakeRelationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val createFamilyGroupUseCase: CreateFamilyGroupUseCase,
+    private val registerAppUseCase: RegisterAppUseCase,
 ) : ViewModel() {
 
     private val onboardingMakeRelationRoute: OnboardingMakeRelationRoute =
@@ -34,6 +37,7 @@ internal class OnboardingMakeRelationViewModel @Inject constructor(
                 return@launch
             }
             isCreatingGroup = true
+            registerAppUseCase(name, relation, null, Role.MEMBER)
             createFamilyGroupUseCase()
             _isGroupMakingEvent.send(GroupMakingEvent.Success)
         } catch (e: Exception) {
