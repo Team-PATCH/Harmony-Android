@@ -29,7 +29,7 @@ internal class OnboardingMakeRelationViewModel @Inject constructor(
 
     fun createGroup(relation: String, name: String) = viewModelScope.launch {
         try {
-            if (!isCreatingGroup) {
+            if (isCreatingGroup) {
                 _isGroupMakingEvent.send(GroupMakingEvent.Progress)
                 return@launch
             }
