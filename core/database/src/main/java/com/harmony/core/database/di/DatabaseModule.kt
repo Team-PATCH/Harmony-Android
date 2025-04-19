@@ -20,30 +20,26 @@ internal object DatabaseModule {
 
     @Provides
     fun providesRoomInstance(
-        @ApplicationContext appContext: Context
-    ): HarmonyDatabase {
-        return Room.databaseBuilder(
-            context = appContext,
-            klass = HarmonyDatabase::class.java,
-            name = DB_NAME
-        )
-            .build()
-    }
+        @ApplicationContext appContext: Context,
+    ): HarmonyDatabase = Room.databaseBuilder(
+        context = appContext,
+        klass = HarmonyDatabase::class.java,
+        name = DB_NAME
+    )
+        .build()
 
     @Provides
     fun providesTodoDao(
-        harmonyDatabase: HarmonyDatabase
-    ): TodoDao {
-        return harmonyDatabase.todoDao()
-    }
+        harmonyDatabase: HarmonyDatabase,
+    ): TodoDao = harmonyDatabase.todoDao()
 
     @Provides
     fun providesUserDao(
-        harmonyDatabase: HarmonyDatabase
+        harmonyDatabase: HarmonyDatabase,
     ): UserDao = harmonyDatabase.userDao()
 
     @Provides
     fun providesGroupDao(
-        harmonyDatabase: HarmonyDatabase
+        harmonyDatabase: HarmonyDatabase,
     ): GroupDao = harmonyDatabase.groupDao()
 }

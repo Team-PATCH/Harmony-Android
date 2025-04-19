@@ -5,14 +5,14 @@ import com.teampatch.core.domain.repository.UserRepository
 import javax.inject.Inject
 
 class RegisterAppUseCase @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
     suspend operator fun invoke(
         name: String,
         relation: String,
         profileImageUrl: String?,
-        role: Role
+        role: Role,
     ) {
         userRepository.addUserProfile(
             name = name,

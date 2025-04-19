@@ -16,16 +16,13 @@ internal object CoroutineModule {
 
     @CoroutineDispatcher(DispatcherContext.Default)
     @Provides
-    fun providesDefaultCoroutine(): CoroutineScope =
-        CoroutineScope(context = SupervisorJob() + Dispatchers.Default)
+    fun providesDefaultCoroutine(): CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.Default)
 
     @CoroutineDispatcher(DispatcherContext.IO)
     @Provides
-    fun providesIoCoroutine(): CoroutineScope =
-        CoroutineScope(context = SupervisorJob() + Dispatchers.IO)
+    fun providesIoCoroutine(): CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.IO)
 
     @CoroutineDispatcher(DispatcherContext.Main)
     @Provides
-    fun providesMainCoroutine(): CoroutineScope =
-        CoroutineScope(context = SupervisorJob() + Dispatchers.Main)
+    fun providesMainCoroutine(): CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.Main)
 }

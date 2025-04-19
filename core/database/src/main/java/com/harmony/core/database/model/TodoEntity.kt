@@ -9,5 +9,5 @@ data class TodoEntity(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "epoch_milli") val epochMilli: Long,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "is_finished") val isFinished: Boolean
+    @ColumnInfo(name = "is_finished") val isFinished: Boolean,
 )

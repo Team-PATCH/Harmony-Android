@@ -7,5 +7,7 @@ import javax.inject.Qualifier
 annotation class CoroutineDispatcher(val dispatcherContext: DispatcherContext)
 
 enum class DispatcherContext {
-    Default, IO, Main
+    Default,
+    IO,
+    Main,
 }

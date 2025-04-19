@@ -2,14 +2,12 @@ package com.teampatch.core.data.di
 
 import com.teampatch.core.data.repository.AnswerRepositoryImpl
 import com.teampatch.core.data.repository.AppManagementRepositoryImpl
-import com.teampatch.core.data.repository.AuthenticationRepositoryImpl
-import com.teampatch.core.data.repository.GroupManagementOfflineRepositoryImpl
-import com.teampatch.core.data.repository.GroupManagementRepositoryImpl
 import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
 import com.teampatch.core.data.repository.QuestionRepositoryImpl
 import com.teampatch.core.data.repository.TodoOfflineRepositoryImpl
-import com.teampatch.core.data.repository.UserOfflineRepositoryImpl
 import com.teampatch.core.data.repository.local.LocalAuthenticationRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalGroupManagementRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalUserRepositoryImpl
 import com.teampatch.core.domain.repository.AnswerRepository
 import com.teampatch.core.domain.repository.AppManagementRepository
 import com.teampatch.core.domain.repository.AuthenticationRepository
@@ -54,16 +52,16 @@ internal abstract class DataViewModelModule {
 
     @Binds
     abstract fun bindsGroupManagementRepository(
-        groupManagementOfflineRepositoryImpl: GroupManagementOfflineRepositoryImpl
+        groupManagementOfflineRepositoryImpl: LocalGroupManagementRepositoryImpl,
     ): GroupManagementRepository
 
     @Binds
     abstract fun bindsTodoRepository(
-        todoOfflineRepositoryImpl: TodoOfflineRepositoryImpl
+        todoOfflineRepositoryImpl: TodoOfflineRepositoryImpl,
     ): TodoRepository
 
     @Binds
     abstract fun bindsUserRepository(
-        userOfflineRepositoryImpl: UserOfflineRepositoryImpl
+        userOfflineRepositoryImpl: LocalUserRepositoryImpl,
     ): UserRepository
 }

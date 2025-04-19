@@ -13,9 +13,9 @@ import com.harmony.core.database.model.UserEntity
     entities = [
         TodoEntity::class,
         UserEntity::class,
-        GroupEntity::class,
+        GroupEntity::class
     ],
-    version = 1,
+    version = 1
 )
 internal abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
