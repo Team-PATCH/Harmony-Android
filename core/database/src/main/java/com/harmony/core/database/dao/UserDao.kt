@@ -16,6 +16,9 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE uid > 0")
     fun getUsers(): Flow<List<UserEntity>>
 
+    @Query("SELECT * FROM user WHERE sns_id = :id")
+    fun getUserBySnsId(id: String): Flow<UserEntity>
+
     @Insert
     suspend fun insertUsers(vararg userEntity: UserEntity)
 
