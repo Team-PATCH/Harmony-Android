@@ -6,10 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user")
 data class UserEntity(
-    @PrimaryKey val uid: Long,
+    @PrimaryKey(autoGenerate = true) val uid: Long? = null,
     @ColumnInfo(name = "groupId") val groupId: Long?,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "relation") val relation: String,
     @ColumnInfo(name = "profileImageUri") val profileImageUri: String?,
     @ColumnInfo(name = "role") val role: String,
+    @ColumnInfo(name = "sns_id") val snsId: String,
+    @ColumnInfo(name = "is_me") val isMe: Boolean,
 )
