@@ -17,7 +17,7 @@ internal class LocalGroupManagementRepositoryImpl @Inject constructor(
 
     override suspend fun createFamilyGroup(): String {
         val myUserData = userDao.getMyUserData()
-        val inviteCode = Random.nextLong(1000, 9999).toString()
+        val inviteCode = Random.nextLong(10000, 99999).toString()
         val groupEntity = GroupEntity(
             id = null,
             vipUid = null,
