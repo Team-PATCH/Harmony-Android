@@ -1,7 +1,6 @@
 package com.teampatch.core.data.mapper
 
 import com.harmony.core.database.model.UserEntity
-import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.model.User
 import com.teampatch.core.network.model.user.ProfileResponse
 
@@ -24,19 +23,5 @@ internal fun UserEntity.toDomain(): User {
         relation = relation,
         profileImageUrl = profileImageUri,
         role = roleStringMapper(role)
-    )
-}
-
-internal fun User.toEntity(): UserEntity {
-    return UserEntity(
-        uid = uid.toLong(),
-        groupId = groupId.toLong(),
-        name = name,
-        relation = relation,
-        profileImageUri = profileImageUrl,
-        role = when (role) {
-            Role.VIP -> VIP
-            Role.MEMBER -> MEMBER
-        }
     )
 }
