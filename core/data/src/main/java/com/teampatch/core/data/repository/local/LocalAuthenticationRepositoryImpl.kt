@@ -20,6 +20,7 @@ internal class LocalAuthenticationRepositoryImpl @Inject constructor(
     override suspend fun loginKakao(): LoginResult {
         val token = kakaoLoginService.login()
         socialLoginHelper.setSocialUserId(token.userId)
+        tokenManager.setAccessToken(token.accessToken)
         val user = userDao.getUsers().firstOrNull()?.find { it.snsId == token.userId }
         return LoginResult(groupId = user?.groupId?.toString() ?: "-1")
     }
