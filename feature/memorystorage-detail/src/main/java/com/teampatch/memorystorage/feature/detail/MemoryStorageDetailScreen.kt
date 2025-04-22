@@ -45,20 +45,22 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
+import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
+import java.time.LocalDateTime
 
 @Composable
 internal fun MemoryStorageDetailRoute(
     memoryStorageDetailViewModel: MemoryStorageDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val uiState = memoryStorageDetailViewModel.uiState
+    val uiState = memoryStorageDetailViewModel
 }
 
 @Composable
 internal fun MemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
-    uiState: MemoryStorageDetailUiState,
+    memoryStorageDetailUiState: MemoryStorageDetailUiState,
 ) {
     var answerEditMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -98,6 +100,11 @@ internal fun MemoryStorageDetailScreen(
         modifier = Modifier
             .background(WH)
     ) { scaffoldPaddingValues ->
+        val memoryList = when (memoryStorageDetailUiState) {
+            is MemoryStorageDetailUiState.Success -> memoryStorageDetailUiState.memories.toList()
+            else -> emptyList()
+        }
+        val memory = memoryList.firstOrNull()?.second
 
         Column(
             modifier = Modifier
@@ -123,10 +130,9 @@ internal fun MemoryStorageDetailScreen(
             )
 
             MemoryInfoView(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                title = "민준갓",
-                description = "소리쳐"
+                modifier = Modifier.fillMaxWidth(),
+                title = memory?.writerTitle ?: "",
+                description = memory?.dateTime.toString()
             )
 
             Spacer(
@@ -142,7 +148,7 @@ internal fun MemoryStorageDetailScreen(
                     .padding(24.dp)
             ) {
                 Text(
-                    text = "엔믹스엔믹스\n엔믹스엔믹스\n엔믹스엔믹스\n엔믹스엔믹스\n",
+                    text = memory?.text ?: "",
                     fontFamily = PretendardFontFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 20.sp,
@@ -209,7 +215,18 @@ private fun MemoryStorageDetailScreenPreview() {
     HarmonyTheme {
         MemoryStorageDetailScreen(
             onBackRequest = {},
-            uiState = MemoryStorageDetailUiState()
+            memoryStorageDetailUiState = MemoryStorageDetailUiState.Success(
+                memories = mapOf(
+                    "1" to MemoryCard(
+                        id = "1",
+                        writerTitle = "손자",
+                        writerName = "김민준",
+                        text = "다은아 다은아 헌집 줄게 새집다오. 원숭이 엉덩이는 빨개 빨개면 사과 사과는 맛있어 맛있으면 바나난 바나나는 길어 길으면 기차",
+                        imageUrl = "",
+                        dateTime = LocalDateTime.now()
+                    )
+                )
+            )
         )
     }
 }
