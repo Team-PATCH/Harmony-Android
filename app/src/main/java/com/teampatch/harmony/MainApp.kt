@@ -105,7 +105,7 @@ fun MainApp(
             .safeDrawingPadding()
     ) { scaffoldPaddingValue ->
         MainNavHost(
-            isFirstUser = mainUiState.isFirstUser,
+            mainUiState = mainUiState,
             navController = navController,
             modifier = Modifier.padding(scaffoldPaddingValue)
         )

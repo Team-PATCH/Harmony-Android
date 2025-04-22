@@ -27,10 +27,40 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teampatch.core.designsystem.R
 
+private val requiredPermissions: Array<String> = arrayOf(
+    android.Manifest.permission.POST_NOTIFICATIONS
+)
+
 @Composable
-fun OnboardingPermissionNotificationScreen() {
+fun OnboardingPermissionNotificationScreen(
+    onNextPageRequest: () -> Unit,
+) {
     val context = LocalContext.current
     Scaffold(
+        bottomBar = {
+            Button(
+                onClick = {
+                    (context as? Activity)
+                        ?.requestPermissions(requiredPermissions, 1)
+                    onNextPageRequest()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
+                    .height(68.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), // 투명한 배경
+                contentPadding = PaddingValues(0.dp), // 버튼의 기본 내부 패딩 제거
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
+                Image(
+                    painter = painterResource(id = R.drawable.btn_start_harmony), // 카카오 로그인 이미지
+                    contentDescription = "Harmoy Start Process",
+                    modifier = Modifier.fillMaxSize(), // 이미지가 버튼의 크기를 꽉 채움
+                    contentScale = ContentScale.Crop // 이미지가 버튼 크기에 맞춰 잘림
+                )
+            }
+        },
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
@@ -63,34 +93,6 @@ fun OnboardingPermissionNotificationScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-
-                Spacer(modifier = Modifier.height(36.dp))
-
-                Button(
-                    onClick = {
-                        (context as? Activity)?.requestPermissions(
-                            arrayOf(
-                                android.Manifest.permission.POST_NOTIFICATIONS
-                            ),
-                            1
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .height(68.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), // 투명한 배경
-                    contentPadding = PaddingValues(0.dp), // 버튼의 기본 내부 패딩 제거
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
-                    Image(
-                        painter = painterResource(id = R.drawable.btn_start_harmony), // 카카오 로그인 이미지
-                        contentDescription = "Harmoy Start Process",
-                        modifier = Modifier.fillMaxSize(), // 이미지가 버튼의 크기를 꽉 채움
-                        contentScale = ContentScale.Crop // 이미지가 버튼 크기에 맞춰 잘림
-                    )
-                }
             }
         }
     }
@@ -99,5 +101,5 @@ fun OnboardingPermissionNotificationScreen() {
 @Preview(showBackground = true)
 @Composable
 fun OnboardingPermissionNotificationScreenPreview() {
-    OnboardingPermissionNotificationScreen()
+    OnboardingPermissionNotificationScreen({})
 }

@@ -43,7 +43,7 @@ import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_next
 @Composable
 internal fun OnboardingMakeParentsNameScreen(
     onBackRequest: () -> Unit,
-    onShareInvitationScreenRequest: () -> Unit,
+    onShareInvitationScreenRequest: (vipAlias: String, vipName: String) -> Unit,
 ) {
     var selectedText by rememberSaveable { mutableStateOf("") }
     var name by rememberSaveable { mutableStateOf("") }
@@ -64,7 +64,7 @@ internal fun OnboardingMakeParentsNameScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onShareInvitationScreenRequest() },
+                onClick = { onShareInvitationScreenRequest(selectedText, name) },
                 enabled = selectedText.isNotBlank() && name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,7 +162,7 @@ private fun OnboardingMakeParentsNameScreenPreview() {
     HarmonyTheme {
         OnboardingMakeParentsNameScreen(
             onBackRequest = {},
-            onShareInvitationScreenRequest = {}
+            onShareInvitationScreenRequest = { _, _ -> }
         )
     }
 }
