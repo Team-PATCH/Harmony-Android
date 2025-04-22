@@ -1,9 +1,7 @@
 package com.teampatch.core.data.di
 
 import com.teampatch.core.data.entity.TokenManagerImpl
-import com.teampatch.core.data.repository.UserRepositoryImpl
 import com.teampatch.core.domain.entity.TokenManager
-import com.teampatch.core.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,9 +15,4 @@ internal abstract class DataSingletonModule {
     abstract fun bindsTokenManager(
         tokenManagerImpl: TokenManagerImpl,
     ): TokenManager
-
-    @Binds
-    abstract fun bindsUserRepository(
-        userRepositoryImpl: UserRepositoryImpl,
-    ): UserRepository
 }

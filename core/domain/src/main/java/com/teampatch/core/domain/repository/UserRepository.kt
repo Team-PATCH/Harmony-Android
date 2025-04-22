@@ -1,5 +1,6 @@
 package com.teampatch.core.domain.repository
 
+import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
@@ -10,5 +11,12 @@ interface UserRepository {
     suspend fun editProfile(
         name: String?,
         profileImageUri: String?,
+    )
+
+    suspend fun addUserProfile(
+        name: String,
+        relation: String,
+        profileImageUrl: String?,
+        role: Role,
     )
 }

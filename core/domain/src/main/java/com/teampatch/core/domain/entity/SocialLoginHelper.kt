@@ -1,0 +1,16 @@
+package com.teampatch.core.domain.entity
+
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class SocialLoginHelper @Inject constructor() {
+
+    private lateinit var socialUserId: String
+
+    fun getSocialUserId(): String = socialUserId
+
+    fun setSocialUserId(userId: String) {
+        socialUserId = userId
+    }
+}
