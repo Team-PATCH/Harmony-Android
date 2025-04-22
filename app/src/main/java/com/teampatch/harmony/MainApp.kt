@@ -34,7 +34,8 @@ import com.teampatch.harmony.model.MainUiState
 
 private val BottomNavigationEnableScreens: Set<String?> = setOf(
     HomeRoute::class.qualifiedName,
-    QuestionRoute::class.qualifiedName
+    QuestionRoute::class.qualifiedName,
+    DailyRoute::class.qualifiedName
 )
 
 @Composable
@@ -57,6 +58,12 @@ fun MainApp(
 
                 QuestionRoute::class.qualifiedName -> {
                     NavigationItem.QUESTION.also {
+                        previousNavigationItem = it
+                    }
+                }
+
+                DailyRoute::class.qualifiedName -> {
+                    NavigationItem.DAILY.also {
                         previousNavigationItem = it
                     }
                 }
@@ -84,7 +91,7 @@ fun MainApp(
                             NavigationItem.HOME -> navController.navigateToHomeScreen()
                             NavigationItem.STORE -> {}
                             NavigationItem.QUESTION -> navController.navigateToQuestionScreen()
-                            NavigationItem.CALENDAR -> {}
+                            NavigationItem.DAILY -> navController.navigateToDailyScreen()
                         }
                     },
                     navigationItem = navigationItem

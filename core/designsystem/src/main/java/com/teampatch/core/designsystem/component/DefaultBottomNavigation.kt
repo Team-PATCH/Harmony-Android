@@ -33,7 +33,7 @@ enum class NavigationItem {
     HOME,
     STORE,
     QUESTION,
-    CALENDAR,
+    DAILY,
 }
 
 @Composable
@@ -68,10 +68,10 @@ fun DefaultBottomNavigation(
             isSelected = NavigationItem.QUESTION == navigationItem
         )
         DefaultBottomNavigationIcon(
-            onClick = { onClick(NavigationItem.CALENDAR) },
+            onClick = { onClick(NavigationItem.DAILY) },
             title = "일과",
             painter = painterResource(R.drawable.ic_calendar_navigation),
-            isSelected = NavigationItem.CALENDAR == navigationItem
+            isSelected = NavigationItem.DAILY == navigationItem
         )
     }
 }
