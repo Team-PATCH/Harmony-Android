@@ -1,14 +1,13 @@
 package com.teampatch.core.data.repository.local
 
 import com.agvber.core.authentication.kakao.KakaoLoginService
-import com.harmony.core.database.dao.GroupDao
 import com.harmony.core.database.dao.UserDao
 import com.teampatch.core.domain.entity.SocialLoginHelper
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.domain.model.LoginResult
 import com.teampatch.core.domain.repository.AuthenticationRepository
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 internal class LocalAuthenticationRepositoryImpl @Inject constructor(
