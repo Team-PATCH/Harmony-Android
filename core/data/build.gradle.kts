@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":core:authentication"))
+    implementation(project(":core:database"))
 
     implementation(libs.google.play.app.update)
 

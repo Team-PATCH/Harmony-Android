@@ -4,17 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teampatch.core.common.flowErrorCatch
 import com.teampatch.core.domain.usecase.authentication.IsLoginRequiredUseCase
+import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.harmony.model.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val isLoginRequiredUseCase: IsLoginRequiredUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState())
@@ -24,13 +27,24 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             flowErrorCatch(
                 block = { isLoginRequiredUseCase() },
-                action = { it.printStackTrace() }
+                action = {
+                    _uiState.update { state ->
+                        state.copy(
+                            isFirstUser = true,
+                            isLoginRequired = false,
+                            isLoading = false
+                        )
+                    }
+                    it.printStackTrace()
+                }
             )
                 .collect { isLoginRequired ->
-                    _uiState.update {
-                        it.copy(
+                    _uiState.update { state ->
+                        state.copy(
+                            isFirstUser = if (uiState.value.isLoading) isLoginRequired else state.isFirstUser,
                             isLoginRequired = isLoginRequired,
-                            isLoading = false
+                            isLoading = false,
+                            isOnboardingComplete = if (isLoginRequired) false else getUserInfoUseCase().firstOrNull()?.groupId != -1
                         )
                     }
                 }

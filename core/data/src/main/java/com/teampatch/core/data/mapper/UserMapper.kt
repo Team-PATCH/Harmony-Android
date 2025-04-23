@@ -1,22 +1,23 @@
 package com.teampatch.core.data.mapper
 
-import com.teampatch.core.domain.model.Role
+import com.harmony.core.database.model.UserEntity
 import com.teampatch.core.domain.model.User
 import com.teampatch.core.network.model.user.ProfileResponse
 
-internal fun ProfileResponse.toDomain(): User {
-    val role = when (user.permissionId) {
-        "v" -> Role.VIP
-        "m" -> Role.MEMBER
-        else -> throw IllegalStateException()
-    }
+internal fun ProfileResponse.toDomain(): User = User(
+    uid = user.userId,
+    groupId = user.groupId,
+    name = user.nick,
+    relation = "",
+    profileImageUrl = null,
+    role = roleStringMapper(user.permissionId!!)
+)
 
-    return User(
-        uid = user.userId,
-        groupId = user.groupId,
-        name = user.nick,
-        relation = "",
-        profileImageUrl = null,
-        role = role
-    )
-}
+internal fun UserEntity.toDomain(): User = User(
+    uid = uid.toString(),
+    groupId = groupId?.toInt() ?: -1,
+    name = name,
+    relation = relation,
+    profileImageUrl = profileImageUri,
+    role = roleStringMapper(role)
+)

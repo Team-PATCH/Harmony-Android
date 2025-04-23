@@ -3,14 +3,12 @@ package com.teampatch.feature.daily.expand
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import com.teampatch.feature.daily.expand.model.DailyExpandEvent
 import com.teampatch.feature.daily.expand.model.DailyExpandUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -30,11 +28,10 @@ internal class DailyExpandViewModel @Inject constructor(
 
     private fun load() = viewModelScope.launch {
         runCatching {
-            val daily = getDailyManageUseCase("someId") // 적절한 dailyId 값 사용
-            flowOf(PagingData.from(listOf(daily))) // DailyManage를 Flow<PagingData<DailyManage>>로 변환
-        }.onSuccess { dailyFlow ->
+            getDailyManageUseCase("someId") // 단일 데이터 반환
+        }.onSuccess { daily ->
             dailyExpandUiState.value = DailyExpandUiState(
-                dailyManage = dailyFlow,
+                dailyManage = daily,
                 isLoading = false
             )
         }.onFailure {
