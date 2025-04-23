@@ -64,6 +64,9 @@ import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
 @Composable
 internal fun MemoryStorageDetailRoute(
     memoryStorageDetailViewModel: MemoryStorageDetailViewModel = hiltViewModel(),
+    onBackRequest: () -> Unit,
+    onRestartConversation: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
     val uiState = memoryStorageDetailViewModel.uiState
@@ -71,14 +74,14 @@ internal fun MemoryStorageDetailRoute(
     when (uiState.screenState) {
         MemoryDetailScreenState.Detail -> MemoryStorageDetailScreen(
             uiState = uiState,
-            onBackRequest = { TODO() },
+            onBackRequest = { onBackRequest() }, // 뒤로가기 처리
             onShowConversation = { memoryStorageDetailViewModel.showConversation() },
-            onRestartConversation = { TODO() }
+            onRestartConversation = { onRestartConversation() } //
         )
 
         MemoryDetailScreenState.Conversation -> ConversationView(
             onDismiss = { memoryStorageDetailViewModel.showDetail() },
-            onRestartConversation = { TODO() }
+            onRestartConversation = { onRestartConversation() } //
         )
     }
 }

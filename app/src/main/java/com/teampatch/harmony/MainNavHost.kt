@@ -19,6 +19,8 @@ import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
+import com.teampatch.feature.memorystorage.addMemoryStorageScreen
+import com.teampatch.feature.memorystorage.navigateToMemoryStorageScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterInvitationCodeScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
@@ -47,6 +49,8 @@ import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
 import com.teampatch.harmony.model.MainUiState
+import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailScreen
+import com.teampatch.memorystorage.feature.detail.navigateToMemoryStorageDetailScreen
 
 @Composable
 fun MainNavHost(
@@ -195,9 +199,11 @@ fun MainNavHost(
         )
 
         addMemoryStorageScreen(
-            onDetailPageRequest = navController::navigateToMemoryStorageScreen
+            onDetailPageRequest = { navController.navigateToMemoryStorageDetailScreen() }
         )
 
-        addMemoryStorageDetailScreen()
+        addMemoryStorageDetailScreen(
+
+        )
     }
 }
