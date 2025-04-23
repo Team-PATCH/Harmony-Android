@@ -32,6 +32,14 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     private val _event: Channel<MemoryStorageDetailEvent> = Channel()
     val event: Flow<MemoryStorageDetailEvent> = _event.receiveAsFlow()
 
+    fun showConversation() {
+        uiState = uiState.copy(screenState = MemoryDetailScreenState.Conversation)
+    }
+
+    fun showDetail() {
+        uiState = uiState.copy(screenState = MemoryDetailScreenState.Detail)
+    }
+
     init {
         load()
     }
