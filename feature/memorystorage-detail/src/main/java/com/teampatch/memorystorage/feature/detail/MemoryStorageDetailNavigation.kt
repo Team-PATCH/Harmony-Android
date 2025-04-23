@@ -1,58 +1,35 @@
 package com.teampatch.memorystorage.feature.detail
 
-import android.annotation.SuppressLint
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MemoryStorageDetailRoute(val memoryCardId: String)
+data class MemoryStorageDetailRoute(val memoryCardId: String) {
+    companion object {
+        fun routeWithArgs(memoryCardId: String) = "memory_storage_detail/$memoryCardId"
+    }
+}
 
 @Serializable
-data class MemoryStorageDetailConversationRoute(val memoryCardId: String)
+data class MemoryStorageDetailConversationRoute(val memoryCardId: String) {
+    companion object {
+        fun routeWithArgs(memoryCardId: String) = "memory_storage_detail_conversation/$memoryCardId"
+    }
+}
 
-//@SuppressLint("WrongNavigateRouteType")
-//fun NavController.navigateToMemoryStorageDetailScreen(
-//    memoryCardId: String,
-//    navOptions: NavOptions? = null,
-//    navigatorExtras: Navigator.Extras? = null,
-//) {
-//    navigate(MemoryStorageDetailRoute(memoryCardId), navOptions, navigatorExtras)
-//}
-
-//@SuppressLint("WrongNavigateRouteType")
-//fun NavController.navigateToMemoryStorageDetailScreen(
-//    memoryCardId: String,
-//    navOptions: NavOptions? = null,
-//    navigatorExtras: Navigator.Extras? = null,
-//) {
-//    navigate(
-//        MemoryStorageDetailRoute(memoryCardId),
-//        navOptions,
-//        navigatorExtras
-//    )
-//}
-//
-//fun NavController.navigateToConversationScreen(
-//    memoryCardId: String,
-//    navOptions: NavOptions? = null,
-//    navigatorExtras: Navigator.Extras? = null,
-//) {
-//    navigate(MemoryStorageDetailConversationRoute(memoryCardId), navOptions, navigatorExtras)
-//}
-
-// NavigationExtensions.kt
-@SuppressLint("WrongNavigateRouteType")
 fun NavController.navigateToMemoryStorageDetailScreen(
     memoryCardId: String,
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(MemoryStorageDetailRoute(memoryCardId), navOptions, navigatorExtras)
+    navigate(MemoryStorageDetailRoute.routeWithArgs(memoryCardId), navOptions, navigatorExtras)
 }
 
 fun NavController.navigateToConversationScreen(
@@ -60,54 +37,23 @@ fun NavController.navigateToConversationScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(MemoryStorageDetailConversationRoute(memoryCardId), navOptions, navigatorExtras)
+    navigate(MemoryStorageDetailConversationRoute.routeWithArgs(memoryCardId), navOptions, navigatorExtras)
 }
 
-//fun NavGraphBuilder.addMemoryStorageDetailScreen(
-//    onClickConversation: (String) -> Unit
-//) {
-//    composable<MemoryStorageDetailRoute> { backStackEntry ->
-//        val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
-//        MemoryStorageDetailScreen(
-//            memoryCardId = memoryCardId,
-//            onClickConversation = onClickConversation
-//        )
-//    }
-//}
-//fun NavGraphBuilder.addMemoryStorageDetailScreen(
-//    onBackRequest: () -> Unit,
-//    onRestartConversation: () -> Unit,
-//    onDismiss: () -> Unit
-//) {
-//    composable<MemoryStorageDetailRoute> { backStackEntry ->
-//        val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
-//
-//        // ViewModel이 Hilt로 DI되고 있으니 그대로 사용
-//        MemoryStorageDetailRoute(
-//            onBackRequest = onBackRequest,
-//            onRestartConversation = onRestartConversation,
-//            onDismiss = onDismiss
-//        )
-//    }
-//}
-//
-//fun NavGraphBuilder.addMemoryStorageDetailConversationScreen() {
-//    composable<MemoryStorageDetailConversationRoute> { backStackEntry ->
-//        val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
-//        MemoryStorageDetailConversationScreen(memoryCardId = memoryCardId)
-//    }
-//}
-
-// NavGraphBuilderExtensions.kt
 fun NavGraphBuilder.addMemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
     onRestartConversation: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
-    composable<MemoryStorageDetailRoute> { backStackEntry ->
+    composable(
+        route = "memory_storage_detail/{memoryCardId}",
+        arguments = listOf(navArgument("memoryCardId") { type = NavType.StringType })
+    ) { backStackEntry ->
         val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
 
-        MemoryStorageDetailRoute(
+        // 여기에서 MemoryStorageDetailRoute는 데이터 클래스이므로 View처럼 호출 ❌
+        MemoryStorageDetailScreen(
+            memoryCardId = memoryCardId,
             memoryStorageDetailViewModel = hiltViewModel(),
             onBackRequest = onBackRequest,
             onRestartConversation = onRestartConversation,
@@ -117,9 +63,16 @@ fun NavGraphBuilder.addMemoryStorageDetailScreen(
 }
 
 fun NavGraphBuilder.addMemoryStorageDetailConversationScreen() {
-    composable<MemoryStorageDetailConversationRoute> { backStackEntry ->
+    composable(
+        route = "memory_storage_detail_conversation/{memoryCardId}",
+        arguments = listOf(navArgument("memoryCardId") { type = NavType.StringType })
+    ) { backStackEntry ->
         val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
 
-        ConversationView(memoryCardId = memoryCardId)
+        ConversationView(
+            memoryCardId = memoryCardId, // 필요하다면 전달
+            onDismiss = { /* TODO: dismiss logic */ },
+            onRestartConversation = { /* TODO: restart logic */ }
+        )
     }
 }

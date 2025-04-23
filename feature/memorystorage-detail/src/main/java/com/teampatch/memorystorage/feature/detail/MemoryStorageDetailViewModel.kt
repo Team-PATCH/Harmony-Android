@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -25,29 +26,50 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     private val memoryStorageDetailRoute: MemoryStorageDetailRoute = savedStateHandle.toRoute()
     val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
 
-    private val _memoryStorageDetailUiState = MutableStateFlow<MemoryStorageDetailUiState>(MemoryStorageDetailUiState.Loading)
+    private val _memoryStorageDetailUiState = MutableStateFlow<MemoryStorageDetailUiState>(
+        MemoryStorageDetailUiState.Loading()
+    )
+
     val memoryStorageDetailUiState = _memoryStorageDetailUiState.asStateFlow()
 
-    private val _event: Channel<MemoryStorageDetailEvent> = Channel()
-    val event: Flow<MemoryStorageDetailEvent> = _event.receiveAsFlow()
+    private var uiState: MemoryStorageDetailUiState
+        get() = _memoryStorageDetailUiState.value
+        set(value) {
+            _memoryStorageDetailUiState.value = value
+        }
 
     fun showConversation() {
-        uiState = uiState.copy(screenState = MemoryDetailScreenState.Conversation)
+        _memoryStorageDetailUiState.update { current ->
+            when (current) {
+                is MemoryStorageDetailUiState.Success -> current.copy(screenState = MemoryStorageDetailScreenState.Conversation)
+                is MemoryStorageDetailUiState.Error -> current.copy(screenState = MemoryStorageDetailScreenState.Conversation)
+                is MemoryStorageDetailUiState.Loading -> current.copy(screenState = MemoryStorageDetailScreenState.Conversation)
+            }
+        }
     }
 
     fun showDetail() {
-        uiState = uiState.copy(screenState = MemoryDetailScreenState.Detail)
+        _memoryStorageDetailUiState.update { current ->
+            when (current) {
+                is MemoryStorageDetailUiState.Success -> current.copy(screenState = MemoryStorageDetailScreenState.Detail)
+                is MemoryStorageDetailUiState.Error -> current.copy(screenState = MemoryStorageDetailScreenState.Detail)
+                is MemoryStorageDetailUiState.Loading -> current.copy(screenState = MemoryStorageDetailScreenState.Detail)
+            }
+        }
     }
+
+    private val _event: Channel<MemoryStorageDetailEvent> = Channel()
+    val event: Flow<MemoryStorageDetailEvent> = _event.receiveAsFlow()
 
     init {
         loadData()
     }
 
     private fun loadData() = viewModelScope.launch {
-        _memoryStorageDetailUiState.value = MemoryStorageDetailUiState.Loading
+        _memoryStorageDetailUiState.value = MemoryStorageDetailUiState.Loading()
 
         try {
-            val memoryCard = getMemoryCardUseCase("someId") // 예제 코드
+            val memoryCard = getMemoryCardUseCase(memoryCardId)
             _memoryStorageDetailUiState.value = MemoryStorageDetailUiState.Success(
                 memories = mapOf(memoryCard.id to memoryCard)
             )

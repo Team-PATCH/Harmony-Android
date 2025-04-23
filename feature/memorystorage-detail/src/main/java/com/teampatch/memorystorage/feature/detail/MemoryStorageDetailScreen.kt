@@ -32,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +56,7 @@ import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.MemoryInfoView
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G5
+import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
@@ -68,23 +69,34 @@ internal fun MemoryStorageDetailRoute(
     memoryStorageDetailViewModel: MemoryStorageDetailViewModel = hiltViewModel(),
     onBackRequest: () -> Unit,
     onRestartConversation: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val uiState = memoryStorageDetailViewModel.uiState
+    val uiState = memoryStorageDetailViewModel.memoryStorageDetailUiState.collectAsState().value
+    val memoryCardId = uiState.memories.firstOrNull()?.first ?: ""
 
-    when (uiState.screenState) {
-        MemoryDetailScreenState.Detail -> MemoryStorageDetailScreen(
-            uiState = uiState,
-            onBackRequest = { onBackRequest() }, // 뒤로가기 처리
-            onShowConversation = { memoryStorageDetailViewModel.showConversation() },
-            onRestartConversation = { onRestartConversation() } //
-        )
-
-        MemoryDetailScreenState.Conversation -> ConversationView(
-            onDismiss = { memoryStorageDetailViewModel.showDetail() },
-            onRestartConversation = { onRestartConversation() } //
-        )
+    when (uiState) {
+        is MemoryStorageDetailUiState.Loading -> {
+            // 로딩 UI 처리
+        }
+        is MemoryStorageDetailUiState.Error -> {
+            // 에러 UI 처리
+        }
+        is MemoryStorageDetailUiState.Success -> {
+            when (uiState.screenState) {
+                MemoryStorageDetailScreenState.Detail -> MemoryStorageDetailScreen(
+                    memoryStorageDetailUiState = uiState,
+                    onBackRequest = onBackRequest,
+                    onShowConversation = { memoryStorageDetailViewModel.showConversation() },
+                    onRestartConversation = onRestartConversation,
+                    memoryCardId = memoryCardId
+                )
+                MemoryStorageDetailScreenState.Conversation -> ConversationView(
+                    onDismiss = { memoryStorageDetailViewModel.showDetail() },
+                    onRestartConversation = onRestartConversation,
+                    memoryCardId = memoryCardId
+                )
+            }
+        }
     }
 }
 
@@ -92,6 +104,7 @@ internal fun MemoryStorageDetailRoute(
 fun ConversationView(
     onDismiss: () -> Unit,
     onRestartConversation: () -> Unit,
+    memoryCardId: String, // <-- 여기에 추가
 ) {
     Column(
         modifier = Modifier
@@ -107,7 +120,7 @@ fun ConversationView(
         ) {
             Column {
                 Text(
-                    text = "다은이 태어난 날",
+                    text = memoryCardId,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -204,10 +217,11 @@ fun ConversationView(
 @Composable
 internal fun MemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
-    memoryStorageDetailUiState: MemoryStorageDetailUiState,
+    memoryStorageDetailUiState: MemoryStorageDetailUiState.Success,
     onShowConversation: () -> Unit,
     onRestartConversation: () -> Unit,
-    uiState: MemoryStorageDetailUiState,
+    memoryCardId: String, // <-- 여기에 추가
+
 ) {
     var answerEditMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -364,22 +378,9 @@ fun BottomSheetForMemory(
 @Preview
 @Composable
 private fun MemoryStorageDetailScreenPreview() {
-//    HarmonyTheme {
-//        MemoryStorageDetailScreen(
-//            onBackRequest = {},
-//            uiState = MemoryStorageDetailUiState(),
-//            onRestartConversation = {},
-//            onShowConversation = {},
-//        )
-//    }
-    val fakeUiState = MemoryStorageDetailUiState(screenState = MemoryDetailScreenState.Conversation)
-
-    when (fakeUiState.screenState) {
-        MemoryDetailScreenState.Detail -> MemoryStorageDetailScreen(
-            uiState = fakeUiState,
+    HarmonyTheme {
+        MemoryStorageDetailScreen(
             onBackRequest = {},
-            onShowConversation = {},
-            onRestartConversation = {}
             memoryStorageDetailUiState = MemoryStorageDetailUiState.Success(
                 memories = mapOf(
                     "1" to MemoryCard(
@@ -391,12 +392,26 @@ private fun MemoryStorageDetailScreenPreview() {
                         dateTime = LocalDateTime.now()
                     )
                 )
-            )
-        )
-
-        MemoryDetailScreenState.Conversation -> ConversationView(
-            onDismiss = {},
-            onRestartConversation = {}
+            ),
+            onRestartConversation = {},
+            onShowConversation = {},
+            memoryCardId = ""
         )
     }
+//    val fakeUiState = MemoryStorageDetailUiState(screenState = MemoryDetailScreenState.Conversation)
+//
+//    when (fakeUiState.screenState) {
+//        MemoryDetailScreenState.Detail -> MemoryStorageDetailScreen(
+//            uiState = fakeUiState,
+//            onBackRequest = {},
+//            onShowConversation = {},
+//            onRestartConversation = {}
+//
+//        )
+//
+//        MemoryDetailScreenState.Conversation -> ConversationView(
+//            onDismiss = {},
+//            onRestartConversation = {}
+//        )
+//    }
 }
