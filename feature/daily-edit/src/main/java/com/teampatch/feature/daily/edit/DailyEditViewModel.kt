@@ -1,10 +1,12 @@
 package com.teampatch.feature.daily.edit
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.DayOfWeek
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -18,8 +20,9 @@ import kotlinx.coroutines.launch
 internal class DailyEditViewModel @Inject constructor(
     private val getDailyManageUseCase: GetDailyManageUseCase,
 ) : ViewModel() {
-    var dailyEditUiState = mutableStateOf(DailyEditUiState())
-        private set
+
+    private val _dailyEditUiState = mutableStateOf(DailyEditUiState())
+    val dailyEditUiState: State<DailyEditUiState> = _dailyEditUiState
 
     private val _event: Channel<DailyEditEvent> = Channel()
     val event: Flow<DailyEditEvent> = _event.receiveAsFlow()
@@ -32,10 +35,9 @@ internal class DailyEditViewModel @Inject constructor(
         runCatching {
             getDailyManageUseCase("someId") // 올바른 dailyId 사용
         }.onSuccess { dailyManage ->
-            dailyEditUiState.value = DailyEditUiState(
+            _dailyEditUiState.value = DailyEditUiState(
                 dailyExpand = dailyManage,
-                isLoading = false,
-                selectedDays = setOf(dailyManage.dateTime.dayOfWeek.name)
+                isLoading = false
             )
         }.onFailure {
             _event.send(DailyEditEvent.LoadError(it))
@@ -43,17 +45,18 @@ internal class DailyEditViewModel @Inject constructor(
         }
     }
 
-    fun toggleDaySelection(day: String) {
-        dailyEditUiState.value = dailyEditUiState.value.copy(
-            selectedDays = if (dailyEditUiState.value.selectedDays.contains(day)) {
-                dailyEditUiState.value.selectedDays - day
-            } else {
-                dailyEditUiState.value.selectedDays + day
-            }
+    fun changeDailyContent(content: String) {
+        _dailyEditUiState.value = _dailyEditUiState.value.copy(
+            dailyExpand = _dailyEditUiState.value.dailyExpand.copy(content = content)
         )
     }
 
-    fun saveDaily(daily: String) = viewModelScope.launch {
-        // UseCase를 호출하여 선택한 요일과 함께 저장
+    /** ✅ 요일 선택을 업데이트하는 메서드 추가 **/
+    fun toggleSelectedDay(day: DayOfWeek) {
+        _dailyEditUiState.value = dailyEditUiState.value.copy(
+            selectedDays = dailyEditUiState.value.selectedDays.toMutableSet().apply {
+                if (contains(day)) remove(day) else add(day)
+            }
+        )
     }
 }

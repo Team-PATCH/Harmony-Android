@@ -7,6 +7,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.teampatch.core.designsystem.R
+import com.teampatch.feature.onboarding.login.model.LoginEvent
 
 @Composable
 internal fun OnboardingFirstScreen(
-    onKakaoLoginRequest: () -> Unit,
+    onHomeScreenRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
@@ -52,62 +53,64 @@ internal fun OnboardingFirstScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.loginSuccessEvent.collect { isLoginSuccessful ->
-            if (isLoginSuccessful) {
-                if (!hasNotificationGranted(context)) {
-                    onPermissionNotificationRequest()
-                } else {
-                    onStartScreenRequest()
+        viewModel.loginEvent.collect { event ->
+            when (event) {
+                is LoginEvent.Error -> {
+                    Toast.makeText(context, "로그인에 실패했습니다.", Toast.LENGTH_LONG).show()
                 }
-            } else {
-                Toast.makeText(context, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                LoginEvent.FamilyRegistrationRequired -> {
+                    if (!hasNotificationGranted(context)) {
+                        onPermissionNotificationRequest()
+                    } else {
+                        onStartScreenRequest()
+                    }
+                }
+                LoginEvent.Success -> {
+                    onHomeScreenRequest()
+                }
             }
         }
     }
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues) // Scaffold의 기본 패딩
-                .padding(top = 135.dp, bottom = 8.dp) // Column 시작 위치에 추가 패딩
-        ) {
-            Column(
+            .fillMaxSize(),
+        bottomBar = {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(68.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { viewModel.loginKakao() },
+                contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.img_logo_in_login),
-                    contentDescription = "Logo Harmony",
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    painter = painterResource(id = R.drawable.kakao_login_medium_wide),
+                    contentDescription = "Kakao Login",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
                 )
-
-                Spacer(modifier = Modifier.height(465.dp))
-
-                Button(
-                    onClick = { viewModel.loginKakao() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .height(68.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFE812)),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.kakao_login_medium_wide),
-                        contentDescription = "Kakao Login",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
-                    )
-                }
             }
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF5F5F5))
+                .padding(paddingValues)
+                .padding(top = 135.dp, bottom = 8.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_logo_in_login),
+                contentDescription = "Logo Harmony",
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(465.dp))
         }
     }
 }
@@ -116,7 +119,7 @@ internal fun OnboardingFirstScreen(
 @Composable
 fun OnboardingLoginScreenPreview() {
     OnboardingFirstScreen(
-        onKakaoLoginRequest = {},
+        onHomeScreenRequest = {},
         onPermissionNotificationRequest = {},
         onStartScreenRequest = {}
     )

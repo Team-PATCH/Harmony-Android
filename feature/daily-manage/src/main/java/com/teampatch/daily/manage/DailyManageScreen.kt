@@ -55,6 +55,7 @@ import com.teampatch.daily.manage.model.CommentEdit
 import com.teampatch.daily.manage.model.CommentEvent
 import com.teampatch.daily.manage.model.DailyManageSideEffect
 import com.teampatch.daily.manage.model.DailyManageUiState
+import com.teampatch.feature.daily.manage.R
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.Serializable
 

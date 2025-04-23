@@ -3,6 +3,7 @@ package com.teampatch.core.data.repository
 import androidx.core.net.toUri
 import com.teampatch.core.data.mapper.toDomain
 import com.teampatch.core.data.service.ImageUriCompressor
+import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.model.User
 import com.teampatch.core.domain.repository.UserRepository
 import com.teampatch.core.network.UserRemoteDataSource
@@ -56,6 +57,15 @@ internal class UserRepositoryImpl @Inject constructor(
         )
 
         user.value = profileResponse.toDomain()
+    }
+
+    override suspend fun addUserProfile(
+        name: String,
+        relation: String,
+        profileImageUrl: String?,
+        role: Role,
+    ) {
+        TODO("Not yet implemented")
     }
 
     companion object {
