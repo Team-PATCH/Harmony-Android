@@ -69,32 +69,34 @@ internal fun MemoryStorageDetailRoute(
     memoryStorageDetailViewModel: MemoryStorageDetailViewModel = hiltViewModel(),
     onBackRequest: () -> Unit,
     onRestartConversation: () -> Unit,
-    onDismiss: () -> Unit,
 ) {
-    val uiState = memoryStorageDetailViewModel.memoryStorageDetailUiState.collectAsState().value
-    val memoryCardId = uiState.memories.firstOrNull()?.first ?: ""
+    val uiState by memoryStorageDetailViewModel.uiState.collectAsState()
 
     when (uiState) {
         is MemoryStorageDetailUiState.Loading -> {
-            // 로딩 UI 처리
+            // TODO: 로딩 UI
         }
         is MemoryStorageDetailUiState.Error -> {
-            // 에러 UI 처리
+            // TODO: 에러 UI
         }
         is MemoryStorageDetailUiState.Success -> {
-            when (uiState.screenState) {
-                MemoryStorageDetailScreenState.Detail -> MemoryStorageDetailScreen(
-                    memoryStorageDetailUiState = uiState,
-                    onBackRequest = onBackRequest,
-                    onShowConversation = { memoryStorageDetailViewModel.showConversation() },
-                    onRestartConversation = onRestartConversation,
-                    memoryCardId = memoryCardId
-                )
-                MemoryStorageDetailScreenState.Conversation -> ConversationView(
-                    onDismiss = { memoryStorageDetailViewModel.showDetail() },
-                    onRestartConversation = onRestartConversation,
-                    memoryCardId = memoryCardId
-                )
+            val state = uiState as MemoryStorageDetailUiState.Success
+            when (state.screenState) {
+                MemoryStorageDetailScreenState.Detail -> {
+                    MemoryStorageDetailScreen(
+                        memoryStorageDetailUiState = state,
+                        onBackRequest = onBackRequest,
+                        onShowConversation = memoryStorageDetailViewModel::showConversation,
+                        onRestartConversation = onRestartConversation
+                    )
+                }
+
+                MemoryStorageDetailScreenState.Conversation -> {
+                    ConversationView(
+                        onDismiss = memoryStorageDetailViewModel::showDetail,
+                        onRestartConversation = onRestartConversation
+                    )
+                }
             }
         }
     }
@@ -104,7 +106,6 @@ internal fun MemoryStorageDetailRoute(
 fun ConversationView(
     onDismiss: () -> Unit,
     onRestartConversation: () -> Unit,
-    memoryCardId: String, // <-- 여기에 추가
 ) {
     Column(
         modifier = Modifier
@@ -120,7 +121,7 @@ fun ConversationView(
         ) {
             Column {
                 Text(
-                    text = memoryCardId,
+                    text = "",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -220,8 +221,6 @@ internal fun MemoryStorageDetailScreen(
     memoryStorageDetailUiState: MemoryStorageDetailUiState.Success,
     onShowConversation: () -> Unit,
     onRestartConversation: () -> Unit,
-    memoryCardId: String, // <-- 여기에 추가
-
 ) {
     var answerEditMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -258,14 +257,11 @@ internal fun MemoryStorageDetailScreen(
                 Text(stringResource(btn_look_all_answer))
             }
         },
+
         modifier = Modifier
             .background(WH)
     ) { scaffoldPaddingValues ->
-        val memoryList = when (memoryStorageDetailUiState) {
-            is MemoryStorageDetailUiState.Success -> memoryStorageDetailUiState.memories.toList()
-            else -> emptyList()
-        }
-        val memory = memoryList.firstOrNull()?.second
+        val memory = memoryStorageDetailUiState.memoryCard
 
         Column(
             modifier = Modifier
@@ -382,36 +378,29 @@ private fun MemoryStorageDetailScreenPreview() {
         MemoryStorageDetailScreen(
             onBackRequest = {},
             memoryStorageDetailUiState = MemoryStorageDetailUiState.Success(
-                memories = mapOf(
-                    "1" to MemoryCard(
-                        id = "1",
-                        writerTitle = "손자",
-                        writerName = "김민준",
-                        text = "다은아 다은아 헌집 줄게 새집다오. 원숭이 엉덩이는 빨개 빨개면 사과 사과는 맛있어 맛있으면 바나난 바나나는 길어 길으면 기차",
-                        imageUrl = "",
-                        dateTime = LocalDateTime.now()
-                    )
-                )
+                memoryCard = MemoryCard(
+                    id = "1",
+                    writerTitle = "손자",
+                    writerName = "김민준",
+                    text = "다은아 다은아 헌집 줄게 새집 다오...",
+                    imageUrl = "",
+                    dateTime = LocalDateTime.of(2024, 5, 4, 15, 0)
+                ),
+                screenState = MemoryStorageDetailScreenState.Detail
             ),
             onRestartConversation = {},
-            onShowConversation = {},
-            memoryCardId = ""
+            onShowConversation = {}
         )
     }
-//    val fakeUiState = MemoryStorageDetailUiState(screenState = MemoryDetailScreenState.Conversation)
-//
-//    when (fakeUiState.screenState) {
-//        MemoryDetailScreenState.Detail -> MemoryStorageDetailScreen(
-//            uiState = fakeUiState,
-//            onBackRequest = {},
-//            onShowConversation = {},
-//            onRestartConversation = {}
-//
-//        )
-//
-//        MemoryDetailScreenState.Conversation -> ConversationView(
-//            onDismiss = {},
-//            onRestartConversation = {}
-//        )
-//    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MemoryStorageDetailScreen_ConversationPreview() {
+    HarmonyTheme {
+        ConversationView(
+            onDismiss = {},
+            onRestartConversation = {}
+        )
+    }
 }
