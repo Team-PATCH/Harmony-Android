@@ -1,6 +1,5 @@
 package com.teampatch.memorystorage.feature.detail
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -37,42 +36,40 @@ fun NavController.navigateToConversationScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(MemoryStorageDetailConversationRoute.routeWithArgs(memoryCardId), navOptions, navigatorExtras)
+    navigate(
+        MemoryStorageDetailConversationRoute.routeWithArgs(memoryCardId),
+        navOptions,
+        navigatorExtras
+    )
 }
 
 fun NavGraphBuilder.addMemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
     onRestartConversation: () -> Unit,
-    onDismiss: () -> Unit,
 ) {
     composable(
         route = "memory_storage_detail/{memoryCardId}",
         arguments = listOf(navArgument("memoryCardId") { type = NavType.StringType })
-    ) { backStackEntry ->
-        val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
-
-        // 여기에서 MemoryStorageDetailRoute는 데이터 클래스이므로 View처럼 호출 ❌
-        MemoryStorageDetailScreen(
-            memoryCardId = memoryCardId,
-            memoryStorageDetailViewModel = hiltViewModel(),
+    ) {
+        // ViewModel을 내부에서 사용하므로 별도로 주입할 필요 없음
+        MemoryStorageDetailRoute(
             onBackRequest = onBackRequest,
-            onRestartConversation = onRestartConversation,
-            onDismiss = onDismiss
+            onRestartConversation = onRestartConversation
         )
     }
 }
 
-fun NavGraphBuilder.addMemoryStorageDetailConversationScreen() {
+fun NavGraphBuilder.addMemoryStorageDetailConversationScreen(
+    onDismiss: () -> Unit,
+    onRestartConversation: () -> Unit,
+) {
     composable(
         route = "memory_storage_detail_conversation/{memoryCardId}",
         arguments = listOf(navArgument("memoryCardId") { type = NavType.StringType })
-    ) { backStackEntry ->
-        val memoryCardId = backStackEntry.arguments?.getString("memoryCardId") ?: return@composable
-
+    ) {
         ConversationView(
-            memoryCardId = memoryCardId, // 필요하다면 전달
-            onDismiss = { /* TODO: dismiss logic */ },
-            onRestartConversation = { /* TODO: restart logic */ }
+            onDismiss = onDismiss,
+            onRestartConversation = onRestartConversation
         )
     }
 }

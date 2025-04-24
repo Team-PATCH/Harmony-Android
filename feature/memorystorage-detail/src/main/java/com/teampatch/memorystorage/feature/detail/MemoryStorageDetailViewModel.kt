@@ -1,60 +1,42 @@
 package com.teampatch.memorystorage.feature.detail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class MemoryStorageDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val getMemoryCardUseCase: GetMemoryCardUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val memoryStorageDetailRoute: MemoryStorageDetailRoute = savedStateHandle.toRoute()
-    val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
-
-    private val _memoryStorageDetailUiState = MutableStateFlow<MemoryStorageDetailUiState>(
+    private val _uiState = MutableStateFlow<MemoryStorageDetailUiState>(
         MemoryStorageDetailUiState.Loading()
     )
+    val uiState: StateFlow<MemoryStorageDetailUiState> = _uiState
 
-    val memoryStorageDetailUiState = _memoryStorageDetailUiState.asStateFlow()
-
-    private var uiState: MemoryStorageDetailUiState
-        get() = _memoryStorageDetailUiState.value
-        set(value) {
-            _memoryStorageDetailUiState.value = value
-        }
+    private val memoryCardId: String = checkNotNull(savedStateHandle["memoryCardId"])
 
     fun showConversation() {
-        _memoryStorageDetailUiState.update { current ->
-            when (current) {
-                is MemoryStorageDetailUiState.Success -> current.copy(screenState = MemoryStorageDetailScreenState.Conversation)
-                is MemoryStorageDetailUiState.Error -> current.copy(screenState = MemoryStorageDetailScreenState.Conversation)
-                is MemoryStorageDetailUiState.Loading -> current.copy(screenState = MemoryStorageDetailScreenState.Conversation)
-            }
+        val currentState = _uiState.value
+        if (currentState is MemoryStorageDetailUiState.Success) {
+            _uiState.value = currentState.copy(screenState = MemoryStorageDetailScreenState.Conversation)
         }
     }
 
     fun showDetail() {
-        _memoryStorageDetailUiState.update { current ->
-            when (current) {
-                is MemoryStorageDetailUiState.Success -> current.copy(screenState = MemoryStorageDetailScreenState.Detail)
-                is MemoryStorageDetailUiState.Error -> current.copy(screenState = MemoryStorageDetailScreenState.Detail)
-                is MemoryStorageDetailUiState.Loading -> current.copy(screenState = MemoryStorageDetailScreenState.Detail)
-            }
+        val currentState = _uiState.value
+        if (currentState is MemoryStorageDetailUiState.Success) {
+            _uiState.value = currentState.copy(screenState = MemoryStorageDetailScreenState.Detail)
         }
     }
 
@@ -66,15 +48,13 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     }
 
     private fun loadData() = viewModelScope.launch {
-        _memoryStorageDetailUiState.value = MemoryStorageDetailUiState.Loading()
+        _uiState.value = MemoryStorageDetailUiState.Loading()
 
         try {
             val memoryCard = getMemoryCardUseCase(memoryCardId)
-            _memoryStorageDetailUiState.value = MemoryStorageDetailUiState.Success(
-                memories = mapOf(memoryCard.id to memoryCard)
-            )
+            _uiState.value = MemoryStorageDetailUiState.Success(memoryCard)
         } catch (e: Exception) {
-            _memoryStorageDetailUiState.value = MemoryStorageDetailUiState.Error("데이터 로딩 실패")
+            _uiState.value = MemoryStorageDetailUiState.Error("카드 로딩 실패")
             _event.send(MemoryStorageDetailEvent.LoadError)
         }
     }

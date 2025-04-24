@@ -15,7 +15,7 @@ sealed class MemoryStorageDetailUiState(
     ) : MemoryStorageDetailUiState()
 
     data class Success(
-        val memories: Map<String, MemoryCard>,
+        val memoryCard: MemoryCard,
         override val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
     ) : MemoryStorageDetailUiState()
 
