@@ -30,7 +30,7 @@ fun MemoryInfoView(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
-    circleTexts: List<String>
+    circleTexts: List<String>,
 ) {
     Column(
         modifier = modifier

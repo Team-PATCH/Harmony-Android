@@ -3,6 +3,7 @@ package com.teampatch.core.designsystem.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,9 +26,6 @@ import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 
-/** *
- * 민준갓의 ExpandMemoryCard를 참고하여 만듬(추억저장소 메인에 임의로 보여주기 위함)
- */
 @Composable
 fun TempMemoryCard(
     title: String,
@@ -50,25 +48,27 @@ fun TempMemoryCard(
                 .fillMaxWidth()
                 .height(128.dp)
         )
-        Column(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-            Text(
-                text = title,
-                fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = BL
-            )
-            Text(
-                text = description,
-                fontFamily = PretendardFontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 16.sp,
-                color = G5,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            text = title,
+            fontFamily = PretendardFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            color = BL,
+            modifier = Modifier.padding(horizontal = 14.dp)
+        )
+        Text(
+            text = description,
+            fontFamily = PretendardFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            color = G5,
+            modifier = Modifier
+                .padding(horizontal = 14.dp)
+                .padding(top = 4.dp)
+        )
     }
 }
 
