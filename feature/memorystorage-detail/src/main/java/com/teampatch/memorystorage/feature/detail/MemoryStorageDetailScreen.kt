@@ -63,6 +63,7 @@ import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 internal fun MemoryStorageDetailRoute(
@@ -289,7 +290,12 @@ internal fun MemoryStorageDetailScreen(
             MemoryInfoView(
                 modifier = Modifier.fillMaxWidth(),
                 title = memory?.writerTitle ?: "",
-                description = memory?.dateTime.toString()
+                description = memory?.dateTime.toString(),
+                circleTexts = listOf(
+                    memory?.writerName ?: "",
+                    memory?.dateTime?.toFormattedString() ?: "",
+                    memory?.text ?: ""
+                )
             )
 
             Spacer(
@@ -369,6 +375,11 @@ fun BottomSheetForMemory(
             }
         }
     }
+}
+
+fun LocalDateTime.toFormattedString(): String {
+    val formatter = DateTimeFormatter.ofPattern("M월")
+    return this.format(formatter)
 }
 
 @Preview
