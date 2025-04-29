@@ -3,6 +3,7 @@ package com.harmony.core.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.harmony.core.database.dao.GroupDao
+import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
 import com.harmony.core.database.dao.UserDao
 import com.harmony.core.database.model.GroupEntity
