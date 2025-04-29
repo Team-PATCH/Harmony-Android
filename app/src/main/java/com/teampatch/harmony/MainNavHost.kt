@@ -197,7 +197,7 @@ fun MainNavHost(
         )
 
         addMemoryStorageDetailScreen(
-            onBackRequest = { navController.popBackStack() },
+            onBackRequest = navController::navigateUp,
             onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
         )
 
