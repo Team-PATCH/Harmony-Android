@@ -1,6 +1,8 @@
 package com.harmony.core.database
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.harmony.core.database.dao.GroupDao
 import com.harmony.core.database.dao.QuestionDao
@@ -27,4 +29,19 @@ internal abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun groupDao(): GroupDao
     abstract fun questionDao(): QuestionDao
+
+    companion object {
+        private const val DB_NAME = "harmony.db"
+        private var instance: HarmonyDatabase? = null
+
+        fun getInstance(context: Context): HarmonyDatabase = instance ?: synchronized(HarmonyDatabase::class) {
+            instance ?: Room.databaseBuilder(
+                context.applicationContext,
+                HarmonyDatabase::class.java,
+                DB_NAME
+            )
+                .build()
+                .also { instance = it }
+        }
+    }
 }
