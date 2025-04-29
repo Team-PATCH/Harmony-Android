@@ -2,8 +2,10 @@ package com.harmony.core.database
 
 import android.content.Context
 import androidx.room.Database
+import androidx.room.OnConflictStrategy
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.harmony.core.database.dao.GroupDao
 import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
@@ -31,17 +33,35 @@ internal abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun questionDao(): QuestionDao
 
     companion object {
+        internal const val QUESTION_TABLE_NAME = "question"
+
         private const val DB_NAME = "harmony.db"
         private var instance: HarmonyDatabase? = null
 
-        fun getInstance(context: Context): HarmonyDatabase = instance ?: synchronized(HarmonyDatabase::class) {
-            instance ?: Room.databaseBuilder(
-                context.applicationContext,
-                HarmonyDatabase::class.java,
-                DB_NAME
-            )
-                .build()
-                .also { instance = it }
+        fun getInstance(context: Context): HarmonyDatabase {
+            val roomDatabaseCallback: Callback = object : Callback() {
+                override fun onCreate(db: SupportSQLiteDatabase) {
+                    super.onCreate(db)
+                    dummyQuestion.forEach { contentValues ->
+                        db.insert(
+                            table = QUESTION_TABLE_NAME,
+                            conflictAlgorithm = OnConflictStrategy.IGNORE,
+                            values = contentValues
+                        )
+                    }
+                }
+            }
+
+            return instance ?: synchronized(HarmonyDatabase::class) {
+                instance ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    HarmonyDatabase::class.java,
+                    DB_NAME
+                )
+                    .addCallback(roomDatabaseCallback)
+                    .build()
+                    .also { instance = it }
+            }
         }
     }
 }
