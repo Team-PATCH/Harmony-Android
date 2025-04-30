@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.harmony.core.database.LOCAL_DB_DATE_TIME_FORMATTER
 import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.UserDao
+import com.harmony.core.database.getCurrentTimeLocalDBFormat
 import com.harmony.core.database.model.QuestionCommentEntity
 import com.teampatch.core.domain.model.Question
 import com.teampatch.core.domain.model.QuestionComment
@@ -58,13 +59,13 @@ internal class LocalQuestionRepositoryImpl @Inject constructor(
 
     override suspend fun addComment(questionId: String, comment: String): QuestionComment {
         val user = userDao.getMyUserData().first()
-        val now = LocalDateTime.now().format(LOCAL_DB_DATE_TIME_FORMATTER)
+        val currentTime = getCurrentTimeLocalDBFormat()
         val questionCommentEntity = QuestionCommentEntity(
             questionId = questionId.toLong(),
             writtenUid = user.uid!!,
             content = comment,
-            createdAt = now,
-            modifiedAt = now
+            createdAt = currentTime,
+            modifiedAt = currentTime
         )
         questionDao.insertQuestionComment(questionCommentEntity)
 
@@ -78,11 +79,11 @@ internal class LocalQuestionRepositoryImpl @Inject constructor(
 
     override suspend fun editComment(commentId: String, comment: String) {
         val questionCommentEntity = questionDao.getQuestionCommentById(commentId.toLong()).first()
-        val now = LocalDateTime.now().format(LOCAL_DB_DATE_TIME_FORMATTER)
+        val currentTime = getCurrentTimeLocalDBFormat()
         questionDao.updateQuestionComment(
             questionCommentEntity.copy(
                 content = comment,
-                modifiedAt = now
+                modifiedAt = currentTime
             )
         )
     }
