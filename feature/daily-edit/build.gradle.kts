@@ -6,17 +6,13 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.daily.manage"
+    namespace = "com.teampatch.feature.daily.edit"
 }
 
 dependencies {
 
-    implementation(project(":core:common"))
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
-
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
