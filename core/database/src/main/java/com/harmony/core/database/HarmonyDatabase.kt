@@ -2,7 +2,6 @@ package com.harmony.core.database
 
 import android.content.Context
 import androidx.room.Database
-import androidx.room.OnConflictStrategy
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -15,6 +14,7 @@ import com.harmony.core.database.model.QuestionCommentEntity
 import com.harmony.core.database.model.QuestionEntity
 import com.harmony.core.database.model.TodoEntity
 import com.harmony.core.database.model.UserEntity
+import com.harmony.core.database.model.preload.QuestionPreloadData
 import com.harmony.core.database.model.preload.TodoPreloadData
 
 @Database(
@@ -34,7 +34,6 @@ internal abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun questionDao(): QuestionDao
 
     companion object {
-        internal const val QUESTION_TABLE_NAME = "question"
         private const val DB_NAME = "harmony.db"
 
         @Volatile
@@ -44,14 +43,11 @@ internal abstract class HarmonyDatabase : RoomDatabase() {
             val roomDatabaseCallback: Callback = object : Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    dummyQuestion.forEach { contentValues ->
-                        db.insert(
-                            table = QUESTION_TABLE_NAME,
-                            conflictAlgorithm = OnConflictStrategy.IGNORE,
-                            values = contentValues
-                        )
-                    }
-                    TodoPreloadData().insertPreloadData(db)
+                    listOf(
+                        QuestionPreloadData(),
+                        TodoPreloadData()
+                    )
+                        .forEach { it.insertPreloadData(db) }
                 }
             }
 
