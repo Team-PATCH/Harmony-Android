@@ -3,7 +3,9 @@ package com.harmony.core.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.harmony.core.database.model.TodoEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,6 +20,9 @@ interface TodoDao {
 
     @Insert
     suspend fun insertAll(vararg todos: TodoEntity)
+
+    @Update(entity = TodoEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateTodo(vararg todo: TodoEntity)
 
     @Query("DELETE FROM todo WHERE id = :id")
     fun deleteById(id: Long)
