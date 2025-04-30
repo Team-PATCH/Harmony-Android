@@ -1,11 +1,16 @@
 package com.harmony.core.database.di
 
 import android.content.Context
+import androidx.room.Room
+import androidx.room.RoomDatabase.Callback
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.harmony.core.database.HarmonyDatabase
 import com.harmony.core.database.dao.GroupDao
 import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
 import com.harmony.core.database.dao.UserDao
+import com.harmony.core.database.model.preload.QuestionPreloadData
+import com.harmony.core.database.model.preload.TodoPreloadData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +26,26 @@ internal object DatabaseModule {
     @Provides
     fun providesRoomInstance(
         @ApplicationContext appContext: Context,
-    ): HarmonyDatabase = HarmonyDatabase.getInstance(appContext)
+    ): HarmonyDatabase {
+        val roomDatabaseCallback: Callback = object : Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+                listOf(
+                    QuestionPreloadData(),
+                    TodoPreloadData()
+                )
+                    .forEach { it.insertPreloadData(db) }
+            }
+        }
+
+        return Room.databaseBuilder(
+            appContext,
+            HarmonyDatabase::class.java,
+            HarmonyDatabase.DB_NAME
+        )
+            .addCallback(roomDatabaseCallback)
+            .build()
+    }
 
     @Provides
     fun providesTodoDao(
