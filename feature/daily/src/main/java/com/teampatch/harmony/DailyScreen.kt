@@ -68,7 +68,7 @@ internal fun DailyRoute(
             progress = 0f,
             onDailyRoutineClick = {},
             onDailyRoutineCheckChanged = { _, _ -> },
-            dailyRoutine = flowOf(PagingData.empty<CheckableData<Todo>>()).collectAsLazyPagingItems(),
+            dailyRoutine = uiState.daily.collectAsLazyPagingItems(),
             dailyExpandPageRequest = dailyExpandPageRequest,
             uiState = uiState
         )
