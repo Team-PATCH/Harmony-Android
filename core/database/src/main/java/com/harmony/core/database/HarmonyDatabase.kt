@@ -34,8 +34,9 @@ internal abstract class HarmonyDatabase : RoomDatabase() {
 
     companion object {
         internal const val QUESTION_TABLE_NAME = "question"
-
         private const val DB_NAME = "harmony.db"
+
+        @Volatile
         private var instance: HarmonyDatabase? = null
 
         fun getInstance(context: Context): HarmonyDatabase {
