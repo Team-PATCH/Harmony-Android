@@ -1,4 +1,4 @@
-package com.teampatch.core.domain.usecase.routine
+package com.teampatch.core.domain.usecase.daily
 
 import javax.inject.Inject
 
