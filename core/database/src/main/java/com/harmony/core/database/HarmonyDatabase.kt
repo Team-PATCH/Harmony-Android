@@ -15,6 +15,7 @@ import com.harmony.core.database.model.QuestionCommentEntity
 import com.harmony.core.database.model.QuestionEntity
 import com.harmony.core.database.model.TodoEntity
 import com.harmony.core.database.model.UserEntity
+import com.harmony.core.database.model.preload.TodoPreloadData
 
 @Database(
     entities = [
@@ -50,6 +51,7 @@ internal abstract class HarmonyDatabase : RoomDatabase() {
                             values = contentValues
                         )
                     }
+                    TodoPreloadData().insertPreloadData(db)
                 }
             }
 
