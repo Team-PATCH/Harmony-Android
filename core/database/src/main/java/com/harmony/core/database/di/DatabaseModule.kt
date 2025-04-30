@@ -3,6 +3,7 @@ package com.harmony.core.database.di
 import android.content.Context
 import com.harmony.core.database.HarmonyDatabase
 import com.harmony.core.database.dao.GroupDao
+import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
 import com.harmony.core.database.dao.UserDao
 import dagger.Module
@@ -36,4 +37,9 @@ internal object DatabaseModule {
     fun providesGroupDao(
         harmonyDatabase: HarmonyDatabase,
     ): GroupDao = harmonyDatabase.groupDao()
+
+    @Provides
+    fun providesQuestionDao(
+        harmonyDatabase: HarmonyDatabase,
+    ): QuestionDao = harmonyDatabase.questionDao()
 }
