@@ -13,6 +13,9 @@ interface TodoDao {
     @Query("SELECT * FROM todo")
     fun getAllTodos(): Flow<List<TodoEntity>>
 
+    @Query("SELECT * FROM todo WHERE id = :id")
+    fun getTodoById(id: Long): Flow<TodoEntity>
+
     @Insert
     suspend fun insertAll(vararg todos: TodoEntity)
 
