@@ -59,8 +59,8 @@ fun MainApp(
                 }
 
                 MemoryStorageRoute::class.qualifiedName -> {
-                    NavigationItem.STORE.also {
-                        previousNavigationItem = it
+                    NavigationItem.STORE.apply {
+                        previousNavigationItem = NavigationItem.STORE
                     }
                 }
 
