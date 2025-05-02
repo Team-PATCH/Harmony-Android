@@ -47,6 +47,8 @@ import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
 import com.teampatch.harmony.model.MainUiState
+import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailConversationScreen
+import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailScreen
 
 @Composable
 fun MainNavHost(
@@ -192,6 +194,16 @@ fun MainNavHost(
             onBackRequest = navController::navigateUp,
             dailyEditPageRequest = { navController.navigateToDailyEditScreen() },
             onDeleteClick = {} // 임시
+        )
+
+        addMemoryStorageDetailScreen(
+            onBackRequest = navController::navigateUp,
+            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
+        )
+
+        addMemoryStorageDetailConversationScreen(
+            onDismiss = navController::navigateUp,
+            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
         )
     }
 }
