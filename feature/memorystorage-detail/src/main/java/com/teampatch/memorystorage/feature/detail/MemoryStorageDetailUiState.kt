@@ -7,20 +7,20 @@ enum class MemoryStorageDetailScreenState {
     Conversation,
 }
 
-sealed class MemoryStorageDetailUiState(
-    open val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
-) {
+sealed interface MemoryStorageDetailUiState {
+    val screenState: MemoryStorageDetailScreenState
+
     data class Loading(
         override val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
-    ) : MemoryStorageDetailUiState()
+    ) : MemoryStorageDetailUiState
 
     data class Success(
         val memoryCard: MemoryCard,
         override val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
-    ) : MemoryStorageDetailUiState()
+    ) : MemoryStorageDetailUiState
 
     data class Error(
         val message: String,
         override val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
-    ) : MemoryStorageDetailUiState()
+    ) : MemoryStorageDetailUiState
 }
