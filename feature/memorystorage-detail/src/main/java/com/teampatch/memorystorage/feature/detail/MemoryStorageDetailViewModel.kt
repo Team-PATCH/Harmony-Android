@@ -3,6 +3,7 @@ package com.teampatch.memorystorage.feature.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -24,7 +25,9 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     )
     val uiState: StateFlow<MemoryStorageDetailUiState> = _uiState
 
-    private val memoryCardId: String = checkNotNull(savedStateHandle["memoryCardId"])
+    private val memoryStorageDetailRoute: MemoryStorageDetailRoute = savedStateHandle.toRoute()
+
+    private val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
 
     fun showConversation() {
         val currentState = _uiState.value

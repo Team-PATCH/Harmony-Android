@@ -36,6 +36,7 @@ import com.teampatch.harmony.model.MainUiState
 
 private val BottomNavigationEnableScreens: Set<String?> = setOf(
     HomeRoute::class.qualifiedName,
+    MemoryStorageRoute::class.qualifiedName,
     QuestionRoute::class.qualifiedName,
     DailyRoute::class.qualifiedName
 )
