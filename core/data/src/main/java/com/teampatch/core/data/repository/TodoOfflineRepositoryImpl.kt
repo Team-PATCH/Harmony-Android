@@ -8,6 +8,7 @@ import com.teampatch.core.domain.model.Todo
 import com.teampatch.core.domain.repository.TodoRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 internal class TodoOfflineRepositoryImpl @Inject constructor(
@@ -18,5 +19,11 @@ internal class TodoOfflineRepositoryImpl @Inject constructor(
         PagingData.from(todos).map {
             it.toDomain()
         }
+    }
+
+    override suspend fun toggleTodoStatus(id: String, isFinished: Boolean) {
+        val todo = todoDao.getTodoById(id.toLong()).first()
+            .copy(isFinished = isFinished)
+        todoDao.updateTodo(todo.copy(isFinished = isFinished))
     }
 }

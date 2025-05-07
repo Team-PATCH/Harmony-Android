@@ -13,10 +13,10 @@ import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.domain.model.Image
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.core.domain.model.User
+import com.teampatch.core.domain.usecase.daily.GetDailyRoutineUseCase
+import com.teampatch.core.domain.usecase.daily.ToggleDailyRoutineStatusUseCase
 import com.teampatch.core.domain.usecase.memory.AddMemoryCardUseCase
 import com.teampatch.core.domain.usecase.memory.GetLatestMemoryCardUseCase
-import com.teampatch.core.domain.usecase.routine.GetDailyRoutineUseCase
-import com.teampatch.core.domain.usecase.routine.ToggleDailyRoutineStatusUseCase
 import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
 import com.teampatch.feature.home.model.HomeErrorHandler
 import com.teampatch.feature.home.model.MemoryCardUiState

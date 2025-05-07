@@ -20,11 +20,11 @@ interface QuestionDao {
 
     @Query(
         """
-        SELECT question_comment.*, user.*
-        FROM question_comment 
-        INNER JOIN user ON question_comment.written_uid = user.uid
-        WHERE question_comment.question_id = :questionId
-        ORDER BY question_comment.modified_at DESC
+        SELECT QC.*, user.*
+        FROM question_comment QC
+        INNER JOIN user ON QC.written_uid = user.uid
+        WHERE QC.question_id = :questionId
+        ORDER BY QC.modified_at DESC
     """
     )
     fun getQuestionComments(questionId: Long): Flow<List<QuestionCommentWithUser>>
