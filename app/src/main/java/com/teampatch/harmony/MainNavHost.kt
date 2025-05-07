@@ -19,6 +19,7 @@ import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
+import com.teampatch.feature.memorystorage.addMemoryStorageScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterInvitationCodeScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
@@ -135,6 +136,10 @@ fun MainNavHost(
             onDailyRoutineClick = { },
             onDailyRoutineRegisterPageRequest = { },
             onMemoryCardClick = navController::navigateToMemoryCardRegistrationScreen
+        )
+
+        addMemoryStorageScreen(
+            onDetailPageRequest = {}
         )
 
         addQuestionScreen(
