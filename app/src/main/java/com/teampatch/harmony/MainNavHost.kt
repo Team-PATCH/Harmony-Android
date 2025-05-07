@@ -19,6 +19,7 @@ import com.teampatch.feature.home.addHomeScreen
 import com.teampatch.feature.home.navigateToHomeScreen
 import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationScreen
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
+import com.teampatch.feature.memorystorage.addMemoryStorageScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterInvitationCodeScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
@@ -47,6 +48,8 @@ import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
 import com.teampatch.harmony.model.MainUiState
+import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailConversationScreen
+import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailScreen
 
 @Composable
 fun MainNavHost(
@@ -135,6 +138,10 @@ fun MainNavHost(
             onMemoryCardClick = navController::navigateToMemoryCardRegistrationScreen
         )
 
+        addMemoryStorageScreen(
+            onDetailPageRequest = {}
+        )
+
         addQuestionScreen(
             questionDetailPageRequest = navController::navigateToQuestionDetailScreen,
             answerPageRequest = navController::navigateToAnswerScreen,
@@ -192,6 +199,16 @@ fun MainNavHost(
             onBackRequest = navController::navigateUp,
             dailyEditPageRequest = { navController.navigateToDailyEditScreen() },
             onDeleteClick = {} // 임시
+        )
+
+        addMemoryStorageDetailScreen(
+            onBackRequest = navController::navigateUp,
+            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
+        )
+
+        addMemoryStorageDetailConversationScreen(
+            onDismiss = navController::navigateUp,
+            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
         )
     }
 }

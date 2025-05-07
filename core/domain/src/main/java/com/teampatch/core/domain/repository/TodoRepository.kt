@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface TodoRepository {
 
     fun getAllTodos(): Flow<PagingData<Todo>>
+
+    suspend fun toggleTodoStatus(id: String, isFinished: Boolean)
 }

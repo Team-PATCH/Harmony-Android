@@ -128,6 +128,8 @@ dependencies {
     implementation(project(":feature:onboarding-make"))
     implementation(project(":feature:onboarding-enter"))
 
+    implementation(project(":feature:memorystorage"))
+    implementation(project(":feature:memorystorage-detail"))
     androidTestImplementation(project(":core:ui-test"))
 
     androidTestImplementation(libs.hilt.android)

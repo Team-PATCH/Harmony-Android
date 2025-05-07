@@ -3,10 +3,10 @@ package com.teampatch.core.data.di
 import com.teampatch.core.data.repository.AnswerRepositoryImpl
 import com.teampatch.core.data.repository.AppManagementRepositoryImpl
 import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
-import com.teampatch.core.data.repository.QuestionRepositoryImpl
 import com.teampatch.core.data.repository.TodoOfflineRepositoryImpl
 import com.teampatch.core.data.repository.local.LocalAuthenticationRepositoryImpl
 import com.teampatch.core.data.repository.local.LocalGroupManagementRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalQuestionRepositoryImpl
 import com.teampatch.core.data.repository.local.LocalUserRepositoryImpl
 import com.teampatch.core.domain.repository.AnswerRepository
 import com.teampatch.core.domain.repository.AppManagementRepository
@@ -37,7 +37,7 @@ internal abstract class DataViewModelModule {
 
     @Binds
     abstract fun bindsQuestionRepository(
-        questionRepositoryImpl: QuestionRepositoryImpl,
+        localQuestionRepositoryImpl: LocalQuestionRepositoryImpl,
     ): QuestionRepository
 
     @Binds
