@@ -125,12 +125,12 @@ fun MainNavHost(
 
         addOnboardingEnterInvitationCodeScreen(
             onBackRequest = navController::navigateUp,
-            onEnterRelationSreenRequest = { navController.navigateToEnterRelationScreen() }
+            onEnterRelationScreenRequest = navController::navigateToEnterRelationScreen
         )
 
         addOnboardingEnterRelationScreen(
             onBackRequest = navController::navigateUp,
-            onEnterSpaceScreenRequest = { navController.navigateToEnterSpaceScreen() }
+            onEnterSpaceScreenRequest = navController::navigateToEnterSpaceScreen
         )
 
         addOnboardingEnterSpaceScreen(

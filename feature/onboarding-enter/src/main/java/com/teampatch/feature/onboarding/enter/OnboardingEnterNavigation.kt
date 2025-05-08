@@ -19,12 +19,12 @@ fun NavController.navigateToEnterInvitationCodeScreen(
 
 fun NavGraphBuilder.addOnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
-    onEnterRelationSreenRequest: () -> Unit,
+    onEnterRelationScreenRequest: () -> Unit,
 ) {
     composable<OnboardingEnterInvitationCodeRoute> {
         OnboardingEnterInvitationCodeRoute(
             onBackRequest = onBackRequest,
-            onEnterRelationScreenRequest = onEnterRelationSreenRequest
+            onEnterRelationScreenRequest = onEnterRelationScreenRequest
         )
     }
 }
@@ -37,6 +37,7 @@ fun NavController.navigateToEnterRelationScreen(
     navigatorExtras: Navigator.Extras? = null,
 ) {
     navigate(OnboardingEnterRelationRoute, navOptions, navigatorExtras)
+
 }
 
 fun NavGraphBuilder.addOnboardingEnterRelationScreen(
@@ -44,7 +45,7 @@ fun NavGraphBuilder.addOnboardingEnterRelationScreen(
     onEnterSpaceScreenRequest: () -> Unit,
 ) {
     composable<OnboardingEnterRelationRoute> {
-        OnboardingEnterRelationScreen(
+        OnboardingEnterRelationRoute(
             onBackRequest = onBackRequest,
             onEnterSpaceScreenRequest = onEnterSpaceScreenRequest
         )

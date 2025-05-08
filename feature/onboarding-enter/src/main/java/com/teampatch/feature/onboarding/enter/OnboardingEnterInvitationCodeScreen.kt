@@ -70,7 +70,7 @@ internal fun OnboardingEnterInvitationCodeRoute(
 
     OnboardingEnterInvitationCodeScreen(
         onBackRequest = onBackRequest,
-        onEnterSpaceScreenRequest = onEnterRelationScreenRequest, // <-- 여기로 변경!
+        onEnterSpaceScreenRequest = onEnterRelationScreenRequest,
         onInviteCodeChange = viewModel::updateInviteCode,
         uiState = uiState
     )
