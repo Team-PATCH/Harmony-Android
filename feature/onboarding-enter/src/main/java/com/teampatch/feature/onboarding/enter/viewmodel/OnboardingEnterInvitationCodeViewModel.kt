@@ -2,7 +2,9 @@ package com.teampatch.feature.onboarding.enter.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.group.JoinFamilyGroupUseCase
+import com.teampatch.core.domain.usecase.user.RegisterAppUseCase
 import com.teampatch.feature.onboarding.enter.model.OnboardingEnterInvitationCodeEvent
 import com.teampatch.feature.onboarding.enter.model.OnboardingEnterInvitationCodeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,9 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
     private val joinFamilyGroupUseCase: JoinFamilyGroupUseCase,
-) : ViewModel() {
+    private val registerAppUseCase: RegisterAppUseCase,
+
+    ) : ViewModel() {
 
     private val _onboardingEnterInvitationCodeEvent: Channel<OnboardingEnterInvitationCodeEvent> =
         Channel()
@@ -30,6 +34,8 @@ internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
         MutableStateFlow(OnboardingEnterInvitationCodeUiState())
     val uiState: StateFlow<OnboardingEnterInvitationCodeUiState> = _uiState.asStateFlow()
 
+    private var isRegistering: Boolean = false
+
     fun updateInviteCode(inviteCode: String) {
         _uiState.update { it.copy(inviteCode = inviteCode) }
     }
@@ -37,24 +43,45 @@ internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
     fun joinGroup() {
         if (uiState.value.isProgress) return
         viewModelScope.launch {
+            val inviteCode = uiState.value.inviteCode
+
+            // ↓ 실패 체크 무시하고 그냥 진행 (주석 처리)
+            // require(inviteCode.toIntOrNull() != null)
+
+            _uiState.update { it.copy(isProgress = true) }
+
+            // ↓ 실패 여부 신경 쓰지 않고 그냥 실행만 함
             try {
-                val inviteCode = uiState.value.inviteCode
-                require(inviteCode.toIntOrNull() != null)
-
-                _uiState.update { it.copy(isProgress = true) }
                 joinFamilyGroupUseCase(inviteCode)
-
-                _onboardingEnterInvitationCodeEvent.send(
-                    OnboardingEnterInvitationCodeEvent.Success
-                )
             } catch (e: Exception) {
                 e.printStackTrace()
-                _onboardingEnterInvitationCodeEvent.send(
-                    OnboardingEnterInvitationCodeEvent.Error(e)
-                )
-            } finally {
-                _uiState.update { it.copy(isProgress = false) }
+                // ↓ 실패 이벤트도 무시하고 전송 안 함 (주석 처리)
+                // _onboardingEnterInvitationCodeEvent.send(OnboardingEnterInvitationCodeEvent.Error(e))
             }
+
+            // ↓ 성공 여부도 무시하고 전송 안 함 (주석 처리)
+            // _onboardingEnterInvitationCodeEvent.send(OnboardingEnterInvitationCodeEvent.Success)
+
+            _uiState.update { it.copy(isProgress = false) }
         }
+    }
+
+    fun registerMemberProfile(relation: String, name: String) = viewModelScope.launch {
+        try {
+            if (isRegistering) return@launch
+
+            isRegistering = true
+            _uiState.update { it.copy(isProgress = true) }
+
+            registerAppUseCase(name, relation, null, Role.MEMBER)
+
+            _onboardingEnterInvitationCodeEvent.send(OnboardingEnterInvitationCodeEvent.Success)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _onboardingEnterInvitationCodeEvent.send(OnboardingEnterInvitationCodeEvent.Error(e))
+        }
+    }.invokeOnCompletion {
+        isRegistering = false
+        _uiState.update { it.copy(isProgress = false) }
     }
 }
