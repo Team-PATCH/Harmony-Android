@@ -60,7 +60,7 @@ private const val MAX_LENGTH = 5
 @Composable
 internal fun OnboardingEnterInvitationCodeRoute(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: () -> Unit,
+    onEnterRelationScreenRequest: () -> Unit,
     viewModel: OnboardingEnterInvitationCodeViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
@@ -70,7 +70,7 @@ internal fun OnboardingEnterInvitationCodeRoute(
 
     OnboardingEnterInvitationCodeScreen(
         onBackRequest = onBackRequest,
-        onEnterSpaceScreenRequest = { viewModel.joinGroup() },
+        onEnterSpaceScreenRequest = onEnterRelationScreenRequest, // <-- 여기로 변경!
         onInviteCodeChange = viewModel::updateInviteCode,
         uiState = uiState
     )
@@ -85,7 +85,7 @@ internal fun OnboardingEnterInvitationCodeRoute(
                     }
 
                     OnboardingEnterInvitationCodeEvent.Success -> {
-                        onEnterSpaceScreenRequest()
+                        onEnterRelationScreenRequest()
                     }
                 }
             }

@@ -19,15 +19,38 @@ fun NavController.navigateToEnterInvitationCodeScreen(
 
 fun NavGraphBuilder.addOnboardingEnterInvitationCodeScreen(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: () -> Unit,
+    onEnterRelationSreenRequest: () -> Unit,
 ) {
     composable<OnboardingEnterInvitationCodeRoute> {
         OnboardingEnterInvitationCodeRoute(
+            onBackRequest = onBackRequest,
+            onEnterRelationScreenRequest = onEnterRelationSreenRequest
+        )
+    }
+}
+
+@Serializable
+data object OnboardingEnterRelationRoute
+
+fun NavController.navigateToEnterRelationScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingEnterRelationRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addOnboardingEnterRelationScreen(
+    onBackRequest: () -> Unit,
+    onEnterSpaceScreenRequest: () -> Unit,
+) {
+    composable<OnboardingEnterRelationRoute> {
+        OnboardingEnterRelationScreen(
             onBackRequest = onBackRequest,
             onEnterSpaceScreenRequest = onEnterSpaceScreenRequest
         )
     }
 }
+
 
 @Serializable
 data object OnboardingEnterSpaceRoute
