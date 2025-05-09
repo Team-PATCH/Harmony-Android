@@ -56,7 +56,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 internal fun OnboardingEnterRelationRoute(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: () -> Unit,
+    onEnterProfileSettingsScreenRequest: () -> Unit,
     viewModel: OnboardingEnterInvitationCodeViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
@@ -64,7 +64,7 @@ internal fun OnboardingEnterRelationRoute(
 
     OnboardingEnterRelationScreen(
         onBackRequest = onBackRequest,
-        onEnterSpaceScreenRequest = { relation: String, name: String ->
+        onEnterProfileSettingsScreenRequest = { relation: String, name: String ->
             viewModel.registerMemberProfile(relation, name)
         }
     )
@@ -74,7 +74,7 @@ internal fun OnboardingEnterRelationRoute(
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest {
                 when (it) {
-                    is OnboardingEnterInvitationCodeEvent.Success -> onEnterSpaceScreenRequest()
+                    is OnboardingEnterInvitationCodeEvent.Success -> onEnterProfileSettingsScreenRequest()
                     is OnboardingEnterInvitationCodeEvent.Error -> {
                         Toast.makeText(
                             context,
@@ -90,7 +90,7 @@ internal fun OnboardingEnterRelationRoute(
 @Composable
 internal fun OnboardingEnterRelationScreen(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: (relation: String, name: String) -> Unit,
+    onEnterProfileSettingsScreenRequest: (relation: String, name: String) -> Unit,
 ) {
     var relation by rememberSaveable { mutableStateOf("") }
     var name by rememberSaveable { mutableStateOf("") }
@@ -117,7 +117,7 @@ internal fun OnboardingEnterRelationScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onEnterSpaceScreenRequest(relation, name) },
+                onClick = { onEnterProfileSettingsScreenRequest(relation, name) },
                 enabled = relation.isNotBlank() && name.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -218,7 +218,7 @@ private fun OnboardingMakeRelationScreenPreview() {
     HarmonyTheme {
         OnboardingEnterRelationScreen(
             onBackRequest = {},
-            onEnterSpaceScreenRequest = { _, _ -> }
+            onEnterProfileSettingsScreenRequest = { _, _ -> }
         )
     }
 }

@@ -21,9 +21,11 @@ import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationSc
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
 import com.teampatch.feature.memorystorage.addMemoryStorageScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.enter.addOnboardingEnterProfileSettingsScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterRelationScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.enter.navigateToEnterProfileSettingsScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterRelationScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
@@ -129,6 +131,11 @@ fun MainNavHost(
         )
 
         addOnboardingEnterRelationScreen(
+            onBackRequest = navController::navigateUp,
+            onEnterProfileSettingsScreenRequest = navController::navigateToEnterProfileSettingsScreen
+        )
+
+        addOnboardingEnterProfileSettingsScreen(
             onBackRequest = navController::navigateUp,
             onEnterSpaceScreenRequest = navController::navigateToEnterSpaceScreen
         )

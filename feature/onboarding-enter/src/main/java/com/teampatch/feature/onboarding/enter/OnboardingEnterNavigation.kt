@@ -37,21 +37,41 @@ fun NavController.navigateToEnterRelationScreen(
     navigatorExtras: Navigator.Extras? = null,
 ) {
     navigate(OnboardingEnterRelationRoute, navOptions, navigatorExtras)
-
 }
 
 fun NavGraphBuilder.addOnboardingEnterRelationScreen(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: () -> Unit,
+    onEnterProfileSettingsScreenRequest: () -> Unit,
 ) {
     composable<OnboardingEnterRelationRoute> {
         OnboardingEnterRelationRoute(
+            onBackRequest = onBackRequest,
+            onEnterProfileSettingsScreenRequest = onEnterProfileSettingsScreenRequest
+        )
+    }
+}
+
+@Serializable
+data object OnboardingEnterProfileRoute
+
+fun NavController.navigateToEnterProfileSettingsScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(OnboardingEnterProfileRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addOnboardingEnterProfileSettingsScreen(
+    onBackRequest: () -> Unit,
+    onEnterSpaceScreenRequest: () -> Unit,
+) {
+    composable<OnboardingEnterProfileRoute> {
+        OnboardingEnterProfileSettingsScreen(
             onBackRequest = onBackRequest,
             onEnterSpaceScreenRequest = onEnterSpaceScreenRequest
         )
     }
 }
-
 
 @Serializable
 data object OnboardingEnterSpaceRoute

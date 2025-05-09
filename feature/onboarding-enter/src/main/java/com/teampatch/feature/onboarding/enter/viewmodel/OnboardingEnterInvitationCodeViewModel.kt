@@ -1,9 +1,11 @@
 package com.teampatch.feature.onboarding.enter.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.usecase.group.JoinFamilyGroupUseCase
+import com.teampatch.core.domain.usecase.profile.EditProfileUseCase
 import com.teampatch.core.domain.usecase.user.RegisterAppUseCase
 import com.teampatch.feature.onboarding.enter.model.OnboardingEnterInvitationCodeEvent
 import com.teampatch.feature.onboarding.enter.model.OnboardingEnterInvitationCodeUiState
@@ -23,7 +25,8 @@ internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
     private val joinFamilyGroupUseCase: JoinFamilyGroupUseCase,
     private val registerAppUseCase: RegisterAppUseCase,
 
-    ) : ViewModel() {
+    private val editProfileUseCase: EditProfileUseCase,
+) : ViewModel() {
 
     private val _onboardingEnterInvitationCodeEvent: Channel<OnboardingEnterInvitationCodeEvent> =
         Channel()
@@ -35,6 +38,26 @@ internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
     val uiState: StateFlow<OnboardingEnterInvitationCodeUiState> = _uiState.asStateFlow()
 
     private var isRegistering: Boolean = false
+
+    /** 이미지 업로드 */
+
+    private val _profileImageUri = MutableStateFlow<Uri?>(null)
+    val profileImageUri: StateFlow<Uri?> = _profileImageUri.asStateFlow()
+
+    fun updateProfileImage(value: Uri) {
+        _profileImageUri.value = value
+    }
+
+    override fun onCleared() {
+        profileImageUri.value?.let {
+            viewModelScope.launch {
+                editProfileUseCase(null, it.toString())
+            }
+        }
+        super.onCleared()
+    }
+
+    /** 여기까지 */
 
     fun updateInviteCode(inviteCode: String) {
         _uiState.update { it.copy(inviteCode = inviteCode) }
