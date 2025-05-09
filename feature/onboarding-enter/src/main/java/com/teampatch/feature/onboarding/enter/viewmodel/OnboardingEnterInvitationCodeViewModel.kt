@@ -1,6 +1,8 @@
 package com.teampatch.feature.onboarding.enter.viewmodel
 
 import android.net.Uri
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.model.Role
@@ -41,11 +43,11 @@ internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
 
     /** 이미지 업로드 */
 
-    private val _profileImageUri = MutableStateFlow<Uri?>(null)
-    val profileImageUri: StateFlow<Uri?> = _profileImageUri.asStateFlow()
+    private val _profileImageUri = mutableStateOf<Uri?>(null)
+    val profileImageUri: State<Uri?> = _profileImageUri
 
-    fun updateProfileImage(value: Uri) {
-        _profileImageUri.value = value
+    fun updateProfileImage(uri: Uri) {
+        _profileImageUri.value = uri
     }
 
     override fun onCleared() {

@@ -137,7 +137,7 @@ fun MainNavHost(
 
         addOnboardingEnterProfileSettingsScreen(
             onBackRequest = navController::navigateUp,
-            onEnterSpaceScreenRequest = navController::navigateToEnterSpaceScreen
+            onEnterSpaceScreenRequest = { navController.navigateToEnterSpaceScreen() }
         )
 
         addOnboardingEnterSpaceScreen(

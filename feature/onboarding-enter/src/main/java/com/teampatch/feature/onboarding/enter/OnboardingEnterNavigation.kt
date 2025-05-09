@@ -1,5 +1,6 @@
 package com.teampatch.feature.onboarding.enter
 
+import android.net.Uri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -52,21 +53,21 @@ fun NavGraphBuilder.addOnboardingEnterRelationScreen(
 }
 
 @Serializable
-data object OnboardingEnterProfileRoute
+data object OnboardingEnterProfileSettingsRoute
 
 fun NavController.navigateToEnterProfileSettingsScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(OnboardingEnterProfileRoute, navOptions, navigatorExtras)
+    navigate(OnboardingEnterProfileSettingsRoute, navOptions, navigatorExtras)
 }
 
 fun NavGraphBuilder.addOnboardingEnterProfileSettingsScreen(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: () -> Unit,
+    onEnterSpaceScreenRequest: (Uri) -> Unit,
 ) {
-    composable<OnboardingEnterProfileRoute> {
-        OnboardingEnterProfileSettingsScreen(
+    composable<OnboardingEnterProfileSettingsRoute> {
+        OnboardingEnterProfileSettingsRoute(
             onBackRequest = onBackRequest,
             onEnterSpaceScreenRequest = onEnterSpaceScreenRequest
         )
