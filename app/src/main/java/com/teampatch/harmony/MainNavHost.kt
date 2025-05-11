@@ -1,5 +1,6 @@
 package com.teampatch.harmony
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -137,7 +138,11 @@ fun MainNavHost(
 
         addOnboardingEnterProfileSettingsScreen(
             onBackRequest = navController::navigateUp,
-            onEnterSpaceScreenRequest = { navController.navigateToEnterSpaceScreen() }
+            onEnterSpaceScreenRequest = { uris: List<Uri> ->
+                // uris는 List<Uri> 타입
+                val uriStrings = uris.map { it.toString() } // List<Uri> -> List<String>
+                navController.navigateToEnterSpaceScreen(urisAsStrings = uriStrings) // 수정된 함수 호출
+            }
         )
 
         addOnboardingEnterSpaceScreen(

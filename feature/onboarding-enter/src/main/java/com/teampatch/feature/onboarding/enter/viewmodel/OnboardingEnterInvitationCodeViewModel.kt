@@ -43,17 +43,20 @@ internal class OnboardingEnterInvitationCodeViewModel @Inject constructor(
 
     /** 이미지 업로드 */
 
-    private val _profileImageUri = mutableStateOf<Uri?>(null)
-    val profileImageUri: State<Uri?> = _profileImageUri
+    private val _profileImageUris = mutableStateOf<List<Uri>>(emptyList())
+    val profileImageUris: State<List<Uri>> = _profileImageUris
 
     fun updateProfileImage(uri: Uri) {
-        _profileImageUri.value = uri
+        _profileImageUris.value = _profileImageUris.value + uri
     }
 
+    // OnboardingEnterInvitationCodeViewModel의 onCleared 수정 (예시: 마지막 URI만 저장)
     override fun onCleared() {
-        profileImageUri.value?.let {
+        profileImageUris.value.lastOrNull()?.let { lastUri ->
+            // 가장 마지막 URI만 가져오거나,
+            // 또는 profileImageUris.value 전체를 다른 방식으로 처리
             viewModelScope.launch {
-                editProfileUseCase(null, it.toString())
+                editProfileUseCase(null, lastUri.toString()) // UseCase가 URI 문자열을 받는다고 가정
             }
         }
         super.onCleared()

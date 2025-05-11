@@ -16,14 +16,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -33,7 +30,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import coil.compose.rememberAsyncImagePainter
 import com.teampatch.core.designsystem.R.drawable.ic_camera_profile
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
@@ -53,36 +49,31 @@ import com.teampatch.feature.onboarding.enter.viewmodel.OnboardingEnterInvitatio
 internal fun OnboardingEnterProfileSettingsRoute(
     viewModel: OnboardingEnterInvitationCodeViewModel = hiltViewModel(),
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: (Uri) -> Unit, // Uri를 전달받을 수 있도록 수정
+    onEnterSpaceScreenRequest: (List<Uri>) -> Unit, // 이 시그니처는 유지 (List<Uri> 전달)
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-
     OnboardingEnterProfileSettingsScreen(
-        profileImageUri = viewModel.profileImageUri.value,
+        profileImageUris = viewModel.profileImageUris.value, // ViewModel의 현재 상태 전달
         onBackRequest = onBackRequest,
         onProfileImageUpdate = { uri -> viewModel.updateProfileImage(uri) },
-        onEnterSpaceScreenRequest = { uri ->
-            onEnterSpaceScreenRequest(uri)
-        }
+        onEnterSpaceScreenRequest = onEnterSpaceScreenRequest // 콜백 그대로 전달
     )
 }
 
 @Composable
 internal fun OnboardingEnterProfileSettingsScreen(
-    profileImageUri: Uri?,
+    profileImageUris: List<Uri>, // ✅ List
     onBackRequest: () -> Unit,
     onProfileImageUpdate: (Uri) -> Unit,
-    onEnterSpaceScreenRequest: (Uri) -> Unit,
+    onEnterSpaceScreenRequest: (List<Uri>) -> Unit, // ✅ 변경
 ) {
-    var selectedImageUri by remember { mutableStateOf(profileImageUri ?: Uri.EMPTY) }
-
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             if (uri != null) {
-                selectedImageUri = uri
-                onProfileImageUpdate(uri) // ViewModel 업데이트
+                Log.d("ProfileImageUpdate", "Picked URI: $uri") // URI 확인
+                onProfileImageUpdate(uri) // ViewModel이 상태 업데이트 담당
+            } else {
+                Log.d("ProfileImageUpdate", "No URI picked")
             }
         }
     )
@@ -109,7 +100,7 @@ internal fun OnboardingEnterProfileSettingsScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onEnterSpaceScreenRequest(selectedImageUri) }, // 이미지 URI를 onEnterSpaceScreenRequest에 전달
+                onClick = { onEnterSpaceScreenRequest(profileImageUris) }, // ✅ 리스트 전달
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -135,7 +126,7 @@ internal fun OnboardingEnterProfileSettingsScreen(
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(
-                        model = profileImageUri ?: ic_my_appbar,
+                        model = profileImageUris.lastOrNull() ?: ic_my_appbar,
                         placeholder = painterResource(ic_my_appbar),
                         error = painterResource(ic_my_appbar)
                     ),
@@ -170,7 +161,7 @@ internal fun OnboardingEnterProfileSettingsScreen(
 private fun OnboardingMakeProfileSettingsScreenPreview() {
     HarmonyTheme {
         OnboardingEnterProfileSettingsScreen(
-            profileImageUri = null,
+            profileImageUris = emptyList(), // ✅ 리스트로 전달
             onBackRequest = {},
             onProfileImageUpdate = {},
             onEnterSpaceScreenRequest = {}

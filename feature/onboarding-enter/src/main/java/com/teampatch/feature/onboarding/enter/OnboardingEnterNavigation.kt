@@ -53,7 +53,7 @@ fun NavGraphBuilder.addOnboardingEnterRelationScreen(
 }
 
 @Serializable
-data object OnboardingEnterProfileSettingsRoute
+data object OnboardingEnterProfileSettingsRoute // 기존과 동일
 
 fun NavController.navigateToEnterProfileSettingsScreen(
     navOptions: NavOptions? = null,
@@ -62,26 +62,35 @@ fun NavController.navigateToEnterProfileSettingsScreen(
     navigate(OnboardingEnterProfileSettingsRoute, navOptions, navigatorExtras)
 }
 
+// OnboardingEnterSpaceRoute 수정: data object -> data class
+@Serializable
+data class OnboardingEnterSpaceRoute(
+    val profileImageUrisAsStrings: List<String>, // Uri 문자열 리스트를 저장할 프로퍼티
+)
+
+// navigateToEnterSpaceScreen 함수 시그니처 및 호출 방식 수정
+fun NavController.navigateToEnterSpaceScreen(
+    urisAsStrings: List<String>, // List<String>을 파라미터로 받도록 변경
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    // 수정된 Route 객체를 생성하여 navigate 호출
+    navigate(OnboardingEnterSpaceRoute(profileImageUrisAsStrings = urisAsStrings), navOptions, navigatorExtras)
+}
+
+// NavGraphBuilder 확장 함수들은 시그니처 변경 없이 내부 로직은 그대로 유지될 수 있습니다.
+// 타입 추론에 의해 composable<T>의 T가 data class로 변경됩니다.
+
 fun NavGraphBuilder.addOnboardingEnterProfileSettingsScreen(
     onBackRequest: () -> Unit,
-    onEnterSpaceScreenRequest: (Uri) -> Unit,
+    onEnterSpaceScreenRequest: (List<Uri>) -> Unit, // 이 콜백은 List<Uri>를 전달
 ) {
     composable<OnboardingEnterProfileSettingsRoute> {
-        OnboardingEnterProfileSettingsRoute(
+        OnboardingEnterProfileSettingsRoute( // 이 Composable 내부에서 onEnterSpaceScreenRequest 호출
             onBackRequest = onBackRequest,
             onEnterSpaceScreenRequest = onEnterSpaceScreenRequest
         )
     }
-}
-
-@Serializable
-data object OnboardingEnterSpaceRoute
-
-fun NavController.navigateToEnterSpaceScreen(
-    navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null,
-) {
-    navigate(OnboardingEnterSpaceRoute, navOptions, navigatorExtras)
 }
 
 fun NavGraphBuilder.addOnboardingEnterSpaceScreen(
@@ -89,7 +98,8 @@ fun NavGraphBuilder.addOnboardingEnterSpaceScreen(
     onHomeRouteRequest: () -> Unit,
 ) {
     composable<OnboardingEnterSpaceRoute> {
-        OnboardingEnterSpaceScreen(
+        // T가 OnboardingEnterSpaceRoute (data class)로 변경됨
+        OnboardingEnterSpaceRoute( // 이 Composable 내부의 ViewModel이 SavedStateHandle을 통해 인자를 받음
             onBackRequest = onBackRequest,
             onHomeRouteRequest = onHomeRouteRequest
         )
