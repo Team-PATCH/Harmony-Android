@@ -1,5 +1,6 @@
 package com.teampatch.harmony
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,6 +56,7 @@ internal class DailyViewModel @Inject constructor(
     fun addDailyRoutine(id: String, title: String, time: LocalDateTime, isFinished: Boolean) {
         viewModelScope.launch {
             val input = Todo(title = title, dateTime = time, id = id, isFinished = isFinished)
+            Log.d("DEBUG", "DailyViewModel: addDailyRoutine input = $input") // ✅ 디버그 추가
             val result = addDailyRoutineUseCase(input)
             if (result.isFailure) {
                 _sideEffect.send(DailySideEffect.LoadError(Exception("일과 추가 실패")))

@@ -1,5 +1,6 @@
 package com.teampatch.harmony
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -160,14 +161,14 @@ fun MainNavHost(
             answerEditPageRequest = navController::navigateToAnswerScreen
         )
 
-        addAnswerScreen(
-            onBackRequest = navController::navigateUp,
-            onCompleteRequest = { answer ->
-                navController.previousBackStackEntry?.savedStateHandle?.set(
-                    key = QuestionDetailParams.ANSWER_UPDATE_DATA,
-                    value = answer
-                )
-                navController.popBackStack()
+        addDailyEditScreen(
+            onDismissRequest = navController::navigateUp,
+            onCompleteRequest = { todo ->
+                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo")    // ✅ 여기
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("new_todo", todo)
+                navController.navigateUp()
             }
         )
 
@@ -194,7 +195,6 @@ fun MainNavHost(
         )
 
         addDailyScreen(
-            navController = navController,
             dailyExpandPageRequest = { navController.navigateToDailyExpandScreen() },
             dailyEditPageRequest = { navController.navigateToDailyEditScreen() }
         )
@@ -208,6 +208,7 @@ fun MainNavHost(
         addDailyEditScreen(
             onDismissRequest = navController::navigateUp,
             onCompleteRequest = { todo ->
+                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo")    // ✅ 여기
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("todo_added", true) // 결과 저장
