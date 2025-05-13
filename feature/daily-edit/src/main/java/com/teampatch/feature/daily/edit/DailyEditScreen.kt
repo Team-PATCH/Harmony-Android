@@ -50,35 +50,50 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.fake.FakeDailyManage
+import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.daily.edit.R.string.btn_complete_daily
 import com.teampatch.feature.daily.edit.R.string.select_time
 import com.teampatch.feature.daily.edit.R.string.select_week_days
 import com.teampatch.feature.daily.edit.R.string.text_per_daily
 import com.teampatch.feature.daily.edit.R.string.title_daily
 import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 @Composable
 internal fun DailyEditRoute(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (String) -> Unit,
+    onCompleteRequest: (Todo) -> Unit,
     viewModel: DailyEditViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by viewModel.dailyEditUiState
+
+    // 예시: 완료 버튼 클릭 시
+    val state = viewModel.dailyEditUiState.value
+
     if (!uiState.isLoading) {
         DailyEditScreen(
             onDismissRequest = onDismissRequest,
             onCompleteRequest = {
-                onCompleteRequest(it)
+                val todo = Todo(
+                    id = UUID.randomUUID().toString(),
+                    title = state.dailyExpand.content,
+                    dateTime = state.selectedTime?.let { LocalDateTime.of(LocalDate.now(), it) } ?: LocalDateTime.now(),
+                    isFinished = false
+                )
+                onCompleteRequest(todo)
             },
             uiState = uiState,
             selectedDays = uiState.selectedDays,
             onDaySelected = { viewModel.toggleSelectedDay(it) },
-            onChangeDaily = { viewModel.changeDailyContent(it) }
+            onChangeDaily = { viewModel.changeDailyContent(it) },
+            onTimeSelected = { viewModel.changeSelectedTime(it) } // 여기서 처리!
         )
     }
 
@@ -100,11 +115,12 @@ internal fun DailyEditRoute(
 @Composable
 internal fun DailyEditScreen(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (String) -> Unit,
+    onCompleteRequest: (Todo) -> Unit,
     uiState: DailyEditUiState,
     selectedDays: Set<DayOfWeek>,
     onDaySelected: (DayOfWeek) -> Unit,
     onChangeDaily: (String) -> Unit,
+    onTimeSelected: (LocalTime) -> Unit, // 추가
 ) {
     val context = LocalContext.current
     val daily = uiState.dailyExpand.content
@@ -117,7 +133,9 @@ internal fun DailyEditScreen(
         TimePickerDialog(
             context,
             { _, selectedHour, selectedMinute ->
-                time = LocalTime.of(selectedHour, selectedMinute)
+                val selectedTime = LocalTime.of(selectedHour, selectedMinute)
+                time = selectedTime
+                onTimeSelected(selectedTime) // 콜백으로 전달
             },
             hour,
             minute,
@@ -143,7 +161,16 @@ internal fun DailyEditScreen(
         },
         bottomBar = {
             DefaultButton(
-                onClick = { onCompleteRequest(daily) },
+                onClick = {
+                    val selectedTime = uiState.selectedTime
+                    val todo = Todo(
+                        id = UUID.randomUUID().toString(),
+                        title = uiState.dailyExpand.content,
+                        dateTime = selectedTime?.let { LocalDateTime.of(LocalDate.now(), it) } ?: LocalDateTime.now(),
+                        isFinished = false
+                    )
+                    onCompleteRequest(todo)
+                },
                 enabled = daily.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -274,7 +301,8 @@ private fun DailyEditScreenPreview() {
                     if (contains(day)) remove(day) else add(day)
                 }
             },
-            onChangeDaily = {}
+            onChangeDaily = {},
+            onTimeSelected = {} // Preview용 빈 함수
         )
     }
 }

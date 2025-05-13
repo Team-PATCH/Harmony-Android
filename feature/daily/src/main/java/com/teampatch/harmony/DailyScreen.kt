@@ -39,6 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -62,12 +64,22 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun DailyRoute(
+    navController: NavController, // ← NavController를 전달받도록 수정
     dailyExpandPageRequest: () -> Unit,
     dailyEditPageRequest: () -> Unit,
 ) {
     val context = LocalContext.current
     val dailyViewModel: DailyViewModel = hiltViewModel()
     val uiState by dailyViewModel.dailyUiState
+
+    val currentBackStackEntry = navController.currentBackStackEntryAsState().value
+
+    LaunchedEffect(currentBackStackEntry?.savedStateHandle?.get<Boolean>("todo_added")) {
+        if (currentBackStackEntry?.savedStateHandle?.get<Boolean>("todo_added") == true) {
+            dailyViewModel.load()
+            currentBackStackEntry.savedStateHandle.set("todo_added", false) // 초기화
+        }
+    }
 
     if (!uiState.isLoading) {
         DailyScreen(
@@ -80,14 +92,14 @@ internal fun DailyRoute(
             uiState = uiState
         )
     }
+
     LaunchedEffect(Unit) {
         dailyViewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is DailySideEffect.LoadError -> {
-                    Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
-                }
+            if (sideEffect is DailySideEffect.LoadError) {
+                Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+        dailyViewModel.load()
     }
 }
 

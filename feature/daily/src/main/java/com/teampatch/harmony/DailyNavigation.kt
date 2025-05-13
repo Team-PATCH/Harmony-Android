@@ -18,11 +18,13 @@ fun NavController.navigateToDailyScreen(
 }
 
 fun NavGraphBuilder.addDailyScreen(
+    navController: NavController,
     dailyExpandPageRequest: () -> Unit,
     dailyEditPageRequest: () -> Unit,
 ) {
     composable<DailyRoute> {
         DailyRoute(
+            navController = navController,
             dailyExpandPageRequest = dailyExpandPageRequest,
             dailyEditPageRequest = dailyEditPageRequest
         )
