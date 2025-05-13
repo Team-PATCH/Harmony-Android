@@ -194,6 +194,7 @@ fun MainNavHost(
         )
 
         addDailyScreen(
+            navController = navController,
             dailyExpandPageRequest = { navController.navigateToDailyExpandScreen() },
             dailyEditPageRequest = { navController.navigateToDailyEditScreen() }
         )
@@ -206,7 +207,12 @@ fun MainNavHost(
 
         addDailyEditScreen(
             onDismissRequest = navController::navigateUp,
-            onCompleteRequest = { }
+            onCompleteRequest = { todo ->
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("todo_added", true) // 결과 저장
+                navController.navigateUp()
+            }
         )
 
         addMemoryStorageDetailScreen(

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.teampatch.core.domain.usecase.daily.GetDailyManageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.DayOfWeek
+import java.time.LocalTime
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -57,6 +58,13 @@ internal class DailyEditViewModel @Inject constructor(
             selectedDays = dailyEditUiState.value.selectedDays.toMutableSet().apply {
                 if (contains(day)) remove(day) else add(day)
             }
+        )
+    }
+
+    // DailyEditViewModel에 추가
+    fun changeSelectedTime(time: LocalTime) {
+        _dailyEditUiState.value = _dailyEditUiState.value.copy(
+            selectedTime = time
         )
     }
 }

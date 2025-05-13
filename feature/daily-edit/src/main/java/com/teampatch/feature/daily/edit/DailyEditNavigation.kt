@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
+import com.teampatch.core.domain.model.Todo
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +20,7 @@ fun NavController.navigateToDailyEditScreen(
 
 fun NavGraphBuilder.addDailyEditScreen(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (String) -> Unit,
+    onCompleteRequest: (Todo) -> Unit,
 ) {
     composable<DailyEditRoute> {
         DailyEditRoute(
