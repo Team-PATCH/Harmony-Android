@@ -12,7 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -58,6 +63,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun DailyRoute(
     dailyExpandPageRequest: () -> Unit,
+    dailyEditPageRequest: () -> Unit,
 ) {
     val context = LocalContext.current
     val dailyViewModel: DailyViewModel = hiltViewModel()
@@ -70,6 +76,7 @@ internal fun DailyRoute(
             onDailyRoutineCheckChanged = { _, _ -> },
             dailyRoutine = uiState.daily.collectAsLazyPagingItems(),
             dailyExpandPageRequest = dailyExpandPageRequest,
+            dailyEditPageRequest = dailyEditPageRequest,
             uiState = uiState
         )
     }
@@ -92,6 +99,7 @@ internal fun DailyScreen(
     onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
     dailyRoutine: LazyPagingItems<CheckableData<Todo>>,
     dailyExpandPageRequest: () -> Unit,
+    dailyEditPageRequest: () -> Unit,
     uiState: DailyUiState,
 ) {
     Scaffold(
@@ -124,7 +132,22 @@ internal fun DailyScreen(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { dailyEditPageRequest() },
+                containerColor = MainGreen,
+                shape = CircleShape,
+                contentColor = Color.White,
+                modifier = Modifier.padding(bottom = 12.dp, end = 12.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "일과 추가"
+                )
+            }
         }
+
     ) { scaffoldPaddingValues ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(1.dp),
@@ -221,6 +244,7 @@ private fun DailyManageScreenPreview() {
             )
                 .collectAsLazyPagingItems(),
             dailyExpandPageRequest = { },
+            dailyEditPageRequest = {},
             uiState = DailyUiState()
         )
     }
