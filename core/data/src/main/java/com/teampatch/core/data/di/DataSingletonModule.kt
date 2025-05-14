@@ -3,7 +3,7 @@ package com.teampatch.core.data.di
 import com.teampatch.core.data.entity.TokenManagerImpl
 import com.teampatch.core.data.repository.AnswerRepositoryImpl
 import com.teampatch.core.data.repository.AppManagementRepositoryImpl
-import com.teampatch.core.data.repository.MemoryCardRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalMemoryCardRepositoryImpl
 import com.teampatch.core.data.repository.TodoOfflineRepositoryImpl
 import com.teampatch.core.data.repository.local.LocalAuthenticationRepositoryImpl
 import com.teampatch.core.data.repository.local.LocalGroupManagementRepositoryImpl
@@ -34,7 +34,7 @@ internal abstract class DataSingletonModule {
 
     @Binds
     abstract fun bindsMemoryCardRepository(
-        memoryCardRepositoryImpl: MemoryCardRepositoryImpl,
+        localMemoryCardRepositoryImpl: LocalMemoryCardRepositoryImpl,
     ): MemoryCardRepository
 
     @Binds
