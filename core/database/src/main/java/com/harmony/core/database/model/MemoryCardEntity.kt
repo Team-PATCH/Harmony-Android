@@ -12,6 +12,11 @@ import androidx.room.PrimaryKey
             entity = QuestionEntity::class,
             parentColumns = ["id"],
             childColumns = ["question_id"]
+        ),
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["uid"],
+            childColumns = ["written_uid"]
         )
     ]
 )
