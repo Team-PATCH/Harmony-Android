@@ -20,7 +20,7 @@ fun NavController.navigateToDailyEditScreen(
 
 fun NavGraphBuilder.addDailyEditScreen(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (Todo) -> Unit
+    onCompleteRequest: (Todo) -> Unit,
 ) {
     composable<DailyEditScreenRoute> {
         DailyEditRoute(

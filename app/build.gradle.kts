@@ -120,6 +120,7 @@ dependencies {
     implementation(project(":feature:daily"))
     implementation(project(":feature:daily-edit"))
     implementation(project(":feature:daily-expand"))
+    implementation(project(":feature:daily-certify"))
     implementation(project(":feature:memorycard-registration"))
     implementation(project(":feature:question"))
     implementation(project(":feature:question-expand"))

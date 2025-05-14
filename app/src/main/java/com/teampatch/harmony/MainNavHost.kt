@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teampatch.core.common.findActivity
-import com.teampatch.feature.answer.addAnswerScreen
+import com.teampatch.daily.certify.addDailyCertifyAlarmScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
 import com.teampatch.feature.daily.edit.addDailyEditScreen
 import com.teampatch.feature.daily.edit.navigateToDailyEditScreen
@@ -43,7 +43,6 @@ import com.teampatch.feature.onboarding.make.navigateToMakeRelationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
-import com.teampatch.feature.question.detail.QuestionDetailParams
 import com.teampatch.feature.question.detail.addQuestionDetailScreen
 import com.teampatch.feature.question.detail.navigateToQuestionDetailScreen
 import com.teampatch.feature.question.expand.addQuestionExpandScreen
@@ -164,7 +163,7 @@ fun MainNavHost(
         addDailyEditScreen(
             onDismissRequest = navController::navigateUp,
             onCompleteRequest = { todo ->
-                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo")    // ✅ 여기
+                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo") // ✅ 여기
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("new_todo", todo)
@@ -208,12 +207,17 @@ fun MainNavHost(
         addDailyEditScreen(
             onDismissRequest = navController::navigateUp,
             onCompleteRequest = { todo ->
-                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo")    // ✅ 여기
+                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo") // ✅ 여기
                 navController.previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("todo_added", true) // 결과 저장
                 navController.navigateUp()
             }
+        )
+
+        addDailyCertifyAlarmScreen(
+            onPickImageScreenRequest = {},
+            onDismissRequest = { navController.navigateToHomeScreen() }
         )
 
         addMemoryStorageDetailScreen(
