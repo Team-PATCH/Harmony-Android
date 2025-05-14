@@ -10,6 +10,7 @@ import com.harmony.core.database.dao.MemoryCardDao
 import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
 import com.harmony.core.database.dao.UserDao
+import com.harmony.core.database.model.preload.MemoryCardPreloadData
 import com.harmony.core.database.model.preload.QuestionPreloadData
 import com.harmony.core.database.model.preload.TodoPreloadData
 import dagger.Module
@@ -33,7 +34,8 @@ internal object DatabaseModule {
                 super.onCreate(db)
                 listOf(
                     QuestionPreloadData(),
-                    TodoPreloadData()
+                    TodoPreloadData(),
+                    MemoryCardPreloadData()
                 )
                     .forEach { it.insertPreloadData(db) }
             }
