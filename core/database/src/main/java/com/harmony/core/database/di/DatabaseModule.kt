@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase.Callback
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.harmony.core.database.HarmonyDatabase
 import com.harmony.core.database.dao.GroupDao
+import com.harmony.core.database.dao.MemoryCardDao
 import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
 import com.harmony.core.database.dao.UserDao
@@ -66,4 +67,9 @@ internal object DatabaseModule {
     fun providesQuestionDao(
         harmonyDatabase: HarmonyDatabase,
     ): QuestionDao = harmonyDatabase.questionDao()
+
+    @Provides
+    fun providesMemoryCardDao(
+        harmonyDatabase: HarmonyDatabase,
+    ): MemoryCardDao = harmonyDatabase.memoryCardDao()
 }
