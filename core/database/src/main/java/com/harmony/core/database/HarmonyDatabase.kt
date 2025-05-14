@@ -2,6 +2,8 @@ package com.harmony.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.harmony.core.database.converters.SetStringTypeTypeConverter
 import com.harmony.core.database.dao.GroupDao
 import com.harmony.core.database.dao.QuestionDao
 import com.harmony.core.database.dao.TodoDao
@@ -21,6 +23,11 @@ import com.harmony.core.database.model.UserEntity
         QuestionCommentEntity::class
     ],
     version = 1
+)
+@TypeConverters(
+    value = [
+        SetStringTypeTypeConverter::class
+    ]
 )
 internal abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
