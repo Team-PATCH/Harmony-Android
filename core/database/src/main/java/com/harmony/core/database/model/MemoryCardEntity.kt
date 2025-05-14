@@ -20,6 +20,7 @@ data class MemoryCardEntity(
     @ColumnInfo("question_id") val questionId: Long,
     @ColumnInfo("written_uid") val writtenUid: Long,
     @ColumnInfo("title") val title: String,
+    @ColumnInfo("content") val content: String,
     @ColumnInfo("created_at") val createdAt: String,
     @ColumnInfo("modified_at") val modifiedAt: String,
     @ColumnInfo("image_uri") val imageUri: String?,
