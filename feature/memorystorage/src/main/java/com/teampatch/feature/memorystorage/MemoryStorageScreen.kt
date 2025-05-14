@@ -40,6 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.teampatch.core.designsystem.R.drawable
 import com.teampatch.core.designsystem.R.drawable.btn_search
 import com.teampatch.core.designsystem.component.AppBar
@@ -51,6 +55,7 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
 import java.time.LocalDateTime
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun MemoryStorageRoute(
@@ -59,17 +64,21 @@ internal fun MemoryStorageRoute(
 ) {
     val context = LocalContext.current
     val memoryStorageUiState by memoryStorageViewModel.memoryStorageUiState.collectAsStateWithLifecycle()
+    val memoryCards: LazyPagingItems<MemoryCard> =
+        memoryStorageViewModel.memoryCards.collectAsLazyPagingItems()
 
     when (memoryStorageUiState) {
         is MemoryStorageUiState.Loading -> {
             // 로딩 화면 표시
         }
+
         is MemoryStorageUiState.Success -> {
             MemoryStorageScreen(
                 onDetailPageRequest = onDetailPageRequest,
-                memoryStorageUiState = memoryStorageUiState as MemoryStorageUiState.Success
+                memoryCardsLazyItems = memoryCards
             )
         }
+
         is MemoryStorageUiState.Error -> {
             LaunchedEffect(Unit) {
                 Toast.makeText(
@@ -85,7 +94,7 @@ internal fun MemoryStorageRoute(
 @Composable
 internal fun MemoryStorageScreen(
     onDetailPageRequest: () -> Unit,
-    memoryStorageUiState: MemoryStorageUiState,
+    memoryCardsLazyItems: LazyPagingItems<MemoryCard>,
 ) {
     // 상태 관리
     var isSearchMode by remember { mutableStateOf(false) }
@@ -206,10 +215,6 @@ internal fun MemoryStorageScreen(
             }
         }
     ) { scaffoldPaddingValues ->
-        val memoryList = when (memoryStorageUiState) {
-            is MemoryStorageUiState.Success -> memoryStorageUiState.memories.toList()
-            else -> emptyList()
-        }
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -219,8 +224,8 @@ internal fun MemoryStorageScreen(
                 .padding(scaffoldPaddingValues)
         ) {
             items(
-                count = memoryList.size,
-                key = { index -> memoryList[index].first }, // key는 Map의 Key (String)
+                count = memoryCardsLazyItems.itemCount,
+                key = memoryCardsLazyItems.itemKey(),
                 span = { index ->
                     if (index == 0) {
                         GridItemSpan(maxLineSpan)
@@ -229,11 +234,9 @@ internal fun MemoryStorageScreen(
                     }
                 }
             ) { index ->
-                val memory = memoryList[index].second // ID를 사용하지 않으므로 second만 가져옴
-
                 TempMemoryCard(
-                    title = memory.writerTitle,
-                    description = memory.dateTime.toString(),
+                    title = memoryCardsLazyItems[index]?.text ?: "",
+                    description = memoryCardsLazyItems[index]?.dateTime.toString(),
                     painter = painterResource(id = drawable.img_test_memory_card),
                     modifier = Modifier.noRippleClickable {
                         onDetailPageRequest() // ID가 필요 없다면 인자를 제거
@@ -250,42 +253,44 @@ private fun MemoryStorageScreenPreview() {
     HarmonyTheme {
         MemoryStorageScreen(
             onDetailPageRequest = { },
-            memoryStorageUiState = MemoryStorageUiState.Success(
-                memories = mapOf(
-                    "1" to MemoryCard(
-                        id = "1",
-                        writerTitle = "손자",
-                        writerName = "김민준",
-                        text = "title",
-                        imageUrl = "",
-                        dateTime = LocalDateTime.now()
-                    ),
-                    "2" to MemoryCard(
-                        id = "2",
-                        writerTitle = "할머니",
-                        writerName = "이영희",
-                        text = "어릴 적 사진",
-                        imageUrl = "",
-                        dateTime = LocalDateTime.now()
-                    ),
-                    "3" to MemoryCard(
-                        id = "3",
-                        writerTitle = "할머니",
-                        writerName = "이영희",
-                        text = "어릴 적 사진",
-                        imageUrl = "",
-                        dateTime = LocalDateTime.now()
-                    ),
-                    "4" to MemoryCard(
-                        id = "4",
-                        writerTitle = "할머니",
-                        writerName = "이영희",
-                        text = "어릴 적 사진",
-                        imageUrl = "",
-                        dateTime = LocalDateTime.now()
+            flowOf(
+                PagingData.from(
+                    listOf(
+                        MemoryCard(
+                            id = "1",
+                            writerTitle = "손자",
+                            writerName = "김민준",
+                            text = "title",
+                            imageUrl = "",
+                            dateTime = LocalDateTime.now()
+                        ),
+                        MemoryCard(
+                            id = "2",
+                            writerTitle = "할머니",
+                            writerName = "이영희",
+                            text = "어릴 적 사진",
+                            imageUrl = "",
+                            dateTime = LocalDateTime.now()
+                        ),
+                        MemoryCard(
+                            id = "3",
+                            writerTitle = "할머니",
+                            writerName = "이영희",
+                            text = "어릴 적 사진",
+                            imageUrl = "",
+                            dateTime = LocalDateTime.now()
+                        ),
+                        MemoryCard(
+                            id = "4",
+                            writerTitle = "할머니",
+                            writerName = "이영희",
+                            text = "어릴 적 사진",
+                            imageUrl = "",
+                            dateTime = LocalDateTime.now()
+                        )
                     )
                 )
-            )
+            ).collectAsLazyPagingItems()
         )
     }
 }
