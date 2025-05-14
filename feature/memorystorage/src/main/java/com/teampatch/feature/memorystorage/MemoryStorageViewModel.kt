@@ -6,10 +6,10 @@ import com.teampatch.core.common.flowErrorCatch
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
 @HiltViewModel
 internal class MemoryStorageViewModel @Inject constructor(
