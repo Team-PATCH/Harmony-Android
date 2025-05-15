@@ -7,10 +7,6 @@ import javax.inject.Singleton
 class SocialLoginHelper @Inject constructor() {
 
     private lateinit var socialUserId: String
-
-    init {
-        socialUserId = "random_sjsbsn"
-    }
     fun getSocialUserId(): String = socialUserId
 
     fun setSocialUserId(userId: String) {
