@@ -41,12 +41,12 @@ fun NavController.navigateToShareInvitationScreen(
 
 fun NavGraphBuilder.addOnboardingMakeInviteGrandParentsScreen(
     onBackRequest: () -> Unit,
-    onRelationScreenRequest: () -> Unit,
+    onHomeRouteRequest: () -> Unit,
 ) {
     composable<OnboardingMakeInvitationRoute> {
         OnboardingMakeInviteCodeCreationScreen(
             onBackRequest = onBackRequest,
-            onRelationScreenRequest = onRelationScreenRequest
+            onHomeRouteRequest = onHomeRouteRequest
         )
     }
 }
