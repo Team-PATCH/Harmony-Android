@@ -29,7 +29,7 @@ internal class OnboardingViewModel @Inject constructor(
 
     fun loginKakao() = viewModelScope.launch {
         runCatching {
-            throw FamilyRegistrationRequiredException()
+            loginKakaoUseCase
         }.onSuccess {
             _loginEvent.send(LoginEvent.Success)
         }.onFailure { t ->
@@ -37,7 +37,6 @@ internal class OnboardingViewModel @Inject constructor(
                 _loginEvent.send(LoginEvent.FamilyRegistrationRequired)
                 return@launch
             }
-
             _loginEvent.send(LoginEvent.Error(t))
             t.printStackTrace()
         }
