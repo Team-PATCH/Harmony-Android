@@ -54,26 +54,26 @@ fun MainApp(
         mutableStateOf(
             when (currentBackStackEntry?.destination?.route) {
                 HomeRoute::class.qualifiedName -> {
-                    NavigationItem.HOME.also {
-                        previousNavigationItem = it
+                    NavigationItem.HOME.apply {
+                        previousNavigationItem = this
                     }
                 }
 
                 MemoryStorageRoute::class.qualifiedName -> {
                     NavigationItem.STORE.apply {
-                        previousNavigationItem = NavigationItem.STORE
+                        previousNavigationItem = this
                     }
                 }
 
                 QuestionRoute::class.qualifiedName -> {
-                    NavigationItem.QUESTION.also {
-                        previousNavigationItem = it
+                    NavigationItem.QUESTION.apply {
+                        previousNavigationItem = this
                     }
                 }
 
                 DailyRoute::class.qualifiedName -> {
-                    NavigationItem.DAILY.also {
-                        previousNavigationItem = it
+                    NavigationItem.DAILY.apply {
+                        previousNavigationItem = this
                     }
                 }
 

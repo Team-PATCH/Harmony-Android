@@ -1,7 +1,23 @@
 package com.teampatch.core.data.di
 
 import com.teampatch.core.data.entity.TokenManagerImpl
+import com.teampatch.core.data.repository.AnswerRepositoryImpl
+import com.teampatch.core.data.repository.AppManagementRepositoryImpl
+import com.teampatch.core.data.repository.TodoOfflineRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalAuthenticationRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalGroupManagementRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalMemoryCardRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalQuestionRepositoryImpl
+import com.teampatch.core.data.repository.local.LocalUserRepositoryImpl
 import com.teampatch.core.domain.entity.TokenManager
+import com.teampatch.core.domain.repository.AnswerRepository
+import com.teampatch.core.domain.repository.AppManagementRepository
+import com.teampatch.core.domain.repository.AuthenticationRepository
+import com.teampatch.core.domain.repository.GroupManagementRepository
+import com.teampatch.core.domain.repository.MemoryCardRepository
+import com.teampatch.core.domain.repository.QuestionRepository
+import com.teampatch.core.domain.repository.TodoRepository
+import com.teampatch.core.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +31,44 @@ internal abstract class DataSingletonModule {
     abstract fun bindsTokenManager(
         tokenManagerImpl: TokenManagerImpl,
     ): TokenManager
+
+    @Binds
+    abstract fun bindsMemoryCardRepository(
+        localMemoryCardRepositoryImpl: LocalMemoryCardRepositoryImpl,
+    ): MemoryCardRepository
+
+    @Binds
+    abstract fun bindsAuthenticationRepository(
+        localAuthenticationRepositoryImpl: LocalAuthenticationRepositoryImpl,
+    ): AuthenticationRepository
+
+    @Binds
+    abstract fun bindsQuestionRepository(
+        localQuestionRepositoryImpl: LocalQuestionRepositoryImpl,
+    ): QuestionRepository
+
+    @Binds
+    abstract fun bindsAnswerRepository(
+        answerRepositoryImpl: AnswerRepositoryImpl,
+    ): AnswerRepository
+
+    @Binds
+    abstract fun bindsAppManagementRepository(
+        appManagementRepositoryImpl: AppManagementRepositoryImpl,
+    ): AppManagementRepository
+
+    @Binds
+    abstract fun bindsGroupManagementRepository(
+        groupManagementOfflineRepositoryImpl: LocalGroupManagementRepositoryImpl,
+    ): GroupManagementRepository
+
+    @Binds
+    abstract fun bindsTodoRepository(
+        todoOfflineRepositoryImpl: TodoOfflineRepositoryImpl,
+    ): TodoRepository
+
+    @Binds
+    abstract fun bindsUserRepository(
+        userOfflineRepositoryImpl: LocalUserRepositoryImpl,
+    ): UserRepository
 }

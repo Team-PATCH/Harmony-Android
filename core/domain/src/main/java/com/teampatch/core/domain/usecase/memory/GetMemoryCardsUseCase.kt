@@ -1,13 +1,15 @@
 package com.teampatch.core.domain.usecase.memory
 
+import androidx.paging.PagingData
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.core.domain.repository.MemoryCardRepository
 import javax.inject.Inject
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
 
-class GetMemoryCardUseCase @Inject constructor(
+class GetMemoryCardsUseCase @Inject constructor(
     private val memoryCardRepository: MemoryCardRepository,
+
 ) {
 
-    suspend operator fun invoke(memoryCardId: String): MemoryCard = memoryCardRepository.getMemoryCardById(memoryCardId).first()
+    operator fun invoke(): Flow<PagingData<MemoryCard>> = memoryCardRepository.getMemoryCards()
 }
