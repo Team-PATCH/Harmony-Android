@@ -3,12 +3,15 @@ package com.teampatch.core.data.repository.local
 import com.harmony.core.database.dao.GroupDao
 import com.harmony.core.database.dao.UserDao
 import com.harmony.core.database.model.GroupEntity
+import com.teampatch.core.data.mapper.roleStringMapper
+import com.teampatch.core.domain.model.FamilyInfo
 import com.teampatch.core.domain.model.InvitedGroup
 import com.teampatch.core.domain.model.UserGroup
 import com.teampatch.core.domain.repository.GroupManagementRepository
 import javax.inject.Inject
 import kotlin.random.Random
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 internal class LocalGroupManagementRepositoryImpl @Inject constructor(
     private val groupDao: GroupDao,
@@ -51,7 +54,32 @@ internal class LocalGroupManagementRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserGroupList(uid: String): List<UserGroup> {
-        TODO("Not yet implemented")
+        val userEntity = userDao.getUserById(uid.toLong()).first()
+        val userGroupIds = userEntity.groupId
+            ?.let { listOf(it) }
+            ?: emptyList()
+
+        return userGroupIds.map { groupId ->
+            groupDao.queryGroupById(groupId).map { groupEntity ->
+                UserGroup(
+                    groupId = groupId.toString(),
+                    name = "",
+                    members = userDao.getUserByGroupId(groupId).map { userEntities ->
+                        userEntities.map {
+                            FamilyInfo(
+                                title = it.relation,
+                                name = it.name,
+                                isManager = groupEntity.managerUid == it.uid,
+                                role = roleStringMapper(it.role),
+                                profileImageUrl = it.profileImageUri
+                            )
+                        }
+                    }
+                        .first()
+                )
+            }
+                .first()
+        }
     }
 
     override suspend fun queryGroupInvitationCode(): String {
