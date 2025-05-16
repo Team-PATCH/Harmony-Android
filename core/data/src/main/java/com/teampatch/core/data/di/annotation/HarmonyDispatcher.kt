@@ -4,10 +4,9 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CoroutineDispatcher(val dispatcherContext: DispatcherContext)
+annotation class HarmonyDispatcher(val dispatchersContext: DispatchersContext)
 
-enum class DispatcherContext {
+enum class DispatchersContext {
     Default,
     IO,
-    Main,
 }

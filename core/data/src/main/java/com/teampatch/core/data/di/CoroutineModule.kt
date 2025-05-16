@@ -1,28 +1,23 @@
 package com.teampatch.core.data.di
 
-import com.teampatch.core.data.di.annotation.CoroutineDispatcher
-import com.teampatch.core.data.di.annotation.DispatcherContext
+import com.teampatch.core.data.di.annotation.DispatchersContext
+import com.teampatch.core.data.di.annotation.HarmonyDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object CoroutineModule {
 
-    @CoroutineDispatcher(DispatcherContext.Default)
+    @HarmonyDispatcher(DispatchersContext.Default)
     @Provides
-    fun providesDefaultCoroutine(): CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.Default)
+    fun providesDefaultCoroutine(): CoroutineDispatcher = Dispatchers.Default
 
-    @CoroutineDispatcher(DispatcherContext.IO)
+    @HarmonyDispatcher(DispatchersContext.IO)
     @Provides
-    fun providesIoCoroutine(): CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.IO)
-
-    @CoroutineDispatcher(DispatcherContext.Main)
-    @Provides
-    fun providesMainCoroutine(): CoroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.Main)
+    fun providesIoCoroutine(): CoroutineDispatcher = Dispatchers.IO
 }
