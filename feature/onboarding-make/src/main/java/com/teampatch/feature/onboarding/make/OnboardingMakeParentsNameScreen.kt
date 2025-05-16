@@ -108,7 +108,6 @@ fun CustomDropdownAndTextField(
         ) {
             OutlinedTextField(
                 value = selectedText,
-                placeholder = { Text(stringArrayResource(title_onboarding_make_option_of_gp)[0], color = Color.Gray) },
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {

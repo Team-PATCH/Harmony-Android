@@ -4,28 +4,41 @@ import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.teampatch.core.designsystem.R
+import com.teampatch.core.designsystem.component.DefaultButton
+import com.teampatch.core.designsystem.component.SpeechBubble
+import com.teampatch.core.designsystem.theme.BL
+import com.teampatch.core.designsystem.theme.G3
+import com.teampatch.core.designsystem.theme.G5
+import com.teampatch.core.designsystem.theme.MainGreen
+import com.teampatch.core.designsystem.theme.WH
+import com.teampatch.feature.onboarding.R.drawable.bell
+import com.teampatch.feature.onboarding.R.string.text_onboarding_start_harmony
 
 private val requiredPermissions: Array<String> = arrayOf(
     android.Manifest.permission.POST_NOTIFICATIONS
@@ -38,7 +51,7 @@ fun OnboardingPermissionNotificationScreen(
     val context = LocalContext.current
     Scaffold(
         bottomBar = {
-            Button(
+            DefaultButton(
                 onClick = {
                     (context as? Activity)
                         ?.requestPermissions(requiredPermissions, 1)
@@ -46,54 +59,71 @@ fun OnboardingPermissionNotificationScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 12.dp)
-                    .height(68.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), // 투명한 배경
-                contentPadding = PaddingValues(0.dp), // 버튼의 기본 내부 패딩 제거
-                shape = RoundedCornerShape(10.dp)
+                    .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
             ) {
-                // 이미지 리소스를 painterResource로 불러오고 버튼을 꽉 채움
-                Image(
-                    painter = painterResource(id = R.drawable.btn_start_harmony), // 카카오 로그인 이미지
-                    contentDescription = "Harmoy Start Process",
-                    modifier = Modifier.fillMaxSize(), // 이미지가 버튼의 크기를 꽉 채움
-                    contentScale = ContentScale.Crop // 이미지가 버튼 크기에 맞춰 잘림
-                )
+                Text(text = stringResource(text_onboarding_start_harmony))
             }
         },
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(paddingValues)
-                .padding(top = 92.dp, bottom = 8.dp) // Column 시작 위치에 추가 패딩
+                .padding(top = 92.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                verticalArrangement = Arrangement.SpaceBetween, // 첫 요소는 위, 마지막 요소는 아래에 붙음
-                horizontalAlignment = Alignment.CenterHorizontally
+            SpeechBubble(
+                backgroundColor = WH,
+                borderColor = G3
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.image_permission_to_notify),
-                    contentDescription = "Permission Notification Image",
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                )
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(id = bell),
+                        contentDescription = null,
+                        tint = MainGreen,
+                        modifier = Modifier.size(32.dp)
+                    )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                Image(
-                    painter = painterResource(id = R.drawable.img_character_fullbody_mony),
-                    contentDescription = "Full-Body Mony Character",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = MainGreen, fontWeight = FontWeight.Bold)) {
+                                append("알림")
+                            }
+                            append("을 허용해 주세요.")
+                        },
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = BL
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "하모니는 가족들이 보내는 알림을 통해\n진행되는 서비스예요.\n가족들과 함께 소중한 추억을 공유해봐요.",
+                        fontSize = 14.sp,
+                        color = G5,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.img_character_fullbody_mony),
+                contentDescription = "Full-Body Mony Character",
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

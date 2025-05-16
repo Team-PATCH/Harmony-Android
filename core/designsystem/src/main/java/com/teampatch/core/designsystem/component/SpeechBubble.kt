@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
@@ -31,6 +32,8 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 @Composable
 fun SpeechBubble(
     modifier: Modifier = Modifier,
+    backgroundColor: Color = G1,
+    borderColor: Color = G3,
     contentAlignment: Alignment = Alignment.Center,
     propagateMinConstraints: Boolean = false,
     content: @Composable (BoxScope.() -> Unit),
@@ -43,12 +46,12 @@ fun SpeechBubble(
             .padding(top = 32.dp, start = 20.dp, end = 20.dp)
             .drawBehind {
                 drawRoundRect(
-                    color = G1,
+                    color = backgroundColor,
                     size = size,
                     cornerRadius = CornerRadius(20.dp.toPx())
                 )
                 drawRoundRect(
-                    color = G3,
+                    color = borderColor,
                     size = size,
                     cornerRadius = CornerRadius(20.dp.toPx()),
                     style = Stroke(1.dp.toPx())
@@ -60,16 +63,16 @@ fun SpeechBubble(
                         lineTo((size.width / 2) - 24.dp.toPx(), size.height - 20.dp.toPx())
                         close()
                     },
-                    color = G1
+                    color = backgroundColor
                 )
                 drawLine(
-                    color = G3,
+                    color = borderColor,
                     start = Offset(size.width / 2, size.height + 20.dp.toPx()),
                     end = Offset((size.width / 2) + 12.dp.toPx(), size.height),
                     strokeWidth = 1.dp.toPx()
                 )
                 drawLine(
-                    color = G3,
+                    color = borderColor,
                     start = Offset(size.width / 2, size.height + 20.dp.toPx()),
                     end = Offset((size.width / 2) - 12.dp.toPx(), size.height),
                     strokeWidth = 1.dp.toPx()

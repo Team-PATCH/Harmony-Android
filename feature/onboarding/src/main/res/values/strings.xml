@@ -44,5 +44,8 @@
     <string name="subtext_onboarding_invite_grandparents">"할머니를 초대해야\n" + "하모니를 시작할 수 있어요"</string>
     <string name="subtext_onboarding_enter_code">"전달 받은 5자리 코드를\n" + "입력해 주세요."</string>
 
+    <string name="text_onboarding_start_harmony">"하모니 시작하기"</string>
+
+
 </resources>
 

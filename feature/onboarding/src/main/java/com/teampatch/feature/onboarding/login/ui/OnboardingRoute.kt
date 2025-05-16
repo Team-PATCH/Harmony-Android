@@ -8,10 +8,10 @@ internal fun OnboardingRoute(
     onPermissionNotificationRequest: () -> Unit,
     onStartScreenRequest: () -> Unit,
 ) {
-    OnboardingFirstScreen(
+    OnboardingLoginScreen(
         onHomeScreenRequest = onHomeScreenRequest,
         onPermissionNotificationRequest = onPermissionNotificationRequest,
-        onStartScreenRequest = onStartScreenRequest
+        onStartSpaceScreenRequest = onStartScreenRequest
     )
 }
 
@@ -21,7 +21,7 @@ internal fun OnboardingStartRoute(
     onMakeGroupRequest: () -> Unit,
     onEnterScreenRequest: () -> Unit,
 ) {
-    OnboardingStartScreen(
+    OnboardingStartSpaceScreen(
         onBackRequest = onBackRequest,
         onboardingMakeGroupRequest = onMakeGroupRequest,
         onboardingEnterScreenRequest = onEnterScreenRequest
