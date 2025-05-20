@@ -143,8 +143,7 @@ private fun DailyAlarmScreenPreview() {
             onDismissRequest = { },
             uiState = DailyCertifyUiState(
                 missionText = "공원 산책 가서 비둘기 사진 찍기",
-                missionTime = LocalTime.of(14, 30),
-                isCompleted = false
+                missionTime = LocalTime.of(14, 30)
             )
         )
     }
