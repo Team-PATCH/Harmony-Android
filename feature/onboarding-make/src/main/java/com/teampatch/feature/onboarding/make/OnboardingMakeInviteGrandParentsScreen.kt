@@ -34,7 +34,7 @@ import com.teampatch.feature.onboarding.make.R.string.text_onboarding_make_next
 @Composable
 internal fun OnboardingMakeInviteCodeCreationScreen(
     onBackRequest: () -> Unit,
-    onRelationScreenRequest: () -> Unit,
+    onHomeRouteRequest: () -> Unit,
 ) {
     OnBoardingLayout(
         title = buildAnnotatedString {
@@ -52,7 +52,7 @@ internal fun OnboardingMakeInviteCodeCreationScreen(
         onBackRequest = { onBackRequest() },
         bottomBar = {
             DefaultButton(
-                onClick = { onRelationScreenRequest() },
+                onClick = { onHomeRouteRequest() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -92,7 +92,7 @@ private fun OnboardingMakeInviteCodeCreationScreenPreview() {
     HarmonyTheme {
         OnboardingMakeInviteCodeCreationScreen(
             onBackRequest = {},
-            onRelationScreenRequest = {}
+            onHomeRouteRequest = {}
         )
     }
 }

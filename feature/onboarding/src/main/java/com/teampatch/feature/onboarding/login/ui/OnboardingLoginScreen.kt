@@ -35,10 +35,10 @@ import com.teampatch.core.designsystem.R
 import com.teampatch.feature.onboarding.login.model.LoginEvent
 
 @Composable
-internal fun OnboardingFirstScreen(
+internal fun OnboardingLoginScreen(
     onHomeScreenRequest: () -> Unit,
     onPermissionNotificationRequest: () -> Unit,
-    onStartScreenRequest: () -> Unit,
+    onStartSpaceScreenRequest: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -62,7 +62,7 @@ internal fun OnboardingFirstScreen(
                     if (!hasNotificationGranted(context)) {
                         onPermissionNotificationRequest()
                     } else {
-                        onStartScreenRequest()
+                        onStartSpaceScreenRequest()
                     }
                 }
                 LoginEvent.Success -> {
@@ -118,9 +118,9 @@ internal fun OnboardingFirstScreen(
 @Preview(showBackground = true)
 @Composable
 fun OnboardingLoginScreenPreview() {
-    OnboardingFirstScreen(
+    OnboardingLoginScreen(
         onHomeScreenRequest = {},
         onPermissionNotificationRequest = {},
-        onStartScreenRequest = {}
+        onStartSpaceScreenRequest = {}
     )
 }

@@ -32,7 +32,7 @@ import com.teampatch.feature.onboarding.R
  */
 
 @Composable
-fun OnboardingStartScreen(
+fun OnboardingStartSpaceScreen(
     onBackRequest: () -> Unit,
     onboardingMakeGroupRequest: () -> Unit,
     onboardingEnterScreenRequest: () -> Unit,
@@ -88,7 +88,7 @@ fun OnboardingStartScreen(
 @Composable
 private fun OnboardingStartScreenPreview() {
     HarmonyTheme {
-        OnboardingStartScreen(
+        OnboardingStartSpaceScreen(
             onBackRequest = {},
             onboardingMakeGroupRequest = {},
             onboardingEnterScreenRequest = {}

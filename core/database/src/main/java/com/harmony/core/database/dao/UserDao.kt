@@ -19,7 +19,7 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE uid = :uid")
     fun getUserById(uid: Long): Flow<UserEntity>
 
-    @Query("SELECT * FROM user WHERE groupId = :id")
+    @Query("SELECT * FROM user WHERE group_id = :id")
     fun getUserByGroupId(id: Long): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM user WHERE sns_id = :id")

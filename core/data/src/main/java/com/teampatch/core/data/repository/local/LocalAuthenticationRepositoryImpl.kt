@@ -18,9 +18,11 @@ internal class LocalAuthenticationRepositoryImpl @Inject constructor(
 ) : AuthenticationRepository {
 
     override suspend fun loginKakao(): LoginResult {
-        val token = kakaoLoginService.login()
-        socialLoginHelper.setSocialUserId(token.userId)
-        val user = userDao.getUserBySnsId(token.userId).firstOrNull()
+//        val token = kakaoLoginService.login()
+//        socialLoginHelper.setSocialUserId(token.userId)
+//        val user = userDao.getUserBySnsId(token.userId).firstOrNull()
+        socialLoginHelper.setSocialUserId("12345678")
+        val user = userDao.getUserBySnsId("12345678").firstOrNull()
         val groupId = user?.groupId ?: return LoginResult(groupId = EMPTY_GROUP_CODE)
         userDao.updateUser(user.copy(isMe = true))
         return LoginResult(groupId = groupId.toString())

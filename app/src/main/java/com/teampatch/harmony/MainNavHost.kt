@@ -1,5 +1,6 @@
 package com.teampatch.harmony
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,8 +25,12 @@ import com.teampatch.feature.memorycard.registration.addMemoryCardRegistrationSc
 import com.teampatch.feature.memorycard.registration.navigateToMemoryCardRegistrationScreen
 import com.teampatch.feature.memorystorage.addMemoryStorageScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.enter.addOnboardingEnterProfileSettingsScreen
+import com.teampatch.feature.onboarding.enter.addOnboardingEnterRelationScreen
 import com.teampatch.feature.onboarding.enter.addOnboardingEnterSpaceScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterInvitationCodeScreen
+import com.teampatch.feature.onboarding.enter.navigateToEnterProfileSettingsScreen
+import com.teampatch.feature.onboarding.enter.navigateToEnterRelationScreen
 import com.teampatch.feature.onboarding.enter.navigateToEnterSpaceScreen
 import com.teampatch.feature.onboarding.login.ui.OnboardingRoute
 import com.teampatch.feature.onboarding.login.ui.OnboardingStartRoute
@@ -34,12 +39,14 @@ import com.teampatch.feature.onboarding.login.ui.addOnboardingScreen
 import com.teampatch.feature.onboarding.login.ui.addOnboardingStartScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToPermissionNotificationScreen
 import com.teampatch.feature.onboarding.login.ui.navigateToStartScreen
+import com.teampatch.feature.onboarding.make.addOnboardingMakeInviteGrandParentsScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeParentsNameScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.addOnboardingMakeRelationScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeGroupScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeProfileSettingsScreen
 import com.teampatch.feature.onboarding.make.navigateToMakeRelationScreen
+import com.teampatch.feature.onboarding.make.navigateToShareInvitationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
@@ -106,17 +113,17 @@ fun MainNavHost(
             onShareInvitationScreenRequest = navController::navigateToMakeRelationScreen
         )
 
-//        addOnboardingMakeInviteGrandParentsScreen(
-//            onBackRequest = navController::navigateUp,
-//            onRelationScreenRequest = { navController.navigateToMakeRelationScreen() }
-//        )
-
         addOnboardingMakeRelationScreen(
             onBackRequest = navController::navigateUp,
             onProfileSettingsScreenRequest = navController::navigateToMakeProfileSettingsScreen
         )
 
         addOnboardingMakeProfileSettingsScreen(
+            onBackRequest = navController::navigateUp,
+            onHomeRouteRequest = { navController.navigateToShareInvitationScreen() }
+        )
+
+        addOnboardingMakeInviteGrandParentsScreen(
             onBackRequest = navController::navigateUp,
             onHomeRouteRequest = { navController.navigateToHomeScreen() }
         )
@@ -125,7 +132,21 @@ fun MainNavHost(
 
         addOnboardingEnterInvitationCodeScreen(
             onBackRequest = navController::navigateUp,
-            onEnterSpaceScreenRequest = { navController.navigateToEnterSpaceScreen() }
+            onEnterRelationScreenRequest = navController::navigateToEnterRelationScreen
+        )
+
+        addOnboardingEnterRelationScreen(
+            onBackRequest = navController::navigateUp,
+            onEnterProfileSettingsScreenRequest = navController::navigateToEnterProfileSettingsScreen
+        )
+
+        addOnboardingEnterProfileSettingsScreen(
+            onBackRequest = navController::navigateUp,
+            onEnterSpaceScreenRequest = { uris: List<Uri> ->
+                // uris는 List<Uri> 타입
+                val uriStrings = uris.map { it.toString() } // List<Uri> -> List<String>
+                navController.navigateToEnterSpaceScreen(urisAsStrings = uriStrings) // 수정된 함수 호출
+            }
         )
 
         addOnboardingEnterSpaceScreen(

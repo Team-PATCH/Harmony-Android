@@ -37,7 +37,6 @@ internal class OnboardingViewModel @Inject constructor(
                 _loginEvent.send(LoginEvent.FamilyRegistrationRequired)
                 return@launch
             }
-
             _loginEvent.send(LoginEvent.Error(t))
             t.printStackTrace()
         }
