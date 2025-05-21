@@ -10,4 +10,6 @@ internal data class DailyCertifyUiState(
     val certifyStatus: CertifyStatus = CertifyStatus.BEFORE,
     val comments: List<DailyComment> = emptyList(),
     val editingComment: DailyComment? = null, // 수정 중인 댓글이 있으면 bottomSheet 띄움
+    val showCertifyDialog: Boolean = false,
+    val showCommentSheet: Boolean = false,
 )
