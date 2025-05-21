@@ -1,9 +1,11 @@
 package com.teampatch.daily.certify
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,29 +15,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +51,7 @@ import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.img_upload_cert
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
+import com.teampatch.core.designsystem.component.RoundButton
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
 import com.teampatch.core.designsystem.theme.G5
@@ -62,10 +61,10 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.SubRed
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.domain.model.DailyComment
+import com.teampatch.feature.daily.certify.R.string.text_float_add_comment
 import com.teampatch.feature.daily.certify.R.string.text_title_appbar
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun DailyCertifyRoute(
@@ -78,84 +77,34 @@ internal fun DailyCertifyRoute(
 internal fun DailyCertifyScreen(
     uiState: DailyCertifyUiState,
     onBackRequest: () -> Unit,
-    onCommentSubmit: (String) -> Unit,
     onCommentEditRequest: (DailyComment?) -> Unit,
-    onCommentEditComplete: (String) -> Unit,
     onCertifyComplete: () -> Unit,
-    onDismissDialog: () -> Unit,
     onOpenCommentSheet: () -> Unit,
-    onCloseCommentSheet: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
+    val commentEditSheetState = rememberModalBottomSheetState()
+    val commentWriteSheetState = rememberModalBottomSheetState()
     val isImageUploaded = uiState.imageUrl?.isNotBlank() == true
     val isCertifyConfirmed = uiState.certifyStatus == CertifyStatus.CONFIRMED
-
-    // ✅ 댓글 수정 BottomSheet
-    if (uiState.editingComment != null) {
-        ModalBottomSheet(
-            onDismissRequest = { onCommentEditRequest(null) },
-            sheetState = sheetState
-        ) {
-            Column(Modifier.padding(16.dp)) {
-                Text(text = "댓글 수정", style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                var text by remember { mutableStateOf(uiState.editingComment.content) }
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                DefaultButton(onClick = {
-                    onCommentEditComplete(text)
-                    scope.launch { sheetState.hide() }
-                }) {
-                    Text("수정 완료")
-                }
-            }
+    val lazyListState = rememberLazyListState()
+    val isFloatingVisible by remember {
+        derivedStateOf {
+            !lazyListState.isScrollInProgress && !lazyListState.canScrollBackward
         }
     }
 
-    // ✅ 사진 인증 안내 Dialog
-    if (uiState.showCertifyDialog) {
-        AlertDialog(
-            onDismissRequest = onDismissDialog,
-            confirmButton = {
-                TextButton(onClick = onDismissDialog) {
-                    Text("확인")
-                }
-            },
-            title = { Text("사진 인증 안내") },
-            text = { Text("이 사진이 정말 맞나요?") }
-        )
+    LaunchedEffect(uiState.editingComment) {
+        if (uiState.editingComment != null) {
+            commentEditSheetState.show()
+        } else {
+            commentEditSheetState.hide()
+        }
     }
 
-    // ✅ 댓글 작성 BottomSheet
-    if (uiState.showCommentSheet) {
-        ModalBottomSheet(
-            onDismissRequest = onCloseCommentSheet,
-            sheetState = sheetState
-        ) {
-            Column(Modifier.padding(16.dp)) {
-                Text("댓글 작성", style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.height(8.dp))
-                var text by remember { mutableStateOf("") }
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    placeholder = { Text("댓글을 입력해주세요") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(Modifier.height(8.dp))
-                DefaultButton(onClick = {
-                    onCommentSubmit(text)
-                    scope.launch { sheetState.hide() }
-                    onCloseCommentSheet()
-                }) {
-                    Text("댓글 남기기")
-                }
-            }
+    LaunchedEffect(uiState.showCommentSheet) {
+        if (uiState.showCommentSheet) {
+            commentWriteSheetState.show()
+        } else {
+            commentWriteSheetState.hide()
         }
     }
 
@@ -182,7 +131,7 @@ internal fun DailyCertifyScreen(
                     }
                 }
 
-                uiState.certifyStatus == CertifyStatus.BEFORE -> {
+                uiState.certifyStatus == CertifyStatus.PENDING -> {
                     DefaultButton(
                         onClick = onCertifyComplete,
                         modifier = Modifier
@@ -194,69 +143,86 @@ internal fun DailyCertifyScreen(
                 }
 
                 isCertifyConfirmed -> {
-                    Column(Modifier.padding(16.dp)) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onDismissDialog() }, // 아이콘 클릭 시 Dialog 띄우기
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = "댓글을 남겨보세요!")
-                            Icon(Icons.Default.MoreVert, contentDescription = "댓글 안내")
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        DefaultButton(onClick = onOpenCommentSheet) {
-                            Text("댓글 남기기")
-                        }
-                    }
+                    // ✅ 인증 완료 시 bottomBar는 비우거나 "제어용 UI"로 대체 가능
+                    Spacer(modifier = Modifier.height(1.dp)) // 유지용
                 }
             }
         }
     ) { paddingValues ->
-        Column(
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .background(color = WH)
-        ) {
-            // 인증 이미지
-            uiState.imageUrl?.let {
-                CertifyImage(imageUrl = it)
+        Box(Modifier.fillMaxSize()) {
+            Column(
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(color = WH)
+            ) {
+                uiState.imageUrl?.let {
+                    CertifyImage(imageUrl = it)
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                MissionInfoSection(
+                    missionText = uiState.missionText,
+                    missionTime = uiState.missionTime
+                )
+
+                if (isCertifyConfirmed) {
+                    LazyColumn(
+                        state = lazyListState, // ✅ 상태 연결
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(G1),
+                        contentPadding = PaddingValues(
+                            top = 8.dp,
+                            bottom = 120.dp // ✅ 댓글 남기기 UI를 위한 padding
+                        )
+                    ) {
+                        item {
+                            Text(
+                                text = "댓글 ${uiState.comments.size}",
+                                fontFamily = PretendardFontFamily,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 18.sp,
+                                color = G5,
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp, vertical = 12.dp)
+                            )
+                        }
+
+                        items(uiState.comments, key = { it.commentId }) { comment ->
+                            DailyCertifyCommentItem(
+                                comment = comment,
+                                onEditClick = { onCommentEditRequest(comment) },
+                                onDeleteClick = { /* TODO */ }
+                            )
+                        }
+                    }
+                }
             }
 
-            Spacer(Modifier.height(12.dp))
-            MissionInfoSection(
-                missionText = uiState.missionText,
-                missionTime = uiState.missionTime
-            )
-
+            // ✅ 댓글 남기기 UI (Floating UI)
             if (isCertifyConfirmed) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(G1),
-                    contentPadding = PaddingValues(vertical = 8.dp)
-                ) {
-                    item {
-                        Text(
-                            text = "댓글 ${uiState.comments.size}",
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 18.sp,
-                            color = G5,
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 12.dp)
-                        )
-                    }
+                val shouldShowFloatingCommentButton = isCertifyConfirmed && isFloatingVisible
+                // IDE에서 always true로 추론하는 건 Preview 상의 오해임 – 런타임에는 유동적
 
-                    items(uiState.comments, key = { it.commentId }) { comment ->
-                        DailyCertifyCommentItem(
-                            comment = comment,
-                            onEditClick = { onCommentEditRequest(comment) },
-                            onDeleteClick = { /* TODO: 삭제 핸들러 추가 */ }
+                AnimatedVisibility(
+                    visible = shouldShowFloatingCommentButton,
+                    enter = fadeIn(tween(500)),
+                    exit = fadeOut(tween(500)),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp)
+                ) {
+                    RoundButton(
+                        onClick = onOpenCommentSheet,
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .size(200.dp, 68.dp)
+                    ) {
+                        Text(
+                            text = stringResource(text_float_add_comment),
+                            fontSize = 22.sp
                         )
                     }
                 }
@@ -408,13 +374,9 @@ private fun DailyCertifyScreenPreview_Initial() {
                 certifyStatus = CertifyStatus.BEFORE
             ),
             onBackRequest = {},
-            onCommentSubmit = {},
             onCommentEditRequest = {},
-            onCommentEditComplete = {},
             onCertifyComplete = {},
-            onDismissDialog = {},
-            onOpenCommentSheet = {},
-            onCloseCommentSheet = {}
+            onOpenCommentSheet = {}
         )
     }
 }
@@ -427,20 +389,16 @@ private fun DailyCertifyScreenPreview_Completed_NoComment() {
             uiState = DailyCertifyUiState(
                 missionText = "공원 산책 가서 비둘기 사진 찍기",
                 missionTime = LocalTime.of(14, 30),
-                imageUrl = "",
+                imageUrl = "file:///Users/t2023-m0086/Desktop/%E1%84%8F%E1%85%A1%E1%84%85%E1%85%B5%E1%84%82%E1%85%A1.jpg",
                 comments = emptyList(),
                 editingComment = null,
                 certifyStatus = CertifyStatus.PENDING
 
             ),
             onBackRequest = {},
-            onCommentSubmit = {},
             onCommentEditRequest = {},
-            onCommentEditComplete = {},
             onCertifyComplete = {},
-            onDismissDialog = {},
-            onOpenCommentSheet = {},
-            onCloseCommentSheet = {}
+            onOpenCommentSheet = {}
         )
     }
 }
@@ -453,7 +411,7 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
             uiState = DailyCertifyUiState(
                 missionText = "공원 산책 가서 비둘기 사진 찍기",
                 missionTime = LocalTime.of(14, 30),
-                imageUrl = "",
+                imageUrl = "file:///Users/t2023-m0086/Desktop/%E1%84%8F%E1%85%A1%E1%84%85%E1%85%B5%E1%84%82%E1%85%A1.jpg",
                 comments = listOf(
                     DailyComment("1", "순대 조던", "유정상", "비둘기 너무 귀여워요"),
                     DailyComment("2", "김소라", "씹희", "부산 날씨 완전 봄이야")
@@ -463,13 +421,9 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
 
             ),
             onBackRequest = {},
-            onCommentSubmit = {},
             onCommentEditRequest = {},
-            onCommentEditComplete = {},
             onCertifyComplete = {},
-            onDismissDialog = {},
-            onOpenCommentSheet = {},
-            onCloseCommentSheet = {}
+            onOpenCommentSheet = {}
         )
     }
 }
