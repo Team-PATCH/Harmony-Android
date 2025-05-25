@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,7 +57,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.TextStyle
-import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 
@@ -68,6 +68,21 @@ internal fun DailyEditRoute(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.dailyEditUiState
+
+    val timePickerLauncher = rememberUpdatedState {
+        val now = LocalTime.now()
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                val selectedTime = LocalTime.of(hour, minute)
+                viewModel.changeSelectedTime(selectedTime)
+                viewModel.onTimeSelected(LocalDateTime.of(LocalDate.now(), selectedTime))
+            },
+            now.hour,
+            now.minute,
+            true
+        ).show()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.event.collect {
@@ -89,7 +104,8 @@ internal fun DailyEditRoute(
             selectedDays = uiState.selectedDays,
             onDaySelected = { viewModel.toggleSelectedDay(it) },
             selectedTime = uiState.selectedTime,
-            onTimeSelected = { viewModel.changeSelectedTime(it) }
+            onTimePickRequest = { timePickerLauncher.value() } // 👈 NEW
+
         )
     }
 }
@@ -101,7 +117,7 @@ internal fun DailyEditScreen(
     selectedDays: Set<DayOfWeek>,
     onDaySelected: (DayOfWeek) -> Unit,
     selectedTime: LocalTime?,
-    onTimeSelected: (LocalTime) -> Unit,
+    onTimePickRequest: () -> Unit,
 ) {
     val context = LocalContext.current
     val textState = rememberSaveable { mutableStateOf("") }
@@ -190,22 +206,6 @@ internal fun DailyEditScreen(
 
             Text(stringResource(select_time), fontSize = 18.sp)
 
-            val calendar = remember { Calendar.getInstance() }
-            val hour = remember { calendar.get(Calendar.HOUR_OF_DAY) }
-            val minute = remember { calendar.get(Calendar.MINUTE) }
-
-            val timePickerDialog = remember {
-                TimePickerDialog(
-                    context,
-                    { _, selectedHour, selectedMinute ->
-                        onTimeSelected(LocalTime.of(selectedHour, selectedMinute))
-                    },
-                    hour,
-                    minute,
-                    true
-                )
-            }
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -214,7 +214,7 @@ internal fun DailyEditScreen(
                     .background(WH, RoundedCornerShape(10.dp))
                     .border(1.dp, G2, RoundedCornerShape(10.dp))
                     .padding(horizontal = 20.dp)
-                    .noRippleClickable { timePickerDialog.show() }
+                    .noRippleClickable { onTimePickRequest() }
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_date_memory_card),
@@ -248,7 +248,7 @@ private fun DailyEditScreenPreview() {
                 }
             },
             selectedTime = selectedTime,
-            onTimeSelected = { time -> selectedTime = time }
+            onTimePickRequest = { }
         )
     }
 }

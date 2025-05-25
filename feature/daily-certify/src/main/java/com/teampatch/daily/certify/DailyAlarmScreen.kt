@@ -33,6 +33,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 internal fun DailyAlarmRoute(
+    fromNotification: Boolean,
     onPickImageScreenRequest: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {

@@ -238,7 +238,8 @@ fun MainNavHost(
 
         addDailyCertifyAlarmScreen(
             onPickImageScreenRequest = {},
-            onDismissRequest = { navController.navigateToHomeScreen() }
+            onDismissRequest = { navController.navigateToHomeScreen() },
+            fromNotification = true
         )
 
         addMemoryStorageDetailScreen(

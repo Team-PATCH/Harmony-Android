@@ -20,11 +20,13 @@ fun NavController.navigateToDailyCertifyAlarmScreen(
 fun NavGraphBuilder.addDailyCertifyAlarmScreen(
     onPickImageScreenRequest: () -> Unit,
     onDismissRequest: () -> Unit,
+    fromNotification: Boolean,
 ) {
     composable<DailyCertifyAlarmScreenRoute> {
         DailyAlarmRoute(
             onPickImageScreenRequest = onPickImageScreenRequest,
-            onDismissRequest = onDismissRequest
+            onDismissRequest = onDismissRequest,
+            fromNotification = fromNotification
         )
     }
 }
