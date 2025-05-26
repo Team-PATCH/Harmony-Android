@@ -1,5 +1,6 @@
 package com.teampatch.daily.certify
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
@@ -70,6 +72,26 @@ import java.time.format.DateTimeFormatter
 internal fun DailyCertifyRoute(
     onBackRequest: () -> Unit,
 ) {
+    val viewModel: DailyCertifyViewModel = hiltViewModel()
+    val uiState by viewModel.uiState
+
+    LaunchedEffect(Unit) {
+        Log.d("DEBUG", "DailyCertifyRoute Loaded")
+    }
+
+    DailyCertifyScreen(
+        uiState = uiState,
+        onBackRequest = onBackRequest,
+        onCommentEditRequest = { comment ->
+            viewModel.editComment(comment) // 💡 댓글 수정 요청
+        },
+        onCertifyComplete = {
+            viewModel.completeCertify() // 💡 인증 완료 처리
+        },
+        onOpenCommentSheet = {
+            viewModel.openCommentSheet() // 💡 댓글 작성 바텀시트 열기
+        }
+    )
 }
 
 @Composable

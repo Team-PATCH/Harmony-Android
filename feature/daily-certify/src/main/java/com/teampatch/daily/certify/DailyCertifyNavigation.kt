@@ -30,3 +30,23 @@ fun NavGraphBuilder.addDailyCertifyAlarmScreen(
         )
     }
 }
+
+@Serializable
+data object DailyCertifyScreenRoute
+
+fun NavController.navigateToDailyCertifyScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(DailyCertifyScreenRoute, navOptions, navigatorExtras)
+}
+
+fun NavGraphBuilder.addDailyCertifyScreen(
+    onBackRequest: () -> Unit,
+) {
+    composable<DailyCertifyScreenRoute> {
+        DailyCertifyRoute(
+            onBackRequest = onBackRequest
+        )
+    }
+}

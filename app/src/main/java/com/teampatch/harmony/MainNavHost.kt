@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teampatch.core.common.findActivity
 import com.teampatch.daily.certify.addDailyCertifyAlarmScreen
+import com.teampatch.daily.certify.navigateToDailyCertifyScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
 import com.teampatch.feature.daily.edit.addDailyEditScreen
 import com.teampatch.feature.daily.edit.navigateToDailyEditScreen
@@ -237,7 +238,7 @@ fun MainNavHost(
         )
 
         addDailyCertifyAlarmScreen(
-            onPickImageScreenRequest = {},
+            onPickImageScreenRequest = { navController.navigateToDailyCertifyScreen() },
             onDismissRequest = { navController.navigateToHomeScreen() },
             fromNotification = true
         )
