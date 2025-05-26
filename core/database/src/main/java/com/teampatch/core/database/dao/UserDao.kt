@@ -1,10 +1,10 @@
-package com.harmony.core.database.dao
+package com.teampatch.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.harmony.core.database.model.UserEntity
+import com.teampatch.core.database.model.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

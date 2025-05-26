@@ -1,4 +1,4 @@
-package com.harmony.core.database.converters
+package com.teampatch.core.database.converters
 
 internal abstract class RoomTypeConverter<T> {
     abstract fun fromObjectToJson(value: T): String

@@ -1,4 +1,4 @@
-package com.harmony.core.database.model.preload
+package com.teampatch.core.database.model.preload
 
 import android.content.ContentValues
 import androidx.room.OnConflictStrategy

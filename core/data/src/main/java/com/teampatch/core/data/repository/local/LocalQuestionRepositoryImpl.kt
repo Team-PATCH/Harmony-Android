@@ -1,11 +1,11 @@
 package com.teampatch.core.data.repository.local
 
 import androidx.paging.PagingData
-import com.harmony.core.database.LOCAL_DB_DATE_TIME_FORMATTER
-import com.harmony.core.database.dao.QuestionDao
-import com.harmony.core.database.dao.UserDao
-import com.harmony.core.database.getCurrentTimeLocalDBFormat
-import com.harmony.core.database.model.QuestionCommentEntity
+import com.teampatch.core.database.LOCAL_DB_DATE_TIME_FORMATTER
+import com.teampatch.core.database.dao.QuestionDao
+import com.teampatch.core.database.dao.UserDao
+import com.teampatch.core.database.getCurrentTimeLocalDBFormat
+import com.teampatch.core.database.model.QuestionCommentEntity
 import com.teampatch.core.domain.model.Question
 import com.teampatch.core.domain.model.QuestionComment
 import com.teampatch.core.domain.model.QuestionDetail

@@ -1,12 +1,12 @@
-package com.harmony.core.database.dao
+package com.teampatch.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.harmony.core.database.model.QuestionCommentEntity
-import com.harmony.core.database.model.QuestionEntity
-import com.harmony.core.database.model.multimap.QuestionCommentWithUser
+import com.teampatch.core.database.model.QuestionCommentEntity
+import com.teampatch.core.database.model.QuestionEntity
+import com.teampatch.core.database.model.multimap.QuestionCommentWithUser
 import kotlinx.coroutines.flow.Flow
 
 @Dao

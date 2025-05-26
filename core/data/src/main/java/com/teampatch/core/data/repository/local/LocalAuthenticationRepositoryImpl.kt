@@ -1,7 +1,7 @@
 package com.teampatch.core.data.repository.local
 
 import com.teampatch.core.authentication.kakao.KakaoLoginService
-import com.harmony.core.database.dao.UserDao
+import com.teampatch.core.database.dao.UserDao
 import com.teampatch.core.domain.entity.SocialLoginHelper
 import com.teampatch.core.domain.entity.TokenManager
 import com.teampatch.core.domain.model.LoginResult

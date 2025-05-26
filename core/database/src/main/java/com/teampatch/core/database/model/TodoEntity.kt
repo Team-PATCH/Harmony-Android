@@ -1,4 +1,4 @@
-package com.harmony.core.database.model
+package com.teampatch.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

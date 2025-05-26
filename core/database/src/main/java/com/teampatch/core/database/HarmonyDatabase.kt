@@ -1,20 +1,20 @@
-package com.harmony.core.database
+package com.teampatch.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.harmony.core.database.converters.SetStringTypeTypeConverter
-import com.harmony.core.database.dao.GroupDao
-import com.harmony.core.database.dao.MemoryCardDao
-import com.harmony.core.database.dao.QuestionDao
-import com.harmony.core.database.dao.TodoDao
-import com.harmony.core.database.dao.UserDao
-import com.harmony.core.database.model.GroupEntity
-import com.harmony.core.database.model.MemoryCardEntity
-import com.harmony.core.database.model.QuestionCommentEntity
-import com.harmony.core.database.model.QuestionEntity
-import com.harmony.core.database.model.TodoEntity
-import com.harmony.core.database.model.UserEntity
+import com.teampatch.core.database.converters.SetStringTypeTypeConverter
+import com.teampatch.core.database.dao.GroupDao
+import com.teampatch.core.database.dao.MemoryCardDao
+import com.teampatch.core.database.dao.QuestionDao
+import com.teampatch.core.database.dao.TodoDao
+import com.teampatch.core.database.dao.UserDao
+import com.teampatch.core.database.model.GroupEntity
+import com.teampatch.core.database.model.MemoryCardEntity
+import com.teampatch.core.database.model.QuestionCommentEntity
+import com.teampatch.core.database.model.QuestionEntity
+import com.teampatch.core.database.model.TodoEntity
+import com.teampatch.core.database.model.UserEntity
 
 @Database(
     entities = [

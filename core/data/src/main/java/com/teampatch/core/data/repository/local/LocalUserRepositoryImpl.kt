@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
-import com.harmony.core.database.dao.UserDao
-import com.harmony.core.database.model.UserEntity
+import com.teampatch.core.database.dao.UserDao
+import com.teampatch.core.database.model.UserEntity
 import com.teampatch.core.data.di.annotation.DispatchersContext
 import com.teampatch.core.data.di.annotation.HarmonyDispatcher
 import com.teampatch.core.data.mapper.MEMBER

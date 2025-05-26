@@ -1,4 +1,4 @@
-package com.harmony.core.database.converters
+package com.teampatch.core.database.converters
 
 import androidx.room.TypeConverter
 import com.squareup.moshi.JsonAdapter

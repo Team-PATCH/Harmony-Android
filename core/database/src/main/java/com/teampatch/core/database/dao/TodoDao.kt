@@ -1,4 +1,4 @@
-package com.harmony.core.database.dao
+package com.teampatch.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.harmony.core.database.model.TodoEntity
+import com.teampatch.core.database.model.TodoEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

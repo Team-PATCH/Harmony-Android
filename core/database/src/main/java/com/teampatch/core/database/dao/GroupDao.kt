@@ -1,10 +1,10 @@
-package com.harmony.core.database.dao
+package com.teampatch.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.harmony.core.database.model.GroupEntity
+import com.teampatch.core.database.model.GroupEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
