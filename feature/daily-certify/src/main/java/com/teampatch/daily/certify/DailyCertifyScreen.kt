@@ -1,12 +1,16 @@
 package com.teampatch.daily.certify
 
-import android.util.Log
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.teampatch.core.designsystem.R.drawable.ic_camera_profile
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.R.drawable.ic_my_appbar
 import com.teampatch.core.designsystem.R.drawable.img_upload_cert
@@ -71,26 +77,58 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun DailyCertifyRoute(
     onBackRequest: () -> Unit,
+    onCommentEditRequest: (DailyComment?) -> Unit,
+    onCertifyComplete: () -> Unit,
+    onOpenCommentSheet: () -> Unit,
+    onNavigateToDetail: () -> Unit, // ✅ 추가: 인증 완료 시 이동할 상세 화면
 ) {
+    val context = LocalContext.current
     val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
 
-    LaunchedEffect(Unit) {
-        Log.d("DEBUG", "DailyCertifyRoute Loaded")
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let {
+                viewModel.updateImage(it.toString())
+            }
+        }
+    )
+
+    LaunchedEffect(uiState.certifyStatus) {
+        if (uiState.certifyStatus == CertifyStatus.CONFIRMED) {
+            onNavigateToDetail() // ✅ 상태 변경 시 자동 이동
+        }
     }
 
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
-        onCommentEditRequest = { comment ->
-            viewModel.editComment(comment) // 💡 댓글 수정 요청
-        },
-        onCertifyComplete = {
-            viewModel.completeCertify() // 💡 인증 완료 처리
-        },
-        onOpenCommentSheet = {
-            viewModel.openCommentSheet() // 💡 댓글 작성 바텀시트 열기
+        onCommentEditRequest = onCommentEditRequest,
+        onCertifyComplete = onCertifyComplete,
+        onOpenCommentSheet = onOpenCommentSheet,
+        onImagePickRequest = {
+            launcher.launch("image/*")
         }
+    )
+}
+
+@Composable
+fun DailyCertifyDetailRoute(
+    onBackRequest: () -> Unit,
+    onCommentEditRequest: (DailyComment?) -> Unit,
+    onOpenCommentSheet: () -> Unit,
+) {
+    val viewModel: DailyCertifyViewModel = hiltViewModel()
+    val uiState by viewModel.uiState
+
+    DailyCertifyScreen(
+        uiState = uiState,
+        onBackRequest = onBackRequest,
+        onCommentEditRequest = onCommentEditRequest,
+        onCertifyComplete = {}, // 완료 상태이므로 버튼 없음
+        onOpenCommentSheet = onOpenCommentSheet,
+        onImagePickRequest = { }
     )
 }
 
@@ -102,6 +140,7 @@ internal fun DailyCertifyScreen(
     onCommentEditRequest: (DailyComment?) -> Unit,
     onCertifyComplete: () -> Unit,
     onOpenCommentSheet: () -> Unit,
+    onImagePickRequest: () -> Unit, // ✅ 추가
 ) {
     val commentEditSheetState = rememberModalBottomSheetState()
     val commentWriteSheetState = rememberModalBottomSheetState()
@@ -178,8 +217,14 @@ internal fun DailyCertifyScreen(
                     .fillMaxSize()
                     .background(color = WH)
             ) {
-                uiState.imageUrl?.let {
-                    CertifyImage(imageUrl = it)
+                when {
+                    uiState.imageUrl?.isNotBlank() == true -> {
+                        CertifyImage(imageUrl = uiState.imageUrl)
+                    }
+
+                    else -> {
+                        CertifyImagePlaceholder(onClick = onImagePickRequest)
+                    }
                 }
 
                 Spacer(Modifier.height(12.dp))
@@ -285,6 +330,37 @@ private fun MissionInfoSection(
     }
 }
 
+@Composable
+fun CertifyImagePlaceholder(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(240.dp)
+            .background(G1)
+            .clickable(onClick = onClick),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(ic_camera_profile),
+            contentDescription = null,
+            tint = MainGreen,
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = "이곳을 눌러 사진을 남겨보세요!",
+            color = MainGreen,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+// preview용
 @Composable
 fun CertifyImage(imageUrl: String?) {
     val isPreview = LocalInspectionMode.current
@@ -398,7 +474,8 @@ private fun DailyCertifyScreenPreview_Initial() {
             onBackRequest = {},
             onCommentEditRequest = {},
             onCertifyComplete = {},
-            onOpenCommentSheet = {}
+            onOpenCommentSheet = {},
+            onImagePickRequest = {}
         )
     }
 }
@@ -420,7 +497,9 @@ private fun DailyCertifyScreenPreview_Completed_NoComment() {
             onBackRequest = {},
             onCommentEditRequest = {},
             onCertifyComplete = {},
-            onOpenCommentSheet = {}
+            onOpenCommentSheet = {},
+            onImagePickRequest = {}
+
         )
     }
 }
@@ -445,7 +524,8 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
             onBackRequest = {},
             onCommentEditRequest = {},
             onCertifyComplete = {},
-            onOpenCommentSheet = {}
+            onOpenCommentSheet = {},
+            onImagePickRequest = {}
         )
     }
 }

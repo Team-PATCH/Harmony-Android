@@ -3,6 +3,7 @@ package com.teampatch.daily.certify
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,9 +36,25 @@ class EditCertifyActivity : ComponentActivity() {
                     }
 
                     // Type-safe composable 추가
-                    addDailyCertifyScreen(
-                        onBackRequest = { navController.popBackStack() }
-                    )
+                    composable<DailyCertifyScreenRoute> {
+                        val viewModel: DailyCertifyViewModel = hiltViewModel()
+
+                        DailyCertifyRoute(
+                            onBackRequest = { navController.popBackStack() },
+                            onCommentEditRequest = { comment ->
+                                viewModel.editComment(comment) // ✅ 바텀시트 열기
+                            },
+                            onCertifyComplete = {
+                                viewModel.completeCertify() // ✅ 인증 완료 처리
+                            },
+                            onOpenCommentSheet = {
+                                viewModel.openCommentSheet() // ✅ 댓글 작성 시트 열기
+                            },
+                            onNavigateToDetail = {
+                                navController.navigate(DailyCertifyDetailScreenRoute) // ✅ 상세화면 이동
+                            }
+                        )
+                    }
                 }
             }
         }

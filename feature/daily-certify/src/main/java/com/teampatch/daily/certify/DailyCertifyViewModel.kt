@@ -13,7 +13,8 @@ internal class DailyCertifyViewModel @Inject constructor() : ViewModel() {
     private val _uiState = mutableStateOf(
         DailyCertifyUiState(
             missionText = "오늘의 인증 미션",
-            missionTime = LocalTime.of(14, 0), // 예시 시간
+            missionTime = LocalTime.of(14, 0), // 예시 시간,
+            imageUrl = null, // ✅ 중요
             certifyStatus = CertifyStatus.PENDING,
             comments = listOf(
                 DailyComment("1", "소금형", "씹직", "고양이 귀엽네"),
@@ -43,5 +44,9 @@ internal class DailyCertifyViewModel @Inject constructor() : ViewModel() {
 
     fun onDismiss() {
         // TODO: 인증 완료 종료 시 처리할 것
+    }
+
+    fun updateImage(uri: String) {
+        _uiState.value = _uiState.value.copy(imageUrl = uri)
     }
 }
