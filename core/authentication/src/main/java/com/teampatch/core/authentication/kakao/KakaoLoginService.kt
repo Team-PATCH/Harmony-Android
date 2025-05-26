@@ -1,9 +1,9 @@
-package com.agvber.core.authentication.kakao
+package com.teampatch.core.authentication.kakao
 
 import android.content.Context
 import android.content.Intent
-import com.agvber.core.authentication.SocialLoginService
-import com.agvber.core.authentication.model.Token
+import com.teampatch.core.authentication.SocialLoginService
+import com.teampatch.core.authentication.model.Token
 import com.teampatch.core.common.getCustomParcelableExtra
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

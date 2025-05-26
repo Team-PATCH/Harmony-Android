@@ -1,4 +1,4 @@
-package com.agvber.core.authentication.model
+package com.teampatch.core.authentication.model
 
 import android.os.Parcelable
 import java.util.Date

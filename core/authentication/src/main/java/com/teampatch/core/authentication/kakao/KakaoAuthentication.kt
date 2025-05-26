@@ -1,4 +1,4 @@
-package com.agvber.core.authentication.kakao
+package com.teampatch.core.authentication.kakao
 
 import android.content.Context
 import android.content.Intent
@@ -7,7 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import com.agvber.core.authentication.model.Token
+import com.teampatch.core.authentication.model.Token
 import com.teampatch.core.common.getCustomParcelableExtra
 
 /**
