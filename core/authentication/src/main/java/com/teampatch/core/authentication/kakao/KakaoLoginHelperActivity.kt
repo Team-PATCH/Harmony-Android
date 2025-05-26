@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.teampatch.core.authentication.model.Token
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
+import com.teampatch.core.authentication.model.Token
 
 internal class KakaoLoginHelperActivity : Activity() {
 
