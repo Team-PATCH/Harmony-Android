@@ -41,18 +41,19 @@ class EditCertifyActivity : ComponentActivity() {
 
                         DailyCertifyRoute(
                             onBackRequest = { navController.popBackStack() },
-                            onCommentEditRequest = { comment ->
-                                viewModel.editComment(comment) // ✅ 바텀시트 열기
-                            },
-                            onCertifyComplete = {
+                            onCertifyCompleteRequest = {
                                 viewModel.completeCertify() // ✅ 인증 완료 처리
                             },
-                            onOpenCommentSheet = {
-                                viewModel.openCommentSheet() // ✅ 댓글 작성 시트 열기
-                            },
-                            onNavigateToDetail = {
+                            onNavigateToDetailRequest = {
                                 navController.navigate(DailyCertifyDetailScreenRoute) // ✅ 상세화면 이동
                             }
+                        )
+                    }
+
+                    // ✅ 여기에 이거 추가:
+                    composable<DailyCertifyDetailScreenRoute> {
+                        DailyCertifyDetailRoute(
+                            onBackRequest = { navController.popBackStack() }
                         )
                     }
                 }

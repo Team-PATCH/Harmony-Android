@@ -43,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,12 +76,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun DailyCertifyRoute(
     onBackRequest: () -> Unit,
-    onCommentEditRequest: (DailyComment?) -> Unit,
-    onCertifyComplete: () -> Unit,
-    onOpenCommentSheet: () -> Unit,
-    onNavigateToDetail: () -> Unit, // ✅ 추가: 인증 완료 시 이동할 상세 화면
+    onCertifyCompleteRequest: () -> Unit,
+    onNavigateToDetailRequest: () -> Unit, // ✅ 추가: 인증 완료 시 이동할 상세 화면
 ) {
-    val context = LocalContext.current
     val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
 
@@ -97,16 +93,16 @@ internal fun DailyCertifyRoute(
 
     LaunchedEffect(uiState.certifyStatus) {
         if (uiState.certifyStatus == CertifyStatus.CONFIRMED) {
-            onNavigateToDetail() // ✅ 상태 변경 시 자동 이동
+            onNavigateToDetailRequest() // ✅ 상태 변경 시 자동 이동
         }
     }
 
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
-        onCommentEditRequest = onCommentEditRequest,
-        onCertifyComplete = onCertifyComplete,
-        onOpenCommentSheet = onOpenCommentSheet,
+        onCommentEditRequest = { },
+        onCertifyCompleteRequest = onCertifyCompleteRequest,
+        onOpenCommentSheet = { },
         onImagePickRequest = {
             launcher.launch("image/*")
         }
@@ -116,8 +112,6 @@ internal fun DailyCertifyRoute(
 @Composable
 fun DailyCertifyDetailRoute(
     onBackRequest: () -> Unit,
-    onCommentEditRequest: (DailyComment?) -> Unit,
-    onOpenCommentSheet: () -> Unit,
 ) {
     val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
@@ -125,9 +119,9 @@ fun DailyCertifyDetailRoute(
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
-        onCommentEditRequest = onCommentEditRequest,
-        onCertifyComplete = {}, // 완료 상태이므로 버튼 없음
-        onOpenCommentSheet = onOpenCommentSheet,
+        onCommentEditRequest = { viewModel.completeCertify() },
+        onCertifyCompleteRequest = {}, // 완료 상태이므로 버튼 없음
+        onOpenCommentSheet = { viewModel.openCommentSheet() },
         onImagePickRequest = { }
     )
 }
@@ -138,7 +132,7 @@ internal fun DailyCertifyScreen(
     uiState: DailyCertifyUiState,
     onBackRequest: () -> Unit,
     onCommentEditRequest: (DailyComment?) -> Unit,
-    onCertifyComplete: () -> Unit,
+    onCertifyCompleteRequest: () -> Unit,
     onOpenCommentSheet: () -> Unit,
     onImagePickRequest: () -> Unit, // ✅ 추가
 ) {
@@ -194,7 +188,7 @@ internal fun DailyCertifyScreen(
 
                 uiState.certifyStatus == CertifyStatus.PENDING -> {
                     DefaultButton(
-                        onClick = onCertifyComplete,
+                        onClick = onCertifyCompleteRequest,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp)
@@ -473,7 +467,7 @@ private fun DailyCertifyScreenPreview_Initial() {
             ),
             onBackRequest = {},
             onCommentEditRequest = {},
-            onCertifyComplete = {},
+            onCertifyCompleteRequest = {},
             onOpenCommentSheet = {},
             onImagePickRequest = {}
         )
@@ -496,7 +490,7 @@ private fun DailyCertifyScreenPreview_Completed_NoComment() {
             ),
             onBackRequest = {},
             onCommentEditRequest = {},
-            onCertifyComplete = {},
+            onCertifyCompleteRequest = {},
             onOpenCommentSheet = {},
             onImagePickRequest = {}
 
@@ -523,7 +517,7 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
             ),
             onBackRequest = {},
             onCommentEditRequest = {},
-            onCertifyComplete = {},
+            onCertifyCompleteRequest = {},
             onOpenCommentSheet = {},
             onImagePickRequest = {}
         )

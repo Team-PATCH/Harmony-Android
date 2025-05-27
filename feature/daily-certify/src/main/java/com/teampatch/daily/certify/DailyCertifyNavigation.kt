@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
-import com.teampatch.core.domain.model.DailyComment
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -44,18 +43,14 @@ fun NavController.navigateToDailyCertifyScreen(
 
 fun NavGraphBuilder.addDailyCertifyScreen(
     onBackRequest: () -> Unit,
-    onCommentEditRequest: (DailyComment?) -> Unit,
-    onCertifyComplete: () -> Unit,
-    onOpenCommentSheet: () -> Unit,
-    onNavigateToDetail: () -> Unit,
+    onCertifyCompleteRequest: () -> Unit,
+    onNavigateToDetailRequest: () -> Unit,
 ) {
     composable<DailyCertifyScreenRoute> {
         DailyCertifyRoute(
             onBackRequest = onBackRequest,
-            onCommentEditRequest = onCommentEditRequest,
-            onCertifyComplete = onCertifyComplete,
-            onOpenCommentSheet = onOpenCommentSheet,
-            onNavigateToDetail = onNavigateToDetail
+            onCertifyCompleteRequest = onCertifyCompleteRequest,
+            onNavigateToDetailRequest = onNavigateToDetailRequest
         )
     }
 }
@@ -63,16 +58,19 @@ fun NavGraphBuilder.addDailyCertifyScreen(
 @Serializable
 data object DailyCertifyDetailScreenRoute
 
+fun NavController.navigateToDailyCertifyDetailScreen(
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null,
+) {
+    navigate(DailyCertifyDetailScreenRoute, navOptions, navigatorExtras)
+}
+
 fun NavGraphBuilder.addDailyCertifyDetailScreen(
     onBackRequest: () -> Unit,
-    onCommentEditRequest: (DailyComment?) -> Unit,
-    onOpenCommentSheet: () -> Unit,
 ) {
     composable<DailyCertifyDetailScreenRoute> {
         DailyCertifyDetailRoute(
-            onBackRequest = onBackRequest,
-            onCommentEditRequest = onCommentEditRequest,
-            onOpenCommentSheet = onOpenCommentSheet
+            onBackRequest = onBackRequest
         )
     }
 }
