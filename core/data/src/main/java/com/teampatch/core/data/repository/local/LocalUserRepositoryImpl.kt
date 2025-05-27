@@ -4,14 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
-import com.harmony.core.database.dao.UserDao
-import com.harmony.core.database.model.UserEntity
 import com.teampatch.core.data.di.annotation.DispatchersContext
 import com.teampatch.core.data.di.annotation.HarmonyDispatcher
 import com.teampatch.core.data.mapper.MEMBER
 import com.teampatch.core.data.mapper.VIP
 import com.teampatch.core.data.mapper.toDomain
 import com.teampatch.core.data.utils.getMediaStoreInfo
+import com.teampatch.core.database.dao.UserDao
+import com.teampatch.core.database.model.UserEntity
 import com.teampatch.core.domain.entity.SocialLoginHelper
 import com.teampatch.core.domain.model.Role
 import com.teampatch.core.domain.model.User

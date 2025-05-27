@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.agvber.core.authentication"
+    namespace = "com.teampatch.core.authentication"
 
     buildTypes {
         release {
