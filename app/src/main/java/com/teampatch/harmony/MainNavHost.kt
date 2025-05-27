@@ -10,11 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teampatch.core.common.findActivity
-import com.teampatch.daily.certify.DailyCertifyViewModel
 import com.teampatch.daily.certify.addDailyCertifyAlarmScreen
-import com.teampatch.daily.certify.addDailyCertifyDetailScreen
-import com.teampatch.daily.certify.addDailyCertifyScreen
-import com.teampatch.daily.certify.navigateToDailyCertifyDetailScreen
 import com.teampatch.daily.certify.navigateToDailyCertifyScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
 import com.teampatch.feature.daily.edit.addDailyEditScreen

@@ -3,7 +3,6 @@ package com.teampatch.daily.certify
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,7 +21,6 @@ class EditCertifyActivity : ComponentActivity() {
             HarmonyTheme {
                 val navController = rememberNavController()
                 val viewModel: DailyCertifyViewModel = viewModel() // ✅ Activity 범위에서 생성
-
 
                 NavHost(
                     navController = navController,
