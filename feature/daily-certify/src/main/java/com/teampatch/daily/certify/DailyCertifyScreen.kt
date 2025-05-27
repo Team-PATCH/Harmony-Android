@@ -39,6 +39,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,11 +76,12 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 internal fun DailyCertifyRoute(
+    viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,
     onCertifyCompleteRequest: () -> Unit,
     onNavigateToDetailRequest: () -> Unit, // ✅ 추가: 인증 완료 시 이동할 상세 화면
 ) {
-    val viewModel: DailyCertifyViewModel = hiltViewModel()
+//    val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
 
     val launcher = rememberLauncherForActivityResult(
@@ -91,38 +93,40 @@ internal fun DailyCertifyRoute(
         }
     )
 
+    val hasNavigated = rememberSaveable { mutableStateOf(false) }
+
     LaunchedEffect(uiState.certifyStatus) {
-        if (uiState.certifyStatus == CertifyStatus.CONFIRMED) {
-            onNavigateToDetailRequest() // ✅ 상태 변경 시 자동 이동
+        if (uiState.certifyStatus == CertifyStatus.CONFIRMED && !hasNavigated.value) {
+            hasNavigated.value = true
+            onNavigateToDetailRequest()
         }
     }
 
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
-        onCommentEditRequest = { },
+        onCommentEditRequest = { viewModel.editComment(it) },
         onCertifyCompleteRequest = onCertifyCompleteRequest,
-        onOpenCommentSheet = { },
-        onImagePickRequest = {
-            launcher.launch("image/*")
-        }
+        onOpenCommentSheet = { viewModel.openCommentSheet() },
+        onImagePickRequest = { launcher.launch("image/*") }
     )
 }
 
 @Composable
 fun DailyCertifyDetailRoute(
+    viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,
 ) {
-    val viewModel: DailyCertifyViewModel = hiltViewModel()
+//    val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
 
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
-        onCommentEditRequest = { viewModel.completeCertify() },
-        onCertifyCompleteRequest = {}, // 완료 상태이므로 버튼 없음
+        onCommentEditRequest = { viewModel.editComment(it) },
+        onCertifyCompleteRequest = {}, // ✅ 완료 버튼 제거
         onOpenCommentSheet = { viewModel.openCommentSheet() },
-        onImagePickRequest = { }
+        onImagePickRequest = { } // ✅ 이미지 수정 불가
     )
 }
 
@@ -176,7 +180,7 @@ internal fun DailyCertifyScreen(
             when {
                 !isImageUploaded -> {
                     DefaultButton(
-                        onClick = {},
+                        onClick = onCertifyCompleteRequest,
                         enabled = false,
                         modifier = Modifier
                             .fillMaxWidth()

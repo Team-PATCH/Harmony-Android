@@ -42,12 +42,14 @@ fun NavController.navigateToDailyCertifyScreen(
 }
 
 fun NavGraphBuilder.addDailyCertifyScreen(
+    viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,
     onCertifyCompleteRequest: () -> Unit,
     onNavigateToDetailRequest: () -> Unit,
 ) {
     composable<DailyCertifyScreenRoute> {
         DailyCertifyRoute(
+            viewModel = viewModel,
             onBackRequest = onBackRequest,
             onCertifyCompleteRequest = onCertifyCompleteRequest,
             onNavigateToDetailRequest = onNavigateToDetailRequest
@@ -66,10 +68,12 @@ fun NavController.navigateToDailyCertifyDetailScreen(
 }
 
 fun NavGraphBuilder.addDailyCertifyDetailScreen(
+    viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,
 ) {
     composable<DailyCertifyDetailScreenRoute> {
         DailyCertifyDetailRoute(
+            viewModel = viewModel,
             onBackRequest = onBackRequest
         )
     }

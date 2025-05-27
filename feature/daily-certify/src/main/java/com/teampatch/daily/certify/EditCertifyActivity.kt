@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +21,8 @@ class EditCertifyActivity : ComponentActivity() {
         setContent {
             HarmonyTheme {
                 val navController = rememberNavController()
+                val viewModel: DailyCertifyViewModel = viewModel() // ✅ Activity 범위에서 생성
+
 
                 NavHost(
                     navController = navController,
@@ -37,22 +40,19 @@ class EditCertifyActivity : ComponentActivity() {
 
                     // Type-safe composable 추가
                     composable<DailyCertifyScreenRoute> {
-                        val viewModel: DailyCertifyViewModel = hiltViewModel()
-
                         DailyCertifyRoute(
+                            viewModel = viewModel,
                             onBackRequest = { navController.popBackStack() },
-                            onCertifyCompleteRequest = {
-                                viewModel.completeCertify() // ✅ 인증 완료 처리
-                            },
+                            onCertifyCompleteRequest = { viewModel.completeCertify() },
                             onNavigateToDetailRequest = {
-                                navController.navigate(DailyCertifyDetailScreenRoute) // ✅ 상세화면 이동
+                                navController.navigate(DailyCertifyDetailScreenRoute)
                             }
                         )
                     }
 
-                    // ✅ 여기에 이거 추가:
                     composable<DailyCertifyDetailScreenRoute> {
                         DailyCertifyDetailRoute(
+                            viewModel = viewModel,
                             onBackRequest = { navController.popBackStack() }
                         )
                     }

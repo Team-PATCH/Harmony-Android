@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teampatch.core.common.findActivity
+import com.teampatch.daily.certify.DailyCertifyViewModel
 import com.teampatch.daily.certify.addDailyCertifyAlarmScreen
 import com.teampatch.daily.certify.addDailyCertifyDetailScreen
 import com.teampatch.daily.certify.addDailyCertifyScreen
@@ -246,15 +247,16 @@ fun MainNavHost(
             fromNotification = true
         )
 
-        addDailyCertifyScreen(
-            onBackRequest = navController::navigateUp,
-            onCertifyCompleteRequest = { navController.navigateToDailyCertifyDetailScreen() },
-            onNavigateToDetailRequest = { navController.navigateToDailyCertifyDetailScreen() }
-        )
-
-        addDailyCertifyDetailScreen(
-            onBackRequest = navController::navigateUp
-        )
+//        addDailyCertifyScreen(
+//            viewModel = DailyCertifyViewModel(),
+//            onBackRequest = navController::navigateUp,
+//            onCertifyCompleteRequest = { navController.navigateToDailyCertifyDetailScreen() },
+//            onNavigateToDetailRequest = { navController.navigateToDailyCertifyDetailScreen() }
+//        )
+//
+//        addDailyCertifyDetailScreen(
+//            onBackRequest = navController::navigateUp
+//        )
 
         addMemoryStorageDetailScreen(
             onBackRequest = navController::navigateUp,
