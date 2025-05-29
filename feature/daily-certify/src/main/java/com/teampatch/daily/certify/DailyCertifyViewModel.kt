@@ -47,14 +47,16 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
         // TODO: 인증 완료 종료 시 처리할 것
     }
 
-    fun addComment(text: String) {
+    fun addComment(content: String, imageUrl: String?) {
+        val newComment = DailyComment(
+            commentId = UUID.randomUUID().toString(),
+            writerName = "작성자",
+            writerUid = "",
+            content = content,
+            imageUrl = imageUrl
+        )
         _uiState.value = _uiState.value.copy(
-            comments = _uiState.value.comments + DailyComment(
-                commentId = UUID.randomUUID().toString(),
-                writerUid = "",
-                writerName = "유저이름",
-                content = text
-            ),
+            comments = _uiState.value.comments + newComment,
             showCommentSheet = false
         )
     }

@@ -111,7 +111,8 @@ internal fun DailyCertifyRoute(
         onImagePickRequest = { launcher.launch("image/*") },
         onCommentWrite = {},
         onCommentEditSubmit = { _, _ -> },
-        onBottomSheetDismiss = {}
+        onBottomSheetDismiss = {},
+        commentImageUri = null
     )
 }
 
@@ -123,18 +124,34 @@ fun DailyCertifyDetailRoute(
 ) {
     val uiState by viewModel.uiState
 
+    val commentImageUri = remember { mutableStateOf<String?>(null) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let {
+                commentImageUri.value = it.toString()
+            }
+        }
+    )
+
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
         onCommentEditRequest = { viewModel.editComment(it) },
         onCertifyCompleteRequest = {}, // ✅ 완료 버튼 제거
-        onOpenCommentSheet = { viewModel.openCommentSheet() },
-        onImagePickRequest = { }, // ✅ 이미지 수정 불가
-
-        // ✅ 추가
-        onCommentWrite = { viewModel.addComment(it) },
+        onOpenCommentSheet = {
+            commentImageUri.value = null
+            viewModel.openCommentSheet()
+        },
+        onImagePickRequest = { launcher.launch("image/*") },
+        onCommentWrite = { text -> viewModel.addComment(text, commentImageUri.value) },
         onCommentEditSubmit = { id, content -> viewModel.updateComment(id, content) },
-        onBottomSheetDismiss = { viewModel.closeCommentSheet() }
+        onBottomSheetDismiss = {
+            viewModel.closeCommentSheet()
+            commentImageUri.value = null
+        },
+        commentImageUri = commentImageUri.value
     )
 }
 
@@ -150,6 +167,7 @@ internal fun DailyCertifyScreen(
     onCommentWrite: (String) -> Unit, // ✅
     onCommentEditSubmit: (String, String) -> Unit, // ✅ (commentId, content)
     onBottomSheetDismiss: () -> Unit, // ✅
+    commentImageUri: String?, // ✅ 댓글 작성용 임시 이미지 상태
 ) {
     val commentEditSheetState = rememberModalBottomSheetState()
     val commentWriteSheetState = rememberModalBottomSheetState()
@@ -287,8 +305,8 @@ internal fun DailyCertifyScreen(
                             onCommentWrite(text)
                             onBottomSheetDismiss()
                         },
-                        onImagePick = onImagePickRequest,       // ✅ 포토피커 트리거
-                        imageUrl = uiState.imageUrl             // ✅ 현재 이미지
+                        onImagePick = onImagePickRequest, // ✅ 포토피커 트리거
+                        imageUrl = commentImageUri
                     )
                 }
             }
@@ -593,7 +611,8 @@ private fun DailyCertifyScreenPreview_Initial() {
             onImagePickRequest = {},
             onCommentWrite = {},
             onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
-            onBottomSheetDismiss = {} // ✅
+            onBottomSheetDismiss = {},
+            commentImageUri = null
         )
     }
 }
@@ -619,7 +638,8 @@ private fun DailyCertifyScreenPreview_Completed_NoComment() {
             onImagePickRequest = {},
             onCommentWrite = {},
             onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
-            onBottomSheetDismiss = {} // ✅
+            onBottomSheetDismiss = {},
+            commentImageUri = null
         )
     }
 }
@@ -648,7 +668,8 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
             onImagePickRequest = {},
             onCommentWrite = {},
             onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
-            onBottomSheetDismiss = {} // ✅
+            onBottomSheetDismiss = {},
+            commentImageUri = null
         )
     }
 }
