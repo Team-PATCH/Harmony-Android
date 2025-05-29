@@ -1,7 +1,6 @@
 package com.teampatch.daily.certify
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -109,7 +108,10 @@ internal fun DailyCertifyRoute(
         onCommentEditRequest = { viewModel.editComment(it) },
         onCertifyCompleteRequest = onCertifyCompleteRequest,
         onOpenCommentSheet = { viewModel.openCommentSheet() },
-        onImagePickRequest = { launcher.launch("image/*") }
+        onImagePickRequest = { launcher.launch("image/*") },
+        onCommentWrite = {},
+        onCommentEditSubmit = { _, _ -> },
+        onBottomSheetDismiss = {}
     )
 }
 
@@ -121,28 +123,23 @@ fun DailyCertifyDetailRoute(
 ) {
     val uiState by viewModel.uiState
 
-    val commentWriteSheetState = rememberModalBottomSheetState()
-
-    LaunchedEffect(uiState.showCommentSheet) {
-        if (uiState.showCommentSheet) {
-            commentWriteSheetState.show()
-        } else {
-            commentWriteSheetState.hide()
-        }
-    }
-
     DailyCertifyScreen(
         uiState = uiState,
         onBackRequest = onBackRequest,
         onCommentEditRequest = { viewModel.editComment(it) },
         onCertifyCompleteRequest = {}, // ✅ 완료 버튼 제거
         onOpenCommentSheet = { viewModel.openCommentSheet() },
-        onImagePickRequest = { } // ✅ 이미지 수정 불가
+        onImagePickRequest = { }, // ✅ 이미지 수정 불가
+
+        // ✅ 추가
+        onCommentWrite = { viewModel.addComment(it) },
+        onCommentEditSubmit = { id, content -> viewModel.updateComment(id, content) },
+        onBottomSheetDismiss = { viewModel.closeCommentSheet() }
     )
 }
 
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
 internal fun DailyCertifyScreen(
     uiState: DailyCertifyUiState,
     onBackRequest: () -> Unit,
@@ -150,6 +147,9 @@ internal fun DailyCertifyScreen(
     onCertifyCompleteRequest: () -> Unit,
     onOpenCommentSheet: () -> Unit,
     onImagePickRequest: () -> Unit, // ✅ 추가
+    onCommentWrite: (String) -> Unit, // ✅
+    onCommentEditSubmit: (String, String) -> Unit, // ✅ (commentId, content)
+    onBottomSheetDismiss: () -> Unit, // ✅
 ) {
     val commentEditSheetState = rememberModalBottomSheetState()
     val commentWriteSheetState = rememberModalBottomSheetState()
@@ -162,20 +162,16 @@ internal fun DailyCertifyScreen(
         }
     }
 
-    LaunchedEffect(uiState.editingComment) {
-        Log.d("DEBUG", "Editing comment: ${uiState.editingComment}")
-        if (uiState.editingComment != null) {
-            commentEditSheetState.show()
-        } else {
-            commentEditSheetState.hide()
+    LaunchedEffect(commentWriteSheetState.isVisible) {
+        if (!commentWriteSheetState.isVisible && uiState.showCommentSheet) {
+            // 사용자가 dismiss해서 꺼졌지만 상태는 true인 경우 → 상태도 false로 정리
+            onBottomSheetDismiss()
         }
     }
 
-    LaunchedEffect(uiState.showCommentSheet) {
-        if (uiState.showCommentSheet) {
-            commentWriteSheetState.show()
-        } else {
-            commentWriteSheetState.hide()
+    LaunchedEffect(commentEditSheetState.isVisible) {
+        if (!commentEditSheetState.isVisible && uiState.editingComment != null) {
+            onBottomSheetDismiss()
         }
     }
 
@@ -289,10 +285,10 @@ internal fun DailyCertifyScreen(
                 ) {
                     CommentWriteSheetContent(
                         onSubmit = { text ->
-                            // TODO: ViewModel에 댓글 추가 메서드 연결
-                            // viewModel.addComment(...)
+                            onCommentWrite(text)
+                            onBottomSheetDismiss()
                         },
-                        onDismiss = { onCommentEditRequest(null) }
+                        onDismiss = { onBottomSheetDismiss() }
                     )
                 }
             }
@@ -308,11 +304,10 @@ internal fun DailyCertifyScreen(
                     CommentEditSheetContent(
                         initialText = editingComment.content,
                         onSubmit = { updatedText ->
-                            // TODO: ViewModel에 댓글 수정 메서드 연결
-                            // viewModel.updateComment(editingComment.commentId, updatedText)
-                            onCommentEditRequest(null)
+                            onCommentEditSubmit(editingComment.commentId, updatedText)
+                            onBottomSheetDismiss()
                         },
-                        onDismiss = { onCommentEditRequest(null) }
+                        onDismiss = { onBottomSheetDismiss() }
                     )
                 }
             }
@@ -587,7 +582,10 @@ private fun DailyCertifyScreenPreview_Initial() {
             onCommentEditRequest = {},
             onCertifyCompleteRequest = {},
             onOpenCommentSheet = {},
-            onImagePickRequest = {}
+            onImagePickRequest = {},
+            onCommentWrite = {},
+            onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
+            onBottomSheetDismiss = {} // ✅
         )
     }
 }
@@ -610,8 +608,10 @@ private fun DailyCertifyScreenPreview_Completed_NoComment() {
             onCommentEditRequest = {},
             onCertifyCompleteRequest = {},
             onOpenCommentSheet = {},
-            onImagePickRequest = {}
-
+            onImagePickRequest = {},
+            onCommentWrite = {},
+            onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
+            onBottomSheetDismiss = {} // ✅
         )
     }
 }
@@ -637,7 +637,10 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
             onCommentEditRequest = {},
             onCertifyCompleteRequest = {},
             onOpenCommentSheet = {},
-            onImagePickRequest = {}
+            onImagePickRequest = {},
+            onCommentWrite = {},
+            onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
+            onBottomSheetDismiss = {} // ✅
         )
     }
 }

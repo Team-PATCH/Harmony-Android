@@ -1,5 +1,6 @@
 package com.teampatch.daily.certify
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -67,6 +68,7 @@ fun NavController.navigateToDailyCertifyDetailScreen(
     navigate(DailyCertifyDetailScreenRoute, navOptions, navigatorExtras)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.addDailyCertifyDetailScreen(
     viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,

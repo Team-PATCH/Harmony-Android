@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.teampatch.core.domain.model.DailyComment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalTime
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,10 +47,31 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
         // TODO: 인증 완료 종료 시 처리할 것
     }
 
-    fun addComment(comment: DailyComment) {
+    fun addComment(text: String) {
         _uiState.value = _uiState.value.copy(
-            comments = _uiState.value.comments + comment,
+            comments = _uiState.value.comments + DailyComment(
+                commentId = UUID.randomUUID().toString(),
+                writerUid = "",
+                writerName = "유저이름",
+                content = text
+            ),
             showCommentSheet = false
+        )
+    }
+
+    fun updateComment(commentId: String, newContent: String) {
+        _uiState.value = _uiState.value.copy(
+            comments = _uiState.value.comments.map {
+                if (it.commentId == commentId) it.copy(content = newContent) else it
+            },
+            editingComment = null
+        )
+    }
+
+    fun closeCommentSheet() {
+        _uiState.value = _uiState.value.copy(
+            showCommentSheet = false,
+            editingComment = null
         )
     }
 
