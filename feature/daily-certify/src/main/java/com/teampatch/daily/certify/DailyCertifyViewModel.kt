@@ -53,7 +53,8 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
             writerName = "작성자",
             writerUid = "",
             content = content,
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
+            profileImageUrl = imageUrl // ✅ 첨부한 이미지를 프로필로도 활용
         )
         _uiState.value = _uiState.value.copy(
             comments = _uiState.value.comments + newComment,
