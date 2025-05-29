@@ -1,6 +1,7 @@
 package com.teampatch.daily.certify
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -30,8 +31,10 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,7 +83,6 @@ internal fun DailyCertifyRoute(
     onCertifyCompleteRequest: () -> Unit,
     onNavigateToDetailRequest: () -> Unit, // ✅ 추가: 인증 완료 시 이동할 상세 화면
 ) {
-//    val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
 
     val launcher = rememberLauncherForActivityResult(
@@ -111,13 +113,23 @@ internal fun DailyCertifyRoute(
     )
 }
 
+@ExperimentalMaterial3Api
 @Composable
 fun DailyCertifyDetailRoute(
     viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,
 ) {
-//    val viewModel: DailyCertifyViewModel = hiltViewModel()
     val uiState by viewModel.uiState
+
+    val commentWriteSheetState = rememberModalBottomSheetState()
+
+    LaunchedEffect(uiState.showCommentSheet) {
+        if (uiState.showCommentSheet) {
+            commentWriteSheetState.show()
+        } else {
+            commentWriteSheetState.hide()
+        }
+    }
 
     DailyCertifyScreen(
         uiState = uiState,
@@ -151,6 +163,7 @@ internal fun DailyCertifyScreen(
     }
 
     LaunchedEffect(uiState.editingComment) {
+        Log.d("DEBUG", "Editing comment: ${uiState.editingComment}")
         if (uiState.editingComment != null) {
             commentEditSheetState.show()
         } else {
@@ -262,6 +275,45 @@ internal fun DailyCertifyScreen(
                             )
                         }
                     }
+                }
+            }
+
+            // ✅ 댓글 작성 BottomSheet
+            if (uiState.showCommentSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        // 닫기 요청 → ViewModel에서 상태 초기화
+                        onCommentEditRequest(null)
+                    },
+                    sheetState = commentWriteSheetState
+                ) {
+                    CommentWriteSheetContent(
+                        onSubmit = { text ->
+                            // TODO: ViewModel에 댓글 추가 메서드 연결
+                            // viewModel.addComment(...)
+                        },
+                        onDismiss = { onCommentEditRequest(null) }
+                    )
+                }
+            }
+
+// ✅ 댓글 수정 BottomSheet
+            uiState.editingComment?.let { editingComment ->
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        onCommentEditRequest(null)
+                    },
+                    sheetState = commentEditSheetState
+                ) {
+                    CommentEditSheetContent(
+                        initialText = editingComment.content,
+                        onSubmit = { updatedText ->
+                            // TODO: ViewModel에 댓글 수정 메서드 연결
+                            // viewModel.updateComment(editingComment.commentId, updatedText)
+                            onCommentEditRequest(null)
+                        },
+                        onDismiss = { onCommentEditRequest(null) }
+                    )
                 }
             }
 
@@ -452,6 +504,69 @@ fun DailyCertifyCommentItem(
             color = BL,
             modifier = Modifier.padding(top = 12.dp)
         )
+    }
+}
+
+@Composable
+fun CommentWriteSheetContent(
+    onSubmit: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var comment by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+    ) {
+        Text("댓글 남기기", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(12.dp))
+        TextField(
+            value = comment,
+            onValueChange = { comment = it },
+            placeholder = { Text("댓글을 입력해주세요.") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        DefaultButton(
+            onClick = { onSubmit(comment) },
+            enabled = comment.isNotBlank(),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("작성 완료")
+        }
+    }
+}
+
+@Composable
+fun CommentEditSheetContent(
+    initialText: String,
+    onSubmit: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var comment by remember { mutableStateOf(initialText) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+    ) {
+        Text("댓글 수정", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(12.dp))
+        TextField(
+            value = comment,
+            onValueChange = { comment = it },
+            placeholder = { Text("댓글을 입력해주세요.") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        DefaultButton(
+            onClick = { onSubmit(comment) },
+            enabled = comment.isNotBlank(),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("수정 완료")
+        }
     }
 }
 
