@@ -82,7 +82,7 @@ internal fun DailyCertifyRoute(
     viewModel: DailyCertifyViewModel,
     onBackRequest: () -> Unit,
     onCertifyCompleteRequest: () -> Unit,
-    onNavigateToDetailRequest: () -> Unit, // ✅ 추가: 인증 완료 시 이동할 상세 화면
+    onNavigateToDetailRequest: () -> Unit,
 ) {
     val uiState by viewModel.uiState
 
@@ -114,7 +114,8 @@ internal fun DailyCertifyRoute(
         onCommentWrite = {},
         onCommentEditSubmit = { _, _ -> },
         onBottomSheetDismiss = {},
-        commentImageUri = null
+        commentImageUri = null,
+        onCommentDeleteRequest = {}
     )
 }
 
@@ -141,7 +142,7 @@ fun DailyCertifyDetailRoute(
         uiState = uiState,
         onBackRequest = onBackRequest,
         onCommentEditRequest = { viewModel.editComment(it) },
-        onCertifyCompleteRequest = {}, // ✅ 완료 버튼 제거
+        onCertifyCompleteRequest = {},
         onOpenCommentSheet = {
             commentImageUri.value = null
             viewModel.openCommentSheet()
@@ -153,7 +154,8 @@ fun DailyCertifyDetailRoute(
             viewModel.closeCommentSheet()
             commentImageUri.value = null
         },
-        commentImageUri = commentImageUri.value
+        commentImageUri = commentImageUri.value,
+        onCommentDeleteRequest = {viewModel.deleteComment(it)}
     )
 }
 
@@ -163,13 +165,14 @@ internal fun DailyCertifyScreen(
     uiState: DailyCertifyUiState,
     onBackRequest: () -> Unit,
     onCommentEditRequest: (DailyComment?) -> Unit,
+    onCommentDeleteRequest: (DailyComment?) -> Unit,
     onCertifyCompleteRequest: () -> Unit,
     onOpenCommentSheet: () -> Unit,
-    onImagePickRequest: () -> Unit, // ✅ 추가
-    onCommentWrite: (String) -> Unit, // ✅
-    onCommentEditSubmit: (String, String) -> Unit, // ✅ (commentId, content)
-    onBottomSheetDismiss: () -> Unit, // ✅
-    commentImageUri: String?, // ✅ 댓글 작성용 임시 이미지 상태
+    onImagePickRequest: () -> Unit,
+    onCommentWrite: (String) -> Unit,
+    onCommentEditSubmit: (String, String) -> Unit,
+    onBottomSheetDismiss: () -> Unit,
+    commentImageUri: String?,
 ) {
     val commentEditSheetState = rememberModalBottomSheetState()
     val commentWriteSheetState = rememberModalBottomSheetState()
@@ -184,7 +187,6 @@ internal fun DailyCertifyScreen(
 
     LaunchedEffect(commentWriteSheetState.isVisible) {
         if (!commentWriteSheetState.isVisible && uiState.showCommentSheet) {
-            // 사용자가 dismiss해서 꺼졌지만 상태는 true인 경우 → 상태도 false로 정리
             onBottomSheetDismiss()
         }
     }
@@ -262,13 +264,13 @@ internal fun DailyCertifyScreen(
 
                 if (isCertifyConfirmed) {
                     LazyColumn(
-                        state = lazyListState, // ✅ 상태 연결
+                        state = lazyListState,
                         modifier = Modifier
                             .fillMaxSize()
                             .background(G1),
                         contentPadding = PaddingValues(
                             top = 8.dp,
-                            bottom = 120.dp // ✅ 댓글 남기기 UI를 위한 padding
+                            bottom = 120.dp // 댓글 남기기 UI를 위한 padding
                         )
                     ) {
                         item {
@@ -287,14 +289,13 @@ internal fun DailyCertifyScreen(
                             DailyCertifyCommentItem(
                                 comment = comment,
                                 onEditClick = { onCommentEditRequest(comment) },
-                                onDeleteClick = { /* TODO */ }
+                                onDeleteClick = { onCommentDeleteRequest(comment) }
                             )
                         }
                     }
                 }
             }
 
-            // ✅ 댓글 작성 BottomSheet
             if (uiState.showCommentSheet) {
                 ModalBottomSheet(
                     onDismissRequest = {
@@ -307,13 +308,12 @@ internal fun DailyCertifyScreen(
                             onCommentWrite(text)
                             onBottomSheetDismiss()
                         },
-                        onImagePick = onImagePickRequest, // ✅ 포토피커 트리거
+                        onImagePick = onImagePickRequest,
                         imageUrl = commentImageUri
                     )
                 }
             }
 
-// ✅ 댓글 수정 BottomSheet
             uiState.editingComment?.let { editingComment ->
                 ModalBottomSheet(
                     onDismissRequest = {
@@ -327,12 +327,11 @@ internal fun DailyCertifyScreen(
                             onCommentEditSubmit(editingComment.commentId, updatedText)
                             onBottomSheetDismiss()
                         },
-                        onDismiss = { onBottomSheetDismiss() }
                     )
                 }
             }
 
-            // ✅ 댓글 남기기 UI (Floating UI)
+            // 댓글 남기기 UI (Floating UI)
             if (isCertifyConfirmed) {
                 val shouldShowFloatingCommentButton = isCertifyConfirmed && isFloatingVisible
                 // IDE에서 always true로 추론하는 건 Preview 상의 오해임 – 런타임에는 유동적
@@ -371,7 +370,7 @@ private fun MissionInfoSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally // ✅ 가운데 정렬 핵심
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = missionText,
@@ -529,8 +528,8 @@ fun DailyCertifyCommentItem(
 @Composable
 fun CommentWriteSheetContent(
     onSubmit: (String) -> Unit,
-    onImagePick: () -> Unit, // ✅ 추가
-    imageUrl: String?, // ✅ 현재 이미지 표시
+    onImagePick: () -> Unit,
+    imageUrl: String?,
 ) {
     var comment by remember { mutableStateOf("") }
 
@@ -569,7 +568,6 @@ fun CommentWriteSheetContent(
 fun CommentEditSheetContent(
     initialText: String,
     onSubmit: (String) -> Unit,
-    onDismiss: () -> Unit,
 ) {
     var comment by remember { mutableStateOf(initialText) }
 
@@ -616,9 +614,10 @@ private fun DailyCertifyScreenPreview_Initial() {
             onOpenCommentSheet = {},
             onImagePickRequest = {},
             onCommentWrite = {},
-            onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
+            onCommentEditSubmit = { _, _ -> },
             onBottomSheetDismiss = {},
-            commentImageUri = null
+            commentImageUri = null,
+            onCommentDeleteRequest = {}
         )
     }
 }
@@ -643,9 +642,10 @@ private fun DailyCertifyScreenPreview_Completed_NoComment() {
             onOpenCommentSheet = {},
             onImagePickRequest = {},
             onCommentWrite = {},
-            onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
+            onCommentEditSubmit = { _, _ -> },
             onBottomSheetDismiss = {},
-            commentImageUri = null
+            commentImageUri = null,
+            onCommentDeleteRequest = {}
         )
     }
 }
@@ -664,7 +664,7 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
                     DailyComment("2", "김소라", "씹희", "부산 날씨 완전 봄이야")
                 ),
                 editingComment = null,
-                certifyStatus = CertifyStatus.CONFIRMED // ✅ 이걸 넣어야 댓글 목록이 나타남!
+                certifyStatus = CertifyStatus.CONFIRMED // 이걸 넣어야 댓글 목록이 나타남!
 
             ),
             onBackRequest = {},
@@ -673,9 +673,10 @@ private fun DailyCertifyScreenPreview_Completed_WithComment() {
             onOpenCommentSheet = {},
             onImagePickRequest = {},
             onCommentWrite = {},
-            onCommentEditSubmit = { _, _ -> }, // ✅ (commentId, content)
+            onCommentEditSubmit = { _, _ -> },
             onBottomSheetDismiss = {},
-            commentImageUri = null
+            commentImageUri = null,
+            onCommentDeleteRequest = {}
         )
     }
 }

@@ -37,6 +37,12 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
         )
     }
 
+    fun deleteComment(comment: DailyComment?) {
+        _uiState.value = _uiState.value.copy(
+            comments = _uiState.value.comments.filterNot { it.commentId == comment?.commentId }
+        )
+    }
+
     fun openCommentSheet() {
         _uiState.value = _uiState.value.copy(
             showCommentSheet = true
@@ -62,6 +68,7 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
         )
     }
 
+
     fun updateComment(commentId: String, newContent: String) {
         _uiState.value = _uiState.value.copy(
             comments = _uiState.value.comments.map {
@@ -78,11 +85,7 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun deleteComment(commentId: String) {
-        _uiState.value = _uiState.value.copy(
-            comments = _uiState.value.comments.filterNot { it.commentId == commentId }
-        )
-    }
+
 
     fun updateImage(uri: String) {
         _uiState.value = _uiState.value.copy(imageUrl = uri)
