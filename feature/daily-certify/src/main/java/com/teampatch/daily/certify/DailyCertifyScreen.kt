@@ -155,7 +155,7 @@ fun DailyCertifyDetailRoute(
             commentImageUri.value = null
         },
         commentImageUri = commentImageUri.value,
-        onCommentDeleteRequest = {viewModel.deleteComment(it)}
+        onCommentDeleteRequest = { viewModel.deleteComment(it) }
     )
 }
 
@@ -326,7 +326,7 @@ internal fun DailyCertifyScreen(
                         onSubmit = { updatedText ->
                             onCommentEditSubmit(editingComment.commentId, updatedText)
                             onBottomSheetDismiss()
-                        },
+                        }
                     )
                 }
             }

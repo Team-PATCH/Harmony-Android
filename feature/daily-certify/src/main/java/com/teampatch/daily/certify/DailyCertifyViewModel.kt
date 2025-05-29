@@ -68,7 +68,6 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-
     fun updateComment(commentId: String, newContent: String) {
         _uiState.value = _uiState.value.copy(
             comments = _uiState.value.comments.map {
@@ -84,8 +83,6 @@ class DailyCertifyViewModel @Inject constructor() : ViewModel() {
             editingComment = null
         )
     }
-
-
 
     fun updateImage(uri: String) {
         _uiState.value = _uiState.value.copy(imageUrl = uri)

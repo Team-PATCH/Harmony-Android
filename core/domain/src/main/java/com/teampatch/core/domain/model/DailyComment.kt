@@ -6,5 +6,5 @@ data class DailyComment(
     val writerName: String,
     val content: String,
     val imageUrl: String? = null,
-    val profileImageUrl: String? = null
+    val profileImageUrl: String? = null,
 )
