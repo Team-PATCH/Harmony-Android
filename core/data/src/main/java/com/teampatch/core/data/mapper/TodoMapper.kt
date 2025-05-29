@@ -1,7 +1,7 @@
 package com.teampatch.core.data.mapper
 
-import com.harmony.core.database.LOCAL_DB_DATE_TIME_FORMATTER
-import com.harmony.core.database.model.TodoEntity
+import com.teampatch.core.database.LOCAL_DB_DATE_TIME_FORMATTER
+import com.teampatch.core.database.model.TodoEntity
 import com.teampatch.core.domain.model.Todo
 import java.time.LocalDateTime
 

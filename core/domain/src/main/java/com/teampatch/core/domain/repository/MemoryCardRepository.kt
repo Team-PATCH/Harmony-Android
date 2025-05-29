@@ -20,6 +20,11 @@ interface MemoryCardRepository {
         audioFile: InputStream,
     )
 
+    suspend fun addAnswer(
+        memoryCardId: String,
+        answer: String,
+    )
+
     /**
      * 해당 추억카드 질문들을 가져오는 함수입니다.
      */
