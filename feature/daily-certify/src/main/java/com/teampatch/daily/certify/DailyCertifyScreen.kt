@@ -278,8 +278,7 @@ internal fun DailyCertifyScreen(
             if (uiState.showCommentSheet) {
                 ModalBottomSheet(
                     onDismissRequest = {
-                        // 닫기 요청 → ViewModel에서 상태 초기화
-                        onCommentEditRequest(null)
+                        onBottomSheetDismiss()
                     },
                     sheetState = commentWriteSheetState
                 ) {
@@ -288,7 +287,8 @@ internal fun DailyCertifyScreen(
                             onCommentWrite(text)
                             onBottomSheetDismiss()
                         },
-                        onDismiss = { onBottomSheetDismiss() }
+                        onImagePick = onImagePickRequest,       // ✅ 포토피커 트리거
+                        imageUrl = uiState.imageUrl             // ✅ 현재 이미지
                     )
                 }
             }
@@ -505,7 +505,8 @@ fun DailyCertifyCommentItem(
 @Composable
 fun CommentWriteSheetContent(
     onSubmit: (String) -> Unit,
-    onDismiss: () -> Unit,
+    onImagePick: () -> Unit, // ✅ 추가
+    imageUrl: String?, // ✅ 현재 이미지 표시
 ) {
     var comment by remember { mutableStateOf("") }
 
@@ -516,6 +517,13 @@ fun CommentWriteSheetContent(
     ) {
         Text("댓글 남기기", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(12.dp))
+
+        if (imageUrl.isNullOrBlank()) {
+            CertifyImagePlaceholder(onClick = onImagePick)
+        } else {
+            CertifyImage(imageUrl)
+        }
+
         TextField(
             value = comment,
             onValueChange = { comment = it },
