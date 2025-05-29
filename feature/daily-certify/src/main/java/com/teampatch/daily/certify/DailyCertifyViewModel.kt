@@ -9,7 +9,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-internal class DailyCertifyViewModel @Inject constructor() : ViewModel() {
+class DailyCertifyViewModel @Inject constructor() : ViewModel() {
     private val _uiState = mutableStateOf(
         DailyCertifyUiState(
             missionText = "오늘의 인증 미션",
@@ -44,6 +44,19 @@ internal class DailyCertifyViewModel @Inject constructor() : ViewModel() {
 
     fun onDismiss() {
         // TODO: 인증 완료 종료 시 처리할 것
+    }
+
+    fun addComment(comment: DailyComment) {
+        _uiState.value = _uiState.value.copy(
+            comments = _uiState.value.comments + comment,
+            showCommentSheet = false
+        )
+    }
+
+    fun deleteComment(commentId: String) {
+        _uiState.value = _uiState.value.copy(
+            comments = _uiState.value.comments.filterNot { it.commentId == commentId }
+        )
     }
 
     fun updateImage(uri: String) {
