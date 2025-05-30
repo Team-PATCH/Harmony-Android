@@ -76,7 +76,6 @@ internal fun DailyEditRoute(
             { _, hour, minute ->
                 val selectedTime = LocalTime.of(hour, minute)
                 viewModel.changeSelectedTime(selectedTime)
-                viewModel.onTimeSelected(LocalDateTime.of(LocalDate.now(), selectedTime))
             },
             now.hour,
             now.minute,
@@ -100,7 +99,10 @@ internal fun DailyEditRoute(
     if (!uiState.isLoading) {
         DailyEditScreen(
             onDismissRequest = onDismissRequest,
-            onCompleteRequest = onCompleteRequest,
+            onCompleteRequest = { todo ->
+                viewModel.onTimeSelected(todo.dateTime)
+                onCompleteRequest(todo)
+            },
             selectedDays = uiState.selectedDays,
             onDaySelected = { viewModel.toggleSelectedDay(it) },
             selectedTime = uiState.selectedTime,
@@ -119,7 +121,6 @@ internal fun DailyEditScreen(
     selectedTime: LocalTime?,
     onTimePickRequest: () -> Unit,
 ) {
-    val context = LocalContext.current
     val textState = rememberSaveable { mutableStateOf("") }
     val daysOfWeek = remember { DayOfWeek.values() }
 
@@ -148,10 +149,9 @@ internal fun DailyEditScreen(
                             ?: LocalDateTime.now(),
                         isFinished = false
                     )
-                    Log.d("DEBUG", "1. DailyEditScreen: onCompleteRequest todo = $todo")
                     onCompleteRequest(todo)
                 },
-                enabled = textState.value.isNotBlank(),
+                enabled = textState.value.isNotBlank() && selectedDays.isNotEmpty() && selectedTime != null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
