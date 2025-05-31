@@ -1,68 +1,85 @@
 package com.teampatch.harmony
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.map
+import com.teampatch.core.common.flowErrorCatch
+import com.teampatch.core.common.toPagingData
 import com.teampatch.core.designsystem.model.CheckableData
 import com.teampatch.core.domain.model.Todo
-import com.teampatch.core.domain.usecase.daily.AddDailyRoutineUseCase
 import com.teampatch.core.domain.usecase.daily.GetDailyRoutineUseCase
-import com.teampatch.core.domain.usecase.user.GetUserInfoUseCase
+import com.teampatch.core.domain.usecase.daily.ToggleDailyRoutineStatusUseCase
+import com.teampatch.harmony.model.DailyErrorHandler
 import com.teampatch.harmony.model.DailySideEffect
 import com.teampatch.harmony.model.DailyUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class DailyViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getDailyRoutineUseCase: GetDailyRoutineUseCase,
-    private val addDailyRoutineUseCase: AddDailyRoutineUseCase,
+    private val toggleDailyRoutineStatusUseCase: ToggleDailyRoutineStatusUseCase,
 ) : ViewModel() {
 
-    var dailyUiState = mutableStateOf(DailyUiState())
-        private set
+    private val _dailyUiState = MutableStateFlow(DailyUiState())
+    val dailyUiState: StateFlow<DailyUiState> = _dailyUiState.asStateFlow()
 
     private val _sideEffect = Channel<DailySideEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
-    init {
-        load()
-    }
+    private val _errorHandler = MutableSharedFlow<DailyErrorHandler>()
+    val errorHandler: SharedFlow<DailyErrorHandler> = _errorHandler.asSharedFlow()
 
-    fun load() = viewModelScope.launch {
-        try {
-            val user = getUserInfoUseCase().first()
-            val todo = getDailyRoutineUseCase().map { pagingData ->
-                pagingData.map {
-                    CheckableData(it, mutableStateOf(it.isFinished))
-                }
+    val dailyRoutine: Flow<PagingData<CheckableData<Todo>>> =
+        flowErrorCatch(
+            block = {
+                getDailyRoutineUseCase()
+                    .map { pagingData ->
+                        pagingData.map {
+                            CheckableData(it, mutableStateOf(it.isFinished))
+                        }
+                    }
+                    .cachedIn(viewModelScope)
             }
-            dailyUiState.value = DailyUiState(user = user, daily = todo, isLoading = false)
-        } catch (e: Exception) {
-            _sideEffect.send(DailySideEffect.LoadError(e))
-            e.printStackTrace()
+        ) {
+            it.printStackTrace()
+            emit(it.toPagingData())
+        }
+
+    init {
+        _dailyUiState.update {
+            it.copy(
+                dailyRoutine = dailyRoutine,
+                isLoading = false // 또는 refresh 상태를 기반으로 갱신
+            )
         }
     }
 
-    fun addDailyRoutine(id: String, title: String, time: LocalDateTime, isFinished: Boolean) {
-        viewModelScope.launch {
-            val input = Todo(title = title, dateTime = time, id = id, isFinished = isFinished)
-            Log.d("DEBUG", "DailyViewModel: addDailyRoutine input = $input") // ✅ 디버그 추가
-            val result = addDailyRoutineUseCase(input)
-            if (result.isFailure) {
-                _sideEffect.send(DailySideEffect.LoadError(Exception("일과 추가 실패")))
-            } else {
-                load() // 추가 후 다시 목록 갱신
-            }
+    fun changeDailyRoutine(todo: CheckableData<Todo>, checked: Boolean) = viewModelScope.launch {
+        try {
+            // 1. UI 상태 변경
+            todo.checked.value = checked
+
+            // 2. 서버 상태 반영
+            toggleDailyRoutineStatusUseCase(todo.data.id, checked)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _errorHandler.emit(DailyErrorHandler.ChangeRoutineError(e))
         }
     }
 }

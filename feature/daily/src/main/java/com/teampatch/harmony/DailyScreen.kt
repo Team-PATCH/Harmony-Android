@@ -1,5 +1,6 @@
 package com.teampatch.harmony
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,8 +24,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -39,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -52,11 +56,9 @@ import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
-import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.daily.R
 import com.teampatch.harmony.model.DailySideEffect
-import com.teampatch.harmony.model.DailyUiState
 import java.time.LocalDateTime
 import kotlinx.coroutines.flow.flowOf
 
@@ -66,22 +68,37 @@ internal fun DailyRoute(
     dailyEditPageRequest: () -> Unit,
 ) {
     val context = LocalContext.current
-    val dailyViewModel: DailyViewModel = hiltViewModel()
-    val uiState by dailyViewModel.dailyUiState
+    val viewModel: DailyViewModel = hiltViewModel()
+    val uiState by viewModel.dailyUiState.collectAsState()
+    val dailyRoutine = uiState.dailyRoutine.collectAsLazyPagingItems()
 
-    if (!uiState.isLoading) {
+    Log.d("dailyRoutine", "itemCount=${dailyRoutine.itemCount}")
+    val isLoading = dailyRoutine.loadState.refresh is LoadState.Loading
+
+    val progress = remember(dailyRoutine.itemSnapshotList.items) {
+        val items = dailyRoutine.itemSnapshotList.items
+        val total = items.size
+        val done = items.count { it.checked.value }
+        if (total == 0) 0f else done.toFloat() / total
+    }
+
+    if (!isLoading) {
         DailyScreen(
-            progress = 0f,
-            onDailyRoutineClick = {},
-            onDailyRoutineCheckChanged = { _, _ -> },
-            dailyRoutine = uiState.daily.collectAsLazyPagingItems(),
+            progress = progress,
+            onDailyRoutineCheckChanged = { id, checked ->
+                val item = dailyRoutine.itemSnapshotList.items.find { it.data.id == id }
+                if (item != null) {
+                    viewModel.changeDailyRoutine(item, checked)
+                }
+            },
+            dailyRoutine = dailyRoutine,
             dailyExpandPageRequest = dailyExpandPageRequest,
-            dailyEditPageRequest = dailyEditPageRequest,
-            uiState = uiState
+            dailyEditPageRequest = dailyEditPageRequest
         )
     }
+
     LaunchedEffect(Unit) {
-        dailyViewModel.sideEffect.collect { sideEffect ->
+        viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is DailySideEffect.LoadError -> {
                     Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
@@ -93,14 +110,11 @@ internal fun DailyRoute(
 
 @Composable
 internal fun DailyScreen(
-    // TODO: Route
-    progress: Float, // 진행률 (0f부터 1f까지의 값)
-    onDailyRoutineClick: (String) -> Unit, // id
-    onDailyRoutineCheckChanged: (String, Boolean) -> Unit, // id, checked
+    progress: Float,
+    onDailyRoutineCheckChanged: (String, Boolean) -> Unit,
     dailyRoutine: LazyPagingItems<CheckableData<Todo>>,
     dailyExpandPageRequest: () -> Unit,
     dailyEditPageRequest: () -> Unit,
-    uiState: DailyUiState,
 ) {
     Scaffold(
         topBar = {
@@ -171,7 +185,7 @@ internal fun DailyScreen(
                     )
                     Spacer(modifier = Modifier.height(4.dp)) // 간격 추가
                     Text(
-                        text = "33% 완료",
+                        text = "${(progress * 100).toInt()}% 완료",
                         fontFamily = PretendardFontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
@@ -198,27 +212,24 @@ internal fun DailyScreen(
                 }
             }
             items(dailyRoutine.itemCount) { index ->
-                val lastDateTime =
-                    if (index > 0) dailyRoutine.peek(index - 1)?.data?.dateTime else null
-                val dateTime = dailyRoutine.peek(index)?.data?.dateTime
-                val title = dailyRoutine[index]?.data?.title
+                val data = dailyRoutine[index]?.data ?: return@items
+                val checkedState = dailyRoutine[index]?.checked?.value ?: false
+                val dateTime = dailyRoutine[index]?.data?.dateTime?.stringHour().orEmpty()
+                val title = dailyRoutine[index]?.data?.title.orEmpty()
+
                 DailyRoutineCard(
                     onCheckedChange = {
-                        val data = dailyRoutine[index]?.data ?: return@DailyRoutineCard
                         dailyRoutine.itemSnapshotList.items[index].checked.value = it
                         onDailyRoutineCheckChanged(data.id, it)
                     },
-                    checked = dailyRoutine[index]?.checked?.value ?: false,
-                    dateTime = dateTime?.stringHour() ?: "",
-                    text = title ?: "",
+                    checked = checkedState,
+                    dateTime = dateTime,
+                    text = title,
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
-                        .noRippleClickable {
-                            val data = dailyRoutine[index]?.data ?: return@noRippleClickable
-                            onDailyRoutineClick(data.id)
-                        }
                 )
             }
+
             if (dailyRoutine.itemCount != 0) {
                 item {
                     Box(modifier = Modifier.height(20.dp))
@@ -230,11 +241,10 @@ internal fun DailyScreen(
 
 @Preview
 @Composable
-private fun DailyManageScreenPreview() {
+private fun DailyScreenPreview() {
     HarmonyTheme {
         DailyScreen(
             progress = 0f,
-            onDailyRoutineClick = {},
             onDailyRoutineCheckChanged = { _, _ -> },
             dailyRoutine = flowOf(
                 PagingData.from(
@@ -244,8 +254,7 @@ private fun DailyManageScreenPreview() {
             )
                 .collectAsLazyPagingItems(),
             dailyExpandPageRequest = { },
-            dailyEditPageRequest = {},
-            uiState = DailyUiState()
+            dailyEditPageRequest = {}
         )
     }
 }
