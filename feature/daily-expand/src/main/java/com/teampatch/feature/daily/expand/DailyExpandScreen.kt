@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,48 +39,48 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.teampatch.core.designsystem.R.drawable.ic_more_question
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G1
-import com.teampatch.core.designsystem.theme.G4
 import com.teampatch.core.designsystem.theme.G5
 import com.teampatch.core.designsystem.theme.HarmonyTheme
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.SubRed
-import com.teampatch.core.domain.fake.FakeDailyManage
-import com.teampatch.core.domain.model.DailyManage
+import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.daily.expand.R.string.dropdown_delete_daily
 import com.teampatch.feature.daily.expand.R.string.dropdown_edit_daily
 import com.teampatch.feature.daily.expand.model.DailyExpandEvent
-import com.teampatch.feature.daily.expand.model.DailyExpandUiState
+import java.time.LocalDateTime
 
 @Composable
 internal fun DailyExpandRoute(
     onBackRequest: () -> Unit,
-    onEditDailyRequest: (DailyManage) -> Unit,
-    onDeleteDailyRequest: (DailyManage) -> Unit,
-    viewModel: DailyExpandViewModel = hiltViewModel(),
+    onEditDailyRequest: () -> Unit,
+    onDeleteDailyRequest: () -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val uiState: DailyExpandUiState by viewModel.dailyExpandUiState
+    val viewModel: DailyExpandViewModel = hiltViewModel()
 
-    if (!uiState.isLoading) {
-        DailyExpandScreen(
-            onBackRequest = onBackRequest,
-            onEditDailyRequest = onEditDailyRequest,
-            onDeleteDailyRequest = onDeleteDailyRequest,
-            uiState = uiState
-        )
-    }
+    val dailyRoutines = viewModel.dailyRoutine.collectAsLazyPagingItems()
+
+    DailyExpandScreen(
+        dailyRoutines = dailyRoutines,
+        onBackRequest = onBackRequest,
+        onEditRequest = onEditDailyRequest,
+        onDeleteRequest = onDeleteDailyRequest
+    )
 
     LaunchedEffect(Unit) {
-        lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.event.collect {
                 when (it) {
-                    is DailyExpandEvent.LoadError ->
+                    is DailyExpandEvent.LoadError -> {
                         Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -88,12 +89,11 @@ internal fun DailyExpandRoute(
 
 @Composable
 internal fun DailyExpandScreen(
+    dailyRoutines: LazyPagingItems<Todo>,
     onBackRequest: () -> Unit,
-    onEditDailyRequest: (DailyManage) -> Unit,
-    onDeleteDailyRequest: (DailyManage) -> Unit,
-    uiState: DailyExpandUiState,
+    onEditRequest: () -> Unit,
+    onDeleteRequest: () -> Unit,
 ) {
-    val daily = uiState.dailyManage
     Scaffold(
         topBar = {
             BackButtonAppBar(
@@ -104,21 +104,20 @@ internal fun DailyExpandScreen(
             )
         }
     ) { scaffoldPaddingValues ->
-        Box(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(scaffoldPaddingValues)
-                .padding(top = 16.dp),
-            contentAlignment = Alignment.Center
+                .padding(top = 16.dp)
+                .fillMaxSize()
         ) {
-            if (daily == null) {
-                CircularProgressIndicator() // 로딩 상태 처리
-            } else {
-                DailyItem(
-                    dailyItem = daily,
-                    onEditDailyRequest = { onEditDailyRequest(daily) },
-                    onDeleteDailyRequest = { onDeleteDailyRequest(daily) }
-                )
+            items(dailyRoutines.itemCount) { index ->
+                dailyRoutines[index]?.let { item ->
+                    DailyItem(
+                        title = item.title,
+                        onEditClick = onEditRequest,
+                        onDeleteClick = onDeleteRequest
+                    )
+                }
             }
         }
     }
@@ -126,9 +125,9 @@ internal fun DailyExpandScreen(
 
 @Composable
 fun DailyItem(
-    dailyItem: DailyManage,
-    onEditDailyRequest: () -> Unit,
-    onDeleteDailyRequest: () -> Unit,
+    title: String,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     var isDropDownMenuShow by remember { mutableStateOf(false) }
 
@@ -148,14 +147,15 @@ fun DailyItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
+                    .padding(horizontal = 24.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "#${dailyItem.number}",
+                    text = title,
                     fontFamily = PretendardFontFamily,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp,
-                    color = G4
+                    fontSize = 20.sp,
+                    color = BL,
+                    modifier = Modifier.widthIn(max = 240.dp)
                 )
                 Box(
                     modifier = Modifier
@@ -174,15 +174,11 @@ fun DailyItem(
                         expanded = isDropDownMenuShow,
                         onDismissRequest = { isDropDownMenuShow = false },
                         shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier
-                            .widthIn(min = 200.dp)
+                        modifier = Modifier.widthIn(min = 200.dp)
                     ) {
                         DropdownMenuItem(
                             text = {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                     Text(
                                         text = stringResource(dropdown_edit_daily),
                                         fontFamily = PretendardFontFamily,
@@ -193,16 +189,13 @@ fun DailyItem(
                                 }
                             },
                             onClick = {
-                                onEditDailyRequest()
+                                onEditClick()
                                 isDropDownMenuShow = false
                             }
                         )
                         DropdownMenuItem(
                             text = {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                     Text(
                                         text = stringResource(dropdown_delete_daily),
                                         fontFamily = PretendardFontFamily,
@@ -213,29 +206,12 @@ fun DailyItem(
                                 }
                             },
                             onClick = {
-                                onDeleteDailyRequest()
+                                onDeleteClick()
                                 isDropDownMenuShow = false
                             }
                         )
                     }
                 }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
-            ) {
-                Text(
-                    text = dailyItem.title,
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp,
-                    color = BL,
-                    modifier = Modifier.widthIn(max = 240.dp)
-                )
             }
         }
     }
@@ -243,13 +219,37 @@ fun DailyItem(
 
 @Preview
 @Composable
-private fun DailyExpandScreenPreview() {
-    HarmonyTheme {
-        DailyExpandScreen(
-            onBackRequest = {},
-            onEditDailyRequest = {},
-            onDeleteDailyRequest = {},
-            uiState = DailyExpandUiState(dailyManage = FakeDailyManage().get())
+fun DailyExpandScreenPreview() {
+    val dummyTodos = listOf(
+        Todo(
+            id = "1",
+            dateTime = LocalDateTime.now(),
+            title = "샘플 투두 1",
+            isFinished = false
+        ),
+        Todo(
+            id = "2",
+            dateTime = LocalDateTime.now().plusHours(1),
+            title = "샘플 투두 2",
+            isFinished = true
         )
+    )
+
+    val lazyItems = remember {
+        derivedStateOf {
+            dummyTodos.map { it } // CheckableData 없음
+        }
+    }
+
+    HarmonyTheme {
+        LazyColumn {
+            items(lazyItems.value.size) { index ->
+                DailyItem(
+                    title = lazyItems.value[index].title,
+                    onEditClick = {},
+                    onDeleteClick = {}
+                )
+            }
+        }
     }
 }

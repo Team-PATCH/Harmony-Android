@@ -1,8 +1,11 @@
 package com.teampatch.feature.daily.expand.model
 
-import com.teampatch.core.domain.model.DailyManage
+import androidx.paging.PagingData
+import com.teampatch.core.domain.model.Todo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-internal data class DailyExpandUiState(
-    val dailyManage: DailyManage? = null, // 기본값을 null로 설정
+data class DailyExpandUiState(
+    val dailyRoutine: Flow<PagingData<Todo>> = flowOf(PagingData.empty()),
     val isLoading: Boolean = true,
 )
