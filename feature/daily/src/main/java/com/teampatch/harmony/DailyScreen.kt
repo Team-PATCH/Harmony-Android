@@ -1,6 +1,5 @@
 package com.teampatch.harmony
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -72,9 +70,6 @@ internal fun DailyRoute(
     val uiState by viewModel.dailyUiState.collectAsState()
     val dailyRoutine = uiState.dailyRoutine.collectAsLazyPagingItems()
 
-    Log.d("dailyRoutine", "itemCount=${dailyRoutine.itemCount}")
-    val isLoading = dailyRoutine.loadState.refresh is LoadState.Loading
-
     val progress = remember(dailyRoutine.itemSnapshotList.items) {
         val items = dailyRoutine.itemSnapshotList.items
         val total = items.size
@@ -82,20 +77,18 @@ internal fun DailyRoute(
         if (total == 0) 0f else done.toFloat() / total
     }
 
-    if (!isLoading) {
-        DailyScreen(
-            progress = progress,
-            onDailyRoutineCheckChanged = { id, checked ->
-                val item = dailyRoutine.itemSnapshotList.items.find { it.data.id == id }
-                if (item != null) {
-                    viewModel.changeDailyRoutine(item, checked)
-                }
-            },
-            dailyRoutine = dailyRoutine,
-            dailyExpandPageRequest = dailyExpandPageRequest,
-            dailyEditPageRequest = dailyEditPageRequest
-        )
-    }
+    DailyScreen(
+        progress = progress,
+        onDailyRoutineCheckChanged = { id, checked ->
+            val item = dailyRoutine.itemSnapshotList.items.find { it.data.id == id }
+            if (item != null) {
+                viewModel.changeDailyRoutine(item, checked)
+            }
+        },
+        dailyRoutine = dailyRoutine,
+        dailyExpandPageRequest = dailyExpandPageRequest,
+        dailyEditPageRequest = dailyEditPageRequest
+    )
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
