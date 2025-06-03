@@ -6,10 +6,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,15 +24,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,87 +41,86 @@ import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.AppBar
 import com.teampatch.core.designsystem.component.DefaultButton
 import com.teampatch.core.designsystem.component.DefaultTextField
-import com.teampatch.core.designsystem.theme.BL
 import com.teampatch.core.designsystem.theme.G2
 import com.teampatch.core.designsystem.theme.HarmonyTheme
-import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
-import com.teampatch.core.domain.fake.FakeDailyManage
+import com.teampatch.core.domain.model.Todo
 import com.teampatch.feature.daily.edit.R.string.btn_complete_daily
 import com.teampatch.feature.daily.edit.R.string.select_time
 import com.teampatch.feature.daily.edit.R.string.select_week_days
 import com.teampatch.feature.daily.edit.R.string.text_per_daily
 import com.teampatch.feature.daily.edit.R.string.title_daily
 import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.TextStyle
-import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 @Composable
 internal fun DailyEditRoute(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (String) -> Unit,
+    onCompleteRequest: (Todo) -> Unit,
     viewModel: DailyEditViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by viewModel.dailyEditUiState
-    if (!uiState.isLoading) {
-        DailyEditScreen(
-            onDismissRequest = onDismissRequest,
-            onCompleteRequest = {
-                onCompleteRequest(it)
+
+    val timePickerLauncher = rememberUpdatedState {
+        val now = LocalTime.now()
+        TimePickerDialog(
+            context,
+            { _, hour, minute ->
+                val selectedTime = LocalTime.of(hour, minute)
+                viewModel.changeSelectedTime(selectedTime)
             },
-            uiState = uiState,
-            selectedDays = uiState.selectedDays,
-            onDaySelected = { viewModel.toggleSelectedDay(it) },
-            onChangeDaily = { viewModel.changeDailyContent(it) }
-        )
+            now.hour,
+            now.minute,
+            true
+        ).show()
     }
 
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
                 is DailyEditEvent.AddDailyError -> {
-                    Toast.makeText(context, "서버로 부터 데이터 전송 오류", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "서버 전송 오류", Toast.LENGTH_LONG).show()
                 }
-
                 is DailyEditEvent.LoadError -> {
-                    Toast.makeText(context, "데이터를 불러오지 못하였습니다.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "데이터 불러오기 실패", Toast.LENGTH_LONG).show()
                 }
             }
         }
+    }
+
+    if (!uiState.isLoading) {
+        DailyEditScreen(
+            onDismissRequest = onDismissRequest,
+            onCompleteRequest = { todo ->
+                viewModel.onTimeSelected(todo.dateTime)
+                onCompleteRequest(todo)
+            },
+            selectedDays = uiState.selectedDays,
+            onDaySelected = { viewModel.toggleSelectedDay(it) },
+            selectedTime = uiState.selectedTime,
+            onTimePickRequest = { timePickerLauncher.value() } // 👈 NEW
+
+        )
     }
 }
 
 @Composable
 internal fun DailyEditScreen(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (String) -> Unit,
-    uiState: DailyEditUiState,
+    onCompleteRequest: (Todo) -> Unit,
     selectedDays: Set<DayOfWeek>,
     onDaySelected: (DayOfWeek) -> Unit,
-    onChangeDaily: (String) -> Unit,
+    selectedTime: LocalTime?,
+    onTimePickRequest: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val daily = uiState.dailyExpand.content
-    var time: LocalTime? by rememberSaveable { mutableStateOf(null) }
-    val calendar = remember { Calendar.getInstance() }
-    val hour = remember { calendar.get(Calendar.HOUR_OF_DAY) }
-    val minute = remember { calendar.get(Calendar.MINUTE) }
-
-    val timePickerDialog = remember {
-        TimePickerDialog(
-            context,
-            { _, selectedHour, selectedMinute ->
-                time = LocalTime.of(selectedHour, selectedMinute)
-            },
-            hour,
-            minute,
-            true
-        )
-    }
+    val textState = rememberSaveable { mutableStateOf("") }
     val daysOfWeek = remember { DayOfWeek.values() }
 
     Scaffold(
@@ -143,8 +140,17 @@ internal fun DailyEditScreen(
         },
         bottomBar = {
             DefaultButton(
-                onClick = { onCompleteRequest(daily) },
-                enabled = daily.isNotBlank(),
+                onClick = {
+                    val todo = Todo(
+                        id = UUID.randomUUID().toString(),
+                        title = textState.value,
+                        dateTime = selectedTime?.let { LocalDateTime.of(LocalDate.now(), it) }
+                            ?: LocalDateTime.now(),
+                        isFinished = false
+                    )
+                    onCompleteRequest(todo)
+                },
+                enabled = textState.value.isNotBlank() && selectedDays.isNotEmpty() && selectedTime != null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 8.dp)
@@ -156,47 +162,28 @@ internal fun DailyEditScreen(
         Column(
             modifier = Modifier
                 .padding(scaffoldPaddingValues)
-                .height(IntrinsicSize.Max)
-                .background(
-                    color = MaterialTheme.colorScheme.background,
-                    shape = RoundedCornerShape(10.dp)
-                )
-                .padding(top = 24.dp, bottom = 14.dp, start = 16.dp, end = 16.dp)
+                .fillMaxHeight()
+                .padding(16.dp)
         ) {
-            Text(
-                text = stringResource(text_per_daily),
-                fontFamily = PretendardFontFamily,
-                color = BL,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
+            Text(stringResource(text_per_daily), fontSize = 18.sp)
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // ✅ placeholder 적용
+            DefaultTextField(
+                value = textState.value,
+                onValueChange = {
+                    if (it.length <= 200) textState.value = it
+                },
+                hint = { Text("예) 아침식사 먹기") },
+                singleLine = false,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            ) {
-                DefaultTextField(
-                    value = uiState.dailyExpand.content,
-                    onValueChange = {
-                        if (it.length <= 200) {
-                            onChangeDaily(it) // ViewModel의 함수 호출
-                        }
-                    },
-                    singleLine = false,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.None),
-                    modifier = Modifier.height(IntrinsicSize.Max)
-                )
-            }
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = stringResource(select_week_days),
-                fontFamily = PretendardFontFamily,
-                color = BL,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
-            )
+            Text(stringResource(select_week_days), fontSize = 18.sp)
 
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -209,44 +196,33 @@ internal fun DailyEditScreen(
                         selected = selectedDays.contains(day),
                         onClick = { onDaySelected(day) },
                         label = { Text(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN)) },
-                        modifier = Modifier.padding(horizontal = 2.dp),
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color.Green
-                        )
+                        modifier = Modifier.padding(horizontal = 2.dp)
                     )
                 }
             }
 
-            Text(
-                text = stringResource(select_time),
-                fontFamily = PretendardFontFamily,
-                color = BL,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 32.dp, bottom = 8.dp)
-            )
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(stringResource(select_time), fontSize = 18.sp)
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
-                    .background(color = WH, shape = RoundedCornerShape(10.dp))
-                    .border(width = 1.dp, color = G2, shape = RoundedCornerShape(10.dp))
+                    .background(WH, RoundedCornerShape(10.dp))
+                    .border(1.dp, G2, RoundedCornerShape(10.dp))
                     .padding(horizontal = 20.dp)
-                    .noRippleClickable { timePickerDialog.show() }
+                    .noRippleClickable { onTimePickRequest() }
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_date_memory_card),
                     contentDescription = "time"
                 )
                 Text(
-                    text = time?.let { String.format("%02d:%02d", it.hour, it.minute) }
+                    text = selectedTime?.let { "%02d:%02d".format(it.hour, it.minute) }
                         ?: stringResource(select_time),
-                    color = BL,
                     fontSize = 20.sp,
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(start = 20.dp)
                 )
             }
@@ -254,27 +230,24 @@ internal fun DailyEditScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun DailyEditScreenPreview() {
     HarmonyTheme {
-        var selectedDays by remember { mutableStateOf(setOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY)) } // ✅ 상태 관리
+        var selectedDays by remember { mutableStateOf(setOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY)) }
+        var selectedTime by remember { mutableStateOf<LocalTime?>(null) }
 
         DailyEditScreen(
             onDismissRequest = {},
             onCompleteRequest = {},
-            uiState = DailyEditUiState(
-                dailyExpand = FakeDailyManage().get(),
-                isLoading = false,
-                selectedDays = selectedDays
-            ),
             selectedDays = selectedDays,
             onDaySelected = { day ->
                 selectedDays = selectedDays.toMutableSet().apply {
                     if (contains(day)) remove(day) else add(day)
                 }
             },
-            onChangeDaily = {}
+            selectedTime = selectedTime,
+            onTimePickRequest = { }
         )
     }
 }

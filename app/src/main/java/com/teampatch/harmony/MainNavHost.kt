@@ -1,6 +1,7 @@
 package com.teampatch.harmony
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -9,10 +10,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teampatch.core.common.findActivity
-import com.teampatch.feature.answer.addAnswerScreen
+import com.teampatch.daily.certify.addDailyCertifyAlarmScreen
+import com.teampatch.daily.certify.navigateToDailyCertifyScreen
 import com.teampatch.feature.answer.navigateToAnswerScreen
+import com.teampatch.feature.daily.edit.addDailyEditScreen
 import com.teampatch.feature.daily.edit.navigateToDailyEditScreen
 import com.teampatch.feature.daily.expand.addDailyExpandScreen
+import com.teampatch.feature.daily.expand.navigateToDailyExpandScreen
 import com.teampatch.feature.family.info.addFamilyInfoScreen
 import com.teampatch.feature.family.info.navigateToFamilyInfoScreen
 import com.teampatch.feature.home.HomeRoute
@@ -47,7 +51,6 @@ import com.teampatch.feature.onboarding.make.navigateToShareInvitationScreen
 import com.teampatch.feature.profile.edit.addProfileEditScreen
 import com.teampatch.feature.profile.edit.navigateToProfileEditScreen
 import com.teampatch.feature.question.addQuestionScreen
-import com.teampatch.feature.question.detail.QuestionDetailParams
 import com.teampatch.feature.question.detail.addQuestionDetailScreen
 import com.teampatch.feature.question.detail.navigateToQuestionDetailScreen
 import com.teampatch.feature.question.expand.addQuestionExpandScreen
@@ -179,14 +182,14 @@ fun MainNavHost(
             answerEditPageRequest = navController::navigateToAnswerScreen
         )
 
-        addAnswerScreen(
-            onBackRequest = navController::navigateUp,
-            onCompleteRequest = { answer ->
-                navController.previousBackStackEntry?.savedStateHandle?.set(
-                    key = QuestionDetailParams.ANSWER_UPDATE_DATA,
-                    value = answer
-                )
-                navController.popBackStack()
+        addDailyEditScreen(
+            onDismissRequest = navController::navigateUp,
+            onCompleteRequest = { todo ->
+                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo") // ✅ 여기
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("new_todo", todo)
+                navController.navigateUp()
             }
         )
 
@@ -213,7 +216,8 @@ fun MainNavHost(
         )
 
         addDailyScreen(
-            dailyExpandPageRequest = { navController.navigateToDailyScreen() }
+            dailyExpandPageRequest = { navController.navigateToDailyExpandScreen() },
+            dailyEditPageRequest = { navController.navigateToDailyEditScreen() }
         )
 
         addDailyExpandScreen(
@@ -221,6 +225,34 @@ fun MainNavHost(
             dailyEditPageRequest = { navController.navigateToDailyEditScreen() },
             onDeleteClick = {} // 임시
         )
+
+        addDailyEditScreen(
+            onDismissRequest = navController::navigateUp,
+            onCompleteRequest = { todo ->
+                Log.d("DEBUG", "MainNavHost: 전달받은 todo = $todo") // ✅ 여기
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("todo_added", true) // 결과 저장
+                navController.navigateUp()
+            }
+        )
+
+        addDailyCertifyAlarmScreen(
+            onPickImageScreenRequest = { navController.navigateToDailyCertifyScreen() },
+            onDismissRequest = { navController.navigateToHomeScreen() },
+            fromNotification = true
+        )
+
+//        addDailyCertifyScreen(
+//            viewModel = DailyCertifyViewModel(),
+//            onBackRequest = navController::navigateUp,
+//            onCertifyCompleteRequest = { navController.navigateToDailyCertifyDetailScreen() },
+//            onNavigateToDetailRequest = { navController.navigateToDailyCertifyDetailScreen() }
+//        )
+//
+//        addDailyCertifyDetailScreen(
+//            onBackRequest = navController::navigateUp
+//        )
 
         addMemoryStorageDetailScreen(
             onBackRequest = navController::navigateUp,

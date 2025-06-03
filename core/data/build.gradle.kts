@@ -14,6 +14,9 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:authentication"))
     implementation(project(":core:database"))
+    implementation(project(":core:designsystem"))
+
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     implementation(libs.google.play.app.update)
 
@@ -21,6 +24,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
 
     implementation(libs.androidx.security.crypto)
+    implementation(project(":feature:daily-certify"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

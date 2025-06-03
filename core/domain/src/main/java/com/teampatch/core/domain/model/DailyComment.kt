@@ -5,4 +5,6 @@ data class DailyComment(
     val writerUid: String,
     val writerName: String,
     val content: String,
+    val imageUrl: String? = null,
+    val profileImageUrl: String? = null,
 )

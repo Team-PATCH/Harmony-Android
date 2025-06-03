@@ -5,23 +5,24 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
+import com.teampatch.core.domain.model.Todo
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object DailyEditRoute
+data object DailyEditScreenRoute
 
 fun NavController.navigateToDailyEditScreen(
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
-    navigate(DailyEditRoute, navOptions, navigatorExtras)
+    navigate(DailyEditScreenRoute, navOptions, navigatorExtras)
 }
 
 fun NavGraphBuilder.addDailyEditScreen(
     onDismissRequest: () -> Unit,
-    onCompleteRequest: (String) -> Unit,
+    onCompleteRequest: (Todo) -> Unit,
 ) {
-    composable<DailyEditRoute> {
+    composable<DailyEditScreenRoute> {
         DailyEditRoute(
             onDismissRequest = onDismissRequest,
             onCompleteRequest = onCompleteRequest

@@ -6,17 +6,15 @@ plugins {
 }
 
 android {
-    namespace = "com.teampatch.feature.daily"
+    namespace = "com.teampatch.feature.daily.certify"
 }
 
 dependencies {
 
-    implementation(project(":core:common"))
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
 
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
