@@ -30,6 +30,9 @@ internal class MemoryStorageViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
+    private val _sortOption = MutableStateFlow("오래된순")
+    val sortOption: StateFlow<String> = _sortOption.asStateFlow()
+
     val memoryCards: Flow<PagingData<MemoryCard>> =
         _searchQuery
             .debounce(300)
@@ -37,12 +40,13 @@ internal class MemoryStorageViewModel @Inject constructor(
             .flatMapLatest { query ->
                 getMemoryCardsUseCase()
                     .map { pagingData ->
-                        pagingData.filter { card ->
-                            card.text.contains(query, ignoreCase = true)
+                        pagingData.filter {
+                            it.text.contains(query, ignoreCase = true)
                         }
                     }
             }
             .cachedIn(viewModelScope)
+
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
     }

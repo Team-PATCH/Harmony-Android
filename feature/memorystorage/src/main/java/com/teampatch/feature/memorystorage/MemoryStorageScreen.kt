@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -42,7 +45,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.teampatch.core.designsystem.R.drawable
 import com.teampatch.core.designsystem.R.drawable.btn_search
 import com.teampatch.core.designsystem.component.AppBar
@@ -86,7 +88,6 @@ internal fun MemoryStorageScreen(
     var isSearchMode by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
     var selectedSortOption by remember { mutableStateOf("오래된순") }
-    var isDropdownExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -168,41 +169,22 @@ internal fun MemoryStorageScreen(
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 1.dp) // AppBar와의 간격 추가
-                        .padding(horizontal = 20.dp),
-                    contentAlignment = Alignment.CenterEnd // Box의 콘텐츠를 오른쪽 끝에 정렬
-                ) {
-                    Text(
-                        text = selectedSortOption,
-                        color = MainGreen,
-                        fontSize = 16.sp,
-                        modifier = Modifier.clickable {
-                            isDropdownExpanded = true
-                        }
-                    )
-
-                    DropdownMenu(
-                        expanded = isDropdownExpanded,
-                        onDismissRequest = { isDropdownExpanded = false }
-                    ) {
-                        val options = listOf("오래된순", "최신순", "이름순")
-                        options.forEach { option ->
-                            DropdownMenuItem(
-                                text = { Text(option) },
-                                onClick = {
-                                    selectedSortOption = option
-                                    isDropdownExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
+                SortDropdown(
+                    selectedOption = selectedSortOption,
+                    onOptionSelected = { selectedSortOption = it }
+                )
             }
         }
     ) { scaffoldPaddingValues ->
+        val sortedItems = remember(memoryCardsLazyItems.itemSnapshotList.items, selectedSortOption) {
+            val items = memoryCardsLazyItems.itemSnapshotList.items
+            when (selectedSortOption) {
+                "최신순" -> items.sortedByDescending { it.dateTime }
+                "이름순" -> items.sortedBy { it.text }
+                else -> items.sortedBy { it.dateTime }
+            }
+        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -211,8 +193,8 @@ internal fun MemoryStorageScreen(
                 .padding(scaffoldPaddingValues)
         ) {
             items(
-                count = memoryCardsLazyItems.itemCount,
-                key = memoryCardsLazyItems.itemKey(),
+                count = sortedItems.size,
+                key = { index -> sortedItems[index].id }, // 고유 ID가 있다면 사용
                 span = { index ->
                     if (index == 0) {
                         GridItemSpan(maxLineSpan)
@@ -221,16 +203,67 @@ internal fun MemoryStorageScreen(
                     }
                 }
             ) { index ->
+                val card = sortedItems[index]
                 TempMemoryCard(
-                    title = memoryCardsLazyItems[index]?.text ?: "",
-                    description = with(memoryCardsLazyItems[index]?.dateTime) {
+                    title = card.text,
+                    description = with(card.dateTime) {
                         "${this?.year}${stringResource(text_year_datetime)} " +
                             "${this?.monthValue}${stringResource(text_month_datetime)} " +
                             "${this?.dayOfMonth}${stringResource(text_day_datetime)}"
                     },
                     painter = painterResource(id = drawable.img_test_memory_card),
                     modifier = Modifier.noRippleClickable {
-                        onDetailPageRequest() // ID가 필요 없다면 인자를 제거
+                        onDetailPageRequest()
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SortDropdown(
+    selectedOption: String,
+    options: List<String> = listOf("오래된순", "최신순", "이름순"),
+    onOptionSelected: (String) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 1.dp) // AppBar와의 간격 추가
+            .padding(horizontal = 20.dp),
+        contentAlignment = Alignment.CenterEnd // Box의 콘텐츠를 오른쪽 끝에 정렬
+    ) {
+        // 텍스트 + 화살표 아이콘
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { expanded = true }
+        ) {
+            Text(
+                text = selectedOption,
+                color = MainGreen,
+                fontSize = 16.sp
+            )
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = null,
+                tint = MainGreen
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onOptionSelected(option)
+                        expanded = false
                     }
                 )
             }
