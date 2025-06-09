@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -229,43 +230,44 @@ fun SortDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 1.dp) // AppBar와의 간격 추가
             .padding(horizontal = 20.dp),
-        contentAlignment = Alignment.CenterEnd // Box의 콘텐츠를 오른쪽 끝에 정렬
+        horizontalArrangement = Arrangement.End
     ) {
-        // 텍스트 + 화살표 아이콘
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable { expanded = true }
-        ) {
-            Text(
-                text = selectedOption,
-                color = MainGreen,
-                fontSize = 16.sp
-            )
-            Icon(
-                imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = null,
-                tint = MainGreen
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        onOptionSelected(option)
-                        expanded = false
-                    }
+        Box {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable { expanded = true }
+                    .padding(4.dp) 
+            ) {
+                Text(
+                    text = selectedOption,
+                    color = MainGreen,
+                    fontSize = 16.sp
                 )
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    tint = MainGreen
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            onOptionSelected(option)
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }
