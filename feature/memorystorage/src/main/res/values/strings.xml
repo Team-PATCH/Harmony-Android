@@ -4,4 +4,8 @@
         <item>여정&#160;</item>
         <item>님의 추억 저장소</item>
     </string-array>
+
+    <string name="text_year_datetime">년</string>
+    <string name="text_month_datetime">월</string>
+    <string name="text_day_datetime">일</string>
 </resources>

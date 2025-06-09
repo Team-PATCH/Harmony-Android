@@ -1,6 +1,5 @@
 package com.teampatch.feature.memorystorage
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -54,47 +53,34 @@ import com.teampatch.core.designsystem.theme.MainGreen
 import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
+import com.teampatch.feature.memorystorage.R.string.text_day_datetime
+import com.teampatch.feature.memorystorage.R.string.text_month_datetime
+import com.teampatch.feature.memorystorage.R.string.text_year_datetime
 import java.time.LocalDateTime
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun MemoryStorageRoute(
     onDetailPageRequest: () -> Unit,
-    memoryStorageViewModel: MemoryStorageViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val memoryStorageUiState by memoryStorageViewModel.memoryStorageUiState.collectAsStateWithLifecycle()
+    val viewModel: MemoryStorageViewModel = hiltViewModel()
+    val memoryStorageUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val memoryCards: LazyPagingItems<MemoryCard> =
-        memoryStorageViewModel.memoryCards.collectAsLazyPagingItems()
+        viewModel.memoryCards.collectAsLazyPagingItems()
 
-    when (memoryStorageUiState) {
-        is MemoryStorageUiState.Loading -> {
-            // 로딩 화면 표시
-        }
-
-        is MemoryStorageUiState.Success -> {
-            MemoryStorageScreen(
-                onDetailPageRequest = onDetailPageRequest,
-                memoryCardsLazyItems = memoryCards
-            )
-        }
-
-        is MemoryStorageUiState.Error -> {
-            LaunchedEffect(Unit) {
-                Toast.makeText(
-                    context,
-                    (memoryStorageUiState as MemoryStorageUiState.Error).message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
+    MemoryStorageScreen(
+        onDetailPageRequest = onDetailPageRequest,
+        memoryCardsLazyItems = memoryCards,
+        onSearchQueryChanged = { viewModel.updateSearchQuery(it) }
+    )
 }
 
 @Composable
 internal fun MemoryStorageScreen(
     onDetailPageRequest: () -> Unit,
     memoryCardsLazyItems: LazyPagingItems<MemoryCard>,
+    onSearchQueryChanged: (String) -> Unit,
 ) {
     // 상태 관리
     var isSearchMode by remember { mutableStateOf(false) }
@@ -116,7 +102,10 @@ internal fun MemoryStorageScreen(
                             ) {
                                 TextField(
                                     value = searchText,
-                                    onValueChange = { searchText = it },
+                                    onValueChange = {
+                                        searchText = it
+                                        onSearchQueryChanged(it)
+                                    },
                                     placeholder = { Text("검색어를 입력하세요") },
                                     singleLine = true,
                                     modifier = Modifier
@@ -179,7 +168,6 @@ internal fun MemoryStorageScreen(
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
-                // 정렬 옵션 영역
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -215,7 +203,6 @@ internal fun MemoryStorageScreen(
             }
         }
     ) { scaffoldPaddingValues ->
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -236,7 +223,11 @@ internal fun MemoryStorageScreen(
             ) { index ->
                 TempMemoryCard(
                     title = memoryCardsLazyItems[index]?.text ?: "",
-                    description = memoryCardsLazyItems[index]?.dateTime.toString(),
+                    description = with(memoryCardsLazyItems[index]?.dateTime) {
+                        "${this?.year}${stringResource(text_year_datetime)} " +
+                            "${this?.monthValue}${stringResource(text_month_datetime)} " +
+                            "${this?.dayOfMonth}${stringResource(text_day_datetime)}"
+                    },
                     painter = painterResource(id = drawable.img_test_memory_card),
                     modifier = Modifier.noRippleClickable {
                         onDetailPageRequest() // ID가 필요 없다면 인자를 제거
@@ -290,7 +281,8 @@ private fun MemoryStorageScreenPreview() {
                         )
                     )
                 )
-            ).collectAsLazyPagingItems()
+            ).collectAsLazyPagingItems(),
+            onSearchQueryChanged = {}
         )
     }
 }
