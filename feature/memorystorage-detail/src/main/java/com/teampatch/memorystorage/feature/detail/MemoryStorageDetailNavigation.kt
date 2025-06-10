@@ -37,7 +37,7 @@ fun NavGraphBuilder.addMemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
     onRestartConversation: () -> Unit,
 ) {
-    composable<MemoryStorageDetailConversationRoute> {
+    composable<MemoryStorageDetailRoute> {
         MemoryStorageDetailRoute(
             onBackRequest = onBackRequest,
             onRestartConversation = onRestartConversation

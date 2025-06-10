@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -64,7 +63,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun MemoryStorageRoute(
-    onDetailPageRequest: () -> Unit,
+    onDetailPageRequest: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val viewModel: MemoryStorageViewModel = hiltViewModel()
@@ -81,7 +80,7 @@ internal fun MemoryStorageRoute(
 
 @Composable
 internal fun MemoryStorageScreen(
-    onDetailPageRequest: () -> Unit,
+    onDetailPageRequest: (String) -> Unit,
     memoryCardsLazyItems: LazyPagingItems<MemoryCard>,
     onSearchQueryChanged: (String) -> Unit,
 ) {
@@ -214,7 +213,7 @@ internal fun MemoryStorageScreen(
                     },
                     painter = painterResource(id = drawable.img_test_memory_card),
                     modifier = Modifier.noRippleClickable {
-                        onDetailPageRequest()
+                        onDetailPageRequest(card.id)
                     }
                 )
             }
@@ -241,7 +240,7 @@ fun SortDropdown(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .clickable { expanded = true }
-                    .padding(4.dp) 
+                    .padding(4.dp)
             ) {
                 Text(
                     text = selectedOption,
