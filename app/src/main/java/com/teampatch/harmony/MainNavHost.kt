@@ -172,6 +172,18 @@ fun MainNavHost(
             onRestartConversation = {} // 이거 구현 어떻게 해야되나.. 피그마 보는데 좀 빡세네..
         )
 
+        /** 참고용 **/
+
+//        addMemoryStorageDetailScreen(
+//            onBackRequest = navController::navigateUp,
+//            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
+//        )
+//
+//        addMemoryStorageDetailConversationScreen(
+//            onDismiss = navController::navigateUp,
+//            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
+//        )
+
         addQuestionScreen(
             questionDetailPageRequest = navController::navigateToQuestionDetailScreen,
             answerPageRequest = navController::navigateToAnswerScreen,
@@ -257,15 +269,5 @@ fun MainNavHost(
 //        addDailyCertifyDetailScreen(
 //            onBackRequest = navController::navigateUp
 //        )
-
-        addMemoryStorageDetailScreen(
-            onBackRequest = navController::navigateUp,
-            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
-        )
-
-        addMemoryStorageDetailConversationScreen(
-            onDismiss = navController::navigateUp,
-            onRestartConversation = { navController.navigateToMemoryCardRegistrationScreen("memoryCardId") }
-        )
     }
 }
