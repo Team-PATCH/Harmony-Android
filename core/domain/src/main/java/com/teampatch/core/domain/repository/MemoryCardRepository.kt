@@ -20,6 +20,8 @@ interface MemoryCardRepository {
         audioFile: InputStream,
     )
 
+    suspend fun deleteMemoryCard(memoryCardId: String)
+
     suspend fun addAnswer(
         memoryCardId: String,
         answer: String,

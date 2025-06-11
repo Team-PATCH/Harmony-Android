@@ -1,7 +1,6 @@
 package com.teampatch.harmony
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +57,6 @@ import com.teampatch.feature.question.expand.navigateToQuestionExpandScreen
 import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
 import com.teampatch.harmony.model.MainUiState
-import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailConversationScreen
 import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailScreen
 import com.teampatch.memorystorage.feature.detail.navigateToMemoryStorageDetailScreen
 
@@ -169,7 +167,8 @@ fun MainNavHost(
 
         addMemoryStorageDetailScreen(
             onBackRequest = navController::navigateUp,
-            onRestartConversation = {} // 이거 구현 어떻게 해야되나.. 피그마 보는데 좀 빡세네..
+            onRestartConversation = {}, // 이거 구현 어떻게 해야되나.. 피그마 보는데 좀 빡세네..
+            deleteCardRequest = navController::navigateUp
         )
 
         /** 참고용 **/

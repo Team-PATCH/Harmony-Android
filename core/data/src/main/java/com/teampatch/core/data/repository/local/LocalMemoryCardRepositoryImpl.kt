@@ -11,12 +11,14 @@ import com.teampatch.core.domain.model.MemoryCardQuestion
 import com.teampatch.core.domain.repository.MemoryCardRepository
 import java.io.InputStream
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 internal class LocalMemoryCardRepositoryImpl @Inject constructor(
     private val memoryCardDao: MemoryCardDao,
@@ -28,6 +30,14 @@ internal class LocalMemoryCardRepositoryImpl @Inject constructor(
         question: String,
         audioFile: InputStream,
     ) {
+    }
+
+    override suspend fun deleteMemoryCard(memoryCardId: String) {
+        withContext(Dispatchers.IO) {
+            val id = memoryCardId.toLong()
+            Log.d("Repository", "삭제 요청 id: $id")
+            memoryCardDao.deleteMemoryStorageById(id)
+        }
     }
 
     override suspend fun addAnswer(memoryCardId: String, answer: String) {

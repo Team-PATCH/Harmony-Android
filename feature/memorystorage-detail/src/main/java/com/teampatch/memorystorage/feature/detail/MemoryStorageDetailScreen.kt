@@ -1,5 +1,6 @@
 package com.teampatch.memorystorage.feature.detail
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +33,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +53,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.teampatch.core.designsystem.R
 import com.teampatch.core.designsystem.component.BackButtonAppBar
 import com.teampatch.core.designsystem.component.DefaultButton
@@ -64,22 +69,28 @@ import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MemoryStorageDetailRoute(
-    memoryStorageDetailViewModel: MemoryStorageDetailViewModel = hiltViewModel(),
     onBackRequest: () -> Unit,
     onRestartConversation: () -> Unit,
+    deleteCardRequest: () -> Unit,
 ) {
-    val uiState by memoryStorageDetailViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewModel: MemoryStorageDetailViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
         is MemoryStorageDetailUiState.Loading -> {
             // TODO: 로딩 UI
         }
+
         is MemoryStorageDetailUiState.Error -> {
             // TODO: 에러 UI
         }
+
         is MemoryStorageDetailUiState.Success -> {
             val state = uiState as MemoryStorageDetailUiState.Success
             when (state.screenState) {
@@ -87,16 +98,36 @@ internal fun MemoryStorageDetailRoute(
                     MemoryStorageDetailScreen(
                         memoryStorageDetailUiState = state,
                         onBackRequest = onBackRequest,
-                        onShowConversation = memoryStorageDetailViewModel::showConversation,
-                        onRestartConversation = onRestartConversation
+                        onShowConversation = viewModel::showConversation,
+                        onRestartConversation = onRestartConversation,
+                        deleteCardRequest = {
+                            viewModel.deleteMemoryCard()
+                        }
                     )
                 }
 
                 MemoryStorageDetailScreenState.Conversation -> {
                     ConversationView(
-                        onDismiss = memoryStorageDetailViewModel::showDetail,
+                        onDismiss = viewModel::showDetail,
                         onRestartConversation = onRestartConversation
                     )
+                }
+            }
+        }
+    }
+    LaunchedEffect(Unit) {
+        lifecycleOwner.lifecycleScope.launch {
+            viewModel.event.collect { event ->
+                when (event) {
+                    is MemoryStorageDetailEvent.Deleted -> {
+                        deleteCardRequest()
+                    }
+
+                    is MemoryStorageDetailEvent.DeleteError -> {
+                        Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {}
                 }
             }
         }
@@ -114,7 +145,6 @@ fun ConversationView(
             .background(Color(0xFFF9F9F9))
             .padding(horizontal = 24.dp)
     ) {
-        // 상단 날짜 + 제목 + 닫기 버튼
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -222,9 +252,11 @@ internal fun MemoryStorageDetailScreen(
     memoryStorageDetailUiState: MemoryStorageDetailUiState.Success,
     onShowConversation: () -> Unit,
     onRestartConversation: () -> Unit,
+    deleteCardRequest: (String) -> Unit,
 ) {
     var answerEditMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
+    val memory = memoryStorageDetailUiState.memoryCard
 
     Scaffold(
         topBar = {
@@ -262,8 +294,6 @@ internal fun MemoryStorageDetailScreen(
         modifier = Modifier
             .background(WH)
     ) { scaffoldPaddingValues ->
-        val memory = memoryStorageDetailUiState.memoryCard
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -326,7 +356,9 @@ internal fun MemoryStorageDetailScreen(
         onRestartConversation = {
             showBottomSheet = false
             onRestartConversation()
-        }
+        },
+        memoryCardId = memory?.id ?: "", // ✅ null-safe로 전달
+        deleteCardRequest = deleteCardRequest
     )
 }
 
@@ -336,6 +368,8 @@ fun BottomSheetForMemory(
     showBottomSheet: Boolean,
     onDismiss: () -> Unit,
     onRestartConversation: () -> Unit,
+    memoryCardId: String,
+    deleteCardRequest: (String) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -370,7 +404,9 @@ fun BottomSheetForMemory(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 23.dp)
-                        .clickable { TODO() }
+                        .clickable {
+                            deleteCardRequest(memoryCardId)
+                        }
                 )
             }
         }
@@ -400,7 +436,8 @@ private fun MemoryStorageDetailScreenPreview() {
                 screenState = MemoryStorageDetailScreenState.Detail
             ),
             onRestartConversation = {},
-            onShowConversation = {}
+            onShowConversation = {},
+            deleteCardRequest = {}
         )
     }
 }
