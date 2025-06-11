@@ -29,7 +29,7 @@ import com.teampatch.core.designsystem.theme.WH
 fun MemoryInfoView(
     modifier: Modifier = Modifier,
     title: String,
-    description: String,
+    dateTime: String,
     circleTexts: List<String>,
 ) {
     Column(
@@ -49,7 +49,7 @@ fun MemoryInfoView(
                 color = BL
             )
             Text(
-                text = description,
+                text = dateTime,
                 fontFamily = PretendardFontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
@@ -109,7 +109,7 @@ private fun MemoryInfoViewPreview() {
                 modifier = Modifier
                     .fillMaxWidth(),
                 title = "다은이 태어난 날",
-                description = "1999년 5월 4일",
+                dateTime = "1999년 5월 4일",
                 circleTexts = listOf("가족", "기억", "축하")
             )
         }

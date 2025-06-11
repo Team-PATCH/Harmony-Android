@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 data class MemoryStorageDetailRoute(val memoryCardId: String)
 
 @Serializable
-data class MemoryStorageDetailConversationRoute(val memoryCardId: String)
+data object MemoryStorageDetailConversationRoute
 
 fun NavController.navigateToMemoryStorageDetailScreen(
     memoryCardId: String,
@@ -22,12 +22,11 @@ fun NavController.navigateToMemoryStorageDetailScreen(
 }
 
 fun NavController.navigateToConversationScreen(
-    memoryCardId: String,
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null,
 ) {
     navigate(
-        MemoryStorageDetailConversationRoute(memoryCardId),
+        MemoryStorageDetailConversationRoute,
         navOptions,
         navigatorExtras
     )
@@ -35,12 +34,14 @@ fun NavController.navigateToConversationScreen(
 
 fun NavGraphBuilder.addMemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
+    onConversationViewRequest: () -> Unit,
     onRestartConversation: () -> Unit,
     deleteCardRequest: () -> Unit,
 ) {
     composable<MemoryStorageDetailRoute> {
         MemoryStorageDetailRoute(
             onBackRequest = onBackRequest,
+            onConversationViewRequest = onConversationViewRequest,
             onRestartConversation = onRestartConversation,
             deleteCardRequest = deleteCardRequest
         )

@@ -58,6 +58,7 @@ import com.teampatch.feature.settings.addSettingsScreen
 import com.teampatch.feature.settings.navigateToSettingsScreen
 import com.teampatch.harmony.model.MainUiState
 import com.teampatch.memorystorage.feature.detail.addMemoryStorageDetailScreen
+import com.teampatch.memorystorage.feature.detail.navigateToConversationScreen
 import com.teampatch.memorystorage.feature.detail.navigateToMemoryStorageDetailScreen
 
 @Composable
@@ -167,6 +168,7 @@ fun MainNavHost(
 
         addMemoryStorageDetailScreen(
             onBackRequest = navController::navigateUp,
+            onConversationViewRequest = navController::navigateToConversationScreen,
             onRestartConversation = {}, // 이거 구현 어떻게 해야되나.. 피그마 보는데 좀 빡세네..
             deleteCardRequest = navController::navigateUp
         )

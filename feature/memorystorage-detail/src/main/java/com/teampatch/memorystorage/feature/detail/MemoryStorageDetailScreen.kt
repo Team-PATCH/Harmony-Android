@@ -38,7 +38,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,13 +66,14 @@ import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun MemoryStorageDetailRoute(
     onBackRequest: () -> Unit,
+    onConversationViewRequest: () -> Unit,
     onRestartConversation: () -> Unit,
     deleteCardRequest: () -> Unit,
 ) {
@@ -109,7 +109,9 @@ internal fun MemoryStorageDetailRoute(
                 MemoryStorageDetailScreenState.Conversation -> {
                     ConversationView(
                         onDismiss = viewModel::showDetail,
-                        onRestartConversation = onRestartConversation
+                        onRestartConversation = {
+                            viewModel.loadMemoryCardQuestion()
+                        }
                     )
                 }
             }
@@ -125,6 +127,10 @@ internal fun MemoryStorageDetailRoute(
 
                     is MemoryStorageDetailEvent.DeleteError -> {
                         Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    is MemoryStorageDetailEvent.Conversation -> {
+                        onConversationViewRequest()
                     }
 
                     else -> {}
@@ -234,7 +240,7 @@ fun ConversationView(
 
         // 다시 대화하기 버튼
         Button(
-            onClick = onRestartConversation,
+            onClick = { onRestartConversation() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 24.dp),
@@ -254,7 +260,6 @@ internal fun MemoryStorageDetailScreen(
     onRestartConversation: () -> Unit,
     deleteCardRequest: (String) -> Unit,
 ) {
-    var answerEditMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
     val memory = memoryStorageDetailUiState.memoryCard
 
@@ -320,7 +325,7 @@ internal fun MemoryStorageDetailScreen(
             MemoryInfoView(
                 modifier = Modifier.fillMaxWidth(),
                 title = memory?.writerTitle ?: "",
-                description = memory?.dateTime.toString(),
+                dateTime = memory?.dateTime.toString(),
                 circleTexts = listOf(
                     memory?.writerName ?: "",
                     memory?.dateTime?.toFormattedString() ?: "",

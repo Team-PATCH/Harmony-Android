@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.teampatch.core.domain.usecase.memory.DeleteMemoryCardUseCase
+import com.teampatch.core.domain.usecase.memory.GetMemoryCardQuestionUseCase
 import com.teampatch.core.domain.usecase.memory.GetMemoryCardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 internal class MemoryStorageDetailViewModel @Inject constructor(
     private val getMemoryCardUseCase: GetMemoryCardUseCase,
     private val deleteMemoryCardUseCase: DeleteMemoryCardUseCase,
+    private val getMemoryCardQuestionUseCase: GetMemoryCardQuestionUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -33,15 +35,21 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     private val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
 
     fun deleteMemoryCard() = viewModelScope.launch {
-        Log.d("DeleteMemoryCard", "시도: id=$memoryCardId")
 
         try {
             deleteMemoryCardUseCase(memoryCardId)
-            Log.d("DeleteMemoryCard", "성공: 삭제됨")
             _event.send(MemoryStorageDetailEvent.Deleted)
         } catch (e: Exception) {
-            Log.e("DeleteMemoryCard", "실패: 예외 발생", e)
             _event.send(MemoryStorageDetailEvent.DeleteError("삭제에 실패했습니다."))
+        }
+    }
+
+    fun loadMemoryCardQuestion() = viewModelScope.launch {
+        try {
+            val question = getMemoryCardQuestionUseCase(memoryCardId)
+            // 필요 시 상태에 저장하거나 화면에 반영
+        } catch (e: Exception) {
+            _event.send(MemoryStorageDetailEvent.LoadError)
         }
     }
 

@@ -4,4 +4,5 @@ sealed class MemoryStorageDetailEvent {
     object LoadError : MemoryStorageDetailEvent()
     object Deleted : MemoryStorageDetailEvent()
     data class DeleteError(val message: String) : MemoryStorageDetailEvent()
+    object Conversation : MemoryStorageDetailEvent()
 }
