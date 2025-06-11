@@ -36,8 +36,6 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     private val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
 
     fun deleteMemoryCard() = viewModelScope.launch {
-        Log.d("DeleteMemoryCard", "시도: id=$memoryCardId")
-
         try {
             deleteMemoryCardUseCase(memoryCardId)
             _event.send(MemoryStorageDetailEvent.Deleted)
