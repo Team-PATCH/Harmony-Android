@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 internal class MemoryStorageDetailViewModel @Inject constructor(
     private val getMemoryCardUseCase: GetMemoryCardUseCase,
     private val deleteMemoryCardUseCase: DeleteMemoryCardUseCase,
+//    private val resetMemoryCardAnswerUseCase: ResetMemoryCardAnswerUseCase,
     private val getMemoryCardQuestionUseCase: GetMemoryCardQuestionUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -35,6 +36,7 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     private val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
 
     fun deleteMemoryCard() = viewModelScope.launch {
+        Log.d("DeleteMemoryCard", "시도: id=$memoryCardId")
 
         try {
             deleteMemoryCardUseCase(memoryCardId)
@@ -43,6 +45,18 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
             _event.send(MemoryStorageDetailEvent.DeleteError("삭제에 실패했습니다."))
         }
     }
+
+//    fun resetMemoryCardAnswer() = viewModelScope.launch {
+//        val currentState = _uiState.value
+//        if (currentState is MemoryStorageDetailUiState.Success) {
+//            val card = currentState.memoryCard
+//            val updatedCard = card.copy(text = "") // ✅ text 필드 초기화
+//
+//            // 저장 (로컬 DB 업데이트)
+//            resetMemoryCardAnswerUseCase.updateMemoryCard(updatedCard) // ✅ DAO 통해 저장
+//            _uiState.value = currentState.copy(memoryCard = updatedCard) // ✅ UI 갱신
+//        }
+//    }
 
     fun loadMemoryCardQuestion() = viewModelScope.launch {
         try {

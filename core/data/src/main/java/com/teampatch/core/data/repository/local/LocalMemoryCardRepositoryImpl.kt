@@ -35,10 +35,14 @@ internal class LocalMemoryCardRepositoryImpl @Inject constructor(
     override suspend fun deleteMemoryCard(memoryCardId: String) {
         withContext(Dispatchers.IO) {
             val id = memoryCardId.toLong()
-            Log.d("Repository", "삭제 요청 id: $id")
             memoryCardDao.deleteMemoryStorageById(id)
         }
     }
+
+//    override suspend fun updateMemoryCard(card: MemoryCard) {
+//        val entity = card.toEntity() // 도메인 → 엔티티 변환 필요
+//        memoryCardDao.updateMemoryStorage(entity)
+//    }
 
     override suspend fun addAnswer(memoryCardId: String, answer: String) {
         val memoryCard = memoryCardDao.getMemoryStorageById(memoryCardId.toLong()).first()

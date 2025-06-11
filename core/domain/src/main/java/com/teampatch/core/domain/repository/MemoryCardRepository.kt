@@ -22,6 +22,7 @@ interface MemoryCardRepository {
 
     suspend fun deleteMemoryCard(memoryCardId: String)
 
+//    suspend fun updateMemoryCard(card: MemoryCard)
     suspend fun addAnswer(
         memoryCardId: String,
         answer: String,
