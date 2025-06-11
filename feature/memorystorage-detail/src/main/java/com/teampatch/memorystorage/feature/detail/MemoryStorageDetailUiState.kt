@@ -1,6 +1,7 @@
 package com.teampatch.memorystorage.feature.detail
 
 import com.teampatch.core.domain.model.MemoryCard
+import com.teampatch.core.domain.model.MemoryCardQuestion
 
 enum class MemoryStorageDetailScreenState {
     Detail,
@@ -16,6 +17,7 @@ sealed interface MemoryStorageDetailUiState {
 
     data class Success(
         val memoryCard: MemoryCard,
+        val question: MemoryCardQuestion,
         override val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
     ) : MemoryStorageDetailUiState
 

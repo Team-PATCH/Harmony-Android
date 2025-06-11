@@ -65,6 +65,7 @@ import com.teampatch.core.designsystem.theme.PretendardFontFamily
 import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
+import com.teampatch.core.domain.model.MemoryCardQuestion
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -73,7 +74,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun MemoryStorageDetailRoute(
     onBackRequest: () -> Unit,
-    onConversationViewRequest: () -> Unit,
+    onShowConversation: () -> Unit,
     onRestartConversation: () -> Unit,
     deleteCardRequest: () -> Unit,
 ) {
@@ -98,7 +99,7 @@ internal fun MemoryStorageDetailRoute(
                     MemoryStorageDetailScreen(
                         memoryStorageDetailUiState = state,
                         onBackRequest = onBackRequest,
-                        onShowConversation = viewModel::showConversation,
+                        onShowConversation = viewModel::loadConversation,
                         onRestartConversation = onRestartConversation,
                         deleteCardRequest = {
                             viewModel.deleteMemoryCard()
@@ -109,10 +110,9 @@ internal fun MemoryStorageDetailRoute(
                 MemoryStorageDetailScreenState.Conversation -> {
                     ConversationView(
                         onDismiss = viewModel::showDetail,
-                        onRestartConversation = {
-                            viewModel.loadMemoryCardQuestion()
-                        }
-                    )
+                        onRestartConversation = {},
+                        memoryCard = state.memoryCard,
+                        question = state.question ?: MemoryCardQuestion("질문 없음") // fallback
                 }
             }
         }
@@ -130,7 +130,7 @@ internal fun MemoryStorageDetailRoute(
                     }
 
                     is MemoryStorageDetailEvent.Conversation -> {
-                        onConversationViewRequest()
+                        onShowConversation()
                     }
 
                     else -> {}
@@ -144,7 +144,9 @@ internal fun MemoryStorageDetailRoute(
 fun ConversationView(
     onDismiss: () -> Unit,
     onRestartConversation: () -> Unit,
-) {
+    memoryCard: MemoryCard,
+    question: MemoryCardQuestion,
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -158,7 +160,7 @@ fun ConversationView(
         ) {
             Column {
                 Text(
-                    text = "",
+                    text = memoryCard.writerTitle,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -169,7 +171,9 @@ fun ConversationView(
                         .background(Color(0xFFECECEC))
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
-                    Text("2024년 5월 4일", fontSize = 12.sp)
+                    Text(
+                        text = memoryCard.dateTime.toFormattedString(),
+                        fontSize = 12.sp)
                 }
             }
 
@@ -211,7 +215,7 @@ fun ConversationView(
                     modifier = Modifier.padding(end = 32.dp)
                 ) {
                     Text(
-                        text = "다은이를 분만실에서 처음 봤을 때 어떤 느낌이 들었나요?",
+                        text = question.question,
                         modifier = Modifier.padding(12.dp),
                         fontSize = 14.sp
                     )
@@ -229,7 +233,7 @@ fun ConversationView(
                 modifier = Modifier.padding(start = 64.dp)
             ) {
                 Text(
-                    text = "너무 사랑스러웠단다. 내 소중한 손녀 딸을 보고 싶었거든 어쩌구 저쩌구 그래서 울산 병원에서 어쩌구 저쩌구",
+                    text = memoryCard.text,
                     modifier = Modifier.padding(12.dp),
                     fontSize = 14.sp
                 )

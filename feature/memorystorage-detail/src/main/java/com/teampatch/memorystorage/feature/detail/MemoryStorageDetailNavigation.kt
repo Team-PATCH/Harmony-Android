@@ -34,14 +34,14 @@ fun NavController.navigateToConversationScreen(
 
 fun NavGraphBuilder.addMemoryStorageDetailScreen(
     onBackRequest: () -> Unit,
-    onConversationViewRequest: () -> Unit,
+    onShowConversation: () -> Unit,
     onRestartConversation: () -> Unit,
     deleteCardRequest: () -> Unit,
 ) {
     composable<MemoryStorageDetailRoute> {
         MemoryStorageDetailRoute(
             onBackRequest = onBackRequest,
-            onConversationViewRequest = onConversationViewRequest,
+            onShowConversation = onShowConversation,
             onRestartConversation = onRestartConversation,
             deleteCardRequest = deleteCardRequest
         )

@@ -168,7 +168,7 @@ fun MainNavHost(
 
         addMemoryStorageDetailScreen(
             onBackRequest = navController::navigateUp,
-            onConversationViewRequest = navController::navigateToConversationScreen,
+            onShowConversation = navController::navigateToConversationScreen,
             onRestartConversation = {}, // 이거 구현 어떻게 해야되나.. 피그마 보는데 좀 빡세네..
             deleteCardRequest = navController::navigateUp
         )
