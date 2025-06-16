@@ -17,7 +17,7 @@ sealed interface MemoryStorageDetailUiState {
 
     data class Success(
         val memoryCard: MemoryCard,
-        val question: MemoryCardQuestion,
+        val question: MemoryCardQuestion? = null,
         override val screenState: MemoryStorageDetailScreenState = MemoryStorageDetailScreenState.Detail,
     ) : MemoryStorageDetailUiState
 

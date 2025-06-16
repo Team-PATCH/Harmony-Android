@@ -53,7 +53,7 @@ fun NavGraphBuilder.addMemoryStorageDetailConversationScreen(
     onRestartConversation: () -> Unit,
 ) {
     composable<MemoryStorageDetailConversationRoute> {
-        ConversationView(
+        MemoryStorageConversationRoute(
             onDismiss = onDismiss,
             onRestartConversation = onRestartConversation
         )
