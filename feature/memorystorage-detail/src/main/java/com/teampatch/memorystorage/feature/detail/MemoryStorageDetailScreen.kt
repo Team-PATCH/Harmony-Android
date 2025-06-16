@@ -66,14 +66,14 @@ import com.teampatch.core.designsystem.theme.WH
 import com.teampatch.core.designsystem.utils.noRippleClickable
 import com.teampatch.core.domain.model.MemoryCard
 import com.teampatch.feature.memorystorage.detail.R.string.btn_look_all_answer
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MemoryStorageDetailRoute(
     onBackRequest: () -> Unit,
-    onConversationViewRequest: () -> Unit,
+    onShowConversation: () -> Unit,
     onRestartConversation: () -> Unit,
     deleteCardRequest: () -> Unit,
 ) {
@@ -93,12 +93,13 @@ internal fun MemoryStorageDetailRoute(
 
         is MemoryStorageDetailUiState.Success -> {
             val state = uiState as MemoryStorageDetailUiState.Success
+
             when (state.screenState) {
                 MemoryStorageDetailScreenState.Detail -> {
                     MemoryStorageDetailScreen(
                         memoryStorageDetailUiState = state,
                         onBackRequest = onBackRequest,
-                        onShowConversation = viewModel::showConversation,
+                        onShowConversation = viewModel::loadConversation,
                         onRestartConversation = onRestartConversation,
                         deleteCardRequest = {
                             viewModel.deleteMemoryCard()
@@ -107,16 +108,15 @@ internal fun MemoryStorageDetailRoute(
                 }
 
                 MemoryStorageDetailScreenState.Conversation -> {
-                    ConversationView(
+                    MemoryStorageConversationRoute(
                         onDismiss = viewModel::showDetail,
-                        onRestartConversation = {
-                            viewModel.loadMemoryCardQuestion()
-                        }
+                        onRestartConversation = onRestartConversation
                     )
                 }
             }
         }
     }
+
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycleScope.launch {
             viewModel.event.collect { event ->
@@ -130,7 +130,7 @@ internal fun MemoryStorageDetailRoute(
                     }
 
                     is MemoryStorageDetailEvent.Conversation -> {
-                        onConversationViewRequest()
+                        onShowConversation()
                     }
 
                     else -> {}
@@ -141,115 +141,28 @@ internal fun MemoryStorageDetailRoute(
 }
 
 @Composable
-fun ConversationView(
+internal fun MemoryStorageConversationRoute(
     onDismiss: () -> Unit,
     onRestartConversation: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF9F9F9))
-            .padding(horizontal = 24.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = "",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color(0xFFECECEC))
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                ) {
-                    Text("2024년 5월 4일", fontSize = 12.sp)
-                }
-            }
+    val viewModel: MemoryStorageDetailViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
-            IconButton(onClick = onDismiss) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "닫기")
-            }
-        }
+    val successState = uiState as? MemoryStorageDetailUiState.Success
+        ?: return // 혹은 로딩/에러 처리
 
-        Spacer(modifier = Modifier.height(16.dp))
+    val conversationUiState = MemoryStorageConversationUiState(
+        title = successState.memoryCard.writerTitle,
+        date = successState.memoryCard.dateTime.toFormattedString(),
+        question = successState.question?.question ?: "질문 없음",
+        answer = successState.memoryCard.text
+    )
 
-        // 프로필 이미지 + 질문 + 사진
-        Row(verticalAlignment = Alignment.Top) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_my_appbar), // 귀여운 캐릭터 아이콘 대체
-                contentDescription = "캐릭터",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color.White)
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_my_appbar), // 병실 이미지 대체
-                    contentDescription = "병실 사진",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .border(2.dp, Color(0xFF4A90E2), RoundedCornerShape(12.dp))
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(1.dp, Color.LightGray),
-                    modifier = Modifier.padding(end = 32.dp)
-                ) {
-                    Text(
-                        text = "다은이를 분만실에서 처음 봤을 때 어떤 느낌이 들었나요?",
-                        modifier = Modifier.padding(12.dp),
-                        fontSize = 14.sp
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 대답 말풍선
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = Color(0xFFD9FDD3), // 연한 초록
-                modifier = Modifier.padding(start = 64.dp)
-            ) {
-                Text(
-                    text = "너무 사랑스러웠단다. 내 소중한 손녀 딸을 보고 싶었거든 어쩌구 저쩌구 그래서 울산 병원에서 어쩌구 저쩌구",
-                    modifier = Modifier.padding(12.dp),
-                    fontSize = 14.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        // 다시 대화하기 버튼
-        Button(
-            onClick = { onRestartConversation() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            shape = RoundedCornerShape(30.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2DC26B))
-        ) {
-            Text("다시 대화하기", color = Color.White)
-        }
-    }
+    MemoryStorageConversationScreen(
+        uiState = conversationUiState,
+        onDismiss = onDismiss,
+        onRestartConversation = onRestartConversation
+    )
 }
 
 @Composable
@@ -418,6 +331,122 @@ fun BottomSheetForMemory(
     }
 }
 
+@Composable
+fun MemoryStorageConversationScreen(
+    uiState: MemoryStorageConversationUiState,
+    onDismiss: () -> Unit,
+    onRestartConversation: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF9F9F9))
+            .padding(horizontal = 24.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = uiState.title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0xFFECECEC))
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = uiState.date,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+
+            IconButton(onClick = onDismiss) {
+                Icon(imageVector = Icons.Default.Close, contentDescription = "닫기")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 프로필 이미지 + 질문 + 사진
+        Row(verticalAlignment = Alignment.Top) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_my_appbar), // 귀여운 캐릭터 아이콘 대체
+                contentDescription = "캐릭터",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_my_appbar), // 병실 이미지 대체
+                    contentDescription = "병실 사진",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(2.dp, Color(0xFF4A90E2), RoundedCornerShape(12.dp))
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(1.dp, Color.LightGray),
+                    modifier = Modifier.padding(end = 32.dp)
+                ) {
+                    Text(
+                        text = uiState.question,
+                        modifier = Modifier.padding(12.dp),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 대답 말풍선
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                color = Color(0xFFD9FDD3), // 연한 초록
+                modifier = Modifier.padding(start = 64.dp)
+            ) {
+                Text(
+                    text = uiState.answer,
+                    modifier = Modifier.padding(12.dp),
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // 다시 대화하기 버튼
+        Button(
+            onClick = { onRestartConversation() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp),
+            shape = RoundedCornerShape(30.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2DC26B))
+        ) {
+            Text("다시 대화하기", color = Color.White)
+        }
+    }
+}
+
 fun LocalDateTime.toFormattedString(): String {
     val formatter = DateTimeFormatter.ofPattern("M월")
     return this.format(formatter)
@@ -447,11 +476,17 @@ private fun MemoryStorageDetailScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "MemoryStorageConversation Preview")
 @Composable
-private fun MemoryStorageDetailScreen_ConversationPreview() {
+fun MemoryStorageConversationScreenPreview() {
     HarmonyTheme {
-        ConversationView(
+        MemoryStorageConversationScreen(
+            uiState = MemoryStorageConversationUiState(
+                title = "할머니의 병문안",
+                date = "2024.03.15",
+                question = "할머니를 병문안 갔을 때 어떤 이야기를 나누었나요?",
+                answer = "할머니는 예전 이야기를 많이 해주셨어요. 어릴 적 동네에서 뛰놀던 기억이 새록새록 떠올랐어요."
+            ),
             onDismiss = {},
             onRestartConversation = {}
         )

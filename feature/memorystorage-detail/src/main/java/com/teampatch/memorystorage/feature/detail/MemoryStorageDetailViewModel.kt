@@ -1,6 +1,5 @@
 package com.teampatch.memorystorage.feature.detail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,7 +34,6 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
     private val memoryCardId: String = memoryStorageDetailRoute.memoryCardId
 
     fun deleteMemoryCard() = viewModelScope.launch {
-
         try {
             deleteMemoryCardUseCase(memoryCardId)
             _event.send(MemoryStorageDetailEvent.Deleted)
@@ -44,19 +42,19 @@ internal class MemoryStorageDetailViewModel @Inject constructor(
         }
     }
 
-    fun loadMemoryCardQuestion() = viewModelScope.launch {
+    fun loadConversation() = viewModelScope.launch {
         try {
             val question = getMemoryCardQuestionUseCase(memoryCardId)
-            // 필요 시 상태에 저장하거나 화면에 반영
+
+            val currentState = _uiState.value
+            if (currentState is MemoryStorageDetailUiState.Success) {
+                _uiState.value = currentState.copy(
+                    screenState = MemoryStorageDetailScreenState.Conversation
+//                    question = question // ✅ 필요 시 question을 상태에 저장
+                )
+            }
         } catch (e: Exception) {
             _event.send(MemoryStorageDetailEvent.LoadError)
-        }
-    }
-
-    fun showConversation() {
-        val currentState = _uiState.value
-        if (currentState is MemoryStorageDetailUiState.Success) {
-            _uiState.value = currentState.copy(screenState = MemoryStorageDetailScreenState.Conversation)
         }
     }
 
